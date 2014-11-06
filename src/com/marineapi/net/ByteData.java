@@ -2,6 +2,7 @@ package com.marineapi.net;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -145,6 +146,28 @@ public class ByteData {
 		}
 		
 		return a;
+	}
+	
+
+	public int readVarInt() {
+		return readInt(); //TODO: this!
+	}
+	
+	public byte[] readBytes(int amt) {
+		byte[] r = new byte[amt];
+		int i = 0;
+		while(amt < i) {
+			r[i] = bytes.get(i);
+			bytes.remove(i);
+			i++;
+		}
+		
+		return r;
+	}
+	
+	public String readString() {
+		int l = readUnsignedShort();
+		return new String(readBytes(l), StandardCharsets.UTF_8);
 	}
 	
 	public void writeToStream(OutputStream stream) {
