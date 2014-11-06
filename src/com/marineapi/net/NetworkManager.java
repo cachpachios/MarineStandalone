@@ -19,11 +19,18 @@ public class NetworkManager {
 	public NetworkManager(int port) {
 		connectedClients = new ArrayList<Client>();
 		try {
-			server = new ServerSocket(port, 5); //Port and num "queued" connections 
+			server = new ServerSocket(port, 100); //Port and num "queued" connections 
 		} catch (IOException e) {
 			Logging.getLogger().fatal("Port binding failed, perhaps allready in use");
+			System.exit(1);
 		}
-		connector = new ConnectionThread(5, this);
+		Logging.getLogger().log("Binding to port: " + port);
+		connector = new ConnectionThread(2, this);
+		try {
+			Thread.sleep(5);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		connector.start(); // Permitt Connections
 	}
 
@@ -45,6 +52,8 @@ public class NetworkManager {
 	public void connect(Socket accept) { 
 		Client c = new Client(this, accept);
 		Logging.getLogger().log("Client: " + accept.getInetAddress().toString() + " connected");
+		ClientThread t = new ClientThread(c);
+		c.setThread(t);
 		connectedClients.add(c);
 	}
 }

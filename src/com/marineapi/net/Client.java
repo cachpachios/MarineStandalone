@@ -7,6 +7,8 @@ import java.net.Socket;
 public class Client {
 	private final NetworkManager networkManager;
 	
+	private ClientThread privateHandler;
+	
 	private final Socket connection;
 	
 	public Client(NetworkManager network, Socket s) {
@@ -32,5 +34,10 @@ public class Client {
 	
 	public Socket getConnection() {
 		return connection;
+	}
+
+	public void setThread(ClientThread t) {
+		privateHandler = t;
+		privateHandler.start();
 	}
 }

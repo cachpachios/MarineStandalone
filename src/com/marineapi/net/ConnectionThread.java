@@ -1,6 +1,7 @@
 package com.marineapi.net;
 
 import java.io.IOException;
+import java.net.Socket;
 
 import com.marineapi.Logging;
 
@@ -15,14 +16,16 @@ public class ConnectionThread extends Thread {
 	
 	public void run() {
 		
-		Logging.getLogger().log("Connector started, Players can now connect.");
+		Logging.getLogger().log("Waiting for connection...");
 		
 		while(true) { //TODO: Stopping and starting!
 			try {
-				network.connect(network.server.accept());
+				
+				Socket connection = network.server.accept();
+				network.connect(connection);
 				ConnectionThread.sleep(sleepTime);
 			} catch (InterruptedException e ) {
-				// No problems!
+				// No point of catch exception
 			} catch (IOException e) {
 				Logging.getLogger().error("Connetion problems with client.");
 			}

@@ -149,9 +149,20 @@ public class ByteData {
 	}
 	
 
-	public int readVarInt() {
-		return readInt(); //TODO: this!
-	}
+	public int readVarInt(){
+        int out = 0;
+        int bytes = 0;
+        byte in;
+        while (true) {
+            in = readByte();
+            out |= (in & 0x7F) << (bytes++ * 7);
+            if ((in & 0x80) != 0x80) {
+            	append(in);
+                break;
+            }
+        }
+        return out;
+    }
 	
 	public byte[] readBytes(int amt) {
 		byte[] r = new byte[amt];
@@ -176,4 +187,9 @@ public class ByteData {
 		} catch (IOException e) {
 		}
 	}
+	
+	public void append(byte b) {
+		bytes.add(0, b);
+	}
+	
 }

@@ -31,4 +31,8 @@ public class ClientHandshake extends Packet {
 		nextState = input.readVarInt();
 	}
 	
+	public String toString() {
+		return protocolVersion + " at " + serverAddress + " : " + port + " target state " + nextState;
+	}
+	
 }
