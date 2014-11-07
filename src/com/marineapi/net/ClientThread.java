@@ -2,8 +2,6 @@ package com.marineapi.net;
 
 import java.io.IOException;
 
-import com.marineapi.Logging;
-
 public class ClientThread extends Thread{
 	private Client client;
 	
@@ -11,38 +9,28 @@ public class ClientThread extends Thread{
 		client = c;
 	}
 	
-	public void run() {
+	public void run(){
+
 		while(true) {
-			byte[] lengthRAW = new byte[4]; 
+			// Read from client:
+			int a = 0;
+			try { a = client.getConnection().getInputStream().available(); } catch (IOException e) {}
 			
-			try {
-				if(client.getConnection().getInputStream().available() == 0) {
-					continue;
-				}
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			if(a==0) continue;
 			
-			try {
-				client.getConnection().getInputStream().read(lengthRAW);
-			} catch (IOException e) {
-				Logging.getLogger().log("InputStream error at client: " + client.getAdress());
-			}
+			byte[] allData = new byte[a];
 			
-			int packetLength = new ByteData(lengthRAW).readVarInt();
+			try { client.getConnection().getInputStream().read(allData); } catch (IOException e) {}
 			
-			System.out.println("L:" + packetLength);
+			ByteData data = new ByteData(allData);
 			
-			byte[] d = new byte[packetLength]; 
-			try {
-				client.getConnection().getInputStream().read(d);
-			} catch (IOException e) {
-				Logging.getLogger().log("InputStream error for client: " + client.getAdress());
-			}
+			int l = data.readVarInt();
 			
-			PacketInterceptor.income(new ByteData(d), client);
+			if(l < 1) 
+				continue;
 			
+			PacketInterceptor.income(data, client);
+		
 		} // End of loop
 	}
 	

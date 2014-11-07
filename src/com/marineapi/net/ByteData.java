@@ -10,6 +10,8 @@ public class ByteData {
 	
 	protected List<Byte> bytes;
 	
+	protected int writerPos;
+	
 	public ByteData(byte[] bytes) {
 		this.bytes = new ArrayList<Byte>();
 		
@@ -17,12 +19,21 @@ public class ByteData {
 			this.bytes.add(b);
 	}
 	
+	public ByteData() {
+		this.bytes = new ArrayList<Byte>();
+	}
+
+	public void writeByte(byte... b) {
+		for(byte by : b)
+			bytes.add(by);
+	}
+	
 	public boolean readBoolean() {
 		if(bytes.size() < 1)
 			return false;
 		
-		byte b = bytes.get(0);
-		bytes.remove(0);
+		byte b = bytes.get(writerPos);
+		writerPos++;
 		
 		if(b == 0)
 			return false;
@@ -35,8 +46,8 @@ public class ByteData {
 		if(bytes.size() < 1)
 			return 0;
 		
-		byte b = bytes.get(0);
-		bytes.remove(0);
+		byte b = bytes.get(writerPos);
+		writerPos++;
 		return b;
 	}
 	
@@ -44,9 +55,11 @@ public class ByteData {
 		if(bytes.size() < 2)
 			return 0;
 
-		byte a = bytes.get(0);
-		byte b = bytes.get(0);
-	
+		byte a = bytes.get(writerPos);
+		writerPos++;
+		byte b = bytes.get(writerPos);
+		writerPos++;
+		
 		return (short)((a << 8) | (b & 0xff));
 	}
 	
@@ -54,9 +67,11 @@ public class ByteData {
 		if(bytes.size() < 2)
 			return 0;
 
-		byte a = bytes.get(0);
-		byte b = bytes.get(0);
-	
+		byte a = bytes.get(writerPos);
+		writerPos++;
+		byte b = bytes.get(writerPos);
+		writerPos++;
+		
 		return (((a & 0xff) << 8) | (b & 0xff));
 	}
 	
@@ -65,12 +80,14 @@ public class ByteData {
 		if(bytes.size() < 4)
 			return 0;		
 		
-		byte a = bytes.get(0);
-		byte b = bytes.get(1);
-		byte c = bytes.get(2);
-		byte d = bytes.get(3);
-		
-		bytes.remove(0); bytes.remove(1); bytes.remove(2); bytes.remove(3);
+		byte a = bytes.get(writerPos);
+		writerPos++;
+		byte b = bytes.get(writerPos);
+		writerPos++;
+		byte c = bytes.get(writerPos);
+		writerPos++;
+		byte d = bytes.get(writerPos);
+		writerPos++;
 		
 		return  (((a & 0xff) << 24) | ((b & 0xff) << 16) |
 				  ((c & 0xff) << 8) | (d & 0xff));
@@ -82,17 +99,22 @@ public class ByteData {
 		if(bytes.size() < 8)
 			return 0;		
 		
-		byte a = bytes.get(0);
-		byte b = bytes.get(1);
-		byte c = bytes.get(2);
-		byte d = bytes.get(3);
-		byte e = bytes.get(4);
-		byte f = bytes.get(5);
-		byte g = bytes.get(6);
-		byte h = bytes.get(7);
-		
-		bytes.remove(0); bytes.remove(1); bytes.remove(2); bytes.remove(3);
-		bytes.remove(4); bytes.remove(5); bytes.remove(6); bytes.remove(7);
+		byte a = bytes.get(writerPos);
+		writerPos++;
+		byte b = bytes.get(writerPos);
+		writerPos++;
+		byte c = bytes.get(writerPos);
+		writerPos++;
+		byte d = bytes.get(writerPos);
+		writerPos++;
+		byte e = bytes.get(writerPos);
+		writerPos++;
+		byte f = bytes.get(writerPos);
+		writerPos++;
+		byte g = bytes.get(writerPos);
+		writerPos++;
+		byte h = bytes.get(writerPos);
+		writerPos++;
 		
 		return  (((long)(a & 0xff) << 56) |
 				  ((long)(b & 0xff) << 48) |
@@ -120,8 +142,11 @@ public class ByteData {
 		if(bytes.size() < 2)
 			return 0;
 		
-		byte a = bytes.get(0);
-		byte b = bytes.get(0);
+		byte a = bytes.get(writerPos);
+		writerPos++;
+		byte b = bytes.get(writerPos);
+		writerPos++;
+		
 		return (char)((a << 8) | (b & 0xff));
 	};
 	
@@ -130,7 +155,8 @@ public class ByteData {
 		int i = 0;
 		for(byte b : bytes) {
 			a[i] = b;
-			bytes.remove(b);
+			writerPos++;
+			
 			i++;
 		}
 		
@@ -157,7 +183,6 @@ public class ByteData {
             in = readByte();
             out |= (in & 0x7F) << (bytes++ * 7);
             if ((in & 0x80) != 0x80) {
-            	append(in);
                 break;
             }
         }
@@ -168,8 +193,8 @@ public class ByteData {
 		byte[] r = new byte[amt];
 		int i = 0;
 		while(amt < i) {
-			r[i] = bytes.get(i);
-			bytes.remove(i);
+			r[i] = bytes.get(writerPos);
+			writerPos++;
 			i++;
 		}
 		
@@ -188,8 +213,11 @@ public class ByteData {
 		}
 	}
 	
-	public void append(byte b) {
-		bytes.add(0, b);
+	public int getWriterPos() {
+		return writerPos;
 	}
 	
+	public int getRemainingBytes() {
+		return bytes.size() - writerPos;
+	}
 }
