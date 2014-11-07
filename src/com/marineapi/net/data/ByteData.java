@@ -1,4 +1,4 @@
-package com.marineapi.net;
+package com.marineapi.net.data;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -10,7 +10,7 @@ public class ByteData {
 	
 	protected List<Byte> bytes;
 	
-	protected int writerPos;
+	protected int readerPos;
 	
 	public ByteData(byte[] bytes) {
 		this.bytes = new ArrayList<Byte>();
@@ -32,8 +32,8 @@ public class ByteData {
 		if(bytes.size() < 1)
 			return false;
 		
-		byte b = bytes.get(writerPos);
-		writerPos++;
+		byte b = bytes.get(readerPos);
+		readerPos++;
 		
 		if(b == 0)
 			return false;
@@ -46,8 +46,8 @@ public class ByteData {
 		if(bytes.size() < 1)
 			return 0;
 		
-		byte b = bytes.get(writerPos);
-		writerPos++;
+		byte b = bytes.get(readerPos);
+		readerPos++;
 		return b;
 	}
 	
@@ -55,10 +55,10 @@ public class ByteData {
 		if(bytes.size() < 2)
 			return 0;
 
-		byte a = bytes.get(writerPos);
-		writerPos++;
-		byte b = bytes.get(writerPos);
-		writerPos++;
+		byte a = bytes.get(readerPos);
+		readerPos++;
+		byte b = bytes.get(readerPos);
+		readerPos++;
 		
 		return (short)((a << 8) | (b & 0xff));
 	}
@@ -67,10 +67,10 @@ public class ByteData {
 		if(bytes.size() < 2)
 			return 0;
 
-		byte a = bytes.get(writerPos);
-		writerPos++;
-		byte b = bytes.get(writerPos);
-		writerPos++;
+		byte a = bytes.get(readerPos);
+		readerPos++;
+		byte b = bytes.get(readerPos);
+		readerPos++;
 		
 		return (((a & 0xff) << 8) | (b & 0xff));
 	}
@@ -80,14 +80,14 @@ public class ByteData {
 		if(bytes.size() < 4)
 			return 0;		
 		
-		byte a = bytes.get(writerPos);
-		writerPos++;
-		byte b = bytes.get(writerPos);
-		writerPos++;
-		byte c = bytes.get(writerPos);
-		writerPos++;
-		byte d = bytes.get(writerPos);
-		writerPos++;
+		byte a = bytes.get(readerPos);
+		readerPos++;
+		byte b = bytes.get(readerPos);
+		readerPos++;
+		byte c = bytes.get(readerPos);
+		readerPos++;
+		byte d = bytes.get(readerPos);
+		readerPos++;
 		
 		return  (((a & 0xff) << 24) | ((b & 0xff) << 16) |
 				  ((c & 0xff) << 8) | (d & 0xff));
@@ -99,22 +99,22 @@ public class ByteData {
 		if(bytes.size() < 8)
 			return 0;		
 		
-		byte a = bytes.get(writerPos);
-		writerPos++;
-		byte b = bytes.get(writerPos);
-		writerPos++;
-		byte c = bytes.get(writerPos);
-		writerPos++;
-		byte d = bytes.get(writerPos);
-		writerPos++;
-		byte e = bytes.get(writerPos);
-		writerPos++;
-		byte f = bytes.get(writerPos);
-		writerPos++;
-		byte g = bytes.get(writerPos);
-		writerPos++;
-		byte h = bytes.get(writerPos);
-		writerPos++;
+		byte a = bytes.get(readerPos);
+		readerPos++;
+		byte b = bytes.get(readerPos);
+		readerPos++;
+		byte c = bytes.get(readerPos);
+		readerPos++;
+		byte d = bytes.get(readerPos);
+		readerPos++;
+		byte e = bytes.get(readerPos);
+		readerPos++;
+		byte f = bytes.get(readerPos);
+		readerPos++;
+		byte g = bytes.get(readerPos);
+		readerPos++;
+		byte h = bytes.get(readerPos);
+		readerPos++;
 		
 		return  (((long)(a & 0xff) << 56) |
 				  ((long)(b & 0xff) << 48) |
@@ -142,10 +142,10 @@ public class ByteData {
 		if(bytes.size() < 2)
 			return 0;
 		
-		byte a = bytes.get(writerPos);
-		writerPos++;
-		byte b = bytes.get(writerPos);
-		writerPos++;
+		byte a = bytes.get(readerPos);
+		readerPos++;
+		byte b = bytes.get(readerPos);
+		readerPos++;
 		
 		return (char)((a << 8) | (b & 0xff));
 	};
@@ -155,7 +155,7 @@ public class ByteData {
 		int i = 0;
 		for(byte b : bytes) {
 			a[i] = b;
-			writerPos++;
+			readerPos++;
 			
 			i++;
 		}
@@ -189,21 +189,33 @@ public class ByteData {
         return out;
     }
 	
+	public byte[] read(byte... input) {
+		int i = 0;
+		while(i < input.length) {
+			input[i] = bytes.get(readerPos);
+			i++;
+			readerPos++;
+		}
+		return input;
+	}
+	
 	public byte[] readBytes(int amt) {
 		byte[] r = new byte[amt];
 		int i = 0;
-		while(amt < i) {
-			r[i] = bytes.get(writerPos);
-			writerPos++;
+		while(amt > i) {
+			r[i] = bytes.get(readerPos);
+			readerPos++;
 			i++;
 		}
 		
 		return r;
 	}
 	
-	public String readString() {
-		int l = readUnsignedShort();
-		return new String(readBytes(l), StandardCharsets.UTF_8);
+	public String readUTF8PrefixedString() {
+		int l = readVarInt();
+		byte[] data = new byte[l];
+		read(data);
+		return new String(data, StandardCharsets.UTF_8);
 	}
 	
 	public void writeToStream(OutputStream stream) {
@@ -213,11 +225,50 @@ public class ByteData {
 		}
 	}
 	
-	public int getWriterPos() {
-		return writerPos;
+	public int getReaderPos() {
+		return readerPos;
 	}
 	
 	public int getRemainingBytes() {
-		return bytes.size() - writerPos;
+		return bytes.size() - readerPos;
 	}
+	
+	public int getLength() {
+		return bytes.size();
+	}
+	
+	public void writeend(byte... v) {
+		for(byte b : v)
+			bytes.add(b);
+	}
+	
+	public void write(int pos, byte... v) {
+		ArrayList<Byte> bl = new ArrayList<Byte>();
+		for(byte b : v)
+			bl.add(b);
+		bytes.addAll(pos, bl);
+	}
+	
+	public void writeBoolean(boolean v) {
+		writeend(ByteEncoder.writeBoolean(v));
+	}
+	public void writeShort(short v) {
+		writeend(ByteEncoder.writeShort(v));
+	}
+	public void writeInt(int v) {
+		writeend(ByteEncoder.writeInt(v));
+	}
+	public void writeLong(long v) {
+		writeend(ByteEncoder.writeLong(v));
+	}
+	public void writeFloat(float v) {
+		writeend(ByteEncoder.writeFloat(v));
+	}
+	public void writeDouble(double v) {
+		writeend(ByteEncoder.writeDouble(v));
+	}
+	public void writeVarInt(int v) {
+		writeend(ByteEncoder.writeVarInt(v));
+	}
+	
 }

@@ -2,6 +2,8 @@ package com.marineapi.net;
 
 import java.io.IOException;
 
+import com.marineapi.net.data.ByteData;
+
 public class ClientThread extends Thread{
 	private Client client;
 	
@@ -26,7 +28,7 @@ public class ClientThread extends Thread{
 			
 			int l = data.readVarInt();
 			
-			if(l < 1) 
+			if(l == 0) 
 				continue;
 			
 			PacketInterceptor.income(data, client);

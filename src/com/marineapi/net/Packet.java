@@ -3,8 +3,10 @@ package com.marineapi.net;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import com.marineapi.net.data.ByteData;
+
 public abstract class Packet {
-	
+
 	public abstract int getID();
 	
 	public abstract void writeToStream(OutputStream stream) throws IOException;
@@ -35,6 +37,10 @@ public abstract class Packet {
 			
 		};
 		return p;
+	}
+	
+	public static int getGroup() {
+		return 0;
 	}
 	
 }

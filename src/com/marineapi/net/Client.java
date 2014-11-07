@@ -9,9 +9,12 @@ public class Client {
 	
 	private ClientThread privateHandler;
 	
+	private int state;
+	
 	private final Socket connection;
 	
 	public Client(NetworkManager network, Socket s) {
+		this.state = 0;
 		this.networkManager = network;
 		this.connection = s;
 	}
@@ -36,6 +39,14 @@ public class Client {
 		return connection;
 	}
 
+	public void setState(int state) {
+		this.state = state;
+	}
+	
+	public int getState() {
+		return state;
+	}
+	
 	public void setThread(ClientThread t) {
 		privateHandler = t;
 		privateHandler.start();

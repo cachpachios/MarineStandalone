@@ -3,8 +3,8 @@ package com.marineapi.net.handshake;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import com.marineapi.net.ByteData;
 import com.marineapi.net.Packet;
+import com.marineapi.net.data.ByteData;
 
 public class ClientHandshake extends Packet {
 
@@ -26,13 +26,29 @@ public class ClientHandshake extends Packet {
 	@Override
 	public void readFromBytes(ByteData input) {
 		protocolVersion = input.readVarInt();
-		serverAddress = input.readString();
+		serverAddress = input.readUTF8PrefixedString();
 		port = input.readUnsignedShort();
 		nextState = input.readVarInt();
 	}
 	
 	public String toString() {
 		return protocolVersion + " at " + serverAddress + " : " + port + " target state " + nextState;
+	}
+	
+	public int getProtocolVersion() {
+		return protocolVersion;
+	}
+
+	public String getServerAddress() {
+		return serverAddress;
+	}
+
+	public int getPort() {
+		return port;
+	}
+
+	public int getState() {
+		return nextState;
 	}
 	
 }

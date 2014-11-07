@@ -4,6 +4,9 @@ import com.marineapi.net.NetworkManager;
 
 public class StandaloneServer {
 	
+	static final int PROCOL_VERSION = 47;
+	static final String name = "1.8";
+	
 	static NetworkManager network;
 	
 	public static void main(String[] args) {

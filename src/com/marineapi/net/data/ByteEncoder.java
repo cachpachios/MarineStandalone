@@ -1,4 +1,4 @@
-package com.marineapi.net;
+package com.marineapi.net.data;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -96,6 +96,25 @@ public final class ByteEncoder {
 				s.getBytes(StandardCharsets.UTF_8)
 		}
 		);
+	}
+	
+	public static byte[] writeVarInt(int v) {
+		ByteData r = new ByteData();
+		
+		byte part;
+        while (true) {
+            part = (byte) (v & 0x7F);
+            v >>>= 7;
+            if (v != 0) {
+                part |= 0x80;
+            }
+            r.writeByte(part);
+            if (v == 0) {
+                break;
+            }
+        }
+        
+        return r.getBytes();
 	}
 	
 	public static byte[] writeUnsignedVarInt(int v) {
