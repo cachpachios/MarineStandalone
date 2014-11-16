@@ -39,8 +39,6 @@ public abstract class Packet {
 		return p;
 	}
 	
-	public static int getGroup() {
-		return 0;
-	}
+	public abstract States getPacketState();
 	
 }

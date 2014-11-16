@@ -9,12 +9,12 @@ public class Client {
 	
 	private ClientThread privateHandler;
 	
-	private int state;
+	private States state;
 	
 	private final Socket connection;
 	
 	public Client(NetworkManager network, Socket s) {
-		this.state = 0;
+		this.state = States.HANDSHAKE;
 		this.networkManager = network;
 		this.connection = s;
 	}
@@ -35,15 +35,27 @@ public class Client {
 		return connection.getInetAddress();
 	}
 	
-	public Socket getConnection() {
+	protected Socket getConnection() {
 		return connection;
 	}
 
 	public void setState(int state) {
-		this.state = state;
+		if(state==0)
+			this.state = States.HANDSHAKE;
+		else
+			if(state==1)
+				this.state = States.INTRODUCE;
+		else
+			if(state==2)
+				this.state = States.LOGIN;
+		else
+			if(state==3)
+				this.state = States.INGAME;
+					
+		
 	}
 	
-	public int getState() {
+	public States getState() {
 		return state;
 	}
 	
@@ -51,4 +63,13 @@ public class Client {
 		privateHandler = t;
 		privateHandler.start();
 	}
+	
+	public void terminate() {
+		try {
+			this.connection.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 }

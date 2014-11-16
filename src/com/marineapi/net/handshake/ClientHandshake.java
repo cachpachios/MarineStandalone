@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import com.marineapi.net.Packet;
+import com.marineapi.net.States;
 import com.marineapi.net.data.ByteData;
 
 public class ClientHandshake extends Packet {
@@ -49,6 +50,11 @@ public class ClientHandshake extends Packet {
 
 	public int getState() {
 		return nextState;
+	}
+
+	@Override
+	public States getPacketState() {
+		return States.HANDSHAKE;
 	}
 	
 }

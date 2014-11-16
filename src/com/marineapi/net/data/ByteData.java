@@ -12,6 +12,10 @@ public class ByteData {
 	
 	protected int readerPos;
 	
+	public ByteData(List<Byte> list) {
+		this.bytes = list;
+	}
+	
 	public ByteData(byte[] bytes) {
 		this.bytes = new ArrayList<Byte>();
 		
@@ -189,6 +193,10 @@ public class ByteData {
         return out;
     }
 	
+	public ByteData subData(int a, int b) {
+		return new ByteData(this.bytes.subList(a, b));
+	}
+	
 	public byte[] read(byte... input) {
 		int i = 0;
 		while(i < input.length) {
@@ -270,5 +278,8 @@ public class ByteData {
 	public void writeVarInt(int v) {
 		writeend(ByteEncoder.writeVarInt(v));
 	}
-	
+
+	public void writeVarInt(int pos, int v) {
+		write(pos,ByteEncoder.writeVarInt(v));
+	}
 }

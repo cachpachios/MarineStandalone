@@ -31,6 +31,9 @@ public class NetworkManager {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void openConnection() {
 		connector.start(); // Permitt Connections
 	}
 
@@ -56,4 +59,5 @@ public class NetworkManager {
 		c.setThread(t);
 		connectedClients.add(c);
 	}
+	
 }

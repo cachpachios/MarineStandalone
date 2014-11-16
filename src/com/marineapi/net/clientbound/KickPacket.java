@@ -32,5 +32,9 @@ public class KickPacket extends Packet{
 	public void readFromBytes(ByteData input) {
 	// Non Client to Server Packet :)
 	}
+	
+	public static int getGroup() {
+		return 2;
+	}
 
 }

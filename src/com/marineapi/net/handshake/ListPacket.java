@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.marineapi.net.Packet;
+import com.marineapi.net.States;
 import com.marineapi.net.data.ByteData;
 import com.marineapi.net.data.ByteEncoder;
 
@@ -40,27 +41,10 @@ public class ListPacket extends Packet {
 	public void readFromBytes(ByteData input)  {
 		
 	}
-	
-	
-	private static final String EXAMPLE_SCRIPT = readSmallTextFile("C:" +File.separator+ "x.txt");
-			
-	  static String readSmallTextFile(String aFileName) {
-		    Path path = Paths.get(aFileName);
-		    List<String> fs = new ArrayList<String>();
-			try {
-				fs = Files.readAllLines(path, StandardCharsets.UTF_8);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		    
-		    String r = "";
-		    
-		    for(String s : fs) {
-		    	r += s;
-		    }
-		    
-		    return r;
-		  }
+
+	@Override
+	public States getPacketState() {
+		return States.INTRODUCE;
+	}
 }
 

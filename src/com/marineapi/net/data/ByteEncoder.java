@@ -87,9 +87,6 @@ public final class ByteEncoder {
 		return r;
 	}
 	
-	// Minecraft Specifics: (Thanks to netty.io)
-	
-	
 	public static byte[] writeUTFPrefixedString(String s) {
 		return writeBytes(new byte[][] {
 				writeShort((short) s.length()),
