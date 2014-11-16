@@ -1,19 +1,16 @@
 package com.marineapi.net.handshake;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 
+import org.json.simple.JSONObject;
+
+import com.marineapi.StandaloneServer;
 import com.marineapi.net.Packet;
 import com.marineapi.net.States;
 import com.marineapi.net.data.ByteData;
 import com.marineapi.net.data.ByteEncoder;
+import com.marineapi.player.PlayerID;
 
 public class ListPacket extends Packet {
 
@@ -28,7 +25,7 @@ public class ListPacket extends Packet {
 		ByteData data = new ByteData();
 		
 		data.writeend(ByteEncoder.writeVarInt(getID()));
-		data.writeend(ByteEncoder.writeUTFPrefixedString(EXAMPLE_SCRIPT));
+		data.writeend(ByteEncoder.writeUTFPrefixedString(encode("Test",10,1,null)));
 		
 		int l = data.getLength();
 		
@@ -45,6 +42,33 @@ public class ListPacket extends Packet {
 	@Override
 	public States getPacketState() {
 		return States.INTRODUCE;
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	public String encode(String MOTD, int maxPlayers, int onlinePlayers, PlayerID[] samples) { //TODO: Favicon :)
+		JSONObject obj = new JSONObject();
+		
+		JSONObject version = new JSONObject();
+		version.put("name", StandaloneServer.Minecraft_Name);
+		version.put("protocol", StandaloneServer.PROTOCOL_VERSION);
+		
+		obj.put("version", version);
+		
+		JSONObject players = new JSONObject();
+		players.put("max", maxPlayers);
+		players.put("online", onlinePlayers);
+		
+		obj.put("players", players);
+		
+		JSONObject description = new JSONObject();
+		players.put("text", onlinePlayers); // Should be a ChatMessage
+		
+		obj.put("description", description);
+
+		
+		return obj.toJSONString();
+		
 	}
 }
 

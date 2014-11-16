@@ -13,8 +13,10 @@ public abstract class Packet {
 	
 	public abstract void readFromBytes(ByteData input);
 	
-	public static Packet createSimplePacket(byte ID, byte[] inputdata) {
+	public static Packet createSimplePacket(byte ID, byte[] inputdata, States state) {
 		Packet p = new Packet() {
+			
+			States s = state;
 			
 			ByteData data = new ByteData(inputdata);
 			int id = ID;
@@ -33,6 +35,11 @@ public abstract class Packet {
 			@Override
 			public int getID() {
 				return ID;
+			}
+
+			@Override
+			public States getPacketState() {
+				return s;
 			}
 			
 		};

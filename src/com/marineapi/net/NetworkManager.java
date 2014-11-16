@@ -11,6 +11,8 @@ import com.marineapi.Logging;
 public class NetworkManager {
 	public List<Client> connectedClients;
 	
+	public PacketHandler packetHandler;
+	
 	public ServerSocket server;
 	
 	private ConnectionThread connector;
@@ -31,6 +33,9 @@ public class NetworkManager {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		
+		packetHandler = new PacketHandler();
+		
 	}
 	
 	public void openConnection() {

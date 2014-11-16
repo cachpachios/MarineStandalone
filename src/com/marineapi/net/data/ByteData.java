@@ -197,6 +197,12 @@ public class ByteData {
 		return new ByteData(this.bytes.subList(a, b));
 	}
 	
+	public ByteData readData(int amt) {
+		int p = readerPos;
+		readerPos += amt;
+		return new ByteData(this.bytes.subList(p, amt));
+	}
+	
 	public byte[] read(byte... input) {
 		int i = 0;
 		while(i < input.length) {

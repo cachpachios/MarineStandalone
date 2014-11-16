@@ -15,6 +15,10 @@ public class Logging {
 		System.out.println(s);
 	}
 	
+	public void info(String s) {
+		System.out.println(s);
+	}
+	
 	public void debug(String s) {
 		System.out.println(s);
 	}

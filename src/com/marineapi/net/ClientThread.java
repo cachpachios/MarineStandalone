@@ -1,6 +1,7 @@
 package com.marineapi.net;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import com.marineapi.net.data.ByteData;
 
@@ -26,13 +27,22 @@ public class ClientThread extends Thread{
 			
 			ByteData data = new ByteData(allData);
 			
-			int l = data.readVarInt();
+			ArrayList<ByteData> packages = new ArrayList<ByteData>();
+			boolean anotherPacket = true;
 			
-			if(l == 0) 
-				continue;
 			
-			PacketInterceptor.income(data, client);
-		
+			while(anotherPacket) {
+				int l = data.readVarInt();
+				packages.add(data.readData(l));
+				
+				if(data.getLength()-data.getReaderPos() <= data.getLength())
+					anotherPacket = false;
+			}
+			
+			for(ByteData p : packages) {
+				client.getNetwork().packetHandler.intercept(p, client);
+			}
+			
 		} // End of loop
 	}
 	

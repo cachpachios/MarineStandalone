@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import com.marineapi.net.Packet;
+import com.marineapi.net.States;
 import com.marineapi.net.data.ByteData;
 import com.marineapi.net.data.ByteEncoder;
 
@@ -29,9 +30,10 @@ public class PingPacket extends Packet{
 	public void readFromBytes(ByteData input) {
 		TIME = input.readLong();
 	}
-	
-	public static int getGroup() {
-		return 1;
+
+	@Override
+	public States getPacketState() {
+		return States.INTRODUCE;
 	}
 	
 }

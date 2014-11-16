@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import com.marineapi.net.Packet;
+import com.marineapi.net.States;
 import com.marineapi.net.data.ByteData;
 import com.marineapi.net.data.ByteEncoder;
 
@@ -35,6 +36,11 @@ public class KickPacket extends Packet{
 	
 	public static int getGroup() {
 		return 2;
+	}
+
+	@Override
+	public States getPacketState() {
+		return States.INGAME;
 	}
 
 }
