@@ -7,6 +7,6 @@ public class ServerProperties {
 	
 	//FINAL VALUES
 	public static final int PROTOCOL_VERSION = 47;
-	public static final String Minecraft_Name = "1.8";
+	public static final String Minecraft_Name = "1.8.1";
 	public static final int MAX_Y = 256;
 }
