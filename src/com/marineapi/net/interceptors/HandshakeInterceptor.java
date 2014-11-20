@@ -24,8 +24,6 @@ public class HandshakeInterceptor implements PacketInterceptor {
 			return true;
 		}
 		
-		
-		
 		return false;
 	}
 }

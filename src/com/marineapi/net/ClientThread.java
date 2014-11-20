@@ -13,7 +13,6 @@ public class ClientThread extends Thread{
 	}
 	
 	public void run(){
-
 		while(true) {
 			// Read from client:
 			int a = 0;
@@ -35,7 +34,7 @@ public class ClientThread extends Thread{
 				int l = data.readVarInt();
 				packages.add(data.readData(l));
 				
-				if(data.getLength()-data.getReaderPos() <= data.getLength())
+				if(data.getReaderPos() <= data.getLength())
 					anotherPacket = false;
 			}
 			
