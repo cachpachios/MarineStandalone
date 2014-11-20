@@ -9,7 +9,6 @@ import com.marineapi.ServerProperties;
 import com.marineapi.net.Packet;
 import com.marineapi.net.States;
 import com.marineapi.net.data.ByteData;
-import com.marineapi.net.data.ByteEncoder;
 
 public class ListPacket extends Packet {
 

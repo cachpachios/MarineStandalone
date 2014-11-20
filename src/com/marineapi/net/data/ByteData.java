@@ -189,10 +189,13 @@ public class ByteData {
 		return bytes.size() - readerPos;
 	}
 	
-	public String readUTF8PrefixedString() {
+	public String readUTF8() {
 		int l = readVarInt();
+        if (l>= Short.MAX_VALUE) {
+        	Logging.getLogger().error("Tried to read String greater then max value!");
+        }
 		byte[] data = new byte[l];
-		read(data);
+		data = read(data);
 		return new String(data, StandardCharsets.UTF_8);
 	}
 	

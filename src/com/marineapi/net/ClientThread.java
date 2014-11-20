@@ -3,6 +3,7 @@ package com.marineapi.net;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import com.marineapi.Logging;
 import com.marineapi.net.data.ByteData;
 
 public class ClientThread extends Thread{
@@ -19,6 +20,7 @@ public class ClientThread extends Thread{
 			
 			if(!client.getConnection().isConnected()) {
 				client.getNetwork().cleanUp(client);
+				Logging.getLogger().info("Client terminated at: " + client.getAdress());
 				this.interrupt();
 			}
 			

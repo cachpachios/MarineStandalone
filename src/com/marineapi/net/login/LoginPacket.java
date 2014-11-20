@@ -1,4 +1,4 @@
-package com.marineapi.net.handshake;
+package com.marineapi.net.login;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -7,32 +7,27 @@ import com.marineapi.net.Packet;
 import com.marineapi.net.States;
 import com.marineapi.net.data.ByteData;
 
-public class PingPacket extends Packet{
-	
-	protected long TIME;
+public class LoginPacket extends Packet {
+
+	public String name;
 	
 	@Override
 	public int getID() {
-		return 0x01;
+		return 0x00;
 	}
 
 	@Override
 	public void writeToStream(OutputStream stream) throws IOException {
-		ByteData data = new ByteData();
-		data.writeVarInt(getID());
-		data.writeLong(TIME);
-		data.writePacketPrefix();
-		
-		stream.write(data.getBytes());
+		// SERVERBOND PACKET
 	}
+
 	@Override
 	public void readFromBytes(ByteData input) {
-		TIME = input.readLong();
+		name = input.readUTF8();
 	}
 
 	@Override
 	public States getPacketState() {
-		return States.INTRODUCE;
+		return States.LOGIN;
 	}
-	
 }

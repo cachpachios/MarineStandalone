@@ -3,7 +3,6 @@ package com.marineapi.net.handshake;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import com.marineapi.Logging;
 import com.marineapi.net.Packet;
 import com.marineapi.net.States;
 import com.marineapi.net.data.ByteData;
@@ -28,7 +27,7 @@ public class ClientHandshake extends Packet {
 	@Override
 	public void readFromBytes(ByteData input) {
 		protocolVersion = input.readVarInt();
-		serverAddress = input.readUTF8PrefixedString();
+		serverAddress = input.readUTF8();
 		port = input.readUnsignedShort();
 		nextState = input.readVarInt();
 	}
