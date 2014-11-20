@@ -6,6 +6,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.marineapi.Logging;
+
 public class ByteData {
 	
 	protected List<Byte> bytes;
@@ -26,20 +28,13 @@ public class ByteData {
 	public ByteData() {
 		this.bytes = new ArrayList<Byte>();
 	}
-
 	public void writeByte(byte... b) {
 		for(byte by : b)
 			bytes.add(by);
 	}
 	
-	public boolean readBoolean() {
-		if(bytes.size() < 1)
-			return false;
-		
-		byte b = bytes.get(readerPos);
-		readerPos++;
-		
-		if(b == 0)
+	public boolean readBoolean() {	
+		if(readByte() == 0)
 			return false;
 		else
 			return true;
@@ -47,8 +42,10 @@ public class ByteData {
 	
 	public byte readByte() {
 		
-		if(bytes.size() < 1)
+		if(hasBytes() == false) {
+			Logging.getLogger().error("ByteData object ran out of bytes");
 			return 0;
+		}
 		
 		byte b = bytes.get(readerPos);
 		readerPos++;
@@ -58,25 +55,15 @@ public class ByteData {
 	public short readShort() {
 		if(bytes.size() < 2)
 			return 0;
-
-		byte a = bytes.get(readerPos);
-		readerPos++;
-		byte b = bytes.get(readerPos);
-		readerPos++;
 		
-		return (short)((a << 8) | (b & 0xff));
+		return (short)((readByte() << 8) | (readByte() & 0xff));
 	}
 	
 	public int readUnsignedShort() {
 		if(bytes.size() < 2)
 			return 0;
-
-		byte a = bytes.get(readerPos);
-		readerPos++;
-		byte b = bytes.get(readerPos);
-		readerPos++;
 		
-		return (((a & 0xff) << 8) | (b & 0xff));
+		return (((readByte() & 0xff) << 8) | (readByte() & 0xff));
 	}
 	
 	public int readInt() {
@@ -84,50 +71,22 @@ public class ByteData {
 		if(bytes.size() < 4)
 			return 0;		
 		
-		byte a = bytes.get(readerPos);
-		readerPos++;
-		byte b = bytes.get(readerPos);
-		readerPos++;
-		byte c = bytes.get(readerPos);
-		readerPos++;
-		byte d = bytes.get(readerPos);
-		readerPos++;
-		
-		return  (((a & 0xff) << 24) | ((b & 0xff) << 16) |
-				  ((c & 0xff) << 8) | (d & 0xff));
+		return  (((readByte() & 0xff) << 24) | ((readByte() & 0xff) << 16) |
+				  ((readByte() & 0xff) << 8) | (readByte() & 0xff));
 		
 	}
 	
 	public long readLong() {
-		
 		if(bytes.size() < 8)
 			return 0;		
-		
-		byte a = bytes.get(readerPos);
-		readerPos++;
-		byte b = bytes.get(readerPos);
-		readerPos++;
-		byte c = bytes.get(readerPos);
-		readerPos++;
-		byte d = bytes.get(readerPos);
-		readerPos++;
-		byte e = bytes.get(readerPos);
-		readerPos++;
-		byte f = bytes.get(readerPos);
-		readerPos++;
-		byte g = bytes.get(readerPos);
-		readerPos++;
-		byte h = bytes.get(readerPos);
-		readerPos++;
-		
-		return  (((long)(a & 0xff) << 56) |
-				  ((long)(b & 0xff) << 48) |
-				  ((long)(c & 0xff) << 40) |
-				  ((long)(d & 0xff) << 32) |
-				  ((long)(e & 0xff) << 24) |
-				  ((long)(f & 0xff) << 16) |
-				  ((long)(g & 0xff) <<  8) |
-				  ((long)(h & 0xff)));
+		return  (((long)(readByte() & 0xff) << 56) |
+				  ((long)(readByte() & 0xff) << 48) |
+				  ((long)(readByte() & 0xff) << 40) |
+				  ((long)(readByte() & 0xff) << 32) |
+				  ((long)(readByte() & 0xff) << 24) |
+				  ((long)(readByte() & 0xff) << 16) |
+				  ((long)(readByte() & 0xff) <<  8) |
+				  ((long)(readByte() & 0xff)));
 	}
 	
 	public float readFloat() {
@@ -146,12 +105,7 @@ public class ByteData {
 		if(bytes.size() < 2)
 			return 0;
 		
-		byte a = bytes.get(readerPos);
-		readerPos++;
-		byte b = bytes.get(readerPos);
-		readerPos++;
-		
-		return (char)((a << 8) | (b & 0xff));
+		return (char)((readByte() << 8) | (readByte() & 0xff));
 	};
 	
 	public byte[] readAllBytes() {
@@ -160,7 +114,6 @@ public class ByteData {
 		for(byte b : bytes) {
 			a[i] = b;
 			readerPos++;
-			
 			i++;
 		}
 		
@@ -197,11 +150,11 @@ public class ByteData {
 		return new ByteData(this.bytes.subList(a, b));
 	}
 	
-	public ByteData readData(int amt) {
+	public ByteData readData(int l) {
 		int x = 0;
 		ByteData data = new ByteData();
 		
-		while(amt >= x) {
+		while(l > x) {
 			data.writeByte(readByte());
 			x++;
 		}
@@ -212,9 +165,8 @@ public class ByteData {
 	public byte[] read(byte... input) {
 		int i = 0;
 		while(i < input.length) {
-			input[i] = bytes.get(readerPos);
+			input[i] = readByte();
 			i++;
-			readerPos++;
 		}
 		return input;
 	}
@@ -223,12 +175,18 @@ public class ByteData {
 		byte[] r = new byte[amt];
 		int i = 0;
 		while(amt > i) {
-			r[i] = bytes.get(readerPos);
-			readerPos++;
-			i++;
+			r[i] = readByte();
 		}
 		
 		return r;
+	}
+	
+	public boolean hasBytes() {
+		return remainingBytes() > 0;
+	}
+	
+	public int remainingBytes() {
+		return bytes.size() - readerPos;
 	}
 	
 	public String readUTF8PrefixedString() {
@@ -255,6 +213,16 @@ public class ByteData {
 	
 	public int getLength() {
 		return bytes.size();
+	}
+	
+	public void writeUTF8(String v) {
+		final byte[] bytes = v.getBytes(StandardCharsets.UTF_8);
+        if (bytes.length >= Short.MAX_VALUE) {
+        	Logging.getLogger().error("Tried to write String greater then max value!");
+        }
+        // Write the string's length
+        writeVarInt(bytes.length);
+        writeend(bytes);
 	}
 	
 	public void writeend(byte... v) {
@@ -293,5 +261,10 @@ public class ByteData {
 
 	public void writeVarInt(int pos, int v) {
 		write(pos,ByteEncoder.writeVarInt(v));
+	}
+	
+	public void writePacketPrefix() {
+		int l = bytes.size();
+		write(0, ByteEncoder.writeVarInt(l));
 	}
 }

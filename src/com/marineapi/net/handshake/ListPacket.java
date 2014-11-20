@@ -5,12 +5,11 @@ import java.io.OutputStream;
 
 import org.json.simple.JSONObject;
 
-import com.marineapi.StandaloneServer;
+import com.marineapi.ServerProperties;
 import com.marineapi.net.Packet;
 import com.marineapi.net.States;
 import com.marineapi.net.data.ByteData;
 import com.marineapi.net.data.ByteEncoder;
-import com.marineapi.player.PlayerID;
 
 public class ListPacket extends Packet {
 
@@ -24,12 +23,9 @@ public class ListPacket extends Packet {
 	public void writeToStream(OutputStream stream) throws IOException {
 		ByteData data = new ByteData();
 		
-		data.writeend(ByteEncoder.writeVarInt(getID()));
-		data.writeend(ByteEncoder.writeUTFPrefixedString(encode("Test",10,1,null)));
-		
-		int l = data.getLength();
-		
-		data.write(0, ByteEncoder.writeVarInt(l));
+		data.writeVarInt(getID());
+		data.writeUTF8(encode("MarineStandalone DEV", 20, 0));
+		data.writePacketPrefix();
 		
 		stream.write(data.getBytes());
 	}
@@ -46,28 +42,26 @@ public class ListPacket extends Packet {
 	
 	
 	@SuppressWarnings("unchecked")
-	public String encode(String MOTD, int maxPlayers, int onlinePlayers, PlayerID[] samples) { //TODO: Favicon :)
-		JSONObject obj = new JSONObject();
-		
-		JSONObject version = new JSONObject();
-		version.put("name", StandaloneServer.Minecraft_Name);
-		version.put("protocol", StandaloneServer.PROTOCOL_VERSION);
-		
-		obj.put("version", version);
-		
-		JSONObject players = new JSONObject();
-		players.put("max", maxPlayers);
-		players.put("online", onlinePlayers);
-		
-		obj.put("players", players);
-		
-		JSONObject description = new JSONObject();
-		players.put("text", onlinePlayers); // Should be a ChatMessage
-		
-		obj.put("description", description);
+	public String encode(String MOTD, int maxPlayers, int onlinePlayers) {
+		JSONObject json = new JSONObject();
 
-		
-		return obj.toJSONString();
+        JSONObject version = new JSONObject();
+        version.put("name", ServerProperties.Minecraft_Name);
+        version.put("protocol", ServerProperties.PROTOCOL_VERSION);
+        json.put("version", version);
+
+        JSONObject players = new JSONObject();
+        players.put("max", maxPlayers);
+        players.put("online", onlinePlayers);
+        //TODO: Player samples
+        json.put("players", players);
+
+        JSONObject description = new JSONObject();
+        description.put("text", MOTD);
+        json.put("description", description);
+        
+        //TODO: Faviicon
+		return json.toJSONString();
 		
 	}
 }

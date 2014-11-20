@@ -64,5 +64,10 @@ public class NetworkManager {
 		c.setThread(t);
 		connectedClients.add(c);
 	}
+
+	public void cleanUp(Client client) {
+		connectedClients.remove(client);
+		client.terminate();
+	}
 	
 }

@@ -8,13 +8,20 @@ import com.marineapi.net.data.ByteData;
 public class ClientThread extends Thread{
 	private Client client;
 	
+	
 	public ClientThread(Client c) {
 		client = c;
 	}
 	
 	public void run(){
-		while(true) {
+		while(!ClientThread.interrupted()) {
 			// Read from client:
+			
+			if(!client.getConnection().isConnected()) {
+				client.getNetwork().cleanUp(client);
+				this.interrupt();
+			}
+			
 			int a = 0;
 			try { a = client.getConnection().getInputStream().available(); } catch (IOException e) {}
 			
@@ -27,15 +34,18 @@ public class ClientThread extends Thread{
 			ByteData data = new ByteData(allData);
 			
 			ArrayList<ByteData> packages = new ArrayList<ByteData>();
-			boolean anotherPacket = true;
 			
 			
-			while(anotherPacket) {
+			while(true) {
+				if(data.remainingBytes() == 0) {
+					break;
+				}
 				int l = data.readVarInt();
-				packages.add(data.readData(l));
+			
+				if(l == 0)
+					return;
 				
-				if(data.getReaderPos() <= data.getLength())
-					anotherPacket = false;
+				packages.add(data.readData(l));
 			}
 			
 			for(ByteData p : packages) {

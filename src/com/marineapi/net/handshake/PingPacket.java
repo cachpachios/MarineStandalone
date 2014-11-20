@@ -20,11 +20,11 @@ public class PingPacket extends Packet{
 	@Override
 	public void writeToStream(OutputStream stream) throws IOException {
 		ByteData data = new ByteData();
-		data.writeend(ByteEncoder.writeVarInt(getID()));
-		data.writeend(ByteEncoder.writeLong(TIME));
-		int l = data.getLength();
+		data.writeVarInt(getID());
+		data.writeLong(TIME);
+		data.writePacketPrefix();
 		
-		data.write(0, ByteEncoder.writeVarInt(l));
+		stream.write(data.getBytes());
 	}
 	@Override
 	public void readFromBytes(ByteData input) {

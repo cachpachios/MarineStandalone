@@ -3,6 +3,7 @@ package com.marineapi.net.interceptors;
 import com.marineapi.net.Client;
 import com.marineapi.net.data.ByteData;
 import com.marineapi.net.handshake.ListPacket;
+import com.marineapi.net.handshake.PingPacket;
 
 public class StatusInterceptor implements PacketInterceptor {
 
@@ -12,8 +13,13 @@ public class StatusInterceptor implements PacketInterceptor {
 		
 		if(id == 0x00) {
 			ListPacket packet = new ListPacket();
-			packet.readFromBytes(data);
 			c.sendPacket(packet);
+		}
+		else
+		if(id == 0x01) {
+				PingPacket packet = new PingPacket();
+				packet.readFromBytes(data);
+				c.sendPacket(packet);
 		}
 		return false;
 	}
