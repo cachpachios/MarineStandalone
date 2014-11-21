@@ -24,6 +24,12 @@ public class ClientThread extends Thread{
 				this.interrupt();
 			}
 			
+			if(client.getConnection().isClosed()) {
+				client.getNetwork().cleanUp(client);
+				Logging.getLogger().info("Client terminated at: " + client.getAdress());
+				this.interrupt();
+			}
+			
 			int a = 0;
 			try { a = client.getConnection().getInputStream().available(); } catch (IOException e) {}
 			

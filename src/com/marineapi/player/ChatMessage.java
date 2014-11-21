@@ -8,6 +8,7 @@ public class ChatMessage {
 	
 	@SuppressWarnings("unchecked")
 	public ChatMessage(String text) {
+		JSON = new JSONObject();
 		JSON.put("text", text);
 	}
 	
