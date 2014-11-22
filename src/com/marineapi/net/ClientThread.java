@@ -9,25 +9,29 @@ import com.marineapi.net.data.ByteData;
 public class ClientThread extends Thread{
 	private Client client;
 	
+	boolean shouldRun;
 	
 	public ClientThread(Client c) {
 		client = c;
 	}
 	
 	public void run(){
-		while(!ClientThread.interrupted()) {
+		shouldRun = true;
+		
+		while(shouldRun) {
 			// Read from client:
-			
 			if(!client.getConnection().isConnected()) {
 				client.getNetwork().cleanUp(client);
 				Logging.getLogger().info("Client terminated at: " + client.getAdress());
-				this.interrupt();
+				shouldRun = false;
+				break;
 			}
 			
 			if(client.getConnection().isClosed()) {
 				client.getNetwork().cleanUp(client);
 				Logging.getLogger().info("Client terminated at: " + client.getAdress());
-				this.interrupt();
+				shouldRun = false;
+				break;
 			}
 			
 			int a = 0;
