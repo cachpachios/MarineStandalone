@@ -3,7 +3,6 @@ package com.marineapi.net;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,8 +59,6 @@ public class NetworkManager {
 
 	public void connect(Socket accept) { 
 		Client c = new Client(this, accept);
-		Logging.getLogger().log("Client: " + accept.getInetAddress().toString() + " connected");
-		Logging.getLogger().log("" + connectedClients.size());
 		ClientThread t = new ClientThread(c);
 		c.setThread(t);
 		connectedClients.add(c);
