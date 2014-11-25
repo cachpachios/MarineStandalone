@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import com.marineapi.Logging;
 import com.marineapi.net.data.ByteData;
+import com.marineapi.net.data.ByteEncoder;
 
 public class ClientThread extends Thread{
 	private Client client;
@@ -19,14 +20,18 @@ public class ClientThread extends Thread{
 		shouldRun = true;
 		
 		while(shouldRun) {
-			// Read from client:
-			if(!client.getConnection().isConnected()) {
+			
+			try {
+				client.getConnection().getOutputStream().write(ByteEncoder.writeBoolean(false));
+			} catch (IOException e1) {
 				client.getNetwork().cleanUp(client);
 				Logging.getLogger().info("Client terminated at: " + client.getAdress());
 				shouldRun = false;
 				break;
 			}
 			
+			
+			// Read from client:
 			if(client.getConnection().isClosed()) {
 				client.getNetwork().cleanUp(client);
 				Logging.getLogger().info("Client terminated at: " + client.getAdress());
@@ -35,13 +40,21 @@ public class ClientThread extends Thread{
 			}
 			
 			int a = 0;
-			try { a = client.getConnection().getInputStream().available(); } catch (IOException e) {}
+			try { a = client.getConnection().getInputStream().available(); } catch (IOException e) {
+				Logging.getLogger().info("Client terminated at: " + client.getAdress());
+				client.getNetwork().cleanUp(client);
+				shouldRun = false;
+				break;
+			}
+			
 			
 			if(a==0) continue;
 			
+			
+			
 			byte[] allData = new byte[a];
 			
-			try { client.getConnection().getInputStream().read(allData); } catch (IOException e) {}
+			try { client.getConnection().getInputStream().read(allData); } catch (IOException e) {}			
 			
 			ByteData data = new ByteData(allData);
 			
