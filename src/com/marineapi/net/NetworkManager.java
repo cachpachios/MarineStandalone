@@ -21,7 +21,7 @@ public class NetworkManager {
 	public NetworkManager(int port) {
 		connectedClients = new ArrayList<Client>();
 		try {
-			server = new ServerSocket(port, 100); //Port and num "queued" connections 
+			server = new ServerSocket(port, 5); //Port and num "queued" connections 
 		} catch (IOException e) {
 			Logging.getLogger().fatal("Port binding failed, perhaps allready in use");
 			System.exit(1);

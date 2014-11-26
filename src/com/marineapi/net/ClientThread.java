@@ -52,8 +52,7 @@ public class ClientThread extends Thread{
 				try {
 					ClientThread.sleep(1);
 				} catch (InterruptedException e) {}
-				continue;
-				
+				continue;	
 			}
 			
 			
