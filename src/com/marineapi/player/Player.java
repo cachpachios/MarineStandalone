@@ -3,6 +3,7 @@ package com.marineapi.player;
 import java.util.UUID;
 
 import com.marineapi.net.Client;
+import com.marineapi.net.States;
 
 public class Player { //TODO: Extend LivingEntity
 	private Client connection;
@@ -15,4 +16,9 @@ public class Player { //TODO: Extend LivingEntity
 	public Client getConnectedClient() {
 		return connection;
 	}
+	
+	public States getCurrentState() {
+		return connection.getState();
+	}
+	
 }

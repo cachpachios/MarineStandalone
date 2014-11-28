@@ -6,9 +6,14 @@ public class Block {
 	private Position blockPos;
 	private Chunk chunk;
 	
-	private int ID;
+	private BlockData type;
 	
-	private int data;
+	private int metadata;
+	
+	
+	public int toPacketBlock() {
+		return type.getID() << 4 | metadata;
+	}
 	
 }
 

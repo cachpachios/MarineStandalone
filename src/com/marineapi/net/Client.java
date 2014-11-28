@@ -3,11 +3,14 @@ package com.marineapi.net;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.ArrayList;
+
+import com.marineapi.net.data.ByteData;
+import com.marineapi.net.data.ByteEncoder;
 
 public class Client {
 	private final NetworkManager networkManager;
 	
-	private ClientThread privateHandler;
 	
 	private States state;
 	
@@ -19,11 +22,11 @@ public class Client {
 		this.connection = s;
 	}
 	
-	public void sendPacket(Packet packet) {
+	public void sendPacket(Packet packet) { //TODO: PacketBuffer
 		try {
 			packet.writeToStream(connection.getOutputStream());
 		} catch (IOException e) {
-			e.printStackTrace();
+			networkManager.cleanUp(this);
 		}
 	}
 	
@@ -59,11 +62,6 @@ public class Client {
 		return state;
 	}
 	
-	public void setThread(ClientThread t) {
-		privateHandler = t;
-		privateHandler.start();
-	}
-	
 	public void terminate() {
 		try {
 			this.connection.close();
@@ -71,5 +69,63 @@ public class Client {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	public ConnectionStatus process(){ // Returns true if connection is closed.
+		
+		if(this.state != States.INGAME)
+		try { // Write a 0 bit to check if available
+			getConnection().getOutputStream().write(ByteEncoder.writeBoolean(false));
+		} catch (IOException e1) {
+			return ConnectionStatus.CONNECTION_PROBLEMS;
+		}
+		
+		
+		// Read from client:
+		if(getConnection().isClosed()) {
+			return ConnectionStatus.CONNECTION_PROBLEMS;
+		}
+		
+		int a = 0;
+		try { a = getConnection().getInputStream().available(); } catch (IOException e) {
+			return ConnectionStatus.CONNECTION_PROBLEMS;
+		}
+		
+		
+		if(a==0) return ConnectionStatus.EMPTY;
+		
+		
+		
+		byte[] allData = new byte[a];
+		
+		try { getConnection().getInputStream().read(allData); } catch (IOException e) {return ConnectionStatus.CONNECTION_PROBLEMS;}			
+		
+		ByteData data = new ByteData(allData);
+		
+		ArrayList<ByteData> packages = new ArrayList<ByteData>();
+		
+		
+		while(data.remainingBytes() != 0) {
+			int l = data.readVarInt();
+		
+			if(l == 0)
+				continue;
+			
+			packages.add(data.readData(l));
+		}
+		
+		for(ByteData p : packages) {
+			getNetwork().packetHandler.intercept(p, this);
+		}
+		
+		return ConnectionStatus.PROCESSED;
+}
+	
+	public enum ConnectionStatus {
+		EMPTY,
+		CONNECTION_PROBLEMS,
+		PROCESSED
+	}
+
 	
 }

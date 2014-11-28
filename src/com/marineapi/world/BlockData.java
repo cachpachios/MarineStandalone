@@ -1,7 +1,6 @@
 package com.marineapi.world;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public enum BlockData {
 	// NOT WORKING YET :/
@@ -23,9 +22,6 @@ public enum BlockData {
 	ORE_IRON			(15, "iron_ore"),
 	ORE_COAL			(16, "coal_ore"),
 	LOG_OAK				(17, "log"), // Metadata 0 for oak 1 for spruce 2 for birch.... etc
-	LOG_SPRUCE			(17, "log",1),
-	LOG_BIRCH			(17, "log",2),
-	LOG_JUNGLE			(17, "log",3),
 	LEAVES				(18, "leaves"),
 	SPONGE				(19, "sponge"),
 	GLASS				(20, "glass"),
@@ -207,8 +203,8 @@ public enum BlockData {
 	DOOR_ACACIA			(196, "acacia_door"),
 	DOOR_DARKOAK		(197, "dark_oak_door");
 	// Index lookup
-	private final Map<String, BlockData> name_index = new HashMap<String, BlockData>();
-	private final Map<Integer, BlockData> id_index = new HashMap<Integer, BlockData>();
+	private static final HashMap<String, BlockData> name_index = new HashMap<String, BlockData>();
+	private static final HashMap<Integer, BlockData> id_index = new HashMap<Integer, BlockData>();
 	 					
 	private final int ID;
 	private final String NAME;
@@ -219,16 +215,10 @@ public enum BlockData {
 		this.ID = ID;
 		this.NAME = NAME;
 		this.metaData = 0;
-		
-		name_index.put(NAME, this);
-		id_index.put(ID, this);
+		putThis();
 	}
-	 
-	private BlockData(int ID, String NAME, int metadata) {
-		this.ID = ID;
-		this.NAME = NAME;
-		this.metaData = metadata;
-		
+	
+	private void putThis() {
 		name_index.put(NAME, this);
 		id_index.put(ID, this);
 	}
@@ -244,7 +234,11 @@ public enum BlockData {
 	public int getMetaData() {
 		return metaData;
 	}
-	 
+	
+	public int getPacketID() {
+		return getID() << 4 | getMetaData();
+	}
+	
 	public BlockData getFromString(String s) {
 		return name_index.get(s.toLowerCase());
 	}

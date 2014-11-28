@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.marineapi.Logging;
+import com.marineapi.util.Position;
 
 public class ByteData {
 	
@@ -264,6 +265,10 @@ public class ByteData {
 
 	public void writeVarInt(int pos, int v) {
 		write(pos,ByteEncoder.writeVarInt(v));
+	}
+	
+	public void writePosition(Position pos) {
+		writeend(ByteEncoder.writeLong(pos.encode()));
 	}
 	
 	public void writePacketPrefix() {

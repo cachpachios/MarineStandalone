@@ -6,12 +6,12 @@ import java.net.Socket;
 import com.marineapi.Logging;
 
 public class ConnectionThread extends Thread {
-	private final int sleepTime;
 	private NetworkManager network;
 	
-	public ConnectionThread(int sleepTime, NetworkManager manager) {
+	//TODO: SOME KIND OF DDOS PROTECTION!
+	
+	public ConnectionThread(NetworkManager manager) {
 		network = manager;
-		this.sleepTime = sleepTime;
 	}
 	
 	public void run() {
@@ -20,18 +20,13 @@ public class ConnectionThread extends Thread {
 		
 		while(true) { //TODO: Stopping and starting!
 			try {
-				
 				Socket connection = network.server.accept();
 				network.connect(connection);
-				ConnectionThread.sleep(sleepTime);
-			} catch (InterruptedException e ) {
-				// No point of catch exception
-			} catch (IOException e) {
+				ConnectionThread.sleep(0,100);
+			} catch (InterruptedException e ) {} catch (IOException e) {
 				Logging.getLogger().error("Connetion problems with client.");
 			}
 			
 		}
-	
 	}
-	
 }

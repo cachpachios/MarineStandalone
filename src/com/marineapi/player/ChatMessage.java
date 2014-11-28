@@ -3,7 +3,7 @@ package com.marineapi.player;
 import org.json.simple.JSONObject;
 
 public class ChatMessage {
-
+	
 	JSONObject JSON;
 	
 	@SuppressWarnings("unchecked")
@@ -11,7 +11,6 @@ public class ChatMessage {
 		JSON = new JSONObject();
 		JSON.put("text", text);
 	}
-	
 	
 	
 	public String toString() {
