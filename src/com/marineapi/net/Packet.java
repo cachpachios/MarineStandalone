@@ -3,7 +3,7 @@ package com.marineapi.net;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import com.marineapi.net.data.ByteData;
+import com.marineapi.io.data.ByteData;
 
 public abstract class Packet {
 

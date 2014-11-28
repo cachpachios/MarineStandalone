@@ -5,8 +5,8 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 
-import com.marineapi.net.data.ByteData;
-import com.marineapi.net.data.ByteEncoder;
+import com.marineapi.io.data.ByteData;
+import com.marineapi.io.data.ByteEncoder;
 
 public class Client {
 	private final NetworkManager networkManager;

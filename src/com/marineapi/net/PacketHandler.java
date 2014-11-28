@@ -1,6 +1,6 @@
 package com.marineapi.net;
 
-import com.marineapi.net.data.ByteData;
+import com.marineapi.io.data.ByteData;
 import com.marineapi.net.interceptors.HandshakeInterceptor;
 import com.marineapi.net.interceptors.LoginInterceptor;
 import com.marineapi.net.interceptors.PacketInterceptor;

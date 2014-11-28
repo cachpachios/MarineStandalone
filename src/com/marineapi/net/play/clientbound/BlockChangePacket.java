@@ -3,9 +3,9 @@ package com.marineapi.net.play.clientbound;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import com.marineapi.io.data.ByteData;
 import com.marineapi.net.Packet;
 import com.marineapi.net.States;
-import com.marineapi.net.data.ByteData;
 import com.marineapi.util.Position;
 import com.marineapi.world.Block;
 

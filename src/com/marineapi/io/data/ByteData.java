@@ -1,4 +1,4 @@
-package com.marineapi.net.data;
+package com.marineapi.io.data;
 
 import java.io.IOException;
 import java.io.OutputStream;

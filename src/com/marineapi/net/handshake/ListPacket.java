@@ -6,9 +6,9 @@ import java.io.OutputStream;
 import org.json.simple.JSONObject;
 
 import com.marineapi.ServerProperties;
+import com.marineapi.io.data.ByteData;
 import com.marineapi.net.Packet;
 import com.marineapi.net.States;
-import com.marineapi.net.data.ByteData;
 
 public class ListPacket extends Packet {
 

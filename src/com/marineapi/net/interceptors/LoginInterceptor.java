@@ -1,7 +1,7 @@
 package com.marineapi.net.interceptors;
 
+import com.marineapi.io.data.ByteData;
 import com.marineapi.net.Client;
-import com.marineapi.net.data.ByteData;
 import com.marineapi.net.login.DisconnectPacket;
 import com.marineapi.net.login.LoginPacket;
 
