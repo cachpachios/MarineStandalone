@@ -6,12 +6,20 @@ public class NBTString implements NBTTag{
 	
 	String string;
 	
-	public NBTString(String v) {
+	String name;
+	
+	public NBTString(String name, String v) {
+		this.name = name;
 		string = v;
 	}
+	
+	@Override
+	public String getName() {
+		return name;
+	}
 
-	public NBTString(ByteData data) {
-		string = data.readUTF8Short();
+	public NBTString(String name, ByteData data) {
+		this(name, data.readUTF8Short());
 	}
 	
 	@Override
@@ -23,7 +31,16 @@ public class NBTString implements NBTTag{
 	public byte[] toByteArray() {
 		ByteData d = new ByteData();
 		d.writeByte(getTagID());
+		d.writeUTF8Short(name);
 		d.writeUTF8Short(string);
 		return d.getBytes();
 	}
+	
+	@Override
+	public byte[] toNonPrefixedByteArray() {
+		ByteData data = new ByteData();
+		data.writeUTF8Short(this.string);
+		return data.getBytes();
+	}
+	
 }

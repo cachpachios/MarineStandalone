@@ -121,6 +121,7 @@ public class ByteData {
 		return a;
  	}
 	
+	
 	public byte[] getBytes() {
 		byte[] a = new byte[bytes.size()];
 		int i = 0;
@@ -278,6 +279,23 @@ public class ByteData {
 	}
 	public void writeVarInt(int v) {
 		writeend(ByteEncoder.writeVarInt(v));
+	}
+	
+	public boolean writeObj(Object obj) {
+		if(obj instanceof Byte) {
+			writeByte((byte) obj); return true; } else
+			if(obj instanceof Short) {
+				writeShort((short) obj); return true; } else
+				if(obj instanceof Integer) {
+					writeInt((int) obj); return true; } else
+					if(obj instanceof Long) {
+						writeLong((long) obj); return true; } else
+						if(obj instanceof Float) {
+							writeFloat((float) obj); return true; } else
+								if(obj instanceof Double) {
+									writeDouble((double) obj); return true; } else
+										return false;
+		
 	}
 
 	public void writeVarInt(int pos, int v) {

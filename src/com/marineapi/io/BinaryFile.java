@@ -9,6 +9,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PushbackInputStream;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 import com.marineapi.io.data.ByteData;
 
@@ -29,13 +32,25 @@ public class BinaryFile {
 	}
 	
 	@SuppressWarnings("resource")
-	public BinaryFile readBinary() throws IOException, FileNotFoundException {
+	public BinaryFile readBinary() throws IOException {
 		if(!file.canRead()) throw new IOException("Can't read file: " + file.getName());
 		if(!file.exists()) throw new FileNotFoundException("File not found: " + file.getName());
 		
 		
 		byte[] r = new byte[(int) file.length()];
 		InputStream input = new BufferedInputStream(new FileInputStream(file));
+		input.read(r);	
+		data = new ByteData(r);
+		return this;
+	}
+	
+	public BinaryFile readGZIPBinary() throws IOException {
+		if(!file.canRead()) throw new IOException("Can't read file: " + file.getName());
+		if(!file.exists()) throw new FileNotFoundException("File not found: " + file.getName());
+		
+		
+		byte[] r = new byte[(int) file.length()];
+		InputStream input = decompressStream(new BufferedInputStream(new FileInputStream(file)));
 		input.read(r);	
 		data = new ByteData(r);
 		return this;
@@ -50,10 +65,28 @@ public class BinaryFile {
 		      output.close();
 	}
 	
+	public void writeGZIPBinary() throws IOException, FileNotFoundException {
+		  if(!file.exists())
+		  file.createNewFile();
+	      GZIPOutputStream output = new GZIPOutputStream(new BufferedOutputStream(new FileOutputStream(file)));
+	      output.write(data.getBytes());
+	      output.close();
+}
+	
 	public ByteData getData() {
 		if(data == null)
 			return null;
 		return data;
 	}
 	
+	private static InputStream decompressStream(InputStream input) throws IOException {
+	     PushbackInputStream pb = new PushbackInputStream( input, 2 ); //we need a pushbackstream to look ahead
+	     byte [] signature = new byte[2];
+	     pb.read( signature ); //read the signature
+	     pb.unread( signature ); //push back the signature to the stream
+	     if( signature[ 0 ] == (byte) 0x1f && signature[ 1 ] == (byte) 0x8b ) //check if matches standard gzip magic number
+	       return new GZIPInputStream( pb );
+	     else 
+	       return pb;
+	}
 }

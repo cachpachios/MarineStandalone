@@ -9,10 +9,12 @@ public class NBTList implements NBTTag{
 	
 	byte type;
 	int size;
+	private final String name;
 	
 	List<NBTTag> data;
 	
-	public NBTList(ByteData data) {
+	public NBTList(String name, ByteData data) {
+		this.name = name;
 		this.data = new ArrayList<NBTTag>();
 		this.type = data.readByte();
 		this.size = data.readInt();
@@ -31,7 +33,33 @@ public class NBTList implements NBTTag{
 
 	@Override
 	public byte[] toByteArray() {
-		// TODO Auto-generated method stub
-		return null;
+		ByteData data = new ByteData();
+		
+		data.writeByte(getTagID());
+		data.writeUTF8Short(name);
+		data.writeByte(type);
+		data.writeInt(size);
+			
+		for(NBTTag tag : this.data)
+			data.writeend(tag.toByteArray());
+		
+			
+		return data.getBytes();
+	}
+
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public byte[] toNonPrefixedByteArray() {
+		ByteData data = new ByteData();
+		data.writeByte(type);
+		data.writeInt(size);
+			
+		for(NBTTag tag : this.data)
+			data.writeend(tag.toByteArray());
+		return data.getBytes();
 	}
 }

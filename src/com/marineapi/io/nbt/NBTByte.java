@@ -6,12 +6,21 @@ public class NBTByte implements NBTTag {
 
 	private byte data;
 	
-	public NBTByte(byte b) {
-		data = b;
+	private final String name;
+	
+	public NBTByte(String name, Byte v) {
+		this.name = name;
+		data = v;
 	}
 	
-	public NBTByte(ByteData data) {
-		this.data = data.readByte();
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	
+	public NBTByte(String name, ByteData data) {
+		this(name, data.readByte());
 	}
 	
 	@Override
@@ -23,6 +32,7 @@ public class NBTByte implements NBTTag {
 	public byte[] toByteArray() {
 		ByteData d = new ByteData();
 		d.writeByte(getTagID());
+		d.writeUTF8Short(name);
 		d.writeByte(data);
 		return d.getBytes();
 	}
@@ -30,5 +40,10 @@ public class NBTByte implements NBTTag {
 	public byte toByte() {
 		return data;
 	}
-	
+	@Override
+	public byte[] toNonPrefixedByteArray() {
+		ByteData data = new ByteData();
+		data.writeByte((this.data));
+		return data.getBytes();
+	}
 }

@@ -8,7 +8,10 @@ public class NBTIntArray implements NBTTag {
 
 	private int size;
 	
-	public NBTIntArray(ByteData data) {
+	private final String name;
+	
+	public NBTIntArray(String name, ByteData data) {
+		this.name = name;
 		size = data.readInt();
 		array = new int[size];
 		for(int i = 0; i <= size;i++) {
@@ -16,7 +19,8 @@ public class NBTIntArray implements NBTTag {
 		}
 	}
 	
-	public NBTIntArray(int[] v) {
+	public NBTIntArray(String name, int[] v) {
+		this.name = name;
 		array = v;
 	}
 	
@@ -33,6 +37,22 @@ public class NBTIntArray implements NBTTag {
 	public byte[] toByteArray() {
 		ByteData d = new ByteData();
 		d.writeByte(getTagID());
+		d.writeUTF8Short(name);
+		d.writeInt(array.length);
+		for(int x : array)
+			d.writeInt(x);
+		return d.getBytes();
+	}
+
+	@Override
+	public String getName() {
+		return name;
+	}
+	
+
+	@Override
+	public byte[] toNonPrefixedByteArray() {
+		ByteData d = new ByteData();
 		d.writeInt(array.length);
 		for(int x : array)
 			d.writeInt(x);
