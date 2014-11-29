@@ -22,9 +22,12 @@ public class NBT {
 	public NBT(File f) throws IOException { this(new BinaryFile(f).readBinary().getData()); }
 	
 	
-	
 	public static NBTTag parse(ByteData data) {
 		byte id = data.readByte();
+		return parse(data, id);
+	}
+	
+	public static NBTTag parse(ByteData data, byte id) {
 
 		if(id == 0)	 return new NBTByte((byte) 0); else
 		if(id == 1)	 return new NBTByte(data); else
