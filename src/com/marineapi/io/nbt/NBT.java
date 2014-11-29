@@ -1,6 +1,7 @@
 package com.marineapi.io.nbt;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
@@ -21,6 +22,15 @@ public class NBT {
 	
 	public NBT(File f) throws IOException { this(new BinaryFile(f).readBinary().getData()); }
 	
+	public void save(File fPath) throws FileNotFoundException, IOException {
+		ByteData data = new ByteData();
+		for(NBTTag tag : tags)
+			data.writeend(tag.toByteArray());
+		
+		BinaryFile f = new BinaryFile(fPath,data);
+		f.writeBinary();
+		
+	}
 	
 	public static NBTTag parse(ByteData data) {
 		byte id = data.readByte();

@@ -42,6 +42,8 @@ public class BinaryFile {
 	}
 	
 	public void writeBinary() throws IOException, FileNotFoundException {
+			  if(!file.exists())
+			  file.createNewFile();
 		      OutputStream output = null;
 		      output = new BufferedOutputStream(new FileOutputStream(file));
 		      output.write(data.getBytes());
