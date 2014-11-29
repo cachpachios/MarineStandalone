@@ -183,7 +183,11 @@ public class ByteData {
 	}
 	
 	public boolean hasBytes() {
-		return remainingBytes() > 0;
+		return !bytes.isEmpty();
+	}
+	
+	public boolean canReadAnother() {
+		return getRemainingBytes() > 0;
 	}
 	
 	public int remainingBytes() {
@@ -195,6 +199,13 @@ public class ByteData {
         if (l>= Short.MAX_VALUE) {
         	Logging.getLogger().error("Tried to read String greater then max value!");
         }
+		byte[] data = new byte[l];
+		data = read(data);
+		return new String(data, StandardCharsets.UTF_8);
+	}
+	
+	public String readUTF8Short() {
+		int l = readShort();
 		byte[] data = new byte[l];
 		data = read(data);
 		return new String(data, StandardCharsets.UTF_8);
@@ -226,6 +237,12 @@ public class ByteData {
         }
         // Write the string's length
         writeVarInt(bytes.length);
+        writeend(bytes);
+	}
+	
+	public void writeUTF8Short(String v) {
+		final byte[] bytes = v.getBytes(StandardCharsets.UTF_8);
+        writeShort((short) bytes.length);
         writeend(bytes);
 	}
 	
