@@ -1,19 +1,19 @@
 package com.marine.util;
 
-public class Vector {
+public class Vector3i {
 	public int x,y,z;
 	
-	public Vector(int x, int y, int z) {
+	public Vector3i(int x, int y, int z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
 	}
 	
-	public Vector() {
+	public Vector3i() {
 		this(0,0,0);
 	}
 	
-	public Vector(int t) {
+	public Vector3i(int t) {
 		this(t,t,t);
 	}
 
@@ -39,6 +39,10 @@ public class Vector {
 
 	public void setZ(int z) {
 		this.z = z;
+	}
+	
+	public double getLength() {
+		return Math.sqrt(x*x + y*y + z*z);
 	}
 	
 }
