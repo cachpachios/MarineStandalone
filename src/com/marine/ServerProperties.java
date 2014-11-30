@@ -1,6 +1,13 @@
 package com.marine;
 
 public class ServerProperties {
+	
+	// BUILD INFO
+	public static final String BUILD_VERSION = "0.01";
+	public static final String BUILD_TYPE = "Develpment";
+	public static final String BUILD_NAME = "Netties";
+	public static final boolean BUILD_STABLE = false;
+	
 	public static int MAX_PLAYERS = 99;
 	public static String MOTD = "MarineStandalone Server 0.1";
 

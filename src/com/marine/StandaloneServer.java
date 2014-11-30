@@ -73,6 +73,11 @@ public class StandaloneServer {
 			if(ups >= targetTickRate) {	continue; }
 			// Stuff:
 			
+			if(Logging.getLogger().isDisplayed())
+				if(Logging.getLogger().hasBeenTerminated())
+					System.exit(0);
+			
+			
 			// Advance the tick clock.
 			ServerProperties.tick();
 			
