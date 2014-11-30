@@ -66,10 +66,10 @@ public class NetworkManager {
 	}
 	
 	private void terminate(Client client) {
-		synchronized(connectedClients) {	
-		Logging.getLogger().info("Client Terminated at: " + client.getAdress().getHostAddress()); 
-		connectedClients.remove(client);
-		client.terminate();
+		synchronized(cleanUpList) {
+			Logging.getLogger().info("Client Terminated at: " + client.getAdress().getHostAddress()); 
+			connectedClients.remove(client);
+			client.terminate();
 		}
 	}
 	
@@ -89,9 +89,11 @@ public class NetworkManager {
 			
 			
 		}
-			
+			synchronized(cleanUpList) {
 			for(Client c : cleanUpList)
 				terminate(c);
+			cleanUpList.clear();
+			}
 			
 			return didProccessSomething;
 		}
