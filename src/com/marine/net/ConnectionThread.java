@@ -22,7 +22,7 @@ public class ConnectionThread extends Thread {
 			try {
 				Socket connection = network.server.accept();
 				network.connect(connection);
-				ConnectionThread.sleep(0,100);
+				ConnectionThread.sleep(10);
 			} catch (InterruptedException e ) {} catch (IOException e) {
 				Logging.getLogger().error("Connetion problems with client.");
 			}

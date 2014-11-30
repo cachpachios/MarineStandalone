@@ -44,7 +44,7 @@ public class World { // TODO Save and unload chunks...
 	
 	public Chunk getChunk(int x, int z)  {
 		if(!loadedChunks.containsKey(new ChunkPos(x,z)))
-			return null;
+			generateChunk(x,z);
 			
 		return loadedChunks.get(new ChunkPos(x,z));
 	}

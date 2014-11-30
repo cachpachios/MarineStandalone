@@ -13,6 +13,7 @@ public class StandaloneServer {
 
 	
 	public int ticks;
+	public int refreshesPerSecound;
 	
 	private boolean shouldRun;
 	
@@ -53,9 +54,14 @@ public class StandaloneServer {
 		while(shouldRun) {
 			startTime = System.nanoTime(); // Microtime
 			
-			if((startTime - lastRunTime <= skipTime))
+			if((startTime - lastRunTime < skipTime) ) {
+				int sleepTime = (int) (skipTime - (startTime - lastRunTime));
+
+				if(sleepTime > 0)
+				try { Thread.sleep(sleepTime/1000000, sleepTime % 1000); } catch (InterruptedException e) {} 
 				continue;
-			
+			}
+				
 			lastRunTime = startTime;
 			
 			if(startTime - lastTime >= 1000000000) {	
@@ -65,8 +71,10 @@ public class StandaloneServer {
 			}	
 			
 			if(ups >= targetTickRate) {	continue; }
-			network.processAll();
 			// Stuff:
+			
+			// Advance the tick clock.
+			ServerProperties.tick();
 			
 			ups++;
 		}// Loop End
