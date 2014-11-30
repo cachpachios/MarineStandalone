@@ -1,6 +1,7 @@
-package com.marineapi.world.biomes;
+package com.marineapi.world;
 
-public enum StandardBiome {
+public enum BiomeID {
+	UNKNOWNED			(-1,"unknowned"),
 	OCEAN					(0,	"Ocean"),
 	PLAINS					(1,	"Plains"),
 	DESERT					(2,	"Desert"),
@@ -67,7 +68,7 @@ public enum StandardBiome {
 	private final byte ID;
 	private final String name;
 	
-	private StandardBiome(int id, String name) {
+	private BiomeID(int id, String name) {
 		this.ID = (byte) id;
 		this.name = name;
 	}

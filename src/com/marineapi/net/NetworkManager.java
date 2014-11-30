@@ -43,8 +43,6 @@ public class NetworkManager {
 		clientHandler.start(); // Start the connection thread to intercept any packages
 	}
 
-	
-	
 	public List<Client> getClientList() {
 		return connectedClients;
 	}

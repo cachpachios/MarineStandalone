@@ -28,7 +28,11 @@ public class Logging {
 	}
 	
 	public void error(String s) {
-		System.out.print(s);
+		System.out.println(s);
+	}
+	
+	public void warn(String s) {
+		System.out.println(s);
 	}
 	
 }

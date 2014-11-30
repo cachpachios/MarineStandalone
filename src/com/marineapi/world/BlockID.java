@@ -2,8 +2,7 @@ package com.marineapi.world;
 
 import java.util.HashMap;
 
-public enum BlockData {
-	// NOT WORKING YET :/
+public enum BlockID {
 	AIR					(0,"air"),
 	STONE				(1, "stone"),
 	GRASS				(2, "grass"),
@@ -203,15 +202,15 @@ public enum BlockData {
 	DOOR_ACACIA			(196, "acacia_door"),
 	DOOR_DARKOAK		(197, "dark_oak_door");
 	// Index lookup
-	private static final HashMap<String, BlockData> name_index = new HashMap<String, BlockData>();
-	private static final HashMap<Integer, BlockData> id_index = new HashMap<Integer, BlockData>();
+	private static HashMap<String, BlockID> name_index;
+	private static HashMap<Integer, BlockID> id_index;
 	 					
 	private final int ID;
 	private final String NAME;
 	
 	private final int metaData;
 
-	private BlockData(int ID, String NAME) {
+	private BlockID(int ID, String NAME) {
 		this.ID = ID;
 		this.NAME = NAME;
 		this.metaData = 0;
@@ -219,6 +218,14 @@ public enum BlockData {
 	}
 	
 	private void putThis() {
+		
+		if(name_index == null)
+			name_index = new HashMap<String, BlockID>();
+		
+		if(id_index == null)
+			id_index = new HashMap<Integer, BlockID>();
+		
+		
 		name_index.put(NAME, this);
 		id_index.put(ID, this);
 	}
@@ -239,11 +246,11 @@ public enum BlockData {
 		return getID() << 4 | getMetaData();
 	}
 	
-	public BlockData getFromString(String s) {
+	public BlockID getFromString(String s) {
 		return name_index.get(s.toLowerCase());
 	}
 	 
-	public BlockData getFromID(int id) {
+	public BlockID getFromID(int id) {
 		return id_index.get(id);
 	}
 	 
