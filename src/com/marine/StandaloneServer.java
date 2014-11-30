@@ -1,6 +1,6 @@
-package com.marineapi;
+package com.marine;
 
-import com.marineapi.net.NetworkManager;
+import com.marine.net.NetworkManager;
 
 public class StandaloneServer {
 	

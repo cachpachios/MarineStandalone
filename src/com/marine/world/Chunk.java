@@ -1,9 +1,9 @@
-package com.marineapi.world;
+package com.marine.world;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.marineapi.util.Position;
+import com.marine.util.Position;
 
 public final class Chunk {
 	

@@ -1,12 +1,12 @@
-package com.marineapi.player;
+package com.marine.player;
 
 import java.util.UUID;
 
-import com.marineapi.net.Client;
-import com.marineapi.net.States;
-import com.marineapi.util.Position;
-import com.marineapi.world.World;
-import com.marineapi.world.entity.Entity;
+import com.marine.net.Client;
+import com.marine.net.States;
+import com.marine.util.Position;
+import com.marine.world.World;
+import com.marine.world.entity.Entity;
 
 public class Player extends Entity {
 	

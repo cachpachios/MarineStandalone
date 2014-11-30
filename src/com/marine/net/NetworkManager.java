@@ -1,4 +1,4 @@
-package com.marineapi.net;
+package com.marine.net;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.marineapi.Logging;
+import com.marine.Logging;
 
 public class NetworkManager {
 	private List<Client> connectedClients;

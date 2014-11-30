@@ -1,4 +1,4 @@
-package com.marineapi.io;
+package com.marine.io;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -13,7 +13,7 @@ import java.io.PushbackInputStream;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-import com.marineapi.io.data.ByteData;
+import com.marine.io.data.ByteData;
 
 public class BinaryFile {
 	

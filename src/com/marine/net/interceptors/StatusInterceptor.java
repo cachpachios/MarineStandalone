@@ -1,9 +1,9 @@
-package com.marineapi.net.interceptors;
+package com.marine.net.interceptors;
 
-import com.marineapi.io.data.ByteData;
-import com.marineapi.net.Client;
-import com.marineapi.net.handshake.ListPacket;
-import com.marineapi.net.handshake.PingPacket;
+import com.marine.io.data.ByteData;
+import com.marine.net.Client;
+import com.marine.net.handshake.ListPacket;
+import com.marine.net.handshake.PingPacket;
 
 public class StatusInterceptor implements PacketInterceptor {
 

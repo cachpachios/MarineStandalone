@@ -1,11 +1,11 @@
-package com.marineapi.net.handshake;
+package com.marine.net.handshake;
 
 import java.io.IOException;
 import java.io.OutputStream;
 
-import com.marineapi.io.data.ByteData;
-import com.marineapi.net.Packet;
-import com.marineapi.net.States;
+import com.marine.io.data.ByteData;
+import com.marine.net.Packet;
+import com.marine.net.States;
 
 public class PingPacket extends Packet{
 	

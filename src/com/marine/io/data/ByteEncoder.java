@@ -1,4 +1,4 @@
-package com.marineapi.io.data;
+package com.marine.io.data;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;

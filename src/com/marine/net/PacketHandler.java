@@ -1,10 +1,10 @@
-package com.marineapi.net;
+package com.marine.net;
 
-import com.marineapi.io.data.ByteData;
-import com.marineapi.net.interceptors.HandshakeInterceptor;
-import com.marineapi.net.interceptors.LoginInterceptor;
-import com.marineapi.net.interceptors.PacketInterceptor;
-import com.marineapi.net.interceptors.StatusInterceptor;
+import com.marine.io.data.ByteData;
+import com.marine.net.interceptors.HandshakeInterceptor;
+import com.marine.net.interceptors.LoginInterceptor;
+import com.marine.net.interceptors.PacketInterceptor;
+import com.marine.net.interceptors.StatusInterceptor;
 
 
 public class PacketHandler implements PacketInterceptor {

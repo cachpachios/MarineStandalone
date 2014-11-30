@@ -1,7 +1,7 @@
-package com.marineapi.world.entity;
+package com.marine.world.entity;
 
-import com.marineapi.util.Position;
-import com.marineapi.world.World;
+import com.marine.util.Position;
+import com.marine.world.World;
 
 public abstract class Entity {
 	

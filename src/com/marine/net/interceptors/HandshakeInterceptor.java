@@ -1,8 +1,8 @@
-package com.marineapi.net.interceptors;
+package com.marine.net.interceptors;
 
-import com.marineapi.io.data.ByteData;
-import com.marineapi.net.Client;
-import com.marineapi.net.handshake.ClientHandshake;
+import com.marine.io.data.ByteData;
+import com.marine.net.Client;
+import com.marine.net.handshake.ClientHandshake;
 
 
 public class HandshakeInterceptor implements PacketInterceptor {

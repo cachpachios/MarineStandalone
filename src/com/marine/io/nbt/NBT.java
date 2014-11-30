@@ -1,10 +1,10 @@
-package com.marineapi.io.nbt;
+package com.marine.io.nbt;
 
 import java.io.File;
 import java.io.IOException;
 
-import com.marineapi.io.BinaryFile;
-import com.marineapi.io.data.ByteData;
+import com.marine.io.BinaryFile;
+import com.marine.io.data.ByteData;
 
 public class NBT {
 	

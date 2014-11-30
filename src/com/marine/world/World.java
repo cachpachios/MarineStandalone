@@ -1,12 +1,12 @@
-package com.marineapi.world;
+package com.marine.world;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
-import com.marineapi.Logging;
-import com.marineapi.world.generators.TotalFlatGrassGenerator;
-import com.marineapi.world.generators.WorldGenerator;
+import com.marine.Logging;
+import com.marine.world.generators.TotalFlatGrassGenerator;
+import com.marine.world.generators.WorldGenerator;
 
 public class World { // TODO Save and unload chunks...
 	

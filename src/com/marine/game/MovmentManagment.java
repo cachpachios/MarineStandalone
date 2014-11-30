@@ -1,4 +1,4 @@
-package com.marineapi.game;
+package com.marine.game;
 
 public class MovmentManagment {
 

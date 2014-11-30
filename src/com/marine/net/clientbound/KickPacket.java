@@ -1,12 +1,12 @@
-package com.marineapi.net.clientbound;
+package com.marine.net.clientbound;
 
 import java.io.IOException;
 import java.io.OutputStream;
 
-import com.marineapi.io.data.ByteData;
-import com.marineapi.io.data.ByteEncoder;
-import com.marineapi.net.Packet;
-import com.marineapi.net.States;
+import com.marine.io.data.ByteData;
+import com.marine.io.data.ByteEncoder;
+import com.marine.net.Packet;
+import com.marine.net.States;
 
 public class KickPacket extends Packet{
 

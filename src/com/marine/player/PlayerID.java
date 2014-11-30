@@ -1,4 +1,4 @@
-package com.marineapi.player;
+package com.marine.player;
 
 import java.util.UUID;
 

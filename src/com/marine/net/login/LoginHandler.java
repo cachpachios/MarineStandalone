@@ -1,6 +1,6 @@
-package com.marineapi.net.login;
+package com.marine.net.login;
 
-import com.marineapi.net.Client;
+import com.marine.net.Client;
 
 public class LoginHandler {
 
@@ -8,3 +8,4 @@ public class LoginHandler {
 	}
 
 }
+

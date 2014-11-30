@@ -1,4 +1,4 @@
-package com.marineapi.io.nbt;
+package com.marine.io.nbt;
 
 
 public interface NBTTag {

@@ -1,13 +1,13 @@
-package com.marineapi.net.play.clientbound;
+package com.marine.net.play.clientbound;
 
 import java.io.IOException;
 import java.io.OutputStream;
 
-import com.marineapi.io.data.ByteData;
-import com.marineapi.net.Packet;
-import com.marineapi.net.States;
-import com.marineapi.util.Position;
-import com.marineapi.world.Block;
+import com.marine.io.data.ByteData;
+import com.marine.net.Packet;
+import com.marine.net.States;
+import com.marine.util.Position;
+import com.marine.world.Block;
 
 public class BlockChangePacket extends Packet {
 	public Position pos;

@@ -1,9 +1,9 @@
-package com.marineapi.io.nbt;
+package com.marine.io.nbt;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.marineapi.io.data.ByteData;
+import com.marine.io.data.ByteData;
 
 public class NBTCompound implements NBTTag {
 	

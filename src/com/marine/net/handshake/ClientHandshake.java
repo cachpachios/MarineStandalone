@@ -1,11 +1,11 @@
-package com.marineapi.net.handshake;
+package com.marine.net.handshake;
 
 import java.io.IOException;
 import java.io.OutputStream;
 
-import com.marineapi.io.data.ByteData;
-import com.marineapi.net.Packet;
-import com.marineapi.net.States;
+import com.marine.io.data.ByteData;
+import com.marine.net.Packet;
+import com.marine.net.States;
 
 public class ClientHandshake extends Packet {
 
@@ -18,7 +18,7 @@ public class ClientHandshake extends Packet {
 	public int getID() {
 		return 0x00;
 	}
-
+	
 	@Override
 	public void writeToStream(OutputStream stream) throws IOException {
 		// Non clientbound packet!

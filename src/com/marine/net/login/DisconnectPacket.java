@@ -1,13 +1,13 @@
-package com.marineapi.net.login;
+package com.marine.net.login;
 
 import java.io.IOException;
 import java.io.OutputStream;
 
-import com.marineapi.game.chat.ChatColor;
-import com.marineapi.game.chat.RawChatMessage;
-import com.marineapi.io.data.ByteData;
-import com.marineapi.net.Packet;
-import com.marineapi.net.States;
+import com.marine.game.chat.ChatColor;
+import com.marine.game.chat.RawChatMessage;
+import com.marine.io.data.ByteData;
+import com.marine.net.Packet;
+import com.marine.net.States;
 
 public class DisconnectPacket extends Packet {
 

@@ -1,12 +1,12 @@
-package com.marineapi.net;
+package com.marine.net;
 
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 
-import com.marineapi.io.data.ByteData;
-import com.marineapi.io.data.ByteEncoder;
+import com.marine.io.data.ByteData;
+import com.marine.io.data.ByteEncoder;
 
 public class Client {
 	private final NetworkManager networkManager;

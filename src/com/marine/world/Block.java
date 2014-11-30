@@ -1,6 +1,6 @@
-package com.marineapi.world;
+package com.marine.world;
 
-import com.marineapi.util.Position;
+import com.marine.util.Position;
 
 public class Block { // Help class for easier reading not used to save/set data
 	

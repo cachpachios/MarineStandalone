@@ -1,4 +1,4 @@
-package com.marineapi;
+package com.marine;
 
 public class Logging {
 	

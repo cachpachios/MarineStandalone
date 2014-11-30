@@ -1,9 +1,9 @@
-package com.marineapi.net.interceptors;
+package com.marine.net.interceptors;
 
-import com.marineapi.io.data.ByteData;
-import com.marineapi.net.Client;
-import com.marineapi.net.login.DisconnectPacket;
-import com.marineapi.net.login.LoginPacket;
+import com.marine.io.data.ByteData;
+import com.marine.net.Client;
+import com.marine.net.login.DisconnectPacket;
+import com.marine.net.login.LoginPacket;
 
 public class LoginInterceptor implements PacketInterceptor {
 

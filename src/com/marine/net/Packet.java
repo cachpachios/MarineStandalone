@@ -1,9 +1,9 @@
-package com.marineapi.net;
+package com.marine.net;
 
 import java.io.IOException;
 import java.io.OutputStream;
 
-import com.marineapi.io.data.ByteData;
+import com.marine.io.data.ByteData;
 
 public abstract class Packet {
 

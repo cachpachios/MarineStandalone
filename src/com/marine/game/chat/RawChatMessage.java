@@ -1,4 +1,4 @@
-package com.marineapi.game.chat;
+package com.marine.game.chat;
 
 import org.json.simple.JSONObject;
 

@@ -1,7 +1,7 @@
-package com.marineapi.world.generators;
+package com.marine.world.generators;
 
-import com.marineapi.world.Chunk;
-import com.marineapi.world.World;
+import com.marine.world.Chunk;
+import com.marine.world.World;
 
 public abstract class WorldGenerator {
 	

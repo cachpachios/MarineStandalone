@@ -1,4 +1,4 @@
-package com.marineapi.world;
+package com.marine.world;
 
 public enum BiomeID {
 	UNKNOWNED			(-1,"unknowned"),

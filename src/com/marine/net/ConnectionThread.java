@@ -1,9 +1,9 @@
-package com.marineapi.net;
+package com.marine.net;
 
 import java.io.IOException;
 import java.net.Socket;
 
-import com.marineapi.Logging;
+import com.marine.Logging;
 
 public class ConnectionThread extends Thread {
 	private NetworkManager network;

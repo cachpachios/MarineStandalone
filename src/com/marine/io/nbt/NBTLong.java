@@ -1,6 +1,6 @@
-package com.marineapi.io.nbt;
+package com.marine.io.nbt;
 
-import com.marineapi.io.data.ByteData;
+import com.marine.io.data.ByteData;
 
 public class NBTLong implements NBTTag{
 

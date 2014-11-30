@@ -1,4 +1,4 @@
-package com.marineapi.net;
+package com.marine.net;
 
 public enum States {
 	HANDSHAKE(0),

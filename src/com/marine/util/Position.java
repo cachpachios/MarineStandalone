@@ -1,4 +1,4 @@
-package com.marineapi.util;
+package com.marine.util;
 
 public class Position extends Vector {
 	

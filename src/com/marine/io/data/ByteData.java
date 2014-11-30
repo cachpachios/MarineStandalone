@@ -1,4 +1,4 @@
-package com.marineapi.io.data;
+package com.marine.io.data;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -6,8 +6,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.marineapi.Logging;
-import com.marineapi.util.Position;
+import com.marine.Logging;
+import com.marine.util.Position;
 
 public class ByteData {
 	

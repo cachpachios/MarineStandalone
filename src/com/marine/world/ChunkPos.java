@@ -1,4 +1,4 @@
-package com.marineapi.world;
+package com.marine.world;
 
 public class ChunkPos implements Comparable<ChunkPos>{
 	private final int x,y;

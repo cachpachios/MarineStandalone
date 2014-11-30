@@ -1,9 +1,9 @@
-package com.marineapi.game;
+package com.marine.game;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.marineapi.player.Player;
+import com.marine.player.Player;
 
 public class PlayerManagment {
 	

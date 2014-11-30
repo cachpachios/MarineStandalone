@@ -1,4 +1,4 @@
-package com.marineapi.world;
+package com.marine.world;
 
 import java.util.HashMap;
 
