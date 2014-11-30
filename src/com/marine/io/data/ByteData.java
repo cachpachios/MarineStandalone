@@ -4,12 +4,13 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.marine.Logging;
 import com.marine.util.Position;
 
-public class ByteData {
+public class ByteData implements Iterable<Byte> {
 	
 	protected List<Byte> bytes;
 	
@@ -309,5 +310,10 @@ public class ByteData {
 	public void writePacketPrefix() {
 		int l = bytes.size();
 		write(0, ByteEncoder.writeVarInt(l));
+	}
+
+	@Override
+	public Iterator<Byte> iterator() {
+		return bytes.iterator();
 	}
 }
