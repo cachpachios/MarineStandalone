@@ -44,4 +44,8 @@ public double x,y,z;
 	public double getLength() {
 		return Math.sqrt(x*x + y*y + z*z);
 	}
+	
+	public Vector3i toIntVector() {
+		return new Vector3i((int)x,(int)y,(int)z); 
+	}
 }

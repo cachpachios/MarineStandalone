@@ -45,4 +45,8 @@ public class Vector3i {
 		return Math.sqrt(x*x + y*y + z*z);
 	}
 	
+	public Vector3d toDoubleVector() {
+		return new Vector3d(x,y,z);
+	}
+	
 }
