@@ -29,7 +29,7 @@ public class StandaloneServer {
 	}
 	
 	private void run() {
-        Logging.getLogger().log(String.format("Marine Standalone Server starting - Protocol Version %d (Minecraft %s)", ServerProperties.PROTOCOL_VERSION, ServerProperties.MINECRAFT_NAME));
+        Logging.getLogger().log(String.format("Marine Standalone Server starting - Protocol Version §c§o%d§0 (Minecraft §c§o%s§0)", ServerProperties.PROTOCOL_VERSION, ServerProperties.MINECRAFT_NAME));
 
 		network = new NetworkManager(port);
 		network.openConnection();

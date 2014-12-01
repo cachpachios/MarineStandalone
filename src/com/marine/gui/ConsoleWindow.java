@@ -1,27 +1,28 @@
 package com.marine.gui;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.util.ArrayList;
-
-import javax.swing.JFrame;
-import javax.swing.JTextArea;
-
 import com.marine.ServerProperties;
+import com.marine.game.chat.ChatColor;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
 
 public class ConsoleWindow { // Simple console window :)
 	private JFrame jFrame;
 	
-	private JTextArea text;
-	
+	private JTextPane text;
+	private JTextPane input;
+
 	private ArrayList<String> console;
 	
 	private final int maxLines;
-	
+
+    private final boolean showHTML;
+
 	public ConsoleWindow(int maxLines) {
 		this.maxLines = maxLines;
 		console = new ArrayList<String>();
+        this.showHTML = false;
 	}
 	
 	public void initWindow() {
@@ -33,9 +34,15 @@ public class ConsoleWindow { // Simple console window :)
 		
 		jFrame.setLayout(new GridBagLayout());
 		
-		text = new JTextArea();
+		text = new JTextPane();
+        input = new JTextPane();
+
+        if(!showHTML)
+            text.setContentType("text/html");
 		text.setEditable(false);
-		
+        text.setBackground(Color.BLACK);
+		text.setBackground(Color.BLACK);
+
 		c.fill = GridBagConstraints.BOTH;
 		c.gridx = 1;
 		c.gridy = 1;
@@ -43,15 +50,31 @@ public class ConsoleWindow { // Simple console window :)
 		c.weighty = 1;
 		
 		c.insets = new Insets(1, 1, 1, 1);
-		jFrame.add(text,c);
-		
+		jFrame.add(text, c);
+
 		jFrame.setVisible(true);
 	}
 	
 	public void write(String s) {
-		console.add(s);
+		console.add(format(s));
 		update();
 	}
+
+    private String format(String string) {
+        string = string.replace("§0", "§f");
+        string = "<font face='MarineStandalone'>" + string;
+        for(ChatColor color : ChatColor.values()) {
+            if(color.isColor()) {
+                string = string.replace("§" + color.getOldSystemID(), "</b></u></i></s><font color='#" + color.getHexa() + "'>");
+            }
+        }
+        string = string.replace("§l", "<b></u></i></s>");
+        string = string.replace("§o", "</b></u><i></s>");
+        string = string.replace("§n", "</b><u></i></s>");
+        string = string.replace("§s", "</b></u></i><s>");
+        return string + "</font>";
+    }
+
 	
 	public void update() { // TODO remove old lines.
 		if(console.size() > maxLines)
@@ -59,7 +82,7 @@ public class ConsoleWindow { // Simple console window :)
 		String str = "";
 		for(String s : console) {
 			str += s;
-			str += "\n";
+			str += "<br>";
 		}
 		
 		text.setText(str);

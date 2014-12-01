@@ -1,13 +1,13 @@
 package com.marine.net;
 
+import com.marine.Logging;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import com.marine.Logging;
 
 public class NetworkManager {
 	private List<Client> connectedClients;
@@ -28,10 +28,10 @@ public class NetworkManager {
 		try {
 			server = new ServerSocket(port, 100); //Port and num "queued" connections 
 		} catch (IOException e) {
-			Logging.getLogger().fatal("Port binding failed, perhaps allready in use");
+			Logging.getLogger().fatal("Port binding failed, perhaps already in use");
 			System.exit(1);
 		}
-		Logging.getLogger().log("Binding to port: " + port);
+		Logging.getLogger().log("Binding to port: §c" + port);
 		connector = new ConnectionThread(this);
 		
 		packetHandler = new PacketHandler();
