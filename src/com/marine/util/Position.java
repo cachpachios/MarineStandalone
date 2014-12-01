@@ -2,7 +2,7 @@ package com.marine.util;
 
 public class Position extends Vector3i {
 	
-	public Position(int x, int y, int z) {
+	public Position(int x, int y, int z) { // Used for relative posisitions (Blocks etc)
 		super(x,y,z);
 	}
 	

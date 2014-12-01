@@ -1,6 +1,7 @@
 package com.marine.world.entity;
 
 import com.marine.Logging;
+import com.marine.util.Location;
 import com.marine.util.Position;
 import com.marine.util.Vector3d;
 import com.marine.world.World;
@@ -17,16 +18,16 @@ public abstract class Entity {
 	private int entityID;
 	private World world;
 	
-	private Vector3d position;
+	private Location position;
 	
 	private int ticksLived;
 	
 	public abstract int getSendDistance();
 	
-	public Entity(int ID, World world, Position pos) {
+	public Entity(int ID, World world, Location pos) {
 		this.entityID = ID;
 		this.world = world;
-		this.position = pos.toDoubleVector();
+		this.position = pos;
 		this.ticksLived = 0;
 	}
 	

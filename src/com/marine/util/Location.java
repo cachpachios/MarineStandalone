@@ -6,8 +6,9 @@ import com.marine.world.World;
  * Created 2014-12-01 for MarineStandalone
  *
  * @author Citymonstret
+ * @param <T>
  */
-public class Location extends Vector3d {
+public class Location extends Vector3d { // Used for absolute positioning (Entites etc)
 
     private final float yaw, pitch;
     private final World world;
@@ -15,7 +16,14 @@ public class Location extends Vector3d {
     public Location(World world, double x, double y, double z) {
         this(world, x, y, z, 0f, 0f);
     }
+    
+	@SuppressWarnings("rawtypes")
+	public Location(World world, Vector3 v) {
+        this(world, (double) v.getX(), (double) v.getY(), (double)  v.getZ());
+    }
 
+
+	
     public Location(World world, double x, double y, double z, float yaw, float pitch) {
         super(x, y, z);
         this.yaw = yaw;

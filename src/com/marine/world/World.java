@@ -3,6 +3,7 @@ package com.marine.world;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
+import java.util.UUID;
 
 import com.marine.Logging;
 import com.marine.world.generators.TotalFlatGrassGenerator;
@@ -12,11 +13,15 @@ public class World { // TODO Save and unload chunks...
 	
 	private Map<ChunkPos, Chunk> loadedChunks;
 
+	private final UUID uuid;
+	
 	private final Dimension dimension;
 	
 	private WorldGenerator generator;
 	
 	public <T extends WorldGenerator, W extends World> World(Class<T> generator) { //TODO Make it able to load world
+		uuid = UUID.randomUUID();
+		
 		Constructor<T> c = null;
 		try {
 			c = generator.getConstructor(World.class);
@@ -38,6 +43,18 @@ public class World { // TODO Save and unload chunks...
 		dimension = this.generator.getDimension();
 	}
 	
+	public Chunk loadChunk(int x, int y) {
+		return null; // Temp code..
+	}
+	
+	public boolean chunkExist(int x, int y) { // Check if chunk exists in region file (if that exists xD)
+		return false;
+	}
+	
+	public boolean isChunkLoaded(int x, int y) {
+		return loadedChunks.containsKey(new ChunkPos(x,y));
+	}
+	
 	public void generateChunk(int x, int z) {
 		if(loadedChunks.containsKey(new ChunkPos(x,z)))
 			return;
@@ -54,6 +71,10 @@ public class World { // TODO Save and unload chunks...
 
 	public Dimension getDimension() {
 		return dimension;
+	}
+
+	public UUID getUUID() {
+		return uuid;
 	}
 	
 }
