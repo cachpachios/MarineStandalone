@@ -21,7 +21,7 @@ public class ConsoleWindow { // Simple console window :)
 
 	public ConsoleWindow(int maxLines) {
 		this.maxLines = maxLines;
-		console = new ArrayList<String>();
+		console = new ArrayList<>();
         this.showHTML = false;
 	}
 	

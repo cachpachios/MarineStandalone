@@ -21,7 +21,6 @@ public class RawChatMessage {
 		this(text, false, false, false, false, ChatColor.RESET);
 	}
 	
-	
 	public String toString() {
 		return JSON.toJSONString();
 	}

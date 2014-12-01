@@ -49,6 +49,7 @@ public class ListPacket extends Packet {
         json.put("version", version);
 
         JSONObject players = new JSONObject();
+
         players.put("max", maxPlayers);
         players.put("online", onlinePlayers);
         //TODO: Player samples

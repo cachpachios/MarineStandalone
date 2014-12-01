@@ -1,13 +1,16 @@
 package com.marine.player;
 
-import java.util.UUID;
-
+import com.marine.game.chat.RawChatMessage;
+import com.marine.game.command.Command;
+import com.marine.game.command.CommandSender;
 import com.marine.net.Client;
 import com.marine.util.Location;
 import com.marine.world.World;
 import com.marine.world.entity.Entity;
 
-public class Player extends Entity implements IPlayer{
+import java.util.UUID;
+
+public class Player extends Entity implements IPlayer, CommandSender {
 	
 	private AbstractPlayer absPlayer;
 	
@@ -45,5 +48,29 @@ public class Player extends Entity implements IPlayer{
 	public UUID getUUID() {
 		return absPlayer.getUUID();
 	}
-	
+
+    @Override
+    public void executeCommand(String command) {
+
+    }
+
+    @Override
+    public void executeCommand(String command, String[] arguments) {
+
+    }
+
+    @Override
+    public void executeCommand(Command command, String[] arguments) {
+
+    }
+
+    @Override
+    public void sendMessage(String message) {
+
+    }
+
+    @Override
+    public void sendMessage(RawChatMessage message) {
+
+    }
 }
