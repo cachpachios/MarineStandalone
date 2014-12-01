@@ -15,7 +15,7 @@ public class LoginInterceptor implements PacketInterceptor {
 			LoginPacket packet = new LoginPacket();
 			packet.readFromBytes(data);
 			
-			DisconnectPacket nopePacket = new DisconnectPacket("Underdevelopment :)");
+			DisconnectPacket nopePacket = new DisconnectPacket("Under Development :)");
 			c.sendPacket(nopePacket);
 		}
 		

@@ -1,7 +1,7 @@
 package com.marine.world;
 
 public enum BiomeID {
-	UNKNOWNED			(-1,"unknowned"),
+	UNKNOWN                 (-1,"unknowned"),
 	OCEAN					(0,	"Ocean"),
 	PLAINS					(1,	"Plains"),
 	DESERT					(2,	"Desert"),

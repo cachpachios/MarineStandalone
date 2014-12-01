@@ -1,9 +1,9 @@
 package com.marine.net;
 
+import com.marine.io.data.ByteData;
+
 import java.io.IOException;
 import java.io.OutputStream;
-
-import com.marine.io.data.ByteData;
 
 public abstract class Packet {
 
@@ -13,7 +13,7 @@ public abstract class Packet {
 	
 	public abstract void readFromBytes(ByteData input);
 	
-	public static Packet createSimplePacket(byte ID, byte[] inputdata, States state) {
+	public static Packet createSimplePacket(final byte ID, final byte[] inputdata, final States state) {
 		Packet p = new Packet() {
 			
 			States s = state;

@@ -1,10 +1,11 @@
 package com.marine;
 
+import com.marine.gui.ConsoleWindow;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-
-import com.marine.gui.ConsoleWindow;
+import static java.lang.System.out;
 
 public class Logging {
 	
@@ -41,50 +42,55 @@ public class Logging {
 	}
 	
 	public void log(String s) {
-		Date date = new Date();
-		calendar.setTime(date);
-		c.write("["+calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE)+":"+ calendar.get(Calendar.SECOND) + "] " + s);
-		System.out.println("["+calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE)+":"+ calendar.get(Calendar.SECOND) + "] " + s);
+        c.write(format(s));
+        out.println(format(s));
 	}
 	
 	public void info(String s) {
-		Date date = new Date();
-		calendar.setTime(date);
-		c.write("["+calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE)+":"+ calendar.get(Calendar.SECOND) + "] [INFO] " + s);
-
-		System.out.println("["+calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE)+":"+ calendar.get(Calendar.SECOND) + "] [INFO] " + s);
-	}
+        c.write(format("INFO", s));
+        out.println(format("INFO", s));
+    }
 	
 	public void debug(String s) {
-		Date date = new Date();
-		calendar.setTime(date);
-		c.write("["+calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE)+":"+ calendar.get(Calendar.SECOND) + "] [DEBUG] " + s);
-
-		System.out.println("["+calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE)+":"+ calendar.get(Calendar.SECOND) + "] [DEBUG] " + s);
-	}
+        c.write(format("DEBUG", s));
+        out.println(format("DEBUG", s));
+    }
 	
 	public void fatal(String s) {
-		Date date = new Date();
-		calendar.setTime(date);
-		c.write("["+calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE)+":"+ calendar.get(Calendar.SECOND) + "] [FATAL] " + s);
-
-		System.out.println("["+calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE)+":"+ calendar.get(Calendar.SECOND) + "] [FATAL] " + s);
-	}
+        c.write(format("FATAL", s));
+        out.println(format("FATAL", s));
+    }
 	
 	public void error(String s) {
-		Date date = new Date();
-		calendar.setTime(date);
-		c.write("["+calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE)+":"+ calendar.get(Calendar.SECOND) + "] [ERROR] " + s);
-
-		System.out.println("["+calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE)+":"+ calendar.get(Calendar.SECOND) + "] [ERROR] " + s);
-	}
+        c.write(format("ERROR", s));
+        out.println(format("ERROR", s));
+    }
 	
 	public void warn(String s) {
-		Date date = new Date();
-		calendar.setTime(date);
-		c.write("["+calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE)+":"+ calendar.get(Calendar.SECOND) + "] [WARNING] " + s);
+        c.write(format("WARNING", s));
+        out.println(format("WARNING", s));
+    }
 
-		System.out.println("["+calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE)+":"+ calendar.get(Calendar.SECOND) + "] [WARNING] " + s);
-	}
-	
+    private String format(String prefix, String msg) {
+        Date date = new Date();
+        calendar.setTime(date);
+        return String.format("[%d:%d:%d] [%s] %s",
+                calendar.get(Calendar.HOUR_OF_DAY),
+                calendar.get(Calendar.MINUTE),
+                calendar.get(Calendar.SECOND),
+                prefix,
+                msg
+        );
+    }
+
+    private String format(String msg) {
+        Date date = new Date();
+        calendar.setTime(date);
+        return String.format("[%d:%d:%d] %s",
+                calendar.get(Calendar.HOUR_OF_DAY),
+                calendar.get(Calendar.MINUTE),
+                calendar.get(Calendar.SECOND),
+                msg
+        );
+    }
 }

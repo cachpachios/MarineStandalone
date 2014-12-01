@@ -1,10 +1,10 @@
 package com.marine.world;
 
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-
 import com.marine.io.data.ByteData;
 import com.marine.util.Position;
+
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 public final class Chunk {
 	
@@ -41,8 +41,8 @@ public final class Chunk {
 	}
 	
 	public BiomeID getBiomeAt(int x, int z) {
-		if(x > 16) return BiomeID.UNKNOWNED;
-		if(z > 16) return BiomeID.UNKNOWNED;
+		if(x > 16) return BiomeID.UNKNOWN;
+		if(z > 16) return BiomeID.UNKNOWN;
 		return biomes[x + z * WIDTH];
 	}
 	
@@ -144,7 +144,7 @@ public final class Chunk {
 				if(p.getX() > 16) continue;
 				if(p.getY() > 16) continue;
 				if(p.getZ() > 16) continue;
-				setTypeAt(p.x, p.y, p.z, b.getType());
+				setTypeAt(p.getX(), p.getY(), p.getZ(), b.getType());
 			}
 		}	
 		
@@ -154,7 +154,7 @@ public final class Chunk {
 		
 		private Position getWorldPos(int x, int y, int z) { return new Position(x*pos.getX(),y + (((int) ((this.y / 16) + 0.5f)-1) * 16), z*pos.getY()); }
 		private Position getLocalPos(int x, int y, int z) { return new Position(x/pos.getX(),y - (((int) ((this.y / 16) + 0.5f)-1) * 16), z/pos.getY()); }
-		private Position getLocalPos(Position pos) { return getLocalPos(pos.x, pos.y, pos.z); }
+		private Position getLocalPos(Position pos) { return getLocalPos(pos.getX(), pos.getY(), pos.getZ()); }
 		
 		public Block getBlockAt(int x, int y, int z) {
 			if(!blockID.containsKey(x * z + y))

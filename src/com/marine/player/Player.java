@@ -1,24 +1,23 @@
 package com.marine.player;
 
-import java.util.UUID;
-
 import com.marine.net.Client;
 import com.marine.net.States;
 import com.marine.util.Position;
 import com.marine.world.World;
 import com.marine.world.entity.Entity;
 
+import java.util.UUID;
+
 public class Player extends Entity {
-	
-	
-	public Player(Client connection, PlayerID id, int entityID, World world, Position pos) {
+
+    private final Client connection;
+    private final PlayerID id;
+
+    public Player(Client connection, PlayerID id, int entityID, World world, Position pos) {
 		super(entityID, world, pos);
 		this.connection = connection;
 		this.id = id;
 	}
-
-	private Client connection;
-	private PlayerID id;
 	
 	public UUID getUUID() {
 		return id.getUUID();

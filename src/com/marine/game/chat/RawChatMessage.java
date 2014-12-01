@@ -18,7 +18,7 @@ public class RawChatMessage {
 	}
 	
 	public RawChatMessage(String text) {
-		this(text,false,false,false,false,ChatColor.RESET);
+		this(text, false, false, false, false, ChatColor.RESET);
 	}
 	
 	

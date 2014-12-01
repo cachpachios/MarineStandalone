@@ -11,13 +11,13 @@ public class Position extends Vector3i {
 	}
 	
 	public void decode(long l) {
-		 x = (int) (l >> 38);
-		 y = (int) ((l >> 26) & 0xFFF);
-		 z = (int) (l << 38 >> 38);
+		 setX((int) (l >> 38));
+		 setY((int) ((l >> 26) & 0xFFF));
+		 setZ((int) (l << 38 >> 38));
 	}
 	
 	public long encode() {
-		return  ((x & 0x3FFFFFF) << 38) | ((y & 0xFFF) << 26) | (z & 0x3FFFFFF);
+		return  ((getX() & 0x3FFFFFF) << 38) | ((getY() & 0xFFF) << 26) | (getZ() & 0x3FFFFFF);
 	}
 	
 }

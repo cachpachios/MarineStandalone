@@ -7,22 +7,22 @@ public abstract class Entity {
 	
 	private static int nextEntityID;
 	
-	public int generateEntityID() {
+	public static int generateEntityID() {
 		nextEntityID++;
 		return nextEntityID;
 	}
 	
-	private int entityID;
-	private World world;
+	private final int entityID;
+	private final World world;
 	
-	private Position position;
+	private final Position position;
 	
 	private int ticksLived;
 	
 	public abstract int getSendDistance();
 	
-	public Entity(int ID, World world, Position pos) {
-		this.entityID = ID;
+	public Entity(int entityID, World world, Position pos) {
+		this.entityID = entityID;
 		this.world = world;
 		this.position = pos;
 		this.ticksLived = 0;

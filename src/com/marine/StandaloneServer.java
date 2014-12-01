@@ -4,7 +4,7 @@ import com.marine.net.NetworkManager;
 
 public class StandaloneServer {
 	
-	private int port;
+	private final int port;
 	
 	NetworkManager network;
 	
@@ -17,10 +17,10 @@ public class StandaloneServer {
 	
 	private boolean shouldRun;
 	
-	public StandaloneServer(int port, int tickRate) {
+	public StandaloneServer(final int port, final int targetTickRate) {
 		this.port = port;
-		this.skipTime = 1000000000 / tickRate; // nanotim
-		targetTickRate = tickRate;
+		this.skipTime = 1000000000 / targetTickRate; // nanotim
+		this.targetTickRate = targetTickRate;
 	}
 	
 	public void start() {
@@ -29,8 +29,8 @@ public class StandaloneServer {
 	}
 	
 	private void run() {
+        Logging.getLogger().log(String.format("Marine Standalone Server starting - Protocol Version %d (Minecraft %s)", ServerProperties.PROTOCOL_VERSION, ServerProperties.MINECRAFT_NAME));
 
-		Logging.getLogger().log("Marine Standalone Server Starting protocol version "+ ServerProperties.PROTOCOL_VERSION +" (Minecraft "+ ServerProperties.Minecraft_Name +")");
 		network = new NetworkManager(port);
 		network.openConnection();
 
@@ -40,10 +40,9 @@ public class StandaloneServer {
 				Logging.getLogger().warn("Consider update java or your hardware.");
 			}
 		} catch(SecurityException e)  { // If blocked print an error
-			Logging.getLogger().error("Unable to retrive computer arch! Perhaps blocked by the OS.");
+			Logging.getLogger().error("Unable to retrieve computer arch! Perhaps blocked by the OS.");
 		}
 				
-		
 		long startTime = System.nanoTime();
 		long lastTime = startTime;
 		
@@ -58,7 +57,7 @@ public class StandaloneServer {
 				int sleepTime = (int) (skipTime - (startTime - lastRunTime));
 
 				if(sleepTime > 0)
-				try { Thread.sleep(sleepTime/1000000, sleepTime % 1000); } catch (InterruptedException e) {} 
+				try { Thread.sleep(sleepTime/1000000, sleepTime % 1000); } catch (InterruptedException e) {}
 				continue;
 			}
 				
@@ -76,7 +75,6 @@ public class StandaloneServer {
 			if(Logging.getLogger().isDisplayed())
 				if(Logging.getLogger().hasBeenTerminated())
 					System.exit(0);
-			
 			
 			// Advance the tick clock.
 			ServerProperties.tick();

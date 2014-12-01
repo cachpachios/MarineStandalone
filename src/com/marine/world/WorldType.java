@@ -8,8 +8,7 @@ public enum WorldType {
 	AMPLIFIED("amplified");
 	
 	private final String dataName;
-	
-	
+
 	private WorldType(String name) {
 		this.dataName = name;
 	}

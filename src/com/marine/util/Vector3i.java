@@ -1,52 +1,52 @@
 package com.marine.util;
 
-public class Vector3i {
-	public int x,y,z;
-	
-	public Vector3i(int x, int y, int z) {
-		this.x = x;
-		this.y = y;
-		this.z = z;
-	}
-	
+public class Vector3i extends Vector3<Integer> {
+
 	public Vector3i() {
-		this(0,0,0);
+		super(0, 0, 0);
 	}
 	
 	public Vector3i(int t) {
-		this(t,t,t);
+		super(t, t, t);
 	}
 
-	public int getX() {
-		return x;
-	}
+    public Vector3i(int x, int y, int z) {
+        super(x, y, z);
+    }
 
-	public void setX(int x) {
-		this.x = x;
-	}
-
-	public int getY() {
-		return y;
-	}
-
-	public void setY(int y) {
-		this.y = y;
-	}
-
-	public int getZ() {
-		return z;
-	}
-
-	public void setZ(int z) {
-		this.z = z;
-	}
-	
 	public double getLength() {
-		return Math.sqrt(x*x + y*y + z*z);
+		return Math.sqrt(getX() * getX() + getY() * getY() + getZ() * getZ());
 	}
 	
 	public Vector3d toDoubleVector() {
-		return new Vector3d(x,y,z);
+		return new Vector3d(getX(), getY(), getZ());
 	}
-	
+
+    @Override
+    public void add(Vector3<Integer> v2) {
+        setX(getX() + v2.getX());
+        setY(getY() + v2.getY());
+        setZ(getZ() + v2.getZ());
+    }
+
+    @Override
+    public void subtract(Vector3<Integer> v2) {
+        setX(getX() - v2.getX());
+        setY(getY() - v2.getY());
+        setZ(getZ() - v2.getZ());
+    }
+
+    @Override
+    public void multiply(int n) {
+        setX(getX() * n);
+        setY(getY() * n);
+        setZ(getZ() * n);
+    }
+
+    @Override
+    public void divide(int n) {
+        setX(getX() / n);
+        setY(getY() / n);
+        setZ(getZ() / n);
+    }
 }

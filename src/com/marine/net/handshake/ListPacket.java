@@ -1,14 +1,13 @@
 package com.marine.net.handshake;
 
-import java.io.IOException;
-import java.io.OutputStream;
-
-import org.json.simple.JSONObject;
-
 import com.marine.ServerProperties;
 import com.marine.io.data.ByteData;
 import com.marine.net.Packet;
 import com.marine.net.States;
+import org.json.simple.JSONObject;
+
+import java.io.IOException;
+import java.io.OutputStream;
 
 public class ListPacket extends Packet {
 
@@ -45,7 +44,7 @@ public class ListPacket extends Packet {
 		JSONObject json = new JSONObject();
 
         JSONObject version = new JSONObject();
-        version.put("name", ServerProperties.Minecraft_Name);
+        version.put("name", ServerProperties.MINECRAFT_NAME);
         version.put("protocol", ServerProperties.PROTOCOL_VERSION);
         json.put("version", version);
 

@@ -39,11 +39,11 @@ public class Block { // Help class for easier reading not used to save/set data
 	}
 	
 	public int getNBTBlockPos() {
-		return blockPos.y*16*16 + blockPos.z*16 + blockPos.x;
+		return blockPos.getY() * 16 * 16 + blockPos.getZ() * 16 + blockPos.getX() ;
 	}
 	
 	public int toPacketBlock() {
-		return type.getID() << 4 | 0; // TODO Replace 0 with avalible metadata
+		return type.getID() << 4; // TODO Replace 0 with avalible metadata
 	}
 	
 }
