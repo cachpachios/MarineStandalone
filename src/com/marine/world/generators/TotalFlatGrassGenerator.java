@@ -14,7 +14,7 @@ public final class TotalFlatGrassGenerator extends WorldGenerator{
 	}
 
 	@Override
-	public Chunk generateChunk(int x, int z) {
+	public Chunk generateChunk(int x, int z) { // Really need to be improved i guess it could be made in a less laggy way :S
 		Chunk r = new Chunk(world, new ChunkPos(x,z));
 		
 		for(int xx = 0; xx < 16;xx++)

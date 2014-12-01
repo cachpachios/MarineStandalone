@@ -1,35 +1,43 @@
 package com.marine.world.entity;
 
+import com.marine.Logging;
 import com.marine.util.Position;
+import com.marine.util.Vector3d;
 import com.marine.world.World;
 
 public abstract class Entity {
 	
 	private static int nextEntityID;
 	
-	public static int generateEntityID() {
+	public int generateEntityID() {
 		nextEntityID++;
 		return nextEntityID;
 	}
 	
-	private final int entityID;
-	private final World world;
+	private int entityID;
+	private World world;
 	
-	private final Position position;
+	private Vector3d position;
 	
 	private int ticksLived;
 	
 	public abstract int getSendDistance();
 	
-	public Entity(int entityID, World world, Position pos) {
-		this.entityID = entityID;
+	public Entity(int ID, World world, Position pos) {
+		this.entityID = ID;
 		this.world = world;
-		this.position = pos;
+		this.position = pos.toDoubleVector();
 		this.ticksLived = 0;
 	}
 	
-	public void tick() {
-		ticksLived++;
+	public abstract void update(); // Called each tick for ai/other updating
+	
+	public final void tick() {
+		if(ticksLived >= Integer.MAX_VALUE -2) {
+			Logging.getLogger().error("Entity lived more than 3.6 years impressive! but now we have to remove some age because of memory:/");
+			ticksLived = -1;
+		}
+			ticksLived++;
 	}
 	
 	public int getEntityID() {
@@ -41,7 +49,9 @@ public abstract class Entity {
 	public double getX() {return position.getX(); }
 	public double getY() {return position.getY(); }
 	public double getZ() {return position.getZ(); }
-	public Position getPosition() { return position; }
+	public Position getRelativePosition() { return (Position) position.toIntVector(); }
+	public Vector3d getAbsolutePosition() { return position; }
+	
 	
 	public int getSecoundsLived() {
 		return ticksLived/20;

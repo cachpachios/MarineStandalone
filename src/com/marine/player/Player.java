@@ -19,6 +19,10 @@ public class Player extends Entity {
 		this.id = id;
 	}
 	
+	public String getName() {
+		return id.getName();
+	}
+	
 	public UUID getUUID() {
 		return id.getUUID();
 	}
@@ -34,6 +38,12 @@ public class Player extends Entity {
 	@Override
 	public int getSendDistance() { // TODO Make this more dynamic and abilites to use with client render distance
 		return 200;
+	}
+
+	@Override
+	public void update() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

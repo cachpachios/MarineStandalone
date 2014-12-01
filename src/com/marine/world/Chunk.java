@@ -8,6 +8,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public final class Chunk {
 	
+	// TODO : Optimize the serilization and internal storing of data :)
+	
 	public final static int SECTION_HEIGHT = 16;
 	
 	public final static int WIDTH = 16; // X size
