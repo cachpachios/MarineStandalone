@@ -3,6 +3,7 @@ package com.marine.world.generators;
 import com.marine.world.BlockID;
 import com.marine.world.Chunk;
 import com.marine.world.ChunkPos;
+import com.marine.world.Dimension;
 import com.marine.world.World;
 
 public final class TotalFlatGrassGenerator extends WorldGenerator{
@@ -27,6 +28,11 @@ public final class TotalFlatGrassGenerator extends WorldGenerator{
 				
 		
 		return r;
+	}
+
+	@Override
+	public Dimension getDimension() {
+		return Dimension.OVERWORLD;
 	}
 
 }

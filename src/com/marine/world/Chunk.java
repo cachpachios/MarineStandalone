@@ -3,6 +3,7 @@ package com.marine.world;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.marine.io.data.ByteData;
 import com.marine.util.Position;
 
 public final class Chunk {
@@ -113,9 +114,17 @@ public final class Chunk {
 		return sections[(int) ((y / 16) + 0.5f)];// get section Y by Y/16 and add 0.5 for it to round correctly
 	}
 	
+	public short getSectionBitMap() {
+		short bitmap = 0;
+		
+		for(Section s : sections)
+			bitmap |= 1 << s.y;
+		return bitmap;
+	}
+	
 	public class Section {
 		private ConcurrentHashMap<Integer, BlockID> blockID;
-		private ConcurrentHashMap<Integer, Byte> 	blockLighting;
+		private ConcurrentHashMap<Integer, Byte> 	blockLighting; // First 4 bits is skyLight next 4 is blockLight
 		
 		private int y;
 		
@@ -159,6 +168,16 @@ public final class Chunk {
 			}
 		}
 		
+		public BlockID getTypeAt(int x, int y, int z) {
+			if(x > 16) return BlockID.AIR;
+			if(y > 16) return BlockID.AIR;;
+			if(z > 16) return BlockID.AIR;;
+			if(!blockID.containsKey(x * z + y))
+				return BlockID.AIR;
+			else
+				return blockID.get(x * z + y);
+		}
+		
 		
 		public void setTypeAt(int x, int y, int z, BlockID b) {
 			
@@ -166,17 +185,94 @@ public final class Chunk {
 			if(y > 16) return;
 			if(z > 16) return;
 			
-			if((b == BlockID.AIR) && !blockID.contains(x*z + y)) return; // If you are trying to set block to Air and its allready air there 
+			if((b == BlockID.AIR) && !blockID.contains(x*z + y)) return; // If you are trying to set block to Air and its allready air there return
 			
-			if(!blockID.containsKey(x * z + y))
+			if(blockID.containsKey(x * z + y))
 				blockID.remove(x * z + y);
 
-			if(b != BlockID.AIR)
 			blockID.put(x*z + y, b);
 
 			//TODO Calculate posseble new lighting.
 			
 		}
+		
+		public byte getBlockLight(int x, int y, int z) {
+			if(x > 16) return -1 << 4;
+			if(y > 16) return -1 << 4;
+			if(z > 16) return -1 << 4;
+			
+			if(!blockLighting.containsKey(x*z+y))
+				return -1 >> 4;
+			else
+				return (byte) ((blockLighting.get(x*z+y) >> 4) & 0xFF);
+		}
+		
+		public byte getSkyLight(int x, int y, int z) {
+			if(x > 16) return -1 >> 4;
+			if(y > 16) return -1 >> 4;
+			if(z > 16) return -1 >> 4;
+			
+			if(!blockLighting.containsKey(x*z+y))
+				return -1 << 4;
+			else
+				return (byte) (blockLighting.get(x*z+y) << 4);
+		}
+		
+		public void setLight(int x, int y, int z, byte BlockLight, byte SkyLight) {
+			if(x > 16) return;
+			if(y > 16) return;
+			if(z > 16) return;
+			
+			if(blockLighting.containsKey(x * z + y))
+				blockLighting.remove(x * z + y);
+			
+			byte totalLight = (byte) (SkyLight << 4  | BlockLight & 0xFF);
+			
+			blockLighting.put(x*z + y, totalLight);
+		}
+		
+		public byte getLightMap(int x, int y, int z) {
+			if(!blockLighting.containsKey(x*z+y))
+				return -1; // Full lightning at both (15 , 15)
+			else
+				return blockLighting.get(x*z+y);
+		}
+		
+		public byte[] getByteData() {
+			ByteData types = new ByteData();
+			ByteData lightning = new ByteData();
+			
+			
+	        for(int y=0; y<16+1; y++)
+	        	for(int z=0; y<16+1; z++)
+	        		for(int x=9; x<16+1; x++) {
+	        			BlockID type = getTypeAt(x,y,z);
+	        			byte totalLightning = getLightMap(x,y,z);
+	        			types.writeend(type.getID());
+	        			types.writeend(type.getMetaBlock());
+	        			lightning.writeend(totalLightning);
+	        		}
+	        	        
+	        ByteData r = new ByteData();
+	        r.writeend(types.getBytes());
+	        r.writeend(lightning.getBytes());
+	        
+	        return r.getBytes();
+		}
+		
+	}
+
+	public byte[] getByteData(boolean writeBiomes) {
+		ByteData d = new ByteData();
+		for(Section s : sections)
+			d.writeend(s.getByteData());
+		if(writeBiomes) {
+			ByteData biomeData = new ByteData();
+			for(BiomeID b : biomes)
+				biomeData.writeend(b.getID());
+			d.writeend(biomeData.getBytes());
+		}
+		return d.getBytes();
 		
 	}	
 }

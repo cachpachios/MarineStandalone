@@ -12,6 +12,7 @@ public class World { // TODO Save and unload chunks...
 	
 	private Map<ChunkPos, Chunk> loadedChunks;
 
+	private final Dimension dimension;
 	
 	private WorldGenerator generator;
 	
@@ -33,6 +34,8 @@ public class World { // TODO Save and unload chunks...
 				Logging.getLogger().fatal("World construction failed, generator type had an unknowned constructor!");
 			}
 		}
+		
+		dimension = this.generator.getDimension();
 	}
 	
 	public void generateChunk(int x, int z) {
@@ -47,6 +50,10 @@ public class World { // TODO Save and unload chunks...
 			generateChunk(x,z);
 			
 		return loadedChunks.get(new ChunkPos(x,z));
+	}
+
+	public Dimension getDimension() {
+		return dimension;
 	}
 	
 }

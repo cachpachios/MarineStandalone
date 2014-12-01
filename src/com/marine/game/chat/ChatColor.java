@@ -27,11 +27,11 @@ public enum ChatColor {
     RESET			("reset",		 "r");
 	
 	private final String packetData;
-	private final String id; // Old System one char ID
+	private final char id; // Old System one char ID
 	
 	private ChatColor(String rawData, String id) {
 		this.packetData = rawData;
-		this.id = id;
+		this.id = id.charAt(0);
 	}
 	
 	
@@ -40,11 +40,11 @@ public enum ChatColor {
 	}
 	
 	public String getOldSystemID() {
-		return id;
+		return new String(new char[] {id});
 	}
 	
 	public char getOldSystemIDChar() {
-		return id.charAt(0);
+		return id;
 	}
 	
 	public String toString() {

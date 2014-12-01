@@ -20,7 +20,12 @@ public enum BlockID {
 	ORE_GOLD			(14, "gold_ore"),
 	ORE_IRON			(15, "iron_ore"),
 	ORE_COAL			(16, "coal_ore"),
-	LOG_OAK				(17, "log"), // Metadata 0 for oak 1 for spruce 2 for birch.... etc
+	LOG_OAK				(17, "log",(byte) 0), // Metadata 0 for oak 1 for spruce 2 for birch.... etc
+	LOG_SPRUCE			(17, "log",(byte) 1), // Metadata 0 for oak 1 for spruce 2 for birch.... etc
+	LOG_BIRCH			(17, "log",(byte) 2), // Metadata 0 for oak 1 for spruce 2 for birch.... etc
+	LOG_JUNGLE			(17, "log",(byte) 3), // Metadata 0 for oak 1 for spruce 2 for birch.... etc
+	LOG_ACACIA			(17, "log",(byte) 4), // Metadata 0 for oak 1 for spruce 2 for birch.... etc
+	LOG_DARK_OAK		(17, "log",(byte) 5), // Metadata 0 for oak 1 for spruce 2 for birch.... etc
 	LEAVES				(18, "leaves"),
 	SPONGE				(19, "sponge"),
 	GLASS				(20, "glass"),
@@ -203,18 +208,29 @@ public enum BlockID {
 	DOOR_DARKOAK		(197, "dark_oak_door");
 	// Index lookup
 	private static HashMap<String, BlockID> name_index;
-	private static HashMap<Integer, BlockID> id_index;
+	private static HashMap<Byte, BlockID> id_index;
 	 					
-	private final int ID;
+	private final byte ID;
 	private final String NAME;
 	
-	private final int metaData;
+	private final byte metaData;
 
 	private BlockID(int ID, String NAME) {
-		this.ID = ID;
+		this.ID = (byte) ID;
 		this.NAME = NAME;
-		this.metaData = 0;
+		this.metaData = -1;
 		putThis();
+	}
+	
+	private BlockID(int ID, String NAME, byte metaType) {
+		this.ID = (byte) ID;
+		this.NAME = NAME;
+		this.metaData = -1;
+		putThis();
+	}
+	
+	public boolean isMetaBlock() {
+		return metaData != -1;
 	}
 	
 	private void putThis() {
@@ -223,14 +239,14 @@ public enum BlockID {
 			name_index = new HashMap<String, BlockID>();
 		
 		if(id_index == null)
-			id_index = new HashMap<Integer, BlockID>();
+			id_index = new HashMap<Byte, BlockID>();
 		
 		
 		name_index.put(NAME, this);
 		id_index.put(ID, this);
 	}
 	
-	public int getID() {
+	public byte getID() {
 		return ID;
 	}
 	 
@@ -238,12 +254,12 @@ public enum BlockID {
 		return NAME;
 	}
 	
-	public int getMetaData() {
+	public byte getMetaBlock() {
 		return metaData;
 	}
 	
 	public int getPacketID() {
-		return getID() << 4 | getMetaData();
+		return getID() << 4 | 0;
 	}
 	
 	public BlockID getFromString(String s) {
@@ -253,5 +269,4 @@ public enum BlockID {
 	public BlockID getFromID(int id) {
 		return id_index.get(id);
 	}
-	 
 }    
