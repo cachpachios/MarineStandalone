@@ -1,18 +1,21 @@
 package com.marine.game;
 
-import com.marine.net.Client;
-import com.marine.net.States;
-import com.marine.net.login.LoginSucessPacket;
-import com.marine.player.*;
-import com.marine.util.Location;
-import com.marine.util.Position;
-import com.marine.util.UUIDHandler;
-import com.marine.world.World;
-
 import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+
+import com.marine.net.Client;
+import com.marine.net.login.LoginSucessPacket;
+import com.marine.player.AbstractPlayer;
+import com.marine.player.IPlayer;
+import com.marine.player.Player;
+import com.marine.player.PlayerAbilites;
+import com.marine.player.PlayerID;
+import com.marine.util.Location;
+import com.marine.util.Position;
+import com.marine.util.UUIDHandler;
+import com.marine.world.World;
 
 public class LoginHandler {
 

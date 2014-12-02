@@ -6,6 +6,9 @@ package com.marine.game.item;
  * @author Citymonstret
  */
 public enum ItemID {
+	
+	EMPTY			(-1,	"air",					"Air",				false),
+
     IRON_SHOVEL     (256,   "iron_shovel",          "Iron Shovel",      true),
     IRON_PICKAXE    (257,   "iron_pickaxe",         "Iron Pickaxe",     true),
     IRON_AXE        (258,   "iron_axe",             "Iron Axe",         true),
