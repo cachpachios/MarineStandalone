@@ -51,4 +51,9 @@ public final class TotalFlatGrassGenerator extends WorldGenerator{
 		return r;	
 	}
 
+	@Override
+	public LevelType getLevelType() {
+		return LevelType.FLAT;
+	}
+
 }

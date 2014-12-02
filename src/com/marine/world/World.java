@@ -9,6 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.marine.Logging;
 import com.marine.util.Position;
+import com.marine.world.generators.LevelType;
 import com.marine.world.generators.TotalFlatGrassGenerator;
 import com.marine.world.generators.WorldGenerator;
 
@@ -107,5 +108,9 @@ public class World { // TODO Save and unload chunks...
 			time = 0;
 	}
 
+	
+	public LevelType getLevelType() {
+		return generator.getLevelType();
+	}
 	
 }
