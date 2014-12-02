@@ -20,6 +20,8 @@ public class World { // TODO Save and unload chunks...
 	
 	private final Dimension dimension;
 	
+	private int time;
+	
 	private WorldGenerator generator;
 	
 	public <T extends WorldGenerator, W extends World> World(Class<T> generator) { //TODO Make it able to load world
@@ -85,5 +87,13 @@ public class World { // TODO Save and unload chunks...
 	public Position getSpawnPoint() {
 		return spawnPoint;
 	}
+
+	public void tick() {
+		if(time < 24000)
+			time++;
+		else
+			time = 0;
+	}
+
 	
 }

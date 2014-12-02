@@ -39,5 +39,12 @@ public class WorldManager {
 		
 		loadedWorlds.put(w.getUUID(), w);
 	}
+
+	public void tick() {
+		synchronized(loadedWorlds) {
+			for(World w : loadedWorlds.values())
+				w.tick();
+		}
+	}
 	
 }
