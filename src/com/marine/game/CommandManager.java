@@ -1,13 +1,13 @@
 package com.marine.game;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
+import com.marine.game.command.Command;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import com.marine.game.command.Command;
 
 /**
  * Created 2014-12-01 for MarineStandalone
@@ -16,14 +16,14 @@ import com.marine.game.command.Command;
  */
 public class CommandManager {
 
-    private final Map<Command, List<String>> commandMap;
+    private final BiMap<Command, List<String>> commandMap;
     private final List<String> raw;
 
     private static CommandManager instance;
 
     public CommandManager() {
-        commandMap = Collections.synchronizedMap(new ConcurrentHashMap<>());
-        raw = Collections.synchronizedList(new ArrayList<>());
+        commandMap = HashBiMap.create();
+        raw = Collections.synchronizedList(new ArrayList<String>());
     }
 
     public static CommandManager getInstance() {
