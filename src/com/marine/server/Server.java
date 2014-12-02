@@ -22,12 +22,12 @@ public class Server implements MarineServer {
 
     @Override
     public List<Player> getPlayers() {
-        return server.getPlayerManager();
+        return server.getPlayerManager().getPlayers();
     }
 
     @Override
     public int getPlayerCount() {
-        return 0;
+        return this.getPlayers().size();
     }
 
     @Override
@@ -37,7 +37,7 @@ public class Server implements MarineServer {
 
     @Override
     public List<World> getWorlds() {
-        return null;
+        return server.getWorldManager().getWorlds();
     }
 
     @Override

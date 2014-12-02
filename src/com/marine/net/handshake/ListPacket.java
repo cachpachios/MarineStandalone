@@ -1,11 +1,11 @@
 package com.marine.net.handshake;
 
-import com.marine.Server;
 import com.marine.ServerProperties;
 import com.marine.io.data.ByteData;
 import com.marine.net.Packet;
 import com.marine.net.States;
 import com.marine.player.Player;
+import com.marine.server.Marine;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -43,7 +43,7 @@ public class ListPacket extends Packet {
 		ByteData data = new ByteData();
 		
 		data.writeVarInt(getID());
-		data.writeUTF8(encode(ServerProperties.MOTD, 20, Server.getOnlinePlayers().size()));
+		data.writeUTF8(encode(ServerProperties.MOTD, 20, Marine.getPlayers().size()));
 		data.writePacketPrefix();
 		
 		stream.write(data.getBytes());
@@ -79,7 +79,7 @@ public class ListPacket extends Packet {
 
         samples.add(player);
 
-        for (Player p : ) {
+        for (Player p : Marine.getPlayers()) {
             player = new JSONObject();
             player.put("id", p.getUUID().toString());
             player.put("name", p.getName());

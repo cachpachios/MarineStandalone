@@ -1,12 +1,10 @@
 package com.marine.game;
 
-import java.util.Collections;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-
 import com.marine.world.World;
 import com.marine.world.generators.TotalFlatGrassGenerator;
+
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class WorldManager {
 	public Map<UUID, World> loadedWorlds;
@@ -16,6 +14,10 @@ public class WorldManager {
 	public WorldManager() {
 		loadedWorlds = Collections.synchronizedMap(new ConcurrentHashMap<UUID, World>());
 	}
+
+    public List<World> getWorlds() {
+        return new ArrayList<>(loadedWorlds.values());
+    }
 
 	// TODO World loading..
 	

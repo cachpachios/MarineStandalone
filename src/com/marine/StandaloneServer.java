@@ -3,6 +3,8 @@ package com.marine;
 import com.marine.game.PlayerManager;
 import com.marine.game.WorldManager;
 import com.marine.net.NetworkManager;
+import com.marine.server.Marine;
+import com.marine.server.MarineServer;
 import com.marine.server.Server;
 
 public class StandaloneServer {
@@ -18,7 +20,6 @@ public class StandaloneServer {
 	
 	public final int skipTime;
 	private final int targetTickRate; // For use in the loop should be same as (skipTime * 1000000000)
-
 	
 	public int ticks;
 	public int refreshesPerSecound;
@@ -32,13 +33,19 @@ public class StandaloneServer {
         this.players = new PlayerManager(this);
         this.worlds = new WorldManager();
         this.server = new Server(this);
-	}
+
+        Marine.setServer(this.server);
+    }
 	
 	public void start() {
 		shouldRun = true;
 		run();
 	}
-	
+
+    public MarineServer getServer() {
+        return this.server;
+    }
+
 	public PlayerManager getPlayerManager() {
 		return players;
 	}
