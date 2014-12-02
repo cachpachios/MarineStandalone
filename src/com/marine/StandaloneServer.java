@@ -19,10 +19,10 @@ public class StandaloneServer {
 	private final Server server;
 
 	// Settings:
-	private String 			standard_motd;
-	private int 			standard_maxplayers;
-	private Difficulty		standard_difficulty;
-	private Gamemode		standard_gamemode;
+	private String 			standard_motd = "MarineStandalone | Development";
+	private int 			standard_maxplayers = 99;
+	private Difficulty		standard_difficulty = Difficulty.PEACEFUL;
+	private Gamemode		standard_gamemode = Gamemode.SURVIVAL;
 	
 	NetworkManager network;
 	

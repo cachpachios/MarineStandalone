@@ -107,10 +107,13 @@ public class Client {
 		ArrayList<ByteData> packages = new ArrayList<ByteData>();
 		
 		
-		while(data.remainingBytes() != 0) {
+		while(data.remainingBytes() > 0) {
 			int l = data.readVarInt();
 		
 			if(l == 0)
+				continue;
+			
+			if(l > data.remainingBytes())
 				continue;
 			
 			packages.add(data.readData(l));

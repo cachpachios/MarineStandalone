@@ -44,8 +44,14 @@ public class ByteData implements Iterable<Byte> {
 	
 	public byte readByte() {
 		
-		if(hasBytes() == false) {
-			Logging.getLogger().error("ByteData object ran out of bytes");
+		if(!hasBytes()) {
+			Logging.getLogger().error("ByteData object is empty");
+			return 0;
+		}
+		
+		if(!canReadAnother()) {
+			Logging.getLogger().error("ByteData ran out of bytes");
+			new Exception().printStackTrace();
 			return 0;
 		}
 		
