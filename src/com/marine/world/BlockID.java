@@ -1,6 +1,6 @@
 package com.marine.world;
 
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public enum BlockID {
 	AIR					(0,"air"),
@@ -26,7 +26,22 @@ public enum BlockID {
 	LOG_JUNGLE			(17, "log",(byte) 3), // Metadata 0 for oak 1 for spruce 2 for birch.... etc
 	LOG_ACACIA			(17, "log",(byte) 4), // Metadata 0 for oak 1 for spruce 2 for birch.... etc
 	LOG_DARK_OAK		(17, "log",(byte) 5), // Metadata 0 for oak 1 for spruce 2 for birch.... etc
-	LEAVES				(18, "leaves"),
+	LEAVES_OAK			(18, "leaves", (byte) 0),
+	LEAVES_SPRUCE		(18, "leaves", (byte) 1),
+	LEAVES_BIRCH		(18, "leaves", (byte) 2),
+	LEAVES_JUNGLE		(18, "leaves", (byte) 3),
+	LEAVES_NODCAY_OAK	(18, "leaves", (byte) 4),
+	LEAVES_NODCAY_SPRUCE(18, "leaves", (byte) 5),
+	LEAVES_NODCAY_BIRCH	(18, "leaves", (byte) 6),
+	LEAVES_NODCAY_JUNGLE(18, "leaves", (byte) 7),
+	LEAVES_CHDCAY_OAK	(18, "leaves", (byte) 8),
+	LEAVES_CHDCAY_SPRUCE(18, "leaves", (byte) 9),
+	LEAVES_CHDCAY_BIRCH	(18, "leaves", (byte) 10),
+	LEAVES_CHDCAY_JUNGLE(18, "leaves", (byte) 11),
+	LEAVES_DCAY_OAK		(18, "leaves", (byte) 12),
+	LEAVES_DCAY_SPRUCE	(18, "leaves", (byte) 13),
+	LEAVES_DCAY_BIRCH	(18, "leaves", (byte) 14),
+	LEAVES_DCAY_JUNGLE	(18, "leaves", (byte) 15),
 	SPONGE				(19, "sponge"),
 	GLASS				(20, "glass"),
 	LAPIS_ORE			(21, "lapis_ore"),
@@ -43,7 +58,22 @@ public enum BlockID {
 	DEADBUSH			(32, "deadbush"),
 	PISTON_BASE			(33, "piston"),
 	PISON_HEAD			(34, "piston_head"),
-	WOOL				(35, "wool"),
+	WOOL_WHITE			(35, "wool", (byte) 0),
+	WOOL_ORANGE			(35, "wool", (byte) 1),
+	WOOL_MAGENTA		(35, "wool", (byte) 2),
+	WOOL_LIGHT_BLUE		(35, "wool", (byte) 3),
+	WOOL_YELLOW			(35, "wool", (byte) 4),
+	WOOL_LIME			(35, "wool", (byte) 5),
+	WOOL_PINK			(35, "wool", (byte) 6),
+	WOOL_GRAY			(35, "wool", (byte) 7),
+	WOOL_LIGHT_GRAY		(35, "wool", (byte) 8),
+	WOOL_CYAN			(35, "wool", (byte) 9),
+	WOOL_PURPLE			(35, "wool", (byte) 10),
+	WOOL_BLUE			(35, "wool", (byte) 11),
+	WOOL_BROWN			(35, "wool", (byte) 12),
+	WOOL_GREEN			(35, "wool", (byte) 13),
+	WOOL_RED			(35, "wool", (byte) 14),
+	WOOL_BLACK			(35, "wool", (byte) 15),
 	PISON_EXTENSTION	(36, "piston_extension"),
 	YELLOW_FLOWER		(37, "yellow_flower"),
 	RED_FLOWER			(38, "red_flower"),
@@ -103,7 +133,22 @@ public enum BlockID {
 	CAKE				(92, "cake"),
 	REPEATER_UNPOWERED	(93, "unpowered_repeater"),
 	REPEATER_POWERD		(94, "powered_repeater"),
-	GLASS_STAINED		(95, "stained_glass"),
+	GLASS_STAINED_WHITE			(95, "stained_glass", (byte) 0),
+	GLASS_STAINED_ORANGE		(95, "stained_glass", (byte) 1),
+	GLASS_STAINED_MAGENTA		(95, "stained_glass", (byte) 2),
+	GLASS_STAINED_LIGHT_BLUE	(95, "stained_glass", (byte) 3),
+	GLASS_STAINED_YELLOW		(95, "stained_glass", (byte) 4),
+	GLASS_STAINED_LIME			(95, "stained_glass", (byte) 5),
+	GLASS_STAINED_PINK			(95, "stained_glass", (byte) 6),
+	GLASS_STAINED_GRAY			(95, "stained_glass", (byte) 7),
+	GLASS_STAINED_LIGHT_GRAY	(95, "stained_glass", (byte) 8),
+	GLASS_STAINED_CYAN			(95, "stained_glass", (byte) 9),
+	GLASS_STAINED_PURPLE		(95, "stained_glass", (byte) 10),
+	GLASS_STAINED_BLUE			(95, "stained_glass", (byte) 11),
+	GLASS_STAINED_BROWN			(95, "stained_glass", (byte) 12),
+	GLASS_STAINED_GREEN			(95, "stained_glass", (byte) 13),
+	GLASS_STAINED_RED			(95, "stained_glass", (byte) 14),
+	GLASS_STAINED_BLACK			(95, "stained_glass", (byte) 15),
 	TRAPDOOR			(96, "trapdoor"),
 	MONSTER_EGG			(97, "monster_egg"),
 	STONEBRICK			(98, "stonebrick"),
@@ -167,8 +212,38 @@ public enum BlockID {
 	QUARTZ_STAIRS		(156, "quartz_stairs"),
 	RAIL_ACTIVATOR		(157, "activator_rail"),
 	DROPPER				(158, "dropper"),
-	HARDENED_CLAY_STAINED(159, "stained_hardened_clay"),
-	GLASS_PANE_STAINED	(160, "stained_glass_pane"),
+	HARDENED_CLAY_STAINED_WHITE			(95, "stained_glass", (byte) 0),
+	HARDENED_CLAY_STAINED_ORANGE		(95, "stained_glass", (byte) 1),
+	HARDENED_CLAY_STAINED_MAGENTA		(95, "stained_glass", (byte) 2),
+	HARDENED_CLAY_STAINED_LIGHT_BLUE	(95, "stained_glass", (byte) 3),
+	HARDENED_CLAY_STAINED_YELLOW		(95, "stained_glass", (byte) 4),
+	HARDENED_CLAY_STAINED_LIME			(95, "stained_glass", (byte) 5),
+	HARDENED_CLAY_STAINED_PINK			(95, "stained_glass", (byte) 6),
+	HARDENED_CLAY_STAINED_GRAY			(95, "stained_glass", (byte) 7),
+	HARDENED_CLAY_STAINED_LIGHT_GRAY	(95, "stained_glass", (byte) 8),
+	HARDENED_CLAY_STAINED_CYAN			(95, "stained_glass", (byte) 9),
+	HARDENED_CLAY_STAINED_PURPLE		(95, "stained_glass", (byte) 10),
+	HARDENED_CLAY_STAINED_BLUE			(95, "stained_glass", (byte) 11),
+	HARDENED_CLAY_STAINED_BROWN			(95, "stained_glass", (byte) 12),
+	HARDENED_CLAY_STAINED_GREEN			(95, "stained_glass", (byte) 13),
+	HARDENED_CLAY_STAINED_RED			(95, "stained_glass", (byte) 14),
+	HARDENED_CLAY_STAINED_BLACK			(95, "stained_glass", (byte) 15),
+	GLASS_PANE_STAINED_WHITE			(160, "stained_glass_pane", (byte) 0),
+	GLASS_PANE_STAINED_ORANGE			(160, "stained_glass_pane", (byte) 1),
+	GLASS_PANE_STAINED_MAGENTA			(160, "stained_glass_pane", (byte) 2),
+	GLASS_PANE_STAINED_LIGHT_BLUE		(160, "stained_glass_pane", (byte) 3),
+	GLASS_PANE_STAINED_YELLOW			(160, "stained_glass_pane", (byte) 4),
+	GLASS_PANE_STAINED_LIME				(160, "stained_glass_pane", (byte) 5),
+	GLASS_PANE_STAINED_PINK				(160, "stained_glass_pane", (byte) 6),
+	GLASS_PANE_STAINED_GRAY				(160, "stained_glass_pane", (byte) 7),
+	GLASS_PANE_STAINED_LIGHT_GRAY		(160, "stained_glass_pane", (byte) 8),
+	GLASS_PANE_STAINED_CYAN				(160, "stained_glass_pane", (byte) 9),
+	GLASS_PANE_STAINED_PURPLE			(160, "stained_glass_pane", (byte) 10),
+	GLASS_PANE_STAINED_BLUE				(160, "stained_glass_pane", (byte) 11),
+	GLASS_PANE_STAINED_BROWN			(160, "stained_glass_pane", (byte) 12),
+	GLASS_PANE_STAINED_GREEN			(160, "stained_glass_pane", (byte) 13),
+	GLASS_PANE_PANE_STAINED_RED			(160, "stained_glass_pane", (byte) 14),
+	GLASS_PANE_STAINED_BLACK			(160, "stained_glass_pane", (byte) 15),
 	LEAVES_OTHER		(161, "leaves2"),
 	LOGS_OTHER			(162, "log2"),
 	WOODEN_ACAIA_STAIRS	(163, "acacia_stairs"),
@@ -207,9 +282,10 @@ public enum BlockID {
 	DOOR_ACACIA			(196, "acacia_door"),
 	DOOR_DARKOAK		(197, "dark_oak_door");
 	// Index lookup
-	private static HashMap<String, BlockID> name_index;
-	private static HashMap<Byte, BlockID> id_index;
-	 					
+	private static ConcurrentHashMap<String, BlockID> name_index;
+	private static ConcurrentHashMap<Byte, BlockID> 	id_index;
+	private static ConcurrentHashMap<String, BlockID>meta_index;
+	
 	private final byte ID;
 	private final String NAME;
 	
@@ -236,14 +312,21 @@ public enum BlockID {
 	private void putThis() {
 		
 		if(name_index == null)
-			name_index = new HashMap<String, BlockID>();
+			name_index = new ConcurrentHashMap<String, BlockID>();
 		
 		if(id_index == null)
-			id_index = new HashMap<Byte, BlockID>();
+			id_index = new ConcurrentHashMap<Byte, BlockID>();
 		
+		if(meta_index == null)
+			meta_index = new ConcurrentHashMap<String, BlockID>();
 		
+		if(!isMetaBlock()) {
 		name_index.put(NAME, this);
 		id_index.put(ID, this);
+		}
+		else {
+			meta_index.put(ID +" "+ metaData, this);
+		}
 	}
 	
 	public byte getID() {
@@ -262,11 +345,24 @@ public enum BlockID {
 		return getID() << 4 | 0;
 	}
 	
-	public BlockID getFromString(String s) {
-		return name_index.get(s.toLowerCase());
+	public static BlockID getFromString(String s) {
+		if(id_index.containsKey(s.toLowerCase()))
+			return id_index.get(s.toLowerCase());
+		else
+			return null;
 	}
 	 
-	public BlockID getFromID(int id) {
-		return id_index.get(id);
+	public static BlockID getFromID(int id) {
+		if(id_index.containsKey(id))
+			return id_index.get(id);
+		else
+			return null;
+	}
+	
+	public static BlockID getFromIDMeta(int id, int meta) {
+		if(meta_index.containsKey(id +" "+ meta))
+			return meta_index.get(id +" "+ meta);
+		else
+			return null;
 	}
 }    
