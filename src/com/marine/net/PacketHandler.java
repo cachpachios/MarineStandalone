@@ -1,5 +1,6 @@
 package com.marine.net;
 
+import com.marine.StandaloneServer;
 import com.marine.io.data.ByteData;
 import com.marine.net.interceptors.HandshakeInterceptor;
 import com.marine.net.interceptors.LoginInterceptor;
@@ -13,10 +14,10 @@ public class PacketHandler implements PacketInterceptor {
 	StatusInterceptor status;
 	LoginInterceptor login;
 	
-	public PacketHandler() {
+	public PacketHandler(StandaloneServer server) {
 		handshake = new HandshakeInterceptor();
 		status = new StatusInterceptor();
-		login = new LoginInterceptor();
+		login = new LoginInterceptor(server);
 	}
 	
 	public boolean intercept(ByteData data, Client c) {

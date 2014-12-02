@@ -1,8 +1,13 @@
 package com.marine.game;
 
-import com.marine.game.command.Command;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
-import java.util.*;
+import com.marine.game.command.Command;
 
 /**
  * Created 2014-12-01 for MarineStandalone
@@ -17,8 +22,8 @@ public class CommandManager {
     private static CommandManager instance;
 
     public CommandManager() {
-        commandMap = new HashMap<>();
-        raw = new ArrayList<>();
+        commandMap = Collections.synchronizedMap(new ConcurrentHashMap<>());
+        raw = Collections.synchronizedList(new ArrayList<>());
     }
 
     public static CommandManager getInstance() {
@@ -28,6 +33,7 @@ public class CommandManager {
     }
 
     public void registerCommand(Command command) throws RuntimeException {
+    	synchronized(commandMap) { synchronized(raw) {
         if (raw.contains(command.toString())) {
             throw new RuntimeException(String.format("Command Name '%s' is already taken", command.toString()));
         }
@@ -35,6 +41,7 @@ public class CommandManager {
         List<String> s = new ArrayList<>(Arrays.asList(command.getAliases()));
         s.add(command.toString());
         commandMap.put(command, s);
+    	}} // Synchornization end.
     }
 
 }

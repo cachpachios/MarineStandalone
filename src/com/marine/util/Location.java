@@ -31,12 +31,20 @@ public class Location extends Vector3d { // Used for absolute positioning (Entit
         this.world = world;
     }
 
-    public World getWorld() {
+    public Location(Position spawnLocation, World w) {
+    	this(w,(double) spawnLocation.getX(), (double) spawnLocation.getY(), (double) spawnLocation.getZ());
+	}
+
+	public World getWorld() {
         return this.world;
     }
 
     public float getYaw() {
         return this.yaw;
+    }
+    
+    public Position getRelativePosition() {
+    	return new Position(getX().intValue(), getY().intValue(), getZ().intValue());
     }
 
     public float getPitch() {

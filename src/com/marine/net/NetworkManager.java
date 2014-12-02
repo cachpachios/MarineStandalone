@@ -1,13 +1,14 @@
 package com.marine.net;
 
-import com.marine.Logging;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import com.marine.Logging;
+import com.marine.StandaloneServer;
 
 public class NetworkManager {
 	private List<Client> connectedClients;
@@ -22,7 +23,10 @@ public class NetworkManager {
 	
 	public ClientProcessor clientHandler;
 
-	public NetworkManager(int port) {
+	private final StandaloneServer marineServer;
+	
+	public NetworkManager(StandaloneServer marineServer, int port) {
+		this.marineServer = marineServer;
 		connectedClients = Collections.synchronizedList(new ArrayList<Client>());
 		cleanUpList = Collections.synchronizedList(new ArrayList<Client>());
 		try {
@@ -34,9 +38,13 @@ public class NetworkManager {
 		Logging.getLogger().log("Binding to port: §c" + port);
 		connector = new ConnectionThread(this);
 		
-		packetHandler = new PacketHandler();
+		packetHandler = new PacketHandler(marineServer);
 		
 		clientHandler = new ClientProcessor(this);
+	}
+	
+	public StandaloneServer getServer() {
+		return marineServer;
 	}
 	
 	public void openConnection() {

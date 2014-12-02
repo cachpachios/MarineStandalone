@@ -3,14 +3,23 @@ package com.marine.player;
 import java.util.UUID;
 
 import com.marine.net.Client;
+import com.marine.util.Location;
+import com.marine.util.Position;
+import com.marine.world.World;
 
-public  class AbstractPlayer implements IPlayer{ // Used for communication with client/login process
+public class AbstractPlayer implements IPlayer{ // Used for communication with client/login process
 	private PlayerID id;
+	
+	private PlayerAbilites abilites;
 	
 	private Client client;
 	
-	public AbstractPlayer(PlayerID id, Client c) {
+	private Location location;
+	
+	public AbstractPlayer(PlayerID id, Client c, PlayerAbilites abilites, Location spawnLocation) {
 		this.client = c;
+		this.location = spawnLocation;
+		this.abilites = abilites;
 		this.id = id;
 	}
 	
@@ -23,6 +32,10 @@ public  class AbstractPlayer implements IPlayer{ // Used for communication with 
 		return id;
 	}
 
+	public PlayerAbilites getAbilites() {
+		return abilites;
+	}
+	
 	@Override
 	public Client getClient() {
 		return client;
@@ -32,9 +45,26 @@ public  class AbstractPlayer implements IPlayer{ // Used for communication with 
 	public UUID getUUID() {
 		return id.getUUID();
 	}
-	
-	
-	
-	
-	
+
+	@Override
+	public void update() {
+		if(abilites.needUpdate())
+			client.sendPacket(abilites.getPacket());
+	}
+
+	@Override
+	public World getWorld() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Location getLocation() {
+		return location;
+	}
+
+	@Override
+	public Position getRealtivePosition() {
+		return location.getRelativePosition();
+	}	
 }

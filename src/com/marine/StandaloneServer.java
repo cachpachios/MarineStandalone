@@ -1,10 +1,18 @@
 package com.marine;
 
+import com.marine.game.PlayerManager;
+import com.marine.game.WorldManager;
 import com.marine.net.NetworkManager;
 
 public class StandaloneServer {
 	
 	private final int port;
+	
+	// Game managers
+	private PlayerManager players; 
+	private WorldManager worlds;
+	
+	
 	
 	NetworkManager network;
 	
@@ -28,10 +36,14 @@ public class StandaloneServer {
 		run();
 	}
 	
+	public PlayerManager getPlayerManager() {
+		return players;
+	}
+	
 	private void run() {
         Logging.getLogger().log(String.format("Marine Standalone Server starting - Protocol Version §c§o%d§0 (Minecraft §c§o%s§0)", ServerProperties.PROTOCOL_VERSION, ServerProperties.MINECRAFT_NAME));
 
-		network = new NetworkManager(port);
+		network = new NetworkManager(this, port);
 		network.openConnection();
 
 		try { // Check OS Arch and warn if lower than 64bit
@@ -88,6 +100,14 @@ public class StandaloneServer {
 	
 	public void stop() {
 		shouldRun = false;
+	}
+
+	public NetworkManager getNetwork() {
+		return network;
+	}
+	
+	public WorldManager getWorldManager() {
+		return worlds;
 	}
 	
 }
