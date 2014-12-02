@@ -13,4 +13,6 @@ public interface IPlayer {
 	public Client getClient();
 	
 	public UUID getUUID();
+	
+	public void update();
 }

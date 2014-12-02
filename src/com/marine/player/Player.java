@@ -14,9 +14,9 @@ public class Player extends Entity implements IPlayer, CommandSender {
 	
 	private AbstractPlayer absPlayer;
 	
-	public Player(Client connection, PlayerID id, int entityID, World world, Location pos) {
+	public Player(Client connection, PlayerID id, int entityID, World world, Location pos, PlayerAbilites abilites) {
 		super(entityID, world, pos);
-		this.absPlayer = new AbstractPlayer(id, connection);
+		this.absPlayer = new AbstractPlayer(id, connection, abilites);
 	}
 	
 	@Override
@@ -25,12 +25,13 @@ public class Player extends Entity implements IPlayer, CommandSender {
 	}
 	
 	@Override
-	public int getSendDistance() { // TODO Make this more dynamic and abilites to use with client render distance
+	public int getSendDistance() { // TODO Make this more dynamic and ability to use with client render distance
 		return 200;
 	}
 
 	@Override
 	public void update() {
+		absPlayer.update();
 	}
 
 	@Override
