@@ -1,11 +1,13 @@
 package com.marine.net.handshake;
 
 import com.marine.ServerProperties;
+import com.marine.events.ListEvent;
 import com.marine.io.data.ByteData;
 import com.marine.net.Packet;
 import com.marine.net.States;
 import com.marine.player.Player;
 import com.marine.server.Marine;
+import com.marine.util.ListResponse;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -40,10 +42,15 @@ public class ListPacket extends Packet {
 
 	@Override
 	public void writeToStream(OutputStream stream) throws IOException {
-		ByteData data = new ByteData();
+        ListResponse response = new ListResponse(Marine.getMOTD(), Marine.getPlayers().size(), 100, new JSONArray(), null);
+        ListEvent event = new ListEvent(response);
+
+        Marine.getServer().callEvent(event);
+
+        ByteData data = new ByteData();
 		
 		data.writeVarInt(getID());
-		data.writeUTF8(encode(Marine.getMOTD(), 20, Marine.getPlayers().size()));
+		data.writeUTF8(encode(event.getResponse()));
 		data.writePacketPrefix();
 		
 		stream.write(data.getBytes());
@@ -61,7 +68,7 @@ public class ListPacket extends Packet {
 	
 	
 	@SuppressWarnings("unchecked")
-	public String encode(String MOTD, int maxPlayers, int onlinePlayers) {
+	public String encode(ListResponse response) {
 		JSONObject json = new JSONObject();
 
         JSONObject version = new JSONObject();
@@ -86,13 +93,13 @@ public class ListPacket extends Packet {
             samples.add(player);
         }
 
-        players.put("max", maxPlayers);
-        players.put("online", onlinePlayers);
+        players.put("max", response.MAX_PLAYERS);
+        players.put("online", response.CURRENT_PLAYERS);
         players.put("sample", samples);
         json.put("players", players);
 
         JSONObject description = new JSONObject();
-        description.put("text", MOTD);
+        description.put("text", response.MOTD);
         json.put("description", description);
         
         //TODO: Faviicon

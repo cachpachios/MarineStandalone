@@ -1,5 +1,7 @@
 package com.marine.server;
 
+import com.marine.events.Listener;
+import com.marine.events.MarineEvent;
 import com.marine.player.Player;
 import com.marine.world.World;
 
@@ -51,6 +53,12 @@ public interface MarineServer {
      * @return Player
      */
     public Player getPlayer(String username);
+
+    public void registerListener(Listener listener);
+
+    public void unregisterListener(Listener listener);
+
+    public void callEvent(MarineEvent event);
 
 	public String getMOTD();
 

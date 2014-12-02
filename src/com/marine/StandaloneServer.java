@@ -1,5 +1,6 @@
 package com.marine;
 
+import com.marine.events.Listener;
 import com.marine.game.PlayerManager;
 import com.marine.game.WorldManager;
 import com.marine.game.chat.ChatColor;
@@ -11,7 +12,7 @@ import com.marine.server.Server;
 import com.marine.settings.ServerSettings;
 import com.marine.world.Difficulty;
 
-public class StandaloneServer {
+public class StandaloneServer implements Listener {
 	
 	private final int port;
 	
@@ -46,7 +47,7 @@ public class StandaloneServer {
 
         Marine.setServer(this.server);
     }
-	
+
 	public void start() {
 		shouldRun = true;
 		run();

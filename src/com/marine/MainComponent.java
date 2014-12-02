@@ -16,6 +16,9 @@ public class MainComponent {
             ServerSettings.getInstance().verbose();
         }
 
+        if (!ServerProperties.BUILD_STABLE)
+            Logging.getLogger().warn("You are running an unstable build");
+
 		server.start();
 	}
 }

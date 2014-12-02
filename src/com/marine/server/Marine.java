@@ -38,4 +38,8 @@ public class Marine {
 	public static String getMOTD() {
 		return server.getMOTD();
 	}
+
+    public static MarineServer getServer() {
+        return server;
+    }
 }

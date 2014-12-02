@@ -1,6 +1,9 @@
 package com.marine.server;
 
+import com.google.common.eventbus.EventBus;
 import com.marine.StandaloneServer;
+import com.marine.events.Listener;
+import com.marine.events.MarineEvent;
 import com.marine.player.Player;
 import com.marine.world.World;
 
@@ -14,10 +17,12 @@ import java.util.UUID;
  */
 public class Server implements MarineServer {
 
+    private final EventBus eventBus;
     private final StandaloneServer server;
 
     public Server(StandaloneServer server) {
         this.server = server;
+        this.eventBus = new EventBus();
     }
 
     @Override
@@ -50,7 +55,22 @@ public class Server implements MarineServer {
         return null;
     }
 
-	@Override
+    @Override
+    public void registerListener(Listener listener) {
+        eventBus.register(listener);
+    }
+
+    @Override
+    public void unregisterListener(Listener listener) {
+        eventBus.unregister(listener);
+    }
+
+    @Override
+    public void callEvent(MarineEvent event) {
+        eventBus.post(event);
+    }
+
+    @Override
 	public String getMOTD() {
 		return server.getMOTD();
 	}
