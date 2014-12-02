@@ -5,6 +5,7 @@ import com.marine.Logging;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
@@ -20,6 +21,7 @@ public class ServerSettings {
     private Properties config;
 
     public int port = 25565;
+    public int tickrate = 20;
     public String host = "0.0.0.0";
     public String motd = "&cNo MOTD";
 
@@ -30,16 +32,33 @@ public class ServerSettings {
             if (!file.exists()) {
                 if (!file.createNewFile())
                     throw new RuntimeException("Failed to create settings.properties");
-                config.setProperty("host", "127.0.0.1");
-                config.setProperty("port", "25565");
-                config.setProperty("motd", "&cTesting...");
-                config.store(new FileOutputStream(file), null);
             }
             config.load(new FileInputStream(file));
+            Map<String, String> options = new HashMap<String, String>() {
+                {
+                    put("host", "127.0.0.1");
+                    put("port", "25565");
+                    put("motd", "&cTesting...");
+                    put("tickrate", "20");
+                }
+            };
+
+            boolean changed = false;
+
+            for(String string : options.keySet()) {
+                if(!config.containsKey(string)) {
+                    config.setProperty(string, options.get(string));
+                    changed = true;
+                }
+            }
+
+            if(changed)
+                config.store(new FileOutputStream(file), null);
 
             this.port = getInt(config.getProperty("port"));
             this.host = config.getProperty("host");
             this.motd = config.getProperty("motd");
+            this.tickrate = getInt(config.getProperty("tickrate"));
 
         } catch(Exception e) {
             e.printStackTrace();

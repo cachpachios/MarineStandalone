@@ -9,7 +9,7 @@ public class MainComponent {
 	public static void main(String[] args) {
         ServerSettings.getInstance();
 
-		StandaloneServer server = new StandaloneServer(ServerSettings.getInstance().port, 20); // Port and TickRate
+		StandaloneServer server = new StandaloneServer(ServerSettings.getInstance().port, ServerSettings.getInstance().tickrate); // Port and TickRate
 		
 		if(!Arrays.asList(args).contains("nogui")) {// Check if GUI should'nt be shown (Yes lazy implementation...)
             Logging.getLogger().createConsoleWindow(); // Create the simplest gui you will ever see :)
