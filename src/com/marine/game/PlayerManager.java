@@ -1,13 +1,20 @@
 package com.marine.game;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+
 import com.marine.StandaloneServer;
 import com.marine.net.States;
+import com.marine.net.play.clientbound.JoinGamePacket;
+import com.marine.net.play.clientbound.PlayerAbilitesPacket;
+import com.marine.net.play.clientbound.SpawnPointPacket;
 import com.marine.player.AbstractPlayer;
 import com.marine.player.IPlayer;
 import com.marine.player.Player;
-
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class PlayerManager {
 	
@@ -110,9 +117,15 @@ public class PlayerManager {
 		return null; // This shoulnt happening if id does its wierd :S
 	}
 
-	protected void cleanUp(Player p) {
+	private void cleanUp(Player p) {
 		removePlayer(p);
+		//TODO: send player remove packet to every other client
 		server.getNetwork().cleanUp(p.getClient());
+	}
+	
+	protected void disconnect(Player p) {
+		//TODO: clear from world
+		cleanUp(p);
 	}
 	
 	public void joinGame(Player p) {
@@ -120,6 +133,9 @@ public class PlayerManager {
 			cleanUp(p); return;
 		}
 	 	
+		p.getClient().sendPacket(new JoinGamePacket(p));
+		p.getClient().sendPacket(new SpawnPointPacket(p.getWorld().getSpawnPoint()));
+		p.getClient().sendPacket(new PlayerAbilitesPacket(p.getAbilities()));
 		
 		
 	}

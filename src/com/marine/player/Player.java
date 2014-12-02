@@ -130,5 +130,9 @@ public class Player extends Entity implements IPlayer, CommandSender {
 	public PlayerManager getPlayerManager() {
 		return manager;
 	}
+
+	public PlayerAbilites getAbilities() {
+		return abilites;
+	}
 	
 }

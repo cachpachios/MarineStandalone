@@ -24,7 +24,7 @@ public class Location extends Vector3d implements JSONAware { // Used for absolu
 	public Location(World world, Vector3 v) {
         this(world, (double) v.getX(), (double) v.getY(), (double)  v.getZ());
     }
-
+	
     public Location(String json) {
         super(0d, 0d, 0d);
         JSONObject object = (JSONObject) JSONValue.parse(json);
@@ -63,6 +63,20 @@ public class Location extends Vector3d implements JSONAware { // Used for absolu
         return this.pitch;
     }
 
+    public Location lookAt(Location p) {
+    	double l = p.getX()-getX();
+    	double w = p.getZ()-getX();
+    	double c = Math.sqrt(l*l + w*w);
+    	double alpha1 = -Math.asin(l/c)/Math.PI*180;
+    	double alpha2 =  Math.acos(w/c)/Math.PI*180;
+    	if (alpha2 > 90)
+    		yaw = (float) (180 - alpha1);
+    	else
+    		yaw = (float) alpha1;
+    	
+		return this;
+    }
+    
     @Override
     public String toJSONString() {
         JSONObject o = new JSONObject();
