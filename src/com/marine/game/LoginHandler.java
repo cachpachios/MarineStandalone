@@ -63,7 +63,7 @@ public class LoginHandler {
 		//TODO: Check if player is banned incase they are drop them.
 		
 		synchronized(loggingInClients) {
-			loggingInClients.put(uuid, new AbstractPlayer(new PlayerID(name, uuid), c, new PlayerAbilites(false, false, false, 10, 10), spawnLocation));
+			loggingInClients.put(uuid, new AbstractPlayer(players.getServer(), new PlayerID(name, uuid), c, new PlayerAbilites(false, false, false, 10, 10), spawnLocation));
 		}
 		
 		return null;
