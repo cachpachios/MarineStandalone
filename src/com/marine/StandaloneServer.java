@@ -3,17 +3,17 @@ package com.marine;
 import com.marine.game.PlayerManager;
 import com.marine.game.WorldManager;
 import com.marine.net.NetworkManager;
+import com.marine.server.Server;
 
 public class StandaloneServer {
 	
 	private final int port;
 	
 	// Game managers
-	private PlayerManager players; 
-	private WorldManager worlds;
-	
-	
-	
+	private final PlayerManager players;
+	private final WorldManager worlds;
+	private final Server server;
+
 	NetworkManager network;
 	
 	public final int skipTime;
@@ -29,6 +29,9 @@ public class StandaloneServer {
 		this.port = port;
 		this.skipTime = 1000000000 / targetTickRate; // nanotim
 		this.targetTickRate = targetTickRate;
+        this.players = new PlayerManager(this);
+        this.worlds = new WorldManager();
+        this.server = new Server(this);
 	}
 	
 	public void start() {
@@ -55,8 +58,7 @@ public class StandaloneServer {
 			Logging.getLogger().error("Unable to retrieve computer arch! Perhaps blocked by the OS.");
 		}
 
-        // Static access to everything
-        Server.setup(this);
+
 
 		long startTime = System.nanoTime();
 		long lastTime = startTime;

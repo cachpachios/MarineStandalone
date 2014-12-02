@@ -79,7 +79,7 @@ public class ListPacket extends Packet {
 
         samples.add(player);
 
-        for (Player p : Server.getOnlinePlayers()) {
+        for (Player p : ) {
             player = new JSONObject();
             player.put("id", p.getUUID().toString());
             player.put("name", p.getName());

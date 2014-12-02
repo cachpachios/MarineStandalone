@@ -1,21 +1,17 @@
 package com.marine.game;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-
 import com.marine.StandaloneServer;
 import com.marine.net.States;
 import com.marine.player.AbstractPlayer;
 import com.marine.player.IPlayer;
 import com.marine.player.Player;
 
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+
 public class PlayerManager {
 	
-	private List<IPlayer> allPlayers;
+	private List<Player> allPlayers;
 	
 	private Map<UUID, Player> playerIDs;
 	private Map<String, Player> playerNames;
@@ -33,7 +29,7 @@ public class PlayerManager {
 	public PlayerManager(StandaloneServer server) {
 		this.server = server;
 		loginManager = new LoginHandler(this, this.server.getWorldManager().getMainWorld(), this.server.getWorldManager().getMainWorld().getSpawnPoint());
-		allPlayers = Collections.synchronizedList(new ArrayList<IPlayer>());
+		allPlayers = Collections.synchronizedList(new ArrayList<Player>());
 		playerIDs = Collections.synchronizedMap(new ConcurrentHashMap<UUID, Player>());
 		playerNames = Collections.synchronizedMap(new ConcurrentHashMap<String, Player>());
 	}
@@ -95,6 +91,10 @@ public class PlayerManager {
 	public LoginHandler getLoginManager() {
 		return loginManager;
 	}
+
+    public List<Player> getPlayers() {
+        return allPlayers;
+    }
 
 	protected Player passFromLogin(IPlayer player) {
 		if(player instanceof Player) {
