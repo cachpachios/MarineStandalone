@@ -13,7 +13,6 @@ public class ServerProperties {
 	public static final String MINECRAFT_NAME = "1.8.1";
 	public static final int MAX_Y = 256;
 	
-	
 	private static long currentTick;
 	
 	protected static void tick() { currentTick++; }

@@ -2,11 +2,13 @@ package com.marine;
 
 import com.marine.game.PlayerManager;
 import com.marine.game.WorldManager;
+import com.marine.game.chat.ChatColor;
 import com.marine.net.NetworkManager;
 import com.marine.player.Gamemode;
 import com.marine.server.Marine;
 import com.marine.server.MarineServer;
 import com.marine.server.Server;
+import com.marine.settings.ServerSettings;
 import com.marine.world.Difficulty;
 
 public class StandaloneServer {
@@ -127,8 +129,16 @@ public class StandaloneServer {
 		return worlds;
 	}
 
+    private String newMOTD = null;
 	public String getMOTD() {
-		return standard_motd;
+        if(newMOTD != null)
+            return newMOTD;
+		try {
+            newMOTD = ChatColor.transform('&', ServerSettings.getInstance().motd);
+        } catch(Throwable e) {
+            return standard_motd;
+        }
+        return newMOTD;
 	}
 
 	public void setMOTD(String motd) {

@@ -83,6 +83,14 @@ public enum ChatColor {
     }
 
     public static String transform(char c, String s) {
+        char[] characters = s.toCharArray();
+        for(int i = 0; i < characters.length; i++) {
+            if(i < characters.length - 1) {
+                if(characters[i] == c && "0123456789abcdefghjiklmnor".contains(("" + characters[i + 1]).toLowerCase())) {
+                    characters[i] = '\u00A7';
+                }
+            }
+        }
         return s.replace(c, '\u00A7');
     }
 
