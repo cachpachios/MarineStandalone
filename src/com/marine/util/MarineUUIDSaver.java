@@ -1,10 +1,11 @@
 package com.marine.util;
 
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.UUID;
-
-import org.json.simple.JSONObject;
 
 /**
  * Created 2014-12-02 for MarineStandalone

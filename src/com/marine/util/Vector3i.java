@@ -49,4 +49,5 @@ public class Vector3i extends Vector3<Integer> {
         setY(getY() / n);
         setZ(getZ() / n);
     }
+
 }

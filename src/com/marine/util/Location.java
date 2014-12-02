@@ -1,16 +1,19 @@
 package com.marine.util;
 
+import com.marine.server.Marine;
 import com.marine.world.World;
+import org.json.simple.JSONAware;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 
 /**
  * Created 2014-12-01 for MarineStandalone
  *
  * @author Citymonstret
- * @param <T>
  */
-public class Location extends Vector3d { // Used for absolute positioning (Entites etc)
+public class Location extends Vector3d implements JSONAware { // Used for absolute positioning (Entites etc)
 
-    private final float yaw, pitch;
+    private float yaw, pitch;
     private final World world;
 
     public Location(World world, double x, double y, double z) {
@@ -22,8 +25,17 @@ public class Location extends Vector3d { // Used for absolute positioning (Entit
         this(world, (double) v.getX(), (double) v.getY(), (double)  v.getZ());
     }
 
+    public Location(String json) {
+        super(0d, 0d, 0d);
+        JSONObject object = (JSONObject) JSONValue.parse(json);
+        this.world = Marine.getWorld(object.get("world").toString());
+        this.setX((double) object.get("x"));
+        this.setY((double) object.get("y"));
+        this.setZ((double) object.get("z"));
+        this.yaw = (float) object.get("yaw");
+        this.pitch = (float) object.get("pitch");
+    }
 
-	
     public Location(World world, double x, double y, double z, float yaw, float pitch) {
         super(x, y, z);
         this.yaw = yaw;
@@ -49,5 +61,17 @@ public class Location extends Vector3d { // Used for absolute positioning (Entit
 
     public float getPitch() {
         return this.pitch;
+    }
+
+    @Override
+    public String toJSONString() {
+        JSONObject o = new JSONObject();
+        o.put("x", getX());
+        o.put("y", getY());
+        o.put("z", getZ());
+        o.put("yaw", getYaw());
+        o.put("pitch", getPitch());
+        o.put("world", getWorld().getName());
+        return o.toJSONString();
     }
 }
