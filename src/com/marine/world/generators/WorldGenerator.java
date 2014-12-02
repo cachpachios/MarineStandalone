@@ -16,6 +16,8 @@ public abstract class WorldGenerator {
 		return generateRegion(x,y,16,16);
 	}
 	
+	public abstract LevelType getLevelType();
+	
 	public abstract Chunk[] generateRegion(int x, int y, int width, int height);
 	
 	public abstract Dimension getDimension(); //TODO Enum for dimensions
