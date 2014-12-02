@@ -8,8 +8,11 @@ public abstract class WorldGenerator {
 	
 	protected World world;
 	
-	public WorldGenerator(World w) {
-		this.world = w;
+	public WorldGenerator() {
+	}
+	
+	public void setWorld(World w) {
+		world = w;
 	}
 	
 	public Chunk[] generateRegion(int x, int y) {

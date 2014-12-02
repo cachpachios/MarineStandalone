@@ -19,5 +19,9 @@ public class Position extends Vector3i {
 	public long encode() {
 		return  ((getX() & 0x3FFFFFF) << 38) | ((getY() & 0xFFF) << 26) | (getZ() & 0x3FFFFFF);
 	}
+
+	public Location toLocation() {
+		return new Location(null, getX(), getY(), getZ(),0,0);
+	}
 	
 }

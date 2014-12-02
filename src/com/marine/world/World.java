@@ -1,16 +1,12 @@
 package com.marine.world;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.marine.Logging;
 import com.marine.util.Position;
 import com.marine.world.generators.LevelType;
-import com.marine.world.generators.TotalFlatGrassGenerator;
 import com.marine.world.generators.WorldGenerator;
 
 public class World { // TODO Save and unload chunks...
@@ -30,7 +26,11 @@ public class World { // TODO Save and unload chunks...
 	
 	private WorldGenerator generator;
 	
-	public <T extends WorldGenerator, W extends World> World(final String name, Class<T> generator) { //TODO Make it able to load world
+	public World(final String name, WorldGenerator generator) { //TODO Make it able to load world
+		
+		this.generator = generator;
+		this.generator.setWorld(this);
+		
 		uuid = UUID.randomUUID();
 		this.name = name;
 		
@@ -38,23 +38,7 @@ public class World { // TODO Save and unload chunks...
 		
 		spawnPoint = new Position(0,0,0); //TODO make this get loaded from world or generate random based on worldgenerator
 		
-		Constructor<T> c = null;
-		try {
-			c = generator.getConstructor(World.class);
-		} catch (NoSuchMethodException e) {
-			Logging.getLogger().fatal("World construction failed, generator type had an unknowned constructor!");
-		} catch (SecurityException e) {}
 		
-		if(c == null)
-			this.generator = new TotalFlatGrassGenerator(this);
-		else {
-			try {
-				this.generator = c.newInstance(this);
-			} catch (InstantiationException | IllegalAccessException
-					| IllegalArgumentException | InvocationTargetException e) {
-				Logging.getLogger().fatal("World construction failed, generator type had an unknowned constructor!");
-			}
-		}
 		
 		dimension = this.generator.getDimension();
 	}

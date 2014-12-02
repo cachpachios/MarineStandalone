@@ -5,7 +5,7 @@ public class ServerProperties {
 	// BUILD INFO
 	public static final String BUILD_VERSION = "0.01";
 	public static final String BUILD_TYPE = "Development";
-	public static final String BUILD_NAME = "Netties";
+	public static final String BUILD_NAME = "WorldWideWorld";
 	public static final boolean BUILD_STABLE = false;
 	
 	//FINAL VALUES

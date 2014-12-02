@@ -15,6 +15,8 @@ import com.marine.world.entity.Entity;
 
 public class Player extends Entity implements IPlayer, CommandSender {
 	
+	private int nextWindowID = 0; // Used for windows
+	
 	private final PlayerManager manager;
 	
 	private PlayerID id;
@@ -117,6 +119,11 @@ public class Player extends Entity implements IPlayer, CommandSender {
         return true;
     }
 
+    public int nextWindowID() {
+    	nextWindowID++;
+    	return nextWindowID;
+    }
+    
 	@Override
 	public Location getLocation() {
 		return this.getLocation();

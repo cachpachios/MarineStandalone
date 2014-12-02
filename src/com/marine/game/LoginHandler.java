@@ -59,11 +59,13 @@ public class LoginHandler {
 		
 		//TODO: Check if player is banned incase they are drop them.
 		
+		IPlayer p = new AbstractPlayer(players.getServer(),players.getServer().getWorldManager().getMainWorld(), new PlayerID(name, uuid), c, new PlayerAbilites(false, false, false, 10, 10), spawnLocation);
+		
 		synchronized(loggingInClients) {
-			loggingInClients.put(uuid, new AbstractPlayer(players.getServer(), new PlayerID(name, uuid), c, new PlayerAbilites(false, false, false, 10, 10), spawnLocation));
+			loggingInClients.put(uuid, p);
 		}
 		
-		return null;
+		return new LoginResponse(p);
 	}
 	
 
@@ -71,7 +73,6 @@ public class LoginHandler {
 		Player p = players.passFromLogin(loggingInClients.get(player));
 		
 		p.getClient().sendPacket(new LoginSucessPacket(p));
-		p.getClient().setState(States.INGAME);
 		
 		loggingInClients.remove(player); // Remove from loginin process
 		

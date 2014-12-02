@@ -19,8 +19,11 @@ public class AbstractPlayer implements IPlayer{ // Used for communication with c
 	
 	private Location location;
 	
-	public AbstractPlayer(StandaloneServer server, PlayerID id, Client c, PlayerAbilites abilites, Location spawnLocation) {
+	private World w;
+	
+	public AbstractPlayer(StandaloneServer server, World w, PlayerID id, Client c, PlayerAbilites abilites, Location spawnLocation) {
 		this.s = server;
+		this.w = w;
 		this.client = c;
 		this.location = spawnLocation;
 		this.abilites = abilites;
@@ -58,8 +61,7 @@ public class AbstractPlayer implements IPlayer{ // Used for communication with c
 
 	@Override
 	public World getWorld() {
-		// TODO Auto-generated method stub
-		return null;
+		return w;
 	}
 
 	@Override

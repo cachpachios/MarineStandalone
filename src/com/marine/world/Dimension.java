@@ -5,13 +5,13 @@ public enum Dimension {
 	NETHER(-1),
 	END(1);
 
-	private final byte id;
+	private final int id;
 	
 	private Dimension(int id) {
 		this.id = (byte) id;
 	}
 	
  	public byte getID() {
-		return id;
+		return (byte) id;
 	}
 }

@@ -9,6 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.marine.StandaloneServer;
 import com.marine.net.States;
+import com.marine.net.play.clientbound.ClientboundPlayerLookPositionPacket;
 import com.marine.net.play.clientbound.JoinGamePacket;
 import com.marine.net.play.clientbound.PlayerAbilitesPacket;
 import com.marine.net.play.clientbound.SpawnPointPacket;
@@ -129,7 +130,7 @@ public class PlayerManager {
 	}
 	
 	public void joinGame(Player p) {
-		if(p.getClient().getState() != States.INGAME) {
+		if(p.getClient().getState() != States.LOGIN) {
 			cleanUp(p); return;
 		}
 	 	
@@ -137,7 +138,11 @@ public class PlayerManager {
 		p.getClient().sendPacket(new SpawnPointPacket(p.getWorld().getSpawnPoint()));
 		p.getClient().sendPacket(new PlayerAbilitesPacket(p.getAbilities()));
 		
-		
+		p.getClient().sendPacket(new ClientboundPlayerLookPositionPacket(p.getWorld().getSpawnPoint().toLocation()));
+	}
+	
+	public void sendLoginPackages(Player p) {
+
 	}
 	
 }

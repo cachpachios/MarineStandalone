@@ -27,6 +27,7 @@ public class JoinGamePacket extends Packet{
 		d.writeVarInt(getID());
 		
 		d.writeByte(p.getGamemode().getID());
+
 		d.writeByte(p.getWorld().getDimension().getID());
 		d.writeByte((byte)p.getPlayerManager().getServer().getMaxPlayers());
 		d.writeUTF8(p.getWorld().getLevelType().getName());
