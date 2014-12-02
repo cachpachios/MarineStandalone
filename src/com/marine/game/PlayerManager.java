@@ -103,7 +103,7 @@ public class PlayerManager {
 		}
 		else
 			if(player instanceof AbstractPlayer) {
-				Player p = new Player((AbstractPlayer) player);
+				Player p = new Player((AbstractPlayer) player, server.getGamemode());
 				putPlayer(p);
 				return p;
 			}

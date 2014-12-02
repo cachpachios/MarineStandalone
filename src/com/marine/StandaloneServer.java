@@ -3,9 +3,11 @@ package com.marine;
 import com.marine.game.PlayerManager;
 import com.marine.game.WorldManager;
 import com.marine.net.NetworkManager;
+import com.marine.player.Gamemode;
 import com.marine.server.Marine;
 import com.marine.server.MarineServer;
 import com.marine.server.Server;
+import com.marine.world.Difficulty;
 
 public class StandaloneServer {
 	
@@ -16,6 +18,12 @@ public class StandaloneServer {
 	private final WorldManager worlds;
 	private final Server server;
 
+	// Settings:
+	private String 			standard_motd;
+	private int 			standard_maxplayers;
+	private Difficulty		standard_difficulty;
+	private Gamemode		standard_gamemode;
+	
 	NetworkManager network;
 	
 	public final int skipTime;
@@ -110,7 +118,7 @@ public class StandaloneServer {
 	public void stop() {
 		shouldRun = false;
 	}
-
+	
 	public NetworkManager getNetwork() {
 		return network;
 	}
@@ -118,5 +126,36 @@ public class StandaloneServer {
 	public WorldManager getWorldManager() {
 		return worlds;
 	}
+
+	public String getMOTD() {
+		return standard_motd;
+	}
+
+	public void setMOTD(String motd) {
+		this.standard_motd = motd;
+	}
+
+	public int getMaxPlayers() {
+		return standard_maxplayers;
+	}
+
+	public void setMaxPlayers(int maxplayers) {
+		this.standard_maxplayers = maxplayers;
+	}
+
+	public Difficulty getDifficulty() {
+		return standard_difficulty;
+	}
+
+	public void setDifficulty(Difficulty difficulty) {
+		this.standard_difficulty = difficulty;
+	}
+
+	public Gamemode getGamemode() {
+		return standard_gamemode;
+	}
 	
+	public void setGamemode(Gamemode gm) {
+		this.standard_gamemode = gm;
+	}
 }

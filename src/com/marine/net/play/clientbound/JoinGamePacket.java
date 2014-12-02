@@ -23,8 +23,9 @@ public class JoinGamePacket extends Packet{
 
 	@Override
 	public void writeToStream(OutputStream stream) throws IOException {
-		// TODO Auto-generated method stub
-		
+		ByteData d = new ByteData();
+		d.writeVarInt(getID());
+		d.writeByte(p)
 	}
 
 	@Override

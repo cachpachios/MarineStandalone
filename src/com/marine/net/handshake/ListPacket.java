@@ -43,7 +43,7 @@ public class ListPacket extends Packet {
 		ByteData data = new ByteData();
 		
 		data.writeVarInt(getID());
-		data.writeUTF8(encode(ServerProperties.MOTD, 20, Marine.getPlayers().size()));
+		data.writeUTF8(encode(Marine.getMOTD(), 20, Marine.getPlayers().size()));
 		data.writePacketPrefix();
 		
 		stream.write(data.getBytes());

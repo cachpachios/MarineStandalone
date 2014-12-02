@@ -52,5 +52,7 @@ public interface MarineServer {
      */
     public Player getPlayer(String username);
 
+	public String getMOTD();
+
 
 }

@@ -49,4 +49,9 @@ public class Server implements MarineServer {
     public Player getPlayer(String username) {
         return null;
     }
+
+	@Override
+	public String getMOTD() {
+		return server.getMOTD();
+	}
 }

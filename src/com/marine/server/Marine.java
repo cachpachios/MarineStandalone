@@ -13,11 +13,15 @@ public class Marine {
 
     protected static MarineServer server;
 
-    public static void setServer(MarineServer marine) {
+    protected static void setServer(MarineServer marine) {
         server = marine;
     }
 
     public static List<Player> getPlayers() {
         return server.getPlayers();
     }
+
+	public static String getMOTD() {
+		return server.getMOTD();
+	}
 }
