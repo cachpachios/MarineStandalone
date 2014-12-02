@@ -2,12 +2,12 @@ package com.marine.game.chat;
 
 import org.json.simple.JSONObject;
 
-public class RawChatMessage {
+public class ChatComponent {
 	
 	JSONObject JSON;
 	
 	@SuppressWarnings("unchecked")
-	public RawChatMessage(String text, boolean bold, boolean italic, boolean underlined, boolean stirkethrough, ChatColor color) {
+	public ChatComponent(String text, boolean bold, boolean italic, boolean underlined, boolean stirkethrough, ChatColor color) {
 		JSON = new JSONObject();
 		JSON.put("color", color.getDataString());
 		JSON.put("bold", bold);
@@ -17,7 +17,7 @@ public class RawChatMessage {
 		JSON.put("text", text);
 	}
 	
-	public RawChatMessage(String text) {
+	public ChatComponent(String text) {
 		this(text, false, false, false, false, ChatColor.RESET);
 	}
 	
@@ -25,6 +25,9 @@ public class RawChatMessage {
 		return JSON.toJSONString();
 	}
 	
+	public JSONObject getJsonObject() {
+		return JSON;
+	}
 	
 	
 }
