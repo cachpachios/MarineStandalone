@@ -10,7 +10,7 @@ public abstract class Entity {
 	
 	private static int nextEntityID;
 	
-	public int generateEntityID() {
+	public static int generateEntityID() {
 		nextEntityID++;
 		return nextEntityID;
 	}
@@ -50,7 +50,7 @@ public abstract class Entity {
 	public double getX() {return position.getX(); }
 	public double getY() {return position.getY(); }
 	public double getZ() {return position.getZ(); }
-	public Position getRelativePosition() { return (Position) position.toIntVector(); }
+	public Position getRelativePosition() { return position.getRelativePosition(); }
 	public Vector3d getAbsolutePosition() { return position; }
 	
 	

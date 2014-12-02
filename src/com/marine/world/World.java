@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import com.marine.Logging;
+import com.marine.util.Position;
 import com.marine.world.generators.TotalFlatGrassGenerator;
 import com.marine.world.generators.WorldGenerator;
 
@@ -13,6 +14,8 @@ public class World { // TODO Save and unload chunks...
 	
 	private Map<ChunkPos, Chunk> loadedChunks;
 
+	private Position spawnPoint;
+	
 	private final UUID uuid;
 	
 	private final Dimension dimension;
@@ -21,6 +24,8 @@ public class World { // TODO Save and unload chunks...
 	
 	public <T extends WorldGenerator, W extends World> World(Class<T> generator) { //TODO Make it able to load world
 		uuid = UUID.randomUUID();
+		
+		spawnPoint = new Position(0,0,0); //TODO make this get loaded from world or generate random based on worldgenerator
 		
 		Constructor<T> c = null;
 		try {
@@ -75,6 +80,10 @@ public class World { // TODO Save and unload chunks...
 
 	public UUID getUUID() {
 		return uuid;
+	}
+
+	public Position getSpawnPoint() {
+		return spawnPoint;
 	}
 	
 }

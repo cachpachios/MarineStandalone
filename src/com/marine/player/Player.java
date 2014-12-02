@@ -1,27 +1,38 @@
 package com.marine.player;
 
+import java.util.UUID;
+
 import com.marine.game.chat.RawChatMessage;
 import com.marine.game.command.Command;
 import com.marine.game.command.CommandSender;
 import com.marine.net.Client;
 import com.marine.util.Location;
+import com.marine.util.Position;
 import com.marine.world.World;
 import com.marine.world.entity.Entity;
 
-import java.util.UUID;
-
 public class Player extends Entity implements IPlayer, CommandSender {
 	
-	private AbstractPlayer absPlayer;
+	private PlayerID id;
+	
+	private Client connection;
+	
+	private PlayerAbilites abilites;
 	
 	public Player(Client connection, PlayerID id, int entityID, World world, Location pos, PlayerAbilites abilites) {
 		super(entityID, world, pos);
-		this.absPlayer = new AbstractPlayer(id, connection, abilites);
+		this.id = id;
+		this.abilites = abilites;
+		this.connection = connection;
 	}
 	
+	public Player(AbstractPlayer player) {
+		this(player.getClient(),player.getInfo(), Entity.generateEntityID(), player.getWorld(), player.getLocation(), player.getAbilites());
+	}
+
 	@Override
 	public String getName() {
-		return absPlayer.getName();
+		return	id.getName();
 	}
 	
 	@Override
@@ -31,23 +42,24 @@ public class Player extends Entity implements IPlayer, CommandSender {
 
 	@Override
 	public void update() {
-		absPlayer.update();
+		if(abilites.needUpdate())
+			connection.sendPacket(abilites.getPacket());
 	}
 
 	@Override
 	public PlayerID getInfo() {
-		return absPlayer.getInfo();
+		return id;
 	}
 
 	@Override
 	public Client getClient() {
 		// TODO Auto-generated method stub
-		return absPlayer.getClient();
+		return connection;
 	}
 
 	@Override
 	public UUID getUUID() {
-		return absPlayer.getUUID();
+		return id.getUUID();
 	}
 
     @Override
@@ -74,4 +86,14 @@ public class Player extends Entity implements IPlayer, CommandSender {
     public void sendMessage(RawChatMessage message) {
 
     }
+
+	@Override
+	public Location getLocation() {
+		return this.getLocation();
+	}
+
+	@Override
+	public Position getRealtivePosition() {
+		return this.getRealtivePosition();
+	}
 }

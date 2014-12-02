@@ -33,6 +33,7 @@ public class CommandManager {
     }
 
     public void registerCommand(Command command) throws RuntimeException {
+    	synchronized(commandMap) { synchronized(raw) {
         if (raw.contains(command.toString())) {
             throw new RuntimeException(String.format("Command Name '%s' is already taken", command.toString()));
         }
@@ -40,6 +41,7 @@ public class CommandManager {
         List<String> s = new ArrayList<>(Arrays.asList(command.getAliases()));
         s.add(command.toString());
         commandMap.put(command, s);
+    	}} // Synchornization end.
     }
 
 }
