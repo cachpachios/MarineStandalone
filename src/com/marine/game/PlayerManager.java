@@ -22,7 +22,7 @@ public class PlayerManager {
 	private final StandaloneServer server;
 	
 	public void updateThemAll() {
-		for(IPlayer p : allPlayers)
+		for(Player p : allPlayers)
 			p.update();
 	}
 	

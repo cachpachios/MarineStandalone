@@ -30,8 +30,8 @@ public class StandaloneServer {
 		this.port = port;
 		this.skipTime = 1000000000 / targetTickRate; // nanotim
 		this.targetTickRate = targetTickRate;
-        this.players = new PlayerManager(this);
         this.worlds = new WorldManager();
+        this.players = new PlayerManager(this);
         this.server = new Server(this);
 
         Marine.setServer(this.server);

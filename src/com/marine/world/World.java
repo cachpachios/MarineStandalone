@@ -2,8 +2,10 @@ package com.marine.world;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.marine.Logging;
 import com.marine.util.Position;
@@ -26,6 +28,8 @@ public class World { // TODO Save and unload chunks...
 	
 	public <T extends WorldGenerator, W extends World> World(Class<T> generator) { //TODO Make it able to load world
 		uuid = UUID.randomUUID();
+		
+		loadedChunks = Collections.synchronizedMap(new ConcurrentHashMap<ChunkPos, Chunk>());
 		
 		spawnPoint = new Position(0,0,0); //TODO make this get loaded from world or generate random based on worldgenerator
 		
