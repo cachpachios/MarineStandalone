@@ -42,7 +42,22 @@ public class ListPacket extends Packet {
 
 	@Override
 	public void writeToStream(OutputStream stream) throws IOException {
-        ListResponse response = new ListResponse(Marine.getMOTD(), Marine.getPlayers().size(), 100, new JSONArray(), null);
+        JSONArray samples = new JSONArray();
+        JSONObject player = new JSONObject();
+
+        player.put("id", UUID.fromString("1-1-3-3-7").toString());
+        player.put("name", "§cThere is nobody online!");
+
+        samples.add(player);
+
+        for (Player p : Marine.getPlayers()) {
+            player = new JSONObject();
+            player.put("id", p.getUUID().toString());
+            player.put("name", p.getName());
+            samples.add(player);
+        }
+
+        ListResponse response = new ListResponse(Marine.getMOTD(), Marine.getPlayers().size(), 100, samples, "");
         ListEvent event = new ListEvent(response);
 
         Marine.getServer().callEvent(event);
@@ -78,32 +93,18 @@ public class ListPacket extends Packet {
 
         JSONObject players = new JSONObject();
 
-        JSONArray samples = new JSONArray();
-        JSONObject player = new JSONObject();
-
-        player.put("id", UUID.fromString("1-1-3-3-7").toString());
-        player.put("name", "§cThere is nobody online!");
-
-        samples.add(player);
-
-        for (Player p : Marine.getPlayers()) {
-            player = new JSONObject();
-            player.put("id", p.getUUID().toString());
-            player.put("name", p.getName());
-            samples.add(player);
-        }
 
         players.put("max", response.MAX_PLAYERS);
         players.put("online", response.CURRENT_PLAYERS);
-        players.put("sample", samples);
+        players.put("sample", response.SAMPLE_PLAYERS);
         json.put("players", players);
 
         JSONObject description = new JSONObject();
         description.put("text", response.MOTD);
         json.put("description", description);
-        
-        //TODO: Faviicon
-        //json.put("favicon", "data:image/png;base64," + getImage());
+
+        if(response.FAVICON != null && response.FAVICON.length() > 0)
+            json.put("favicon", "data:image/png;base64," + response.FAVICON + "<data>");
 
 		return json.toJSONString();
 		
