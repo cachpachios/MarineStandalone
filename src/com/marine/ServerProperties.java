@@ -8,9 +8,15 @@ public class ServerProperties {
 	public static final String BUILD_NAME = "Netties";
 	public static final boolean BUILD_STABLE = false;
 	
+	// Server Settings TODO: Make this not static and saved in StandaloneServer not here :I
 	public static int MAX_PLAYERS = 99;
+<<<<<<< HEAD
+	public static String MOTD = "MarineStandalone Server 0.1";
+	
+=======
 	public static String MOTD = "§cMarineStandalone §lDevelopment";
 
+>>>>>>> origin/master
 	
 	//FINAL VALUES
 	public static final int PROTOCOL_VERSION = 47;

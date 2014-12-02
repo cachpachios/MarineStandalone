@@ -6,9 +6,11 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.marine.net.Client;
+import com.marine.net.States;
 import com.marine.net.login.LoginSucessPacket;
 import com.marine.player.AbstractPlayer;
 import com.marine.player.IPlayer;
+import com.marine.player.Player;
 import com.marine.player.PlayerAbilites;
 import com.marine.player.PlayerID;
 import com.marine.util.Location;
@@ -68,10 +70,15 @@ public class LoginHandler {
 	}
 	
 
-	public void passPlayer(IPlayer player) { //TODO: Encryption
-		players.passFromLogin(player);
+	public void passPlayer(UUID player) { //TODO: Encryption
+		Player p = players.passFromLogin(loggingInClients.get(player));
 		
-		player.getClient().sendPacket(new LoginSucessPacket());
+		p.getClient().sendPacket(new LoginSucessPacket(p));
+		p.getClient().setState(States.INGAME);
+		
+		loggingInClients.remove(player); // Remove from loginin process
+		
+		players.joinGame(p);
 	}
 
 }

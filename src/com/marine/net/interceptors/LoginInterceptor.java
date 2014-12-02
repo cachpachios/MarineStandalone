@@ -28,12 +28,15 @@ public class LoginInterceptor implements PacketInterceptor {
 				DisconnectPacket nopePacket = new DisconnectPacket(loginReturn.response);
 				c.sendPacket(nopePacket);
 				server.getNetwork().cleanUp(c);
+				return true;
 			}
 			
-			server.getPlayerManager().getLoginManager().passPlayer(loginReturn.player);
+			server.getPlayerManager().getLoginManager().passPlayer(loginReturn.player.getUUID());
 			
 			return true;
 		}
+		
+		//TODO: Encryption Packets
 		
 		return false;
 	}
