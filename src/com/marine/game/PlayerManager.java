@@ -8,6 +8,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.marine.StandaloneServer;
+import com.marine.net.States;
 import com.marine.player.AbstractPlayer;
 import com.marine.player.IPlayer;
 import com.marine.player.Player;
@@ -71,6 +72,16 @@ public class PlayerManager {
 		
 	}
 	
+	protected void removePlayer(Player p) {
+		synchronized(allPlayers){ synchronized(playerIDs){synchronized(playerNames){
+			if(allPlayers.contains(p)) {
+				allPlayers.remove(p);
+				playerIDs.remove(p.getUUID());
+				playerNames.remove(p.getName());
+			}
+		}}} // Sync end
+	}
+	
 	public void tickAllPlayers() {
 		synchronized(allPlayers) {
 			for(IPlayer p : allPlayers)
@@ -96,6 +107,21 @@ public class PlayerManager {
 				putPlayer(p);
 				return p;
 			}
+		return null; // This shoulnt happening if id does its wierd :S
+	}
+
+	protected void cleanUp(Player p) {
+		removePlayer(p);
+		server.getNetwork().cleanUp(p.getClient());
+	}
+	
+	public void joinGame(Player p) {
+		if(p.getClient().getState() != States.INGAME) {
+			cleanUp(p); return;
+		}
+	 	
+		
+		
 	}
 	
 }

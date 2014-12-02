@@ -54,8 +54,10 @@ public class Client {
 		else
 			if(state==3)
 				this.state = States.INGAME;
-					
-		
+	}
+	
+	public void setState(States state) {
+		this.state = state;
 	}
 	
 	public States getState() {
