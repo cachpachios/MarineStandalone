@@ -67,7 +67,7 @@ public class NetworkManager {
 	
 	private void terminate(Client client) {
 		synchronized(cleanUpList) {
-			Logging.getLogger().info("Client Terminated at: " + client.getAdress().getHostAddress()); 
+			Logging.getLogger().info("Client Ping Terminated At: " + client.getAdress().getHostAddress());
 			connectedClients.remove(client);
 			client.terminate();
 		}

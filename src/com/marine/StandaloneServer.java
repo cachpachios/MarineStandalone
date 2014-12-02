@@ -42,7 +42,10 @@ public class StandaloneServer {
 		} catch(SecurityException e)  { // If blocked print an error
 			Logging.getLogger().error("Unable to retrieve computer arch! Perhaps blocked by the OS.");
 		}
-				
+
+        // Static access to everything
+        Server.setup(this);
+
 		long startTime = System.nanoTime();
 		long lastTime = startTime;
 		

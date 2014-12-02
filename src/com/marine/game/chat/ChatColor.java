@@ -90,6 +90,10 @@ public enum ChatColor {
         return s.replaceAll("&([a-f0-9])", "");
     }
 
+    public static ChatColor randomColor() {
+        return ChatColor.values()[(int) Math.floor(Math.random() * 17)];
+    }
+
     @Override
 	public String toString() {
 		return "" + '\u00A7' + id;

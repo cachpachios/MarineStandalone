@@ -9,7 +9,7 @@ public class ServerProperties {
 	public static final boolean BUILD_STABLE = false;
 	
 	public static int MAX_PLAYERS = 99;
-	public static String MOTD = "MarineStandalone Server 0.1";
+	public static String MOTD = "§cMarineStandalone §lDevelopment";
 
 	
 	//FINAL VALUES

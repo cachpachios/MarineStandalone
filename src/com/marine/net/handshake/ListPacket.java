@@ -1,17 +1,38 @@
 package com.marine.net.handshake;
 
+import com.marine.Server;
 import com.marine.ServerProperties;
 import com.marine.io.data.ByteData;
 import com.marine.net.Packet;
 import com.marine.net.States;
+import com.marine.player.Player;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.UUID;
 
 public class ListPacket extends Packet {
 
-	
+    private String img;
+	synchronized private String getImage() {
+        try {
+            if (img == null || img.equals("")) {
+                File file = new File("./favicon.ico");
+                if(file.exists()) {
+                    // TODO: Get this working, it sorta worked before but...
+                }
+                return "";
+            }
+        } catch(Throwable e) {
+            e.printStackTrace();
+            return "";
+        }
+        return img;
+    }
+
 	@Override
 	public int getID() {
 		return 0x00;
@@ -22,7 +43,7 @@ public class ListPacket extends Packet {
 		ByteData data = new ByteData();
 		
 		data.writeVarInt(getID());
-		data.writeUTF8(encode("MarineStandalone DEV", 20, 0));
+		data.writeUTF8(encode(ServerProperties.MOTD, 20, Server.getOnlinePlayers().size()));
 		data.writePacketPrefix();
 		
 		stream.write(data.getBytes());
@@ -50,9 +71,24 @@ public class ListPacket extends Packet {
 
         JSONObject players = new JSONObject();
 
+        JSONArray samples = new JSONArray();
+        JSONObject player = new JSONObject();
+
+        player.put("id", UUID.fromString("1-1-3-3-7").toString());
+        player.put("name", "§cThere is nobody online!");
+
+        samples.add(player);
+
+        for (Player p : Server.getOnlinePlayers()) {
+            player = new JSONObject();
+            player.put("id", p.getUUID().toString());
+            player.put("name", p.getName());
+            samples.add(player);
+        }
+
         players.put("max", maxPlayers);
         players.put("online", onlinePlayers);
-        //TODO: Player samples
+        players.put("sample", samples);
         json.put("players", players);
 
         JSONObject description = new JSONObject();
@@ -60,6 +96,8 @@ public class ListPacket extends Packet {
         json.put("description", description);
         
         //TODO: Faviicon
+        //json.put("favicon", "data:image/png;base64," + getImage());
+
 		return json.toJSONString();
 		
 	}
