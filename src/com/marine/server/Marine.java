@@ -3,6 +3,7 @@ package com.marine.server;
 import com.marine.player.Player;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created 2014-12-02 for MarineStandalone
@@ -19,6 +20,13 @@ public class Marine {
 
     public static List<Player> getPlayers() {
         return server.getPlayers();
+    }
+
+    public static Player getPlayer(String username) {
+        return null;
+    }
+    public static Player getPlayer(UUID uuid) {
+        return null;
     }
 
 	public static String getMOTD() {

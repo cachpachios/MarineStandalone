@@ -1,7 +1,5 @@
 package com.marine.player;
 
-import java.util.UUID;
-
 import com.marine.game.chat.RawChatMessage;
 import com.marine.game.command.Command;
 import com.marine.game.command.CommandSender;
@@ -10,6 +8,8 @@ import com.marine.util.Location;
 import com.marine.util.Position;
 import com.marine.world.World;
 import com.marine.world.entity.Entity;
+
+import java.util.UUID;
 
 public class Player extends Entity implements IPlayer, CommandSender {
 	
@@ -101,6 +101,10 @@ public class Player extends Entity implements IPlayer, CommandSender {
     @Override
     public void sendMessage(RawChatMessage message) {
 
+    }
+
+    public boolean isOnline() {
+        return true;
     }
 
 	@Override
