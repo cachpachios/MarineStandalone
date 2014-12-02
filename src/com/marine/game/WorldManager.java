@@ -23,7 +23,7 @@ public class WorldManager {
 	
 	public World getMainWorld() {
 		if(mainWorld == null) { // Temporary code when no world loader is implemented
-			World w = new World(TotalFlatGrassGenerator.class);
+			World w = new World("world", TotalFlatGrassGenerator.class);
 			w.generateChunk(0, 0);
 			addWorld(w);
 			mainWorld = w.getUUID();

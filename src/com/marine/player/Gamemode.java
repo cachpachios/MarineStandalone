@@ -14,8 +14,8 @@ public enum Gamemode {
 		this.name = name;		
 	}
 	
-	public int getID() {
-		return id;
+	public byte getID() {
+		return (byte) id;
 	}
 	
 	public String getName() {

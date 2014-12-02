@@ -2,6 +2,7 @@ package com.marine.player;
 
 import java.util.UUID;
 
+import com.marine.game.PlayerManager;
 import com.marine.game.chat.ChatComponent;
 import com.marine.game.chat.ChatMessage;
 import com.marine.game.command.Command;
@@ -14,6 +15,8 @@ import com.marine.world.entity.Entity;
 
 public class Player extends Entity implements IPlayer, CommandSender {
 	
+	private final PlayerManager manager;
+	
 	private PlayerID id;
 	
 	private Gamemode gamemode; 
@@ -23,8 +26,9 @@ public class Player extends Entity implements IPlayer, CommandSender {
 	
 	private PlayerAbilites abilites;
 	
-	public Player(Client connection, PlayerID id, int entityID, World world, Location pos, PlayerAbilites abilites, Gamemode gamemode) {
+	public Player(PlayerManager manager, Client connection, PlayerID id, int entityID, World world, Location pos, PlayerAbilites abilites, Gamemode gamemode) {
 		super(entityID, world, pos);
+		this.manager = manager;
 		this.id = id;
 		this.abilites = abilites;
 		this.connection = connection;
@@ -33,7 +37,7 @@ public class Player extends Entity implements IPlayer, CommandSender {
 	}
 
 	public Player(AbstractPlayer player, Gamemode gm) {
-		this(player.getClient(),player.getInfo(), Entity.generateEntityID(), player.getWorld(), player.getLocation(), player.getAbilites(), gm);
+		this(player.getServer().getPlayerManager(),player.getClient(),player.getInfo(), Entity.generateEntityID(), player.getWorld(), player.getLocation(), player.getAbilites(), gm);
 	}
 
 	@Override
@@ -99,6 +103,15 @@ public class Player extends Entity implements IPlayer, CommandSender {
 
     }
 
+	@Override
+	public void sendMessage(ChatMessage message) {
+
+	}
+
+	@Override
+	public void sendMessage(ChatComponent message) {
+
+	}
 
     public boolean isOnline() {
         return true;
@@ -114,13 +127,8 @@ public class Player extends Entity implements IPlayer, CommandSender {
 		return this.getRealtivePosition();
 	}
 
-	@Override
-	public void sendMessage(ChatMessage message) {
-
+	public PlayerManager getPlayerManager() {
+		return manager;
 	}
-
-	@Override
-	public void sendMessage(ChatComponent message) {
-
-	}
+	
 }

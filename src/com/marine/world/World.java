@@ -15,19 +15,23 @@ import com.marine.world.generators.WorldGenerator;
 public class World { // TODO Save and unload chunks...
 	
 	private Map<ChunkPos, Chunk> loadedChunks;
-
-	private Position spawnPoint;
 	
+	// Identifiers:
+	private final String name;
 	private final UUID uuid;
 	
 	private final Dimension dimension;
+	
+	
+	private Position spawnPoint;
 	
 	private int time;
 	
 	private WorldGenerator generator;
 	
-	public <T extends WorldGenerator, W extends World> World(Class<T> generator) { //TODO Make it able to load world
+	public <T extends WorldGenerator, W extends World> World(final String name, Class<T> generator) { //TODO Make it able to load world
 		uuid = UUID.randomUUID();
+		this.name = name;
 		
 		loadedChunks = Collections.synchronizedMap(new ConcurrentHashMap<ChunkPos, Chunk>());
 		
@@ -90,6 +94,10 @@ public class World { // TODO Save and unload chunks...
 
 	public Position getSpawnPoint() {
 		return spawnPoint;
+	}
+	
+	public String getName() {
+		return name;
 	}
 
 	public void tick() {

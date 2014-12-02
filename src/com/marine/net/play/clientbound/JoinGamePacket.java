@@ -25,7 +25,9 @@ public class JoinGamePacket extends Packet{
 	public void writeToStream(OutputStream stream) throws IOException {
 		ByteData d = new ByteData();
 		d.writeVarInt(getID());
-		d.writeByte(p);
+		d.writeByte(p.getGamemode().getID());
+		d.writeByte(p.getWorld().getDimension().getID());
+		
 	}
 
 	@Override

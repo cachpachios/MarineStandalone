@@ -14,7 +14,7 @@ public class Marine {
 
     protected static MarineServer server;
 
-    protected static void setServer(MarineServer marine) {
+    public static void setServer(MarineServer marine) {
         server = marine;
     }
 
