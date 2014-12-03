@@ -16,17 +16,18 @@ public class JSONFileHandler {
 
     private final StandaloneServer server;
     private final JSONConfig administrators, banned, whitelist;
-    private final File settingsPath;
+    private final File settingsPath, storagePath;
 
-    public JSONFileHandler(final StandaloneServer server, final File settingsPath) {
+    public JSONFileHandler(final StandaloneServer server, final File settingsPath, final File storagePath) {
         this.server = server;
         this.settingsPath = settingsPath;
+        this.storagePath = storagePath;
         this.administrators =
-                new JSONConfig(settingsPath, "administrators");
+                new JSONConfig(storagePath, "administrators");
         this.banned =
-                new JSONConfig(settingsPath, "banned");
+                new JSONConfig(storagePath, "banned");
         this.whitelist =
-                new JSONConfig(settingsPath, "whitelist");
+                new JSONConfig(storagePath, "whitelist");
     }
 
     public void loadAll() {
@@ -85,5 +86,9 @@ public class JSONFileHandler {
 
     public File getSettingsPath() {
         return this.settingsPath;
+    }
+
+    public File getStoragePath() {
+        return this.storagePath;
     }
 }

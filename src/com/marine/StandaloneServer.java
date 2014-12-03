@@ -48,7 +48,7 @@ public class StandaloneServer implements Listener {
         this.worlds = new WorldManager();
         this.players = new PlayerManager(this);
         this.server = new Server(this);
-        this.jsonHandler = new JSONFileHandler(this, new File("./settings"));
+        this.jsonHandler = new JSONFileHandler(this, new File("./settings"), new File("./storage"));
         this.jsonHandler.loadAll();
         try {
             this.jsonHandler.defaultValues();
