@@ -2,6 +2,7 @@ package com.marine.game.chat;
 
 
 import java.awt.*;
+import java.util.ArrayList;
 
 public enum ChatColor {
 	BLACK			("black",		 "0", true, "000000", Color.BLACK),
@@ -27,11 +28,14 @@ public enum ChatColor {
     UNDERLINE		("underline",	 "n", false),
     ITALIC			("italic",		 "o", false),
     RESET			("reset",		 "r", false);
-	
+
+    public static final char COLOR_CHARACTER = '\u00A7';
+
 	private final String packetData;
 	private final char id; // Old System one char ID
     private final Color color;
     private final boolean isColor;
+    private final boolean isFormat;
     private final String hexa;
 	
 	private ChatColor(String rawData, String id, boolean isColor, String hexa, Color color) {
@@ -39,6 +43,7 @@ public enum ChatColor {
 		this.id = id.charAt(0);
         this.color = color;
         this.isColor = isColor;
+        this.isFormat = !isColor && !id.equals("r");
         this.hexa = hexa;
 	}
 
@@ -47,6 +52,7 @@ public enum ChatColor {
         this.id = id.charAt(0);
         this.color = null;
         this.isColor = isColor;
+        this.isFormat = !isColor && !id.equals("r");
         this.hexa = "";
     }
 
@@ -74,6 +80,10 @@ public enum ChatColor {
         return this.color;
     }
 
+    public boolean isFormat() {
+        return isFormat;
+    }
+
     public boolean isColor() {
         return isColor;
     }
@@ -87,23 +97,41 @@ public enum ChatColor {
         for(int i = 0; i < characters.length; i++) {
             if(i < characters.length - 1) {
                 if(characters[i] == c && "0123456789abcdefghjiklmnor".contains(("" + characters[i + 1]).toLowerCase())) {
-                    characters[i] = '\u00A7';
+                    characters[i] = COLOR_CHARACTER;
                 }
             }
         }
-        return s.replace(c, '\u00A7');
+        return s.replace(c, COLOR_CHARACTER);
     }
 
     public static String stripColors(String s) {
-        return s.replaceAll("&([a-f0-9])", "");
+        return s.replaceAll(COLOR_CHARACTER + "([a-f0-9])", "");
     }
 
     public static ChatColor randomColor() {
         return ChatColor.values()[(int) Math.floor(Math.random() * 17)];
     }
 
+    public static java.util.List<ChatColor> getColors() {
+        ArrayList<ChatColor> colors = new ArrayList<>();
+        for(ChatColor color : values()) {
+            if(color.isColor())
+                colors.add(color);
+        }
+        return colors;
+    }
+
+    public static java.util.List<ChatColor> getFormats() {
+        ArrayList<ChatColor> formats = new ArrayList<>();
+        for(ChatColor color : values()) {
+            if(color.isFormat())
+                formats.add(color);
+        }
+        return formats;
+    }
+
     @Override
 	public String toString() {
-		return "" + '\u00A7' + id;
+		return "" + COLOR_CHARACTER + id;
 	}
 }

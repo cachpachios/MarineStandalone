@@ -1,8 +1,12 @@
 package com.marine.world;
 
+import com.marine.util.IDObject;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.concurrent.ConcurrentHashMap;
 
-public enum BlockID {
+public enum BlockID implements IDObject {
 	AIR					(0,"air"),
 	STONE				(1, "stone"),
 	GRASS				(2, "grass"),
@@ -344,7 +348,26 @@ public enum BlockID {
 	public int getPacketID() {
 		return getID() << 4 | 0;
 	}
-	
+
+    @Override
+    public String getStringID() {
+        return this.getName();
+    }
+
+    @Override
+    public short getNumericID() {
+        return this.getID();
+    }
+
+    @Override
+    public JSONObject toJSON() throws JSONException {
+        JSONObject o = new JSONObject();
+        o.put("type", "block");
+        o.put("numeric", getNumericID());
+        o.put("string", getStringID());
+        return o;
+    }
+
 	public static BlockID getFromString(String s) {
 		if(id_index.containsKey(s.toLowerCase()))
 			return id_index.get(s.toLowerCase());

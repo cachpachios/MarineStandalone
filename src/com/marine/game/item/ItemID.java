@@ -1,11 +1,16 @@
 package com.marine.game.item;
 
+import com.marine.util.IDObject;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Created 2014-12-02 for MarineStandalone
  *
  * @author Citymonstret
  */
-public enum ItemID {
+public enum ItemID implements IDObject {
+	// AKA AIR
 	EMPTY			(-1,	"air",					"Air",				false),
 
     IRON_SHOVEL     (256,   "iron_shovel",          "Iron Shovel",      true),
@@ -47,6 +52,25 @@ public enum ItemID {
 
     public String getFriendlyName() {
         return friendly;
+    }
+
+    @Override
+    public String getStringID() {
+        return this.name;
+    }
+
+    @Override
+    public short getNumericID() {
+        return this.id;
+    }
+
+    @Override
+    public JSONObject toJSON() throws JSONException {
+        JSONObject o = new JSONObject();
+        o.put("type", "item");
+        o.put("numeric", getNumericID());
+        o.put("string", getStringID());
+        return o;
     }
 
     @Override
