@@ -2,9 +2,13 @@ package com.marine.gui;
 
 import com.marine.ServerProperties;
 import com.marine.game.chat.ChatColor;
+import com.marine.server.Marine;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.ArrayList;
 
 public class ConsoleWindow { // Simple console window :)
@@ -29,8 +33,20 @@ public class ConsoleWindow { // Simple console window :)
 		jFrame = new JFrame();
 		jFrame.setTitle("MarineStandalone " + ServerProperties.BUILD_VERSION + " " + ServerProperties.BUILD_TYPE + " (" + ServerProperties.BUILD_NAME + ")");
 		jFrame.setSize(600, 400);
-		
-		GridBagConstraints c = new GridBagConstraints();
+		jFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+
+        WindowListener exitListener = new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                int confirm = JOptionPane.showOptionDialog(null, "Are you sure you want to close the server?", "Exit Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+                if (confirm == 0) {
+                    Marine.stop();
+                }
+            }
+        };
+        jFrame.addWindowListener(exitListener);
+
+        GridBagConstraints c = new GridBagConstraints();
 		
 		jFrame.setLayout(new GridBagLayout());
 		

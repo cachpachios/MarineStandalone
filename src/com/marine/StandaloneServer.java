@@ -9,8 +9,11 @@ import com.marine.player.Gamemode;
 import com.marine.server.Marine;
 import com.marine.server.MarineServer;
 import com.marine.server.Server;
+import com.marine.settings.JSONFileHandler;
 import com.marine.settings.ServerSettings;
 import com.marine.world.Difficulty;
+
+import java.io.File;
 
 public class StandaloneServer implements Listener {
 	
@@ -20,6 +23,7 @@ public class StandaloneServer implements Listener {
 	private final PlayerManager players;
 	private final WorldManager worlds;
 	private final Server server;
+    private final JSONFileHandler jsonHandler;
 
 	// Settings:
 	private String 			standard_motd = "MarineStandalone | Development";
@@ -44,7 +48,14 @@ public class StandaloneServer implements Listener {
         this.worlds = new WorldManager();
         this.players = new PlayerManager(this);
         this.server = new Server(this);
-
+        this.jsonHandler = new JSONFileHandler(this, new File("./settings"));
+        this.jsonHandler.loadAll();
+        try {
+            this.jsonHandler.defaultValues();
+        } catch(Throwable e) {
+            e.printStackTrace();
+        }
+        Marine.setStandalone(this);
         Marine.setServer(this.server);
     }
 
@@ -121,6 +132,10 @@ public class StandaloneServer implements Listener {
 	
 	public void stop() {
 		shouldRun = false;
+        jsonHandler.saveAll();
+
+        // When finished
+        System.exit(0);
 	}
 	
 	public NetworkManager getNetwork() {

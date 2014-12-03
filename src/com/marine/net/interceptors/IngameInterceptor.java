@@ -23,11 +23,11 @@ public class IngameInterceptor implements PacketInterceptor{
 		if(id == 0x06) {
 			ServerboundPlayerLookPositionPacket packet = new ServerboundPlayerLookPositionPacket();
 			packet.readFromBytes(data);
-			if(players.getLoginManager().clientExists(c)) { // Check if this packet is part by the login process
+			//if(players.getLoginManager().clientExists(c)) { // Check if this packet is part by the login process
 				
-			}else {
+			//}else {
 				
-			}
+			//}
 		}
 		
 		return false;

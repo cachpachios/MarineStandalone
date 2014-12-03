@@ -1,21 +1,16 @@
 package com.marine.game;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-
 import com.marine.StandaloneServer;
 import com.marine.net.States;
 import com.marine.net.play.clientbound.ChunkPacket;
 import com.marine.net.play.clientbound.JoinGamePacket;
-import com.marine.net.play.serverbound.ServerboundPlayerLookPositionPacket;
 import com.marine.player.AbstractPlayer;
 import com.marine.player.IPlayer;
 import com.marine.player.Player;
 import com.marine.util.Position;
+
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class PlayerManager {
 	
@@ -133,7 +128,7 @@ public class PlayerManager {
 			cleanUp(p); return;
 		}
 	 	
-		loginManager.loginDone(p.getClient());
+		//loginManager.loginDone(p.getClient());
 		
 		p.getClient().sendPacket(new JoinGamePacket(p));
 		

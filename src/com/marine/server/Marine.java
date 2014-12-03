@@ -1,5 +1,6 @@
 package com.marine.server;
 
+import com.marine.StandaloneServer;
 import com.marine.player.Player;
 import com.marine.world.World;
 
@@ -14,6 +15,7 @@ import java.util.UUID;
 public class Marine {
 
     protected static MarineServer server;
+    protected static StandaloneServer standaloneServer;
 
     public static void setServer(MarineServer marine) {
         server = marine;
@@ -41,5 +43,13 @@ public class Marine {
 
     public static MarineServer getServer() {
         return server;
+    }
+
+    public static void stop() {
+        standaloneServer.stop();
+    }
+
+    public static void setStandalone(StandaloneServer s) {
+        standaloneServer = s;
     }
 }

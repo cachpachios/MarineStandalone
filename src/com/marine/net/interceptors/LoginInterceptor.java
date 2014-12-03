@@ -31,8 +31,9 @@ public class LoginInterceptor implements PacketInterceptor {
 				server.getNetwork().cleanUp(c);
 				return true;
 			}
-			
-			server.getPlayerManager().getLoginManager().passPlayer(c);
+
+            //TODO: Fix this
+			//server.getPlayerManager().getLoginManager().passPlayer(new IPla);
 			
 			return true;
 		}
