@@ -88,4 +88,20 @@ public class Location extends Vector3d implements JSONAware { // Used for absolu
         o.put("world", getWorld().getName());
         return o.toJSONString();
     }
+
+    public org.json.JSONObject toJSONObject() {
+        org.json.JSONObject o = new org.json.JSONObject();
+        try {
+            o.put("x", getX());
+            o.put("y", getY());
+            o.put("z", getZ());
+            o.put("yaw", getYaw());
+            o.put("pitch", getPitch());
+            o.put("world", getWorld().getName());
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return o;
+    }
+
 }

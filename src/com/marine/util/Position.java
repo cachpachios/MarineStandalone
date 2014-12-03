@@ -1,5 +1,7 @@
 package com.marine.util;
 
+import org.json.JSONObject;
+
 public class Position extends Vector3i {
 	
 	public Position(int x, int y, int z) { // Used for relative posisitions (Blocks etc)
@@ -23,5 +25,17 @@ public class Position extends Vector3i {
 	public Location toLocation() {
 		return new Location(null, getX(), getY(), getZ(),0,0);
 	}
-	
+
+    public JSONObject toJSONObject() {
+        JSONObject o = new JSONObject();
+        try {
+            o.put("x", getX());
+            o.put("y", getY());
+            o.put("z", getZ());
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return o;
+    }
+
 }
