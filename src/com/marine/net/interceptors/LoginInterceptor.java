@@ -1,5 +1,6 @@
 package com.marine.net.interceptors;
 
+import com.marine.Logging;
 import com.marine.StandaloneServer;
 import com.marine.game.LoginHandler;
 import com.marine.io.data.ByteData;
@@ -18,7 +19,7 @@ public class LoginInterceptor implements PacketInterceptor {
 	@Override
 	public boolean intercept(ByteData data, Client c) {
 		int ID = data.readVarInt();
-		
+		Logging.instance().info("Login Packet Intercepted: " + ID);
 		if(ID == 0x00) {
 			LoginPacket packet = new LoginPacket();
 			packet.readFromBytes(data);
@@ -31,7 +32,7 @@ public class LoginInterceptor implements PacketInterceptor {
 				return true;
 			}
 			
-			server.getPlayerManager().getLoginManager().passPlayer(loginReturn.player.getClient());
+			server.getPlayerManager().getLoginManager().passPlayer(c);
 			
 			return true;
 		}

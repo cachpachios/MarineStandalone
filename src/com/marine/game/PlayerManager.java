@@ -133,6 +133,8 @@ public class PlayerManager {
 			cleanUp(p); return;
 		}
 	 	
+		loginManager.loginDone(p.getClient());
+		
 		p.getClient().sendPacket(new JoinGamePacket(p));
 		
 		p.sendAbilites();

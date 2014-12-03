@@ -3,6 +3,7 @@ package com.marine.net;
 import com.marine.StandaloneServer;
 import com.marine.io.data.ByteData;
 import com.marine.net.interceptors.HandshakeInterceptor;
+import com.marine.net.interceptors.IngameInterceptor;
 import com.marine.net.interceptors.LoginInterceptor;
 import com.marine.net.interceptors.PacketInterceptor;
 import com.marine.net.interceptors.StatusInterceptor;
@@ -13,11 +14,13 @@ public class PacketHandler implements PacketInterceptor {
 	HandshakeInterceptor handshake;
 	StatusInterceptor status;
 	LoginInterceptor login;
+	IngameInterceptor ingame;
 	
 	public PacketHandler(StandaloneServer server) {
 		handshake = new HandshakeInterceptor();
 		status = new StatusInterceptor();
 		login = new LoginInterceptor(server);
+		ingame = new IngameInterceptor(server.getPlayerManager());
 	}
 	
 	public boolean intercept(ByteData data, Client c) {
@@ -29,7 +32,9 @@ public class PacketHandler implements PacketInterceptor {
 		else
 		if(c.getState().equals(States.LOGIN))
 			return login.intercept(data, c);
-				
+		else
+			if(c.getState().equals(States.INGAME))
+				return login.intercept(data, c);
 		
 		return false;
 		

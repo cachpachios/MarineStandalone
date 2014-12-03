@@ -1,5 +1,6 @@
 package com.marine.net.interceptors;
 
+import com.marine.Logging;
 import com.marine.game.PlayerManager;
 import com.marine.io.data.ByteData;
 import com.marine.net.Client;
@@ -16,6 +17,8 @@ public class IngameInterceptor implements PacketInterceptor{
 	@Override
 	public boolean intercept(ByteData data, Client c) {
 		int id = data.readVarInt();
+		
+		Logging.instance().info("Ingame Packet Intercepted: " + id);
 		
 		if(id == 0x06) {
 			ServerboundPlayerLookPositionPacket packet = new ServerboundPlayerLookPositionPacket();

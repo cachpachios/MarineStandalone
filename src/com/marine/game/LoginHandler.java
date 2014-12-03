@@ -20,8 +20,6 @@ import com.marine.world.World;
 
 public class LoginHandler {
 	
-	private Map<Client, IPlayer> players;
-	
 	private final PlayerManager playerManager;
 	
 	private Location spawnLocation;
@@ -64,32 +62,19 @@ public class LoginHandler {
 		//TODO: Check if player is banned in that case drop them.
 		
 		IPlayer p = new AbstractPlayer(playerManager.getServer(),playerManager.getServer().getWorldManager().getMainWorld(), new PlayerID(name, uuid), c, new PlayerAbilites(false, false, false, 10, 10), spawnLocation);
-		
-			synchronized(players) {
-				players.put(c, p);
-			}
-			
+
 		return new LoginResponse(p);
 	}
 	
 
-	public void passPlayer(Client player) { //TODO: Encryption
-		Player p = playerManager.passFromLogin(players.get(player));
+	public void passPlayer(IPlayer player) { //TODO: Encryption
+		Player p = playerManager.passFromLogin(player);
 		
 		p.getClient().sendPacket(new LoginSucessPacket(p));
 		
 		p.getClient().setState(States.INGAME);
 		
 		playerManager.joinGame(p);
-	}
-
-	public void loginDone(Client c) {
-		if(players.containsKey(c))
-			players.remove(c);
-	}
-	
-	public boolean clientExists(Client c) {
-		return players.containsKey(c);
 	}
 
 }

@@ -5,6 +5,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import com.marine.Logging;
 import com.marine.io.data.ByteData;
 import com.marine.io.data.ByteEncoder;
 
@@ -23,6 +24,7 @@ public class Client {
 	}
 	
 	public void sendPacket(Packet packet) { //TODO: PacketBuffer
+		Logging.instance().info("Sending packet ID: " + packet.getID() + " State: " + packet.getPacketState());
 		try {
 			packet.writeToStream(connection.getOutputStream());
 		} catch (IOException e) {

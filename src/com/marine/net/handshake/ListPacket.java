@@ -8,6 +8,7 @@ import com.marine.net.States;
 import com.marine.player.Player;
 import com.marine.server.Marine;
 import com.marine.util.ListResponse;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -22,14 +23,13 @@ public class ListPacket extends Packet {
 	synchronized private String getImage() {
         try {
             if (img == null || img.equals("")) {
-                File file = new File("./favicon.ico");
+                File file = new File("./favicon.png");
                 if(file.exists()) {
                     // TODO: Get this working, it sorta worked before but...
                 }
                 return "";
             }
         } catch(Throwable e) {
-            e.printStackTrace();
             return "";
         }
         return img;
@@ -40,14 +40,16 @@ public class ListPacket extends Packet {
 		return 0x00;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void writeToStream(OutputStream stream) throws IOException {
         JSONArray samples = new JSONArray();
         JSONObject player = new JSONObject();
 
-        player.put("id", UUID.fromString("1-1-3-3-7").toString());
-        player.put("name", "§cThere is nobody online!");
-
+        if(Marine.getServer().getPlayerCount() < 1) {
+        	player.put("id", UUID.fromString("1-1-3-3-7").toString());
+        	player.put("name", "§cThere is nobody online!");
+        }
         samples.add(player);
 
         for (Player p : Marine.getPlayers()) {
@@ -57,7 +59,10 @@ public class ListPacket extends Packet {
             samples.add(player);
         }
 
-        ListResponse response = new ListResponse(Marine.getMOTD(), Marine.getPlayers().size(), 100, samples, "");
+        String faviicon = getImage();
+
+        
+        ListResponse response = new ListResponse(Marine.getMOTD(), Marine.getPlayers().size(), 100, samples, getImage());
         ListEvent event = new ListEvent(response);
 
         Marine.getServer().callEvent(event);

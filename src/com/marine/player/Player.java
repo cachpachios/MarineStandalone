@@ -12,7 +12,7 @@ import com.marine.net.Client;
 import com.marine.net.play.clientbound.ClientboundPlayerLookPositionPacket;
 import com.marine.net.play.clientbound.PlayerAbilitesPacket;
 import com.marine.net.play.clientbound.SpawnPointPacket;
-import com.marine.net.play.clientbound.windows.WindowItemsPacket;
+import com.marine.net.play.clientbound.inv.InventoryContentPacket;
 import com.marine.util.Location;
 import com.marine.util.Position;
 import com.marine.world.World;
@@ -162,7 +162,7 @@ public class Player extends Entity implements IPlayer, CommandSender {
 	}
 
 	public void updateInventory() {
-		this.getClient().sendPacket(new WindowItemsPacket(getInventory()));
+		this.getClient().sendPacket(new InventoryContentPacket(getInventory()));
 	}
 	
 	public void sendPostion() {

@@ -26,6 +26,8 @@ public class JoinGamePacket extends Packet{
 		ByteData d = new ByteData();
 		d.writeVarInt(getID());
 		
+		d.writeInt(p.getEntityID());
+		
 		d.writeByte(p.getGamemode().getID());
 
 		d.writeByte(p.getWorld().getDimension().getID());

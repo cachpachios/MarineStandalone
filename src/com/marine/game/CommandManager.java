@@ -1,13 +1,13 @@
 package com.marine.game;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
-import com.marine.game.command.Command;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+
+import com.google.common.collect.HashBiMap;
+import com.marine.game.command.Command;
 
 /**
  * Created 2014-12-01 for MarineStandalone
@@ -16,14 +16,14 @@ import java.util.List;
  */
 public class CommandManager {
 
-    private final BiMap<Command, List<String>> commandMap;
-    private final List<String> raw;
+    private final Map<Command, List<String>> 	commandMap;
+    private final Map<String, Command> 			stringMap;
 
     private static CommandManager instance;
 
     public CommandManager() {
-        commandMap = HashBiMap.create();
-        raw = Collections.synchronizedList(new ArrayList<String>());
+        commandMap = Collections.synchronizedMap(HashBiMap.create());
+        stringMap = Collections.synchronizedMap(HashBiMap.create());
     }
 
     public static CommandManager getInstance() {
@@ -33,11 +33,11 @@ public class CommandManager {
     }
 
     public void registerCommand(Command command) throws RuntimeException {
-    	synchronized(commandMap) { synchronized(raw) {
-        if (raw.contains(command.toString())) {
+    	synchronized(commandMap) { synchronized(stringMap) {
+        if (stringMap.containsKey(command.toString())) {
             throw new RuntimeException(String.format("Command Name '%s' is already taken", command.toString()));
         }
-        raw.add(command.toString());
+        stringMap.put(command.toString(), command);
         List<String> s = new ArrayList<>(Arrays.asList(command.getAliases()));
         s.add(command.toString());
         commandMap.put(command, s);

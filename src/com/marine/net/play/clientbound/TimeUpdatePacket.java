@@ -1,4 +1,4 @@
-package com.marine.net.login;
+package com.marine.net.play.clientbound;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -6,32 +6,26 @@ import java.io.OutputStream;
 import com.marine.io.data.ByteData;
 import com.marine.net.Packet;
 import com.marine.net.States;
-import com.marine.player.Player;
 
-public class LoginSucessPacket extends Packet {
-
-	public Player p;
+public class TimeUpdatePacket extends Packet{
+	final long worldTime;
+	final long worldAge;
 	
-	public LoginSucessPacket(Player p) {
-		this.p = p;
+	public TimeUpdatePacket(long worldTime, long worldAge) {
+		super();
+		this.worldTime = worldTime;
+		this.worldAge = worldAge;
 	}
-	
+
 	@Override
 	public int getID() {
-		return 0x02;
+		return 0x03;
 	}
 
 	@Override
 	public void writeToStream(OutputStream stream) throws IOException {
 		ByteData d = new ByteData();
 		d.writeVarInt(getID());
-		
-		d.writeUTF8(p.getUUID().toString());
-		d.writeUTF8(p.getName());
-		
-		d.writePacketPrefix();
-		
-		stream.write(d.getBytes());
 	}
 
 	@Override
@@ -43,6 +37,7 @@ public class LoginSucessPacket extends Packet {
 	@Override
 	public States getPacketState() {
 		// TODO Auto-generated method stub
-		return States.LOGIN;
+		return null;
 	}
+
 }

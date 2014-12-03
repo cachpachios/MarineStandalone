@@ -18,7 +18,7 @@ public class LoginPacket extends Packet {
 
 	@Override
 	public void writeToStream(OutputStream stream) throws IOException {
-		// SERVERBOND PACKET
+		// SERVERBOUND PACKET
 	}
 
 	@Override

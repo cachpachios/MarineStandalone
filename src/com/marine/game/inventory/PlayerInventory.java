@@ -12,8 +12,6 @@ public final class PlayerInventory extends Inventory {
 	public String getType() {
 		return "inventory";
 	}
-	
-	
 
 	@Override
 	public ChatComponent getName() {

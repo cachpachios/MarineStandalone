@@ -41,7 +41,6 @@ public class ConsoleWindow { // Simple console window :)
             text.setContentType("text/html");
 		text.setEditable(false);
         text.setBackground(Color.BLACK);
-		text.setBackground(Color.BLACK);
 
 		c.fill = GridBagConstraints.BOTH;
 		c.gridx = 1;
@@ -50,7 +49,7 @@ public class ConsoleWindow { // Simple console window :)
 		c.weighty = 1;
 		
 		c.insets = new Insets(1, 1, 1, 1);
-		jFrame.add(text, c);
+		jFrame.add(new JScrollPane(text), c);
 
 		jFrame.setVisible(true);
 	}

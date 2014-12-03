@@ -118,4 +118,8 @@ public class Logging {
                 msg
         );
     }
+
+	public static Logging instance() {
+		return getLogger();
+	}
 }
