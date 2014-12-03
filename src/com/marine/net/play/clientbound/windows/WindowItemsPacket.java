@@ -5,6 +5,7 @@ import java.io.OutputStream;
 
 import com.marine.game.inventory.Inventory;
 import com.marine.game.inventory.SlotData;
+import com.marine.game.item.ItemID;
 import com.marine.io.data.ByteData;
 import com.marine.net.Packet;
 import com.marine.net.States;
@@ -31,7 +32,10 @@ public class WindowItemsPacket extends Packet{
 		d.writeShort((short) inv.getSlots().length);
 		
 		for(SlotData slot : inv.getSlots())
-			d.writeByte(slot.toBytes());
+			if(slot==null)
+				d.writeShort(ItemID.EMPTY.getID());
+			else
+				d.writeByte(slot.toBytes());
 		
 		d.writePacketPrefix();
 		stream.write(d.getBytes());

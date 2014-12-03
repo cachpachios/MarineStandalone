@@ -52,6 +52,7 @@ public abstract class Entity {
 	public double getZ() {return position.getZ(); }
 	public Position getRelativePosition() { return position.getRelativePosition(); }
 	public Vector3d getAbsolutePosition() { return position; }
+	public Location getPosition() { return position; }
 	
 	
 	public int getSecoundsLived() {

@@ -43,30 +43,17 @@ public class World { // TODO Save and unload chunks...
 		dimension = this.generator.getDimension();
 	}
 	
-	public Chunk loadChunk(int x, int y) {
-		return null; // Temp code..
-	}
-	
-	public boolean chunkExist(int x, int y) { // Check if chunk exists in region file (if that exists xD)
-		return false;
-	}
 	
 	public boolean isChunkLoaded(int x, int y) {
 		return loadedChunks.containsKey(new ChunkPos(x,y));
 	}
 	
 	public void generateChunk(int x, int z) {
-		if(loadedChunks.containsKey(new ChunkPos(x,z)))
-			return;
-		
 		loadedChunks.put(new ChunkPos(x,z), generator.generateChunk(x, z));
 	}
 	
 	public Chunk getChunk(int x, int z)  {
-		if(!loadedChunks.containsKey(new ChunkPos(x,z)))
-			generateChunk(x,z);
-			
-		return loadedChunks.get(new ChunkPos(x,z));
+		return generator.generateChunk(x, z);
 	}
 
 	public Dimension getDimension() {

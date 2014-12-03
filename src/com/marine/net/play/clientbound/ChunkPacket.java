@@ -9,7 +9,7 @@ import com.marine.net.States;
 import com.marine.world.Chunk;
 
 public class ChunkPacket extends Packet{
-	Chunk c;
+	final Chunk c;
 	
 	public ChunkPacket(Chunk chunk) {
 		this.c = chunk;
@@ -26,6 +26,8 @@ public class ChunkPacket extends Packet{
 		
 		d.writeVarInt(getID());
 		
+		c.getPos();
+		
 		d.writeInt(c.getPos().getX());
 		d.writeInt(c.getPos().getY());
 		
@@ -34,6 +36,8 @@ public class ChunkPacket extends Packet{
 		byte[] data = c.getByteData(true);
 		
 		d.writeVarInt(data.length);
+		
+		d.writeByte(data);
 		
 		d.writePacketPrefix();
 		

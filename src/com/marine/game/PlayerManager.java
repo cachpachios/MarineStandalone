@@ -9,19 +9,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.marine.StandaloneServer;
 import com.marine.net.States;
-import com.marine.net.play.clientbound.ClientboundPlayerLookPositionPacket;
+import com.marine.net.play.clientbound.ChunkPacket;
 import com.marine.net.play.clientbound.JoinGamePacket;
-import com.marine.net.play.clientbound.MapChunkPacket;
-import com.marine.net.play.clientbound.PlayerAbilitesPacket;
-import com.marine.net.play.clientbound.PlayerPositionPacket;
-import com.marine.net.play.clientbound.SpawnPointPacket;
-import com.marine.net.play.clientbound.windows.WindowItemsPacket;
 import com.marine.net.play.serverbound.ServerboundPlayerLookPositionPacket;
 import com.marine.player.AbstractPlayer;
 import com.marine.player.IPlayer;
 import com.marine.player.Player;
-import com.marine.util.Location;
-import com.marine.world.Chunk;
+import com.marine.util.Position;
 
 public class PlayerManager {
 	
@@ -140,24 +134,15 @@ public class PlayerManager {
 		}
 	 	
 		p.getClient().sendPacket(new JoinGamePacket(p));
-		p.getClient().sendPacket(new SpawnPointPacket(p.getWorld().getSpawnPoint()));
-		p.getClient().sendPacket(new PlayerAbilitesPacket(p.getAbilities()));
 		
-		p.getClient().sendPacket(new ClientboundPlayerLookPositionPacket(p.getWorld().getSpawnPoint().toLocation()));
-	}
-	
-	public void sendLoginPackages(ServerboundPlayerLookPositionPacket packet, Player p) {
-		//TODO: Check if packet is same that we sent client before.
-		p.getClient().sendPacket(new WindowItemsPacket(p.getInventory()));
+		p.sendAbilites();
+		p.updateInventory();
+		p.sendCompassTarget(new Position(0,6,0));
 		
-		ArrayList<Chunk> chunks = new ArrayList<Chunk>();
-				chunks.add(p.getWorld().getChunk(0, 0));
-		
-		p.getClient().sendPacket(new MapChunkPacket(p.getWorld(), chunks));
-		
+		p.getClient().sendPacket(new ChunkPacket(p.getWorld().getChunk(0, 0)));
+
 		// Send initial position to spawn player
 		
-		p.getClient().sendPacket(new PlayerPositionPacket(new Location(p.getWorld(),0,4,0)));
+		p.sendPostion();
 	}
-	
 }

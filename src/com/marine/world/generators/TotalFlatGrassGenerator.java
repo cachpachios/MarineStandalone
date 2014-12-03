@@ -14,10 +14,6 @@ public final class TotalFlatGrassGenerator extends WorldGenerator{
 	@Override
 	public Chunk generateChunk(int x, int y) { // Really need to be improved i guess it could be made in a less laggy way :S
 		Chunk r = new Chunk(world, new ChunkPos(x,y));
-		if(world.chunkExist(x, y))
-			return world.loadChunk(x, y);
-		if(world.isChunkLoaded(x, y))
-			return world.getChunk(x, y);
 		
 		for(int xx = 0; xx < 16;xx++)
 			for(int zz = 0; zz < 16;zz++) {
@@ -25,7 +21,7 @@ public final class TotalFlatGrassGenerator extends WorldGenerator{
 				r.setTypeAt(xx, 1, zz, BlockID.DIRT);
 				r.setTypeAt(xx, 2, zz, 	BlockID.DIRT);
 				r.setTypeAt(xx, 3, zz, BlockID.DIRT);
-				r.setTypeAt(xx, 2, zz, BlockID.GRASS);
+				r.setTypeAt(xx, 4, zz, BlockID.GRASS);
 			}
 				
 		

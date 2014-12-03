@@ -41,13 +41,14 @@ public class MapChunkPacket extends Packet {
 			//Write Chunk metadata
 			data.writeInt(c.getPos().getX());
 			data.writeInt(c.getPos().getY());
-			data.writeShort((short) (c.getSectionBitMap()  & 65535));
-		}
+			data.writeShort(c.getSectionBitMap());
 		
-		for(Chunk c : chunks) 
+			// Write Data length
+			data.writeVarInt(c.getByteData(true).length);
+			
 			// Write Chunk data
 			data.writeend(c.getByteData(true));
-		
+		}
 		
 		data.writePacketPrefix();
 	}

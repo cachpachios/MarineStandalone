@@ -118,9 +118,9 @@ public final class Chunk {
 	
 	public short getSectionBitMap() {
 		short bitmap = 0;
-		
 		for(Section s : sections)
-			bitmap |= 1 << s.y;
+			if(s!=null)
+			bitmap |= 1 << s.getID();
 		return bitmap;
 	}
 	
@@ -260,6 +260,10 @@ public final class Chunk {
 	        r.writeend(lightning.getBytes());
 	        
 	        return r.getBytes();
+		}
+		
+		public int getID() {
+			return y;
 		}
 		
 	}

@@ -61,7 +61,7 @@ public class LoginHandler {
 		if(playerManager.isPlayerOnline(uuid))
 			return new LoginResponse("Failed to login player is allready connected.");
 		
-		//TODO: Check if player is banned incase they are drop them.
+		//TODO: Check if player is banned in that case drop them.
 		
 		IPlayer p = new AbstractPlayer(playerManager.getServer(),playerManager.getServer().getWorldManager().getMainWorld(), new PlayerID(name, uuid), c, new PlayerAbilites(false, false, false, 10, 10), spawnLocation);
 		
