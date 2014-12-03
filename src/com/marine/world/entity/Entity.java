@@ -11,7 +11,7 @@ public abstract class Entity {
 	private static int nextEntityID;
 	
 	public static int generateEntityID() {
-		nextEntityID++;
+		++nextEntityID;
 		return nextEntityID;
 	}
 	
@@ -38,7 +38,7 @@ public abstract class Entity {
 			Logging.getLogger().error("Entity lived more than 3.6 years impressive! but now we have to remove some age because of memory:/");
 			ticksLived = -1;
 		}
-			ticksLived++;
+	    ++ticksLived;
 	}
 	
 	public int getEntityID() {
