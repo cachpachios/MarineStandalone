@@ -16,7 +16,7 @@ public class StandaloneServer implements Listener {
 	
 	private final int port;
 	
-	// Game managers
+	// Managers
 	private final PlayerManager players;
 	private final WorldManager worlds;
 	private final Server server;
@@ -39,7 +39,7 @@ public class StandaloneServer implements Listener {
 	
 	public StandaloneServer(final int port, final int targetTickRate) {
 		this.port = port;
-		this.skipTime = 1000000000 / targetTickRate; // nanotim
+		this.skipTime = 1000000000 / targetTickRate; // nanotime
 		this.targetTickRate = targetTickRate;
         this.worlds = new WorldManager();
         this.players = new PlayerManager(this);
@@ -65,7 +65,6 @@ public class StandaloneServer implements Listener {
         Logging.getLogger().log(String.format("Marine Standalone Server starting - Protocol Version §c§o%d§0 (Minecraft §c§o%s§0)", ServerProperties.PROTOCOL_VERSION, ServerProperties.MINECRAFT_NAME));
 
 		network = new NetworkManager(this, port);
-		network.openConnection();
 
 		try { // Check OS Arch and warn if lower than 64bit
 			if(Integer.parseInt(System.getProperty("sun.arch.data.model")) < 64)  {
@@ -76,7 +75,9 @@ public class StandaloneServer implements Listener {
 			Logging.getLogger().error("Unable to retrieve computer arch! Perhaps blocked by the OS.");
 		}
 
-
+		//TODO World loading
+		
+		network.openConnection();
 
 		long startTime = System.nanoTime();
 		long lastTime = startTime;

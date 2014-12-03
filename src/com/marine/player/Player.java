@@ -7,6 +7,7 @@ import com.marine.game.chat.ChatComponent;
 import com.marine.game.chat.ChatMessage;
 import com.marine.game.command.Command;
 import com.marine.game.command.CommandSender;
+import com.marine.game.inventory.PlayerInventory;
 import com.marine.net.Client;
 import com.marine.util.Location;
 import com.marine.util.Position;
@@ -15,11 +16,13 @@ import com.marine.world.entity.Entity;
 
 public class Player extends Entity implements IPlayer, CommandSender {
 	
-	private int nextWindowID = 0; // Used for windows
+	private byte nextWindowID = 0; // Used for windows
 	
 	private final PlayerManager manager;
 	
 	private PlayerID id;
+	
+	private PlayerInventory inventory;
 	
 	private Gamemode gamemode; 
 		private boolean gamemodeUpdate; //Keep tracks if gamemode have been change without the client getting the info
@@ -28,8 +31,9 @@ public class Player extends Entity implements IPlayer, CommandSender {
 	
 	private PlayerAbilites abilites;
 	
-	public Player(PlayerManager manager, Client connection, PlayerID id, int entityID, World world, Location pos, PlayerAbilites abilites, Gamemode gamemode) {
+	public Player(PlayerManager manager, Client connection, PlayerID id, PlayerInventory inventory, int entityID, World world, Location pos, PlayerAbilites abilites, Gamemode gamemode) {
 		super(entityID, world, pos);
+		this.inventory = inventory;
 		this.manager = manager;
 		this.id = id;
 		this.abilites = abilites;
@@ -39,12 +43,12 @@ public class Player extends Entity implements IPlayer, CommandSender {
 	}
 
 	public Player(AbstractPlayer player, Gamemode gm) {
-		this(player.getServer().getPlayerManager(),player.getClient(),player.getInfo(), Entity.generateEntityID(), player.getWorld(), player.getLocation(), player.getAbilites(), gm);
+		this(player.getServer().getPlayerManager(),player.getClient(),player.getInfo(), new PlayerInventory(), Entity.generateEntityID(), player.getWorld(), player.getLocation(), player.getAbilites(), gm);
 	}
 
 	@Override
 	public String getName() {
-		return	id.getName();
+		return id.getName();
 	}
 	
 	@Override
@@ -76,7 +80,6 @@ public class Player extends Entity implements IPlayer, CommandSender {
 
 	@Override
 	public Client getClient() {
-		// TODO Auto-generated method stub
 		return connection;
 	}
 
@@ -140,6 +143,10 @@ public class Player extends Entity implements IPlayer, CommandSender {
 
 	public PlayerAbilites getAbilities() {
 		return abilites;
+	}
+
+	public PlayerInventory getInventory() {
+		return inventory;
 	}
 	
 }

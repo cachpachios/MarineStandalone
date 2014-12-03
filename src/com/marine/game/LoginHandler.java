@@ -6,6 +6,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.marine.net.Client;
+import com.marine.net.States;
 import com.marine.net.login.LoginSucessPacket;
 import com.marine.player.AbstractPlayer;
 import com.marine.player.IPlayer;
@@ -18,18 +19,18 @@ import com.marine.util.UUIDHandler;
 import com.marine.world.World;
 
 public class LoginHandler {
-
-	private Map<UUID, IPlayer> loggingInClients;
 	
-	private final PlayerManager players;
+	private Map<Client, IPlayer> players;
+	
+	private final PlayerManager playerManager;
 	
 	private Location spawnLocation;
 	
 	public LoginHandler(PlayerManager playerManager, World w, Position spawnLocation) {
 		this.spawnLocation = new Location(spawnLocation, w);
 	
-		players = playerManager;
-		loggingInClients = Collections.synchronizedMap(new ConcurrentHashMap<UUID, IPlayer>());
+		this.playerManager = playerManager;
+		players = Collections.synchronizedMap(new ConcurrentHashMap<Client, IPlayer>());
 	}
 	
 	public class LoginResponse {
@@ -53,33 +54,42 @@ public class LoginHandler {
 	}
 	
 	public LoginResponse preJoin(String name, Client c) { // Returns null if login succeded, otherwise makes LoginInterceptor drop the client
-		UUID uuid = UUIDHandler.getUUID(name); //UUID.randomUUID(); //TODO: Retrive from Mojang
+		UUID uuid = UUIDHandler.getUUID(name); //UUID.randomUUID();
 		
-		if(players.isPlayerOnline(name))
+		if(playerManager.isPlayerOnline(name))
 			return new LoginResponse("Failed to login player is allready connected.");
-		if(players.isPlayerOnline(uuid))
+		if(playerManager.isPlayerOnline(uuid))
 			return new LoginResponse("Failed to login player is allready connected.");
 		
 		//TODO: Check if player is banned incase they are drop them.
 		
-		IPlayer p = new AbstractPlayer(players.getServer(),players.getServer().getWorldManager().getMainWorld(), new PlayerID(name, uuid), c, new PlayerAbilites(false, false, false, 10, 10), spawnLocation);
+		IPlayer p = new AbstractPlayer(playerManager.getServer(),playerManager.getServer().getWorldManager().getMainWorld(), new PlayerID(name, uuid), c, new PlayerAbilites(false, false, false, 10, 10), spawnLocation);
 		
-		synchronized(loggingInClients) {
-			loggingInClients.put(uuid, p);
-		}
-		
+			synchronized(players) {
+				players.put(c, p);
+			}
+			
 		return new LoginResponse(p);
 	}
 	
 
-	public void passPlayer(UUID player) { //TODO: Encryption
-		Player p = players.passFromLogin(loggingInClients.get(player));
+	public void passPlayer(Client player) { //TODO: Encryption
+		Player p = playerManager.passFromLogin(players.get(player));
 		
 		p.getClient().sendPacket(new LoginSucessPacket(p));
 		
-		loggingInClients.remove(player); // Remove from loginin process
+		p.getClient().setState(States.INGAME);
 		
-		players.joinGame(p);
+		playerManager.joinGame(p);
+	}
+
+	public void loginDone(Client c) {
+		if(players.containsKey(c))
+			players.remove(c);
+	}
+	
+	public boolean clientExists(Client c) {
+		return players.containsKey(c);
 	}
 
 }

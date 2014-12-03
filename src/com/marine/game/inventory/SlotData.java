@@ -1,4 +1,4 @@
-package com.marine.game.windows;
+package com.marine.game.inventory;
 
 import com.marine.game.item.ItemID;
 import com.marine.io.data.ByteEncoder;

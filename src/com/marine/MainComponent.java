@@ -13,7 +13,7 @@ public class MainComponent {
 		
 		if(!Arrays.asList(args).contains("nogui")) {// Check if GUI should'nt be shown (Yes lazy implementation...)
             Logging.getLogger().createConsoleWindow(); // Create the simplest gui you will ever see :)
-            ServerSettings.getInstance().verbose();
+            //ServerSettings.getInstance().verbose();
         }
 
         if (!ServerProperties.BUILD_STABLE)

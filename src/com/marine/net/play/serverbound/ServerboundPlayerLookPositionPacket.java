@@ -33,7 +33,7 @@ public class ServerboundPlayerLookPositionPacket extends Packet { //TODO Relativ
 		float yaw = input.readFloat();
 		float pitch = input.readFloat();
 		
-		input.readByte(); //TODO Relative positions using this bitmap
+		input.readBoolean(); // onGround
 		
 		l = new Location(null,x,y,z,yaw,pitch);
 	}

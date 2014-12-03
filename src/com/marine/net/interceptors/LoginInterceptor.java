@@ -31,7 +31,7 @@ public class LoginInterceptor implements PacketInterceptor {
 				return true;
 			}
 			
-			server.getPlayerManager().getLoginManager().passPlayer(loginReturn.player.getUUID());
+			server.getPlayerManager().getLoginManager().passPlayer(loginReturn.player.getClient());
 			
 			return true;
 		}
