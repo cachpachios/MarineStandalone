@@ -28,7 +28,6 @@ public class Client {
 	}
 	
 	public void sendPacket(Packet packet) { //TODO: PacketBuffer
-		Logging.instance().info("Sending packet ID: " + packet.getID() + " State: " + packet.getPacketState());
 		try {
 			packet.writeToStream(output);
 		} catch (IOException e) {

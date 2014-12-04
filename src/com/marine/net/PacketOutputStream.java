@@ -18,8 +18,6 @@ public class PacketOutputStream  { // Here we enable encryption and compression 
 
 	public void write(int id, byte[] b) throws IOException {
 			//TODO Compress and encrypt :D
-		
-			System.out.print(" (Uncompressed)");
 			ByteData fD = new ByteData(b);
 			fD.writeVarInt(0,id);
 			fD.writePacketPrefix();
