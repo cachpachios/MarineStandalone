@@ -31,9 +31,9 @@ public class Item {
     }
 
     public Item(IDObject id) {
-        damage = 0;
-        data = 0x00;
-        amount = 1;
+        this.damage = 0;
+        this.data = 0x00;
+        this.amount = 1;
     }
 
     public IDObject getID() {
@@ -96,6 +96,10 @@ public class Item {
         return isItem() && ((ItemID) id).canTakeDamage();
     }
 
+    /**
+     * Get either the friendly name or the block name
+     * @return Name
+     */
     public String getFriendlyName() {
         if(isItem()) {
             return ((ItemID) id).getFriendlyName();

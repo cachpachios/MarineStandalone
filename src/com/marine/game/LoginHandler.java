@@ -5,11 +5,8 @@ import java.util.UUID;
 import com.marine.net.Client;
 import com.marine.net.States;
 import com.marine.net.login.LoginSucessPacket;
-import com.marine.player.AbstractPlayer;
-import com.marine.player.IPlayer;
-import com.marine.player.Player;
-import com.marine.player.PlayerAbilites;
-import com.marine.player.PlayerID;
+import com.marine.player.*;
+import com.marine.player.PlayerAbilities;
 import com.marine.util.Location;
 import com.marine.util.Position;
 import com.marine.util.UUIDHandler;
@@ -62,7 +59,7 @@ public class LoginHandler {
 		
 		//TODO: Check if player is banned in that case drop them.
 		
-		IPlayer p = new AbstractPlayer(playerManager.getServer(),playerManager.getServer().getWorldManager().getMainWorld(), new PlayerID(name, uuid), c, new PlayerAbilites(false, false, false, 0.1f, 0.2f), spawnLocation);
+		IPlayer p = new AbstractPlayer(playerManager.getServer(),playerManager.getServer().getWorldManager().getMainWorld(), new PlayerID(name, uuid), c, new PlayerAbilities(false, false, false, 0.1f, 0.2f), spawnLocation);
 
 		return new LoginResponse(p);
 	}

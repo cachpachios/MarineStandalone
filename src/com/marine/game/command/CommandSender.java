@@ -12,4 +12,5 @@ public interface CommandSender extends ChatReciver{
     public void executeCommand(String command);
     public void executeCommand(String command, String[] arguments);
     public void executeCommand(Command command, String[] arguments);
+    public boolean hasPermission(String permission);
 }

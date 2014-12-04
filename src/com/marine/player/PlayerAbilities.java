@@ -2,14 +2,14 @@ package com.marine.player;
 
 import com.marine.net.play.clientbound.PlayerAbilitesPacket;
 
-public class PlayerAbilites {
+public class PlayerAbilities {
 	private boolean godMode, canFly, creativeMode;
 	
 	private float flySpeed, walkSpeed;
 
 	private boolean needUpdate; // Used to keep track if a PlayerAbilityPacket needs to be sent to client.
 	
-	public PlayerAbilites(boolean godMode, boolean canFly, boolean creativeMode, float flySpeed, float walkSpeed) {
+	public PlayerAbilities(boolean godMode, boolean canFly, boolean creativeMode, float flySpeed, float walkSpeed) {
 		this.godMode = godMode;
 		this.canFly = canFly;
 		this.creativeMode = creativeMode;

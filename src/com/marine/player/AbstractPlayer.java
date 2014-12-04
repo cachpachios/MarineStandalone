@@ -13,7 +13,7 @@ public class AbstractPlayer implements IPlayer{ // Used for communication with c
 	
 	private PlayerID id;
 	
-	private PlayerAbilites abilites;
+	private PlayerAbilities abilites;
 	
 	private Client client;
 	
@@ -21,7 +21,7 @@ public class AbstractPlayer implements IPlayer{ // Used for communication with c
 	
 	private World w;
 	
-	public AbstractPlayer(StandaloneServer server, World w, PlayerID id, Client c, PlayerAbilites abilites, Location spawnLocation) {
+	public AbstractPlayer(StandaloneServer server, World w, PlayerID id, Client c, PlayerAbilities abilites, Location spawnLocation) {
 		this.s = server;
 		this.w = w;
 		this.client = c;
@@ -39,7 +39,7 @@ public class AbstractPlayer implements IPlayer{ // Used for communication with c
 		return id;
 	}
 
-	public PlayerAbilites getAbilites() {
+	public PlayerAbilities getAbilites() {
 		return abilites;
 	}
 	
