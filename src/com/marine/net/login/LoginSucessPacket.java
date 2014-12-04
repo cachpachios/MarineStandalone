@@ -1,10 +1,10 @@
 package com.marine.net.login;
 
 import java.io.IOException;
-import java.io.OutputStream;
 
 import com.marine.io.data.ByteData;
 import com.marine.net.Packet;
+import com.marine.net.PacketOutputStream;
 import com.marine.net.States;
 import com.marine.player.Player;
 
@@ -22,13 +22,13 @@ public class LoginSucessPacket extends Packet {
 	}
 
 	@Override
-	public void writeToStream(OutputStream stream) throws IOException {
+	public void writeToStream(PacketOutputStream stream) throws IOException {
 		ByteData d = new ByteData();
 		d.writeVarInt(getID());
 		
-		d.writeUTF8(p.getUUID().toString());
+        d.writeUTF8(p.getUUID() == null ? "" : p.getUUID().toString());
 		d.writeUTF8(p.getName());
-		
+	
 		d.writePacketPrefix();
 		
 		stream.write(d.getBytes());

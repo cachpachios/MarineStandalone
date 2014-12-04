@@ -1,10 +1,10 @@
 package com.marine.net.play.clientbound;
 
 import java.io.IOException;
-import java.io.OutputStream;
 
 import com.marine.io.data.ByteData;
 import com.marine.net.Packet;
+import com.marine.net.PacketOutputStream;
 import com.marine.net.States;
 import com.marine.util.Position;
 
@@ -22,7 +22,7 @@ public class SpawnPointPacket extends Packet { // Only used to make the client k
 	}
 
 	@Override
-	public void writeToStream(OutputStream stream) throws IOException {
+	public void writeToStream(PacketOutputStream stream) throws IOException {
 		ByteData d = new ByteData();
 		d.writeVarInt(getID());
 		d.writePosition(spawnPoint);

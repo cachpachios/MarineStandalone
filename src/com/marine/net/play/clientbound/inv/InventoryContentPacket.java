@@ -1,13 +1,13 @@
 package com.marine.net.play.clientbound.inv;
 
 import java.io.IOException;
-import java.io.OutputStream;
 
 import com.marine.game.inventory.Inventory;
 import com.marine.game.item.ItemID;
 import com.marine.game.item.ItemSlot;
 import com.marine.io.data.ByteData;
 import com.marine.net.Packet;
+import com.marine.net.PacketOutputStream;
 import com.marine.net.States;
 
 public class InventoryContentPacket extends Packet{
@@ -24,7 +24,7 @@ public class InventoryContentPacket extends Packet{
 	}
 
 	@Override
-	public void writeToStream(OutputStream stream) throws IOException {
+	public void writeToStream(PacketOutputStream stream) throws IOException {
 		ByteData d = new ByteData();
 		d.writeVarInt(getID());
 		

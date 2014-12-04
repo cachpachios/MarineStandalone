@@ -1,11 +1,11 @@
 package com.marine.net.handshake;
 
+import java.io.IOException;
+
 import com.marine.io.data.ByteData;
 import com.marine.net.Packet;
+import com.marine.net.PacketOutputStream;
 import com.marine.net.States;
-
-import java.io.IOException;
-import java.io.OutputStream;
 
 public class PingPacket extends Packet{
 	
@@ -17,7 +17,7 @@ public class PingPacket extends Packet{
 	}
 
 	@Override
-	public void writeToStream(OutputStream stream) throws IOException {
+	public void writeToStream(PacketOutputStream stream) throws IOException {
 		ByteData data = new ByteData();
 		data.writeVarInt(getID());
 		data.writeLong(TIME);

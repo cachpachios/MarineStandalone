@@ -1,10 +1,10 @@
 package com.marine.net.play.serverbound;
 
 import java.io.IOException;
-import java.io.OutputStream;
 
 import com.marine.io.data.ByteData;
 import com.marine.net.Packet;
+import com.marine.net.PacketOutputStream;
 import com.marine.net.States;
 import com.marine.net.play.clientbound.ClientboundPlayerLookPositionPacket;
 import com.marine.util.Location;
@@ -22,7 +22,7 @@ public class ServerboundPlayerLookPositionPacket extends Packet { //TODO Relativ
 	}
 
 	@Override
-	public void writeToStream(OutputStream stream) throws IOException {}
+	public void writeToStream(PacketOutputStream stream) throws IOException {}
 
 	@Override
 	public void readFromBytes(ByteData input) {

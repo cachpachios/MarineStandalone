@@ -65,7 +65,12 @@ public class NetworkManager {
 	}
 
 	public void connect(Socket accept) { 
-		Client c = new Client(this, accept);
+		Client c;
+		try {
+			c = new Client(this, accept);
+		} catch (IOException e) {
+			return;
+		}
 		connectedClients.add(c);
 	}
 

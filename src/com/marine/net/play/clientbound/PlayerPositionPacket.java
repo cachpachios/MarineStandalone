@@ -5,6 +5,7 @@ import java.io.OutputStream;
 
 import com.marine.io.data.ByteData;
 import com.marine.net.Packet;
+import com.marine.net.PacketOutputStream;
 import com.marine.net.States;
 import com.marine.util.Location;
 
@@ -19,7 +20,7 @@ public class PlayerPositionPacket extends Packet {
 		return 0x04;
 	}
 	@Override
-	public void writeToStream(OutputStream stream) throws IOException {
+	public void writeToStream(PacketOutputStream stream) throws IOException {
 		ByteData d = new ByteData();
 		d.writeVarInt(getID());
 		

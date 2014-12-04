@@ -24,7 +24,7 @@ public class LoginInterceptor implements PacketInterceptor {
 			LoginPacket packet = new LoginPacket();
 			packet.readFromBytes(data);
 			
-			LoginHandler.LoginResponse loginReturn = server.getPlayerManager().getLoginManager().preJoin(packet.name, c);
+			LoginHandler.LoginResponse loginReturn = server.getPlayerManager().getLoginManager().login(packet.name, c);
 			if(!loginReturn.succeed()) {
 				DisconnectPacket nopePacket = new DisconnectPacket(loginReturn.response);
 				c.sendPacket(nopePacket);
@@ -33,7 +33,7 @@ public class LoginInterceptor implements PacketInterceptor {
 			}
 
             //TODO: Fix this
-			//server.getPlayerManager().getLoginManager().passPlayer(new IPla);
+			server.getPlayerManager().getLoginManager().passPlayer(loginReturn.player);
 			
 			return true;
 		}

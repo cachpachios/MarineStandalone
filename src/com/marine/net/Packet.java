@@ -9,7 +9,7 @@ public abstract class Packet {
 
 	public abstract int getID();
 	
-	public abstract void writeToStream(OutputStream stream) throws IOException;
+	public abstract void writeToStream(PacketOutputStream stream) throws IOException;
 	
 	public abstract void readFromBytes(ByteData input);
 	
@@ -22,8 +22,9 @@ public abstract class Packet {
 			int id = ID;
 			
 			@Override
-			public void writeToStream(OutputStream stream) throws IOException {
-					stream.write(id);
+			public void writeToStream(PacketOutputStream stream) throws IOException {
+					data.writeVarInt(0, id);
+					data.writePacketPrefix();
 					stream.write(data.getBytes());
 			}
 

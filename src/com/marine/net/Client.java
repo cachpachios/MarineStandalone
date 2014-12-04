@@ -12,21 +12,23 @@ import com.marine.io.data.ByteEncoder;
 public class Client {
 	private final NetworkManager networkManager;
 	
-	
 	private States state;
 	
 	private final Socket connection;
 	
-	public Client(NetworkManager network, Socket s) {
+	private final PacketOutputStream output;
+	
+	public Client(NetworkManager network, Socket s) throws IOException {
 		this.state = States.HANDSHAKE;
 		this.networkManager = network;
 		this.connection = s;
+		output = new PacketOutputStream(this, s.getOutputStream());
 	}
 	
 	public void sendPacket(Packet packet) { //TODO: PacketBuffer
 		Logging.instance().info("Sending packet ID: " + packet.getID() + " State: " + packet.getPacketState());
 		try {
-			packet.writeToStream(connection.getOutputStream());
+			packet.writeToStream(output);
 		} catch (IOException e) {
 			networkManager.cleanUp(this);
 		}
