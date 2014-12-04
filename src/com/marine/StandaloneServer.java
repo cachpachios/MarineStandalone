@@ -125,7 +125,7 @@ public class StandaloneServer implements Listener {
 			
 			// Advance the tick clock.
 			ServerProperties.tick();
-			
+
 			ups++;
 		}// Loop End
 	}

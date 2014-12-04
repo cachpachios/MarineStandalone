@@ -1,6 +1,8 @@
 package com.marine.server;
 
+import com.marine.Logging;
 import com.marine.StandaloneServer;
+import com.marine.game.chat.ChatColor;
 import com.marine.player.Player;
 import com.marine.world.World;
 
@@ -56,4 +58,12 @@ public class Marine {
     public static int getMaxPlayers() {
         return server.getMaxPlayers();
     }
+
+    public static void broadcastMessage(String string) {
+        for(Player player : getPlayers()) {
+            player.sendMessage(ChatColor.transform('&', string));
+        }
+        Logging.getLogger().log(string);
+    }
+
 }

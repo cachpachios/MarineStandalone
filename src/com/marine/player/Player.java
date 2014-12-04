@@ -7,6 +7,7 @@ import com.marine.game.command.Command;
 import com.marine.game.command.CommandSender;
 import com.marine.game.inventory.PlayerInventory;
 import com.marine.net.Client;
+import com.marine.net.play.clientbound.ChatPacket;
 import com.marine.net.play.clientbound.ClientboundPlayerLookPositionPacket;
 import com.marine.net.play.clientbound.PlayerAbilitesPacket;
 import com.marine.net.play.clientbound.SpawnPointPacket;
@@ -129,7 +130,7 @@ public class Player extends Entity implements IPlayer, CommandSender {
                 if(i + 1 < max)
                     builder.append(".");
             }
-            if(permission.contains(builder.toString())) {
+            if(permission.contains(builder.toString() + ".*")) {
                 return true;
             }
             --max;
@@ -138,12 +139,12 @@ public class Player extends Entity implements IPlayer, CommandSender {
 
     @Override
     public void sendMessage(String message) {
-
+        getClient().sendPacket(new ChatPacket(message));
     }
 
 	@Override
 	public void sendMessage(ChatMessage message) {
-
+        getClient().sendPacket(new ChatPacket(message));
 	}
 
 	@Override

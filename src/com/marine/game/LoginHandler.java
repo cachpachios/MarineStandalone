@@ -1,16 +1,16 @@
 package com.marine.game;
 
-import java.util.UUID;
-
+import com.marine.game.async.ChatManagment;
 import com.marine.net.Client;
 import com.marine.net.States;
 import com.marine.net.login.LoginSucessPacket;
 import com.marine.player.*;
-import com.marine.player.PlayerAbilities;
 import com.marine.util.Location;
 import com.marine.util.Position;
 import com.marine.util.UUIDHandler;
 import com.marine.world.World;
+
+import java.util.UUID;
 
 public class LoginHandler {
 	
@@ -73,6 +73,8 @@ public class LoginHandler {
 		p.getClient().setState(States.INGAME);
 		
 		playerManager.joinGame(p);
+
+        ChatManagment.getInstance().sendJoinMessage(p);
 	}
 
 

@@ -19,7 +19,7 @@ public class MojangUtils {
 
     private static MojangUtils instance;
 
-    public MojangUtils getInstance() {
+    public static MojangUtils getInstance() {
         if (instance == null) instance = new MojangUtils();
         return instance;
     }

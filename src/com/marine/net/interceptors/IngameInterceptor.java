@@ -4,6 +4,7 @@ import com.marine.game.PlayerManager;
 import com.marine.io.data.ByteData;
 import com.marine.net.Client;
 import com.marine.net.play.KeepAlivePacket;
+import com.marine.net.play.clientbound.IncomingChat;
 import com.marine.net.play.serverbound.ServerboundPlayerLookPositionPacket;
 
 public class IngameInterceptor implements PacketInterceptor{
@@ -21,12 +22,12 @@ public class IngameInterceptor implements PacketInterceptor{
 		System.out.println("ID: " + id);
 		
 		if(id == 0x00) {
-			KeepAlivePacket p = new KeepAlivePacket();
-			p.readFromBytes(data);
-			players.keepAlive(c.getUserName(), p.getID());
-		}
-		
-		if(id == 0x06) {
+            KeepAlivePacket p = new KeepAlivePacket();
+            p.readFromBytes(data);
+            players.keepAlive(c.getUserName(), p.getID());
+        } else if(id == 0x01) {
+            new IncomingChat(c).readFromBytes(data);
+        } else if(id == 0x06) {
 			ServerboundPlayerLookPositionPacket packet = new ServerboundPlayerLookPositionPacket();
 			packet.readFromBytes(data);
 			//if(players.getLoginManager().clientExists(c)) { // Check if this packet is part by the login process

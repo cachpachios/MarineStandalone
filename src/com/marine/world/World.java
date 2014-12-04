@@ -1,15 +1,11 @@
 package com.marine.world;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-
 import com.marine.util.Position;
 import com.marine.world.generators.LevelType;
 import com.marine.world.generators.WorldGenerator;
+
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class World { // TODO Save and unload chunks...
 	
@@ -20,8 +16,7 @@ public class World { // TODO Save and unload chunks...
 	private final UUID uuid;
 	
 	private final Dimension dimension;
-	
-	
+
 	private Position spawnPoint;
 	
 	private int time;
@@ -44,7 +39,6 @@ public class World { // TODO Save and unload chunks...
 		
 		dimension = this.generator.getDimension();
 	}
-	
 	
 	public boolean isChunkLoaded(int x, int y) {
 		return loadedChunks.containsKey(new ChunkPos(x,y));

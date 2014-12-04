@@ -26,6 +26,11 @@ public class Server implements MarineServer {
     }
 
     @Override
+    public StandaloneServer getServer() {
+        return server;
+    }
+
+    @Override
     public List<Player> getPlayers() {
         return server.getPlayerManager().getPlayers();
     }

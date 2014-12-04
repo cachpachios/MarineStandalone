@@ -1,5 +1,6 @@
 package com.marine.server;
 
+import com.marine.StandaloneServer;
 import com.marine.events.Listener;
 import com.marine.events.MarineEvent;
 import com.marine.player.Player;
@@ -14,6 +15,8 @@ import java.util.UUID;
  * @author Citymonstret
  */
 public interface MarineServer {
+
+    public StandaloneServer getServer();
 
     /**
      * Get all online players

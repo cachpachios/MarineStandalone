@@ -1,12 +1,5 @@
 package com.marine.game;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-
 import com.marine.StandaloneServer;
 import com.marine.game.async.TimeoutManager;
 import com.marine.net.Client;
@@ -16,6 +9,9 @@ import com.marine.net.play.clientbound.KickPacket;
 import com.marine.player.AbstractPlayer;
 import com.marine.player.IPlayer;
 import com.marine.player.Player;
+
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class PlayerManager {
 	
@@ -122,6 +118,14 @@ public class PlayerManager {
 			}
 		return null; // This shoulnt happening if id does its wierd :S
 	}
+
+    public Player getPlayerByClient(Client c) {
+        for(Player player : getPlayers()) {
+            if(player.getClient() == c)
+                return player;
+        }
+        return null;
+    }
 
 	private void cleanUp(Player p) {
 		removePlayer(p);
