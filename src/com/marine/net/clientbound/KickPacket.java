@@ -1,11 +1,11 @@
 package com.marine.net.clientbound;
 
 import java.io.IOException;
-import java.io.OutputStream;
 
 import com.marine.io.data.ByteData;
 import com.marine.io.data.ByteEncoder;
 import com.marine.net.Packet;
+import com.marine.net.PacketOutputStream;
 import com.marine.net.States;
 
 public class KickPacket extends Packet{
@@ -22,10 +22,8 @@ public class KickPacket extends Packet{
 	}
 
 	@Override
-	public void writeToStream(OutputStream stream) throws IOException {
-		stream.write(ByteEncoder.writeInt(getID()));
-		stream.write(ByteEncoder.writeUTFPrefixedString(msg));
-		
+	public void writeToStream(PacketOutputStream stream) throws IOException {
+		stream.write(getID(), ByteEncoder.writeUTFPrefixedString(msg));
 	}
 
 

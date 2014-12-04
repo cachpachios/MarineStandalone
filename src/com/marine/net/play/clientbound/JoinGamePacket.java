@@ -1,10 +1,10 @@
 package com.marine.net.play.clientbound;
 
 import java.io.IOException;
-import java.io.OutputStream;
 
 import com.marine.io.data.ByteData;
 import com.marine.net.Packet;
+import com.marine.net.PacketOutputStream;
 import com.marine.net.States;
 import com.marine.player.Player;
 
@@ -22,20 +22,21 @@ public class JoinGamePacket extends Packet{
 	}
 
 	@Override
-	public void writeToStream(OutputStream stream) throws IOException {
+	public void writeToStream(PacketOutputStream stream) throws IOException {
 		ByteData d = new ByteData();
-		d.writeVarInt(getID());
 		
 		d.writeInt(p.getEntityID());
 		
-		d.writeByte(p.getGamemode().getID());
+		d.writeByte((byte)0); // Gamemode
 
-		d.writeByte(p.getWorld().getDimension().getID());
-		d.writeByte((byte)p.getPlayerManager().getServer().getMaxPlayers());
-		d.writeUTF8(p.getWorld().getLevelType().getName());
+		d.writeByte((byte)0); // Dimension
+		d.writeByte((byte)0); // Difficulty
+		
+		d.writeByte((byte)20); // MaxPlayers
+		d.writeUTF8("flat");
 		d.writeBoolean(false);
 		
-		d.writePacketPrefix();
+		stream.write(getID(), d.getBytes());
 	}
 
 	@Override

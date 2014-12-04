@@ -1,21 +1,21 @@
 package com.marine.net.handshake;
 
-import com.marine.ServerProperties;
-import com.marine.events.ListEvent;
-import com.marine.io.data.ByteData;
-import com.marine.net.Packet;
-import com.marine.net.States;
-import com.marine.player.Player;
-import com.marine.server.Marine;
-import com.marine.util.ListResponse;
+import java.io.File;
+import java.io.IOException;
+import java.util.UUID;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.UUID;
+import com.marine.ServerProperties;
+import com.marine.events.ListEvent;
+import com.marine.io.data.ByteData;
+import com.marine.net.Packet;
+import com.marine.net.PacketOutputStream;
+import com.marine.net.States;
+import com.marine.player.Player;
+import com.marine.server.Marine;
+import com.marine.util.ListResponse;
 
 public class ListPacket extends Packet {
 
@@ -42,7 +42,7 @@ public class ListPacket extends Packet {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void writeToStream(OutputStream stream) throws IOException {
+	public void writeToStream(PacketOutputStream stream) throws IOException {
         JSONArray samples = new JSONArray();
         JSONObject player = new JSONObject();
 
@@ -58,9 +58,6 @@ public class ListPacket extends Packet {
             player.put("name", p.getName());
             samples.add(player);
         }
-
-        String faviicon = getImage();
-
         
         ListResponse response = new ListResponse(Marine.getMOTD(), Marine.getPlayers().size(), 100, samples, getImage());
         ListEvent event = new ListEvent(response);
@@ -69,11 +66,9 @@ public class ListPacket extends Packet {
 
         ByteData data = new ByteData();
 		
-		data.writeVarInt(getID());
 		data.writeUTF8(encode(event.getResponse()));
-		data.writePacketPrefix();
-		
-		stream.write(data.getBytes());
+
+		stream.write(getID(), data.getBytes());
 	}
 
 	@Override

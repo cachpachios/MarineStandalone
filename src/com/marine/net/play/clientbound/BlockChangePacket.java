@@ -1,10 +1,10 @@
 package com.marine.net.play.clientbound;
 
 import java.io.IOException;
-import java.io.OutputStream;
 
 import com.marine.io.data.ByteData;
 import com.marine.net.Packet;
+import com.marine.net.PacketOutputStream;
 import com.marine.net.States;
 import com.marine.util.Position;
 import com.marine.world.Block;
@@ -24,18 +24,15 @@ public class BlockChangePacket extends Packet {
 	}
 
 	@Override
-	public void writeToStream(OutputStream stream) throws IOException {
+	public void writeToStream(PacketOutputStream stream) throws IOException {
 		
 		ByteData data = new ByteData();
 
-		data.writeVarInt(getID());
-		
 		data.writeVarInt(newBlock.toPacketBlock());
 		data.writeLong(pos.encode());
+
 		
-		data.writePacketPrefix();
-		
-		stream.write(data.getBytes());
+		stream.write(getID(), data.getBytes());
 		
 	}
 

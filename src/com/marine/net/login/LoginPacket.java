@@ -1,10 +1,10 @@
 package com.marine.net.login;
 
 import java.io.IOException;
-import java.io.OutputStream;
 
 import com.marine.io.data.ByteData;
 import com.marine.net.Packet;
+import com.marine.net.PacketOutputStream;
 import com.marine.net.States;
 
 public class LoginPacket extends Packet {
@@ -17,13 +17,15 @@ public class LoginPacket extends Packet {
 	}
 
 	@Override
-	public void writeToStream(OutputStream stream) throws IOException {
+	public void writeToStream(PacketOutputStream stream) throws IOException {
 		// SERVERBOUND PACKET
 	}
 
 	@Override
 	public void readFromBytes(ByteData input) {
 		name = input.readUTF8();
+		
+		System.out.println(name + " Connected");
 	}
 
 	@Override

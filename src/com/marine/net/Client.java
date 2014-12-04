@@ -12,21 +12,24 @@ import com.marine.io.data.ByteEncoder;
 public class Client {
 	private final NetworkManager networkManager;
 	
-	
 	private States state;
 	
 	private final Socket connection;
 	
-	public Client(NetworkManager network, Socket s) {
+	private final PacketOutputStream output;
+	
+	private int compressionThreshold = -1;
+	
+	public Client(NetworkManager network, Socket s) throws IOException {
 		this.state = States.HANDSHAKE;
 		this.networkManager = network;
 		this.connection = s;
+		output = new PacketOutputStream(this, s.getOutputStream());
 	}
 	
 	public void sendPacket(Packet packet) { //TODO: PacketBuffer
-		Logging.instance().info("Sending packet ID: " + packet.getID() + " State: " + packet.getPacketState());
 		try {
-			packet.writeToStream(connection.getOutputStream());
+			packet.writeToStream(output);
 		} catch (IOException e) {
 			networkManager.cleanUp(this);
 		}
@@ -128,10 +131,22 @@ public class Client {
 		return ConnectionStatus.PROCESSED;
 }
 	
+	public int getCompressionThreshold() {
+		return compressionThreshold;
+	}
+
+	public void setCompressionThreshold(int compressionThreshold) {
+		this.compressionThreshold = compressionThreshold;
+	}
+
 	public enum ConnectionStatus {
 		EMPTY,
 		CONNECTION_PROBLEMS,
 		PROCESSED
+	}
+
+	public boolean compressionEnabled() {
+		return compressionThreshold != -1;
 	}
 
 	

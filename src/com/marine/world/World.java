@@ -1,6 +1,8 @@
 package com.marine.world;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -56,6 +58,17 @@ public class World { // TODO Save and unload chunks...
 		return generator.generateChunk(x, z);
 	}
 
+	public List<Chunk> getChunks(int x, int z, int amtX, int amtY) {
+		
+		List<Chunk> chunks = new ArrayList<Chunk>();
+		
+		for(int xx = amtX/2*-1; xx < amtX; xx++)
+			for(int yy = amtY/2*-1; yy < amtY; yy++)
+				chunks.add(getChunk(x+xx,z+yy));
+				
+		return chunks;
+	}
+	
 	public Dimension getDimension() {
 		return dimension;
 	}

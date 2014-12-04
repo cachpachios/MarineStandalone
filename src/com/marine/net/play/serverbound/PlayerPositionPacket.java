@@ -1,10 +1,10 @@
 package com.marine.net.play.serverbound;
 
 import java.io.IOException;
-import java.io.OutputStream;
 
 import com.marine.io.data.ByteData;
 import com.marine.net.Packet;
+import com.marine.net.PacketOutputStream;
 import com.marine.net.States;
 
 public class PlayerPositionPacket extends Packet {
@@ -18,7 +18,7 @@ public class PlayerPositionPacket extends Packet {
 	}
 
 	@Override
-	public void writeToStream(OutputStream stream) throws IOException {} // Serverbound packet only!
+	public void writeToStream(PacketOutputStream stream) throws IOException {} // Serverbound packet only!
 
 	@Override
 	public void readFromBytes(ByteData input) {

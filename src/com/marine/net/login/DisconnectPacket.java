@@ -1,12 +1,12 @@
 package com.marine.net.login;
 
 import java.io.IOException;
-import java.io.OutputStream;
 
 import com.marine.game.chat.ChatColor;
 import com.marine.game.chat.ChatComponent;
 import com.marine.io.data.ByteData;
 import com.marine.net.Packet;
+import com.marine.net.PacketOutputStream;
 import com.marine.net.States;
 
 public class DisconnectPacket extends Packet {
@@ -23,13 +23,11 @@ public class DisconnectPacket extends Packet {
 	}
 
 	@Override
-	public void writeToStream(OutputStream stream) throws IOException {
+	public void writeToStream(PacketOutputStream stream) throws IOException {
 		ByteData data = new ByteData();
-		data.writeVarInt(getID());
 		data.writeUTF8(new ChatComponent(msg,true,true,false,false, ChatColor.randomColor()).toString());
-		data.writePacketPrefix();
-		
-		stream.write(data.getBytes());
+
+		stream.write(getID(), data.getBytes());
 	}
 
 	@Override
