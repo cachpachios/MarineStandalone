@@ -35,8 +35,13 @@ public class IncomingChat extends Packet {
 
     @Override
     public void readFromBytes(ByteData input) {
-        ChatManagment.getInstance().sendChatMessage(
-                Marine.getServer().getServer().getPlayerManager().getPlayerByClient(client).getName(), input.readUTF8());
+        String message = input.readUTF8();
+        if(message.startsWith("/")) {
+            Marine.getServer().getServer().getPlayerManager().getPlayerByClient(client).sendMessage("Commands are not implemented yet");
+        } else {
+            ChatManagment.getInstance().sendChatMessage(
+                    Marine.getServer().getServer().getPlayerManager().getPlayerByClient(client).getName(), message);
+        }
     }
 
     @Override

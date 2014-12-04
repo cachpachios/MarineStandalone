@@ -1,12 +1,13 @@
 package com.marine.net.play.clientbound;
 
-import java.io.IOException;
-
 import com.marine.io.data.ByteData;
 import com.marine.net.Packet;
 import com.marine.net.PacketOutputStream;
 import com.marine.net.States;
 import com.marine.player.Player;
+import com.marine.server.Marine;
+
+import java.io.IOException;
 
 public class JoinGamePacket extends Packet{
 	
@@ -32,7 +33,7 @@ public class JoinGamePacket extends Packet{
 		d.writeByte(p.getWorld().getDimension().getID()); // Dimension
 		d.writeByte(p.getPlayerManager().getServer().getDifficulty().getID()); // Difficulty
 		
-		d.writeByte((byte)20); // MaxPlayers
+		d.writeByte((byte) Marine.getMaxPlayers()); // MaxPlayers
 		d.writeUTF8("flat");
 		d.writeBoolean(false);
 		
