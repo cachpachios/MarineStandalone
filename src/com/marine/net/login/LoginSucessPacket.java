@@ -1,6 +1,7 @@
 package com.marine.net.login;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import com.marine.io.data.ByteData;
 import com.marine.net.Packet;
@@ -25,7 +26,7 @@ public class LoginSucessPacket extends Packet {
 	public void writeToStream(PacketOutputStream stream) throws IOException {
 		ByteData d = new ByteData();
 
-        d.writeUTF8(p.getUUID().toString());
+        d.writeUTF8(UUID.randomUUID().toString());
 		d.writeUTF8(p.getName());
 
 		

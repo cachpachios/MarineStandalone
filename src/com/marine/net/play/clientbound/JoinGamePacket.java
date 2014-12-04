@@ -27,12 +27,15 @@ public class JoinGamePacket extends Packet{
 		
 		d.writeInt(p.getEntityID());
 		
-		d.writeByte(p.getGamemode().getID());
+		d.writeByte((byte)0); // Gamemode
 
-		d.writeByte(p.getWorld().getDimension().getID());
-		d.writeByte((byte)p.getPlayerManager().getServer().getMaxPlayers());
-		d.writeUTF8(p.getWorld().getLevelType().getName());
+		d.writeByte((byte)0); // Dimension
+		d.writeByte((byte)0); // Difficulty
+		
+		d.writeByte((byte)20); // MaxPlayers
+		d.writeUTF8("flat");
 		d.writeBoolean(false);
+		
 		stream.write(getID(), d.getBytes());
 	}
 

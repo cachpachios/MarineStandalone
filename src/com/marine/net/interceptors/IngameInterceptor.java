@@ -18,8 +18,6 @@ public class IngameInterceptor implements PacketInterceptor{
 	public boolean intercept(ByteData data, Client c) {
 		int id = data.readVarInt();
 		
-		Logging.instance().info("Ingame Packet Intercepted: " + id);
-		
 		if(id == 0x06) {
 			ServerboundPlayerLookPositionPacket packet = new ServerboundPlayerLookPositionPacket();
 			packet.readFromBytes(data);

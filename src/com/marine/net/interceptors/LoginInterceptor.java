@@ -19,7 +19,6 @@ public class LoginInterceptor implements PacketInterceptor {
 	@Override
 	public boolean intercept(ByteData data, Client c) {
 		int ID = data.readVarInt();
-		Logging.instance().info("Login Packet Intercepted: " + ID);
 		if(ID == 0x00) {
 			LoginPacket packet = new LoginPacket();
 			packet.readFromBytes(data);
