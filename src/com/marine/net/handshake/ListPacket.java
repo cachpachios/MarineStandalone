@@ -1,12 +1,5 @@
 package com.marine.net.handshake;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.UUID;
-
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-
 import com.marine.ServerProperties;
 import com.marine.events.ListEvent;
 import com.marine.io.data.ByteData;
@@ -16,6 +9,12 @@ import com.marine.net.States;
 import com.marine.player.Player;
 import com.marine.server.Marine;
 import com.marine.util.ListResponse;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.UUID;
 
 public class ListPacket extends Packet {
 
@@ -59,7 +58,7 @@ public class ListPacket extends Packet {
             samples.add(player);
         }
         
-        ListResponse response = new ListResponse(Marine.getMOTD(), Marine.getPlayers().size(), 100, samples, getImage());
+        ListResponse response = new ListResponse(Marine.getMOTD(), Marine.getPlayers().size(), Marine.getMaxPlayers(), samples, getImage());
         ListEvent event = new ListEvent(response);
 
         Marine.getServer().callEvent(event);

@@ -144,7 +144,7 @@ public class Location extends Vector3d implements JSONAware, Cloneable { // Used
         hash = hash * 31 + z;
         hash = (int) (hash * 31 + getYaw());
         hash = (int) (hash * 31 + getPitch());
-        return hash * 31 + world.getName().hashCode();
+        return hash * 31 + (world == null ? 127 : world.getName().hashCode());
     }
 
     @Override

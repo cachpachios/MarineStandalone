@@ -52,4 +52,8 @@ public class Marine {
     public static void setStandalone(StandaloneServer s) {
         standaloneServer = s;
     }
+
+    public static int getMaxPlayers() {
+        return server.getMaxPlayers();
+    }
 }

@@ -74,4 +74,10 @@ public class Server implements MarineServer {
 	public String getMOTD() {
 		return server.getMOTD();
 	}
+
+    @Override
+    public void setMaxPlayers(int n) { server.setMaxPlayers(n); }
+
+    @Override
+    public int getMaxPlayers() { return server.getMaxPlayers(); }
 }

@@ -3,7 +3,7 @@ package com.marine.game.item;
 import com.marine.io.data.ByteEncoder;
 
 public class ItemSlot {
-	private ItemID itemID;
+	private Item item;
 	
 	private byte amount;
 	private byte damage;
@@ -15,12 +15,10 @@ public class ItemSlot {
 	}
 	
 	public ItemSlot(ItemID itemID, int amount, int damage) {
-		this.itemID = itemID;
-		this.amount = (byte) amount;
-		this.damage = (byte) damage;
+		this.item = new Item(itemID, (short) damage, (byte) 0, amount);
 	}
 	
 	public byte[] getBytes() {
-		return ByteEncoder.writeShort(itemID.getID());
+		return ByteEncoder.writeShort(item.getID().getNumericID());
 	}
 }

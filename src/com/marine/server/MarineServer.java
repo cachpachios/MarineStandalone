@@ -62,5 +62,9 @@ public interface MarineServer {
 
 	public String getMOTD();
 
+    public void setMaxPlayers(int n);
+
+    public int getMaxPlayers();
+
 
 }
