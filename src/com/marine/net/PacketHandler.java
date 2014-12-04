@@ -33,8 +33,8 @@ public class PacketHandler implements PacketInterceptor {
 		if(c.getState().equals(States.LOGIN))
 			return login.intercept(data, c);
 		else
-			if(c.getState().equals(States.INGAME))
-				return login.intercept(data, c);
+		if(c.getState().equals(States.INGAME))
+			return ingame.intercept(data, c);
 		
 		return false;
 		

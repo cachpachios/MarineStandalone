@@ -7,10 +7,14 @@ public enum Difficulty {
 	HARD		("Hard", 3);
 	
 	final String name;
-	final int id;
+	final byte id;
 	
 	private Difficulty(String name, int id) {
 		this.name = name;
-		this.id = id;
+		this.id = (byte)id;
+	}
+	
+	public byte getID() {
+		return id;
 	}
 }

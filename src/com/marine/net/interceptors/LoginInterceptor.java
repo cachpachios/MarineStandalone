@@ -23,6 +23,8 @@ public class LoginInterceptor implements PacketInterceptor {
 			LoginPacket packet = new LoginPacket();
 			packet.readFromBytes(data);
 			
+			Logging.instance().info("Player: " + packet.name + " connected.");
+			
 			LoginHandler.LoginResponse loginReturn = server.getPlayerManager().getLoginManager().login(packet.name, c);
 			if(!loginReturn.succeed()) {
 				DisconnectPacket nopePacket = new DisconnectPacket(loginReturn.response);

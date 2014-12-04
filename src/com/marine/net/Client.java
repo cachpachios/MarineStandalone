@@ -150,4 +150,18 @@ public class Client {
 	}
 
 	
+	// For indexing in IngameInterceptor
+	private String userName;
+	
+	public void setUserName(String name) {
+		if(userName == null)
+			return;
+		userName = name;
+	}
+	
+	public String getUserName() {
+		return userName;
+	}
+
+	
 }

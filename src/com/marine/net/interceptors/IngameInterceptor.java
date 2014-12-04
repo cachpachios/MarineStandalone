@@ -1,9 +1,9 @@
 package com.marine.net.interceptors;
 
-import com.marine.Logging;
 import com.marine.game.PlayerManager;
 import com.marine.io.data.ByteData;
 import com.marine.net.Client;
+import com.marine.net.play.KeepAlivePacket;
 import com.marine.net.play.serverbound.ServerboundPlayerLookPositionPacket;
 
 public class IngameInterceptor implements PacketInterceptor{
@@ -17,6 +17,14 @@ public class IngameInterceptor implements PacketInterceptor{
 	@Override
 	public boolean intercept(ByteData data, Client c) {
 		int id = data.readVarInt();
+
+		System.out.println("ID: " + id);
+		
+		if(id == 0x00) {
+			KeepAlivePacket p = new KeepAlivePacket();
+			p.readFromBytes(data);
+			players.keepAlive(c.getUserName(), p.getID());
+		}
 		
 		if(id == 0x06) {
 			ServerboundPlayerLookPositionPacket packet = new ServerboundPlayerLookPositionPacket();

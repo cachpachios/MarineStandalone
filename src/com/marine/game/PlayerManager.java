@@ -1,17 +1,21 @@
 package com.marine.game;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+
 import com.marine.StandaloneServer;
+import com.marine.game.async.TimeoutManager;
+import com.marine.net.Client;
 import com.marine.net.States;
-import com.marine.net.play.clientbound.ChunkPacket;
 import com.marine.net.play.clientbound.JoinGamePacket;
-import com.marine.net.play.clientbound.MapChunkPacket;
+import com.marine.net.play.clientbound.KickPacket;
 import com.marine.player.AbstractPlayer;
 import com.marine.player.IPlayer;
 import com.marine.player.Player;
-import com.marine.util.Position;
-
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class PlayerManager {
 	
@@ -21,9 +25,12 @@ public class PlayerManager {
 	private Map<String, Player> playerNames;
 	
 	
+	
 	private LoginHandler loginManager;
 	
 	private final StandaloneServer server;
+	
+	private TimeoutManager timeout;
 	
 	public void updateThemAll() {
 		for(Player p : allPlayers)
@@ -36,6 +43,8 @@ public class PlayerManager {
 		allPlayers = Collections.synchronizedList(new ArrayList<Player>());
 		playerIDs = Collections.synchronizedMap(new ConcurrentHashMap<UUID, Player>());
 		playerNames = Collections.synchronizedMap(new ConcurrentHashMap<String, Player>());
+		timeout = new TimeoutManager(this);
+		timeout.start();
 	}
 	
 	public StandaloneServer getServer() {
@@ -116,11 +125,13 @@ public class PlayerManager {
 
 	private void cleanUp(Player p) {
 		removePlayer(p);
+		timeout.cleanUp(p);
 		//TODO: send player remove packet to every other client
 		server.getNetwork().cleanUp(p.getClient());
 	}
 	
-	protected void disconnect(Player p) {
+	public void disconnect(Player p, String msg) {
+		p.getClient().sendPacket(new KickPacket(msg));
 		cleanUp(p);
 	}
 	
@@ -128,12 +139,20 @@ public class PlayerManager {
 		if(p.getClient().getState() != States.INGAME) {
 			cleanUp(p); return;
 		}
-	 	
-		//loginManager.loginDone(p.getClient());
 		
+		p.getClient().setUserName(p.getName());
+		
+		timeout.addPlayerToManager(p);
+	 	
 		p.getClient().sendPacket(new JoinGamePacket(p));
 		
-		
 		p.sendPostion();
+	}
+
+	public void keepAlive(String name, int ID) {
+		if(name == null)
+			return;
+		timeout.keepAlive(getPlayer(name),ID);
+		
 	}
 }

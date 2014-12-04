@@ -24,8 +24,6 @@ public class LoginPacket extends Packet {
 	@Override
 	public void readFromBytes(ByteData input) {
 		name = input.readUTF8();
-		
-		System.out.println(name + " Connected");
 	}
 
 	@Override
