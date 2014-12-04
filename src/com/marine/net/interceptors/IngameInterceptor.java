@@ -4,7 +4,7 @@ import com.marine.game.PlayerManager;
 import com.marine.io.data.ByteData;
 import com.marine.net.Client;
 import com.marine.net.play.KeepAlivePacket;
-import com.marine.net.play.clientbound.IncomingChat;
+import com.marine.net.play.serverbound.IncomingChat;
 import com.marine.net.play.serverbound.ServerboundPlayerLookPositionPacket;
 
 public class IngameInterceptor implements PacketInterceptor{
