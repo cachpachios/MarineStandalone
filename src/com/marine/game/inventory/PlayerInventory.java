@@ -10,7 +10,7 @@ public final class PlayerInventory extends Inventory {
 	
 	@Override
 	public String getType() {
-		return "inventory";
+		return InventoryID.INVENTORY.getStringID();
 	}
 
 
@@ -21,7 +21,7 @@ public final class PlayerInventory extends Inventory {
 
 	@Override
 	public byte getID() {
-		return 0; // Player inventory is always 0
+		return (byte) InventoryID.INVENTORY.getIntegerID(); // Player inventory is always 0
 	}
 
 	@Override
