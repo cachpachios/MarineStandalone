@@ -46,4 +46,5 @@ public class NBTByte implements NBTTag {
 		data.writeByte((this.data));
 		return data.getBytes();
 	}
+
 }
