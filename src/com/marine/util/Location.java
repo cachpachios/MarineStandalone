@@ -11,7 +11,7 @@ import org.json.simple.JSONValue;
  *
  * @author Citymonstret
  */
-public class Location extends Vector3d implements JSONAware { // Used for absolute positioning (Entites etc)
+public class Location extends Vector3d implements JSONAware, Cloneable { // Used for absolute positioning (Entites etc)
 
     private float yaw, pitch;
     private final World world;
@@ -104,4 +104,31 @@ public class Location extends Vector3d implements JSONAware { // Used for absolu
         return o;
     }
 
+    public double getEuclideanDistance(Location l2) {
+        double x = getX() - l2.getX();
+        double y = getY() - l2.getY();
+        double z = getZ() - l2.getZ();
+        x *= x; y *= y; z *= z;
+        return Math.sqrt(x + y + z);
+    }
+
+    public double getEuclideanDistanceSquared(Location l2) {
+        double x = getX() - l2.getX(), y = getY() - l2.getY(), z = getZ() - l2.getZ();
+        return (x * x) + (y * y) + (z * z);
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        Location object;
+        try {
+            object = (Location) super.clone();
+        } catch(Throwable e) {
+            object = null;
+        }
+        if(object == null || !object.getX().equals(getX()) || !object.getY().equals(getY()) || !object.getZ().equals(getZ()) || !getWorld().getName().equals(object.getWorld().getName())) {
+            return new Location(getWorld(), getX(), getY(), getZ(), getYaw(), getPitch());
+        } else {
+            return object;
+        }
+    }
 }

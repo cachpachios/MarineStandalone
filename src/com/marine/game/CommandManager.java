@@ -15,6 +15,7 @@ import java.util.Map;
  */
 public class CommandManager {
 
+    // These are already async-optimized
     private final Map<Command, List<String>> 	commandMap;
     private final Map<String, Command> 			stringMap;
 
