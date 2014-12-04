@@ -1,24 +1,21 @@
 package com.marine.game.item;
 
-import com.marine.io.data.ByteEncoder;
+import com.marine.io.data.ByteData;
+import com.marine.util.PacketWrapper;
 
-public class ItemSlot {
-	private Item item;
-	
-	private byte amount;
-	private byte damage;
-	
-	//TODO Enchantments :D
+public class ItemSlot extends PacketWrapper<Item> {
 
-	public ItemSlot(ItemID itemID) {
-		this(itemID, 1, 0);
+	public ItemSlot(Item itemID) {
+		super(itemID);
 	}
-	
-	public ItemSlot(ItemID itemID, int amount, int damage) {
-		this.item = new Item(itemID, (short) damage, (byte) 0, amount);
+
+	@Override
+	public ByteData toByteData() {
+		return null;
 	}
-	
-	public byte[] getBytes() {
-		return ByteEncoder.writeShort(item.getID().getNumericID());
+
+	@Override
+	public Item readFromData(ByteData d) {
+		return null;
 	}
 }

@@ -10,5 +10,5 @@ public interface NBTTag {
 	public byte[] toByteArray();
 	
 	public byte[] toNonPrefixedByteArray();
-	
+
 }

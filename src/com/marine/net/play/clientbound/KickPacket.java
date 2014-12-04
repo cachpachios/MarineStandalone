@@ -2,6 +2,7 @@ package com.marine.net.play.clientbound;
 
 import java.io.IOException;
 
+import com.marine.game.chat.ChatComponent;
 import com.marine.io.data.ByteData;
 import com.marine.net.Packet;
 import com.marine.net.PacketOutputStream;
@@ -23,7 +24,8 @@ public class KickPacket extends Packet{
 	@Override
 	public void writeToStream(PacketOutputStream stream) throws IOException {
 		ByteData d = new ByteData();
-		d.writeUTF8(msg);
+		System.out.println("Kicked: " + msg);
+		d.writeUTF8(new ChatComponent(msg).toString());
 		stream.write(getID(), d.getBytes());
 	}
 

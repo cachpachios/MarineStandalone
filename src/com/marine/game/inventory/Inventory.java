@@ -1,11 +1,13 @@
 package com.marine.game.inventory;
 
 import com.marine.game.chat.ChatComponent;
+import com.marine.game.item.Item;
 import com.marine.game.item.ItemID;
 import com.marine.game.item.ItemSlot;
+import com.marine.util.PacketWrapper;
 
 public abstract class Inventory {
-	public ItemSlot[] slots;
+	public PacketWrapper<Item>[] slots;
 	
 	public Inventory(int size) {
 		slots = new ItemSlot[size];
@@ -15,24 +17,24 @@ public abstract class Inventory {
 	
 	public abstract String getType();
 	
-	public ItemSlot[] getSlots() {
+	public PacketWrapper<Item>[] getSlots() {
 		return slots;
 	}
 	
 	public ItemSlot getSlot(int id) {
-		return slots[id];
+		return (ItemSlot) slots[id];
 	}
 	
-	public void setSlot(int id, ItemSlot data) {
-		slots[id] = data;
+	public void setSlot(int id, Item data) {
+		slots[id] = new ItemSlot(data);
 	}
 	
 	public void clear() {
 		for(int i = 0; i < slots.length;i++)
-			slots[i] = new ItemSlot(ItemID.EMPTY, 0, 0);
+			slots[i] = new ItemSlot(new Item(ItemID.EMPTY));
 	}
 	
-	public abstract ChatComponent getName();
+	public abstract ChatComponent getTitle();
 	
 	public abstract byte getNumberOfSlots();
 	
