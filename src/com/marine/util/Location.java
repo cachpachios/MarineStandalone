@@ -136,6 +136,18 @@ public class Location extends Vector3d implements JSONAware, Cloneable { // Used
     }
 
     @Override
+    public int hashCode() {
+        int hash = 127;
+        int x = getX().intValue(), y = getY().intValue(), z = getZ().intValue();
+        hash = hash * 31 + x;
+        hash = hash * 31 + y;
+        hash = hash * 31 + z;
+        hash = (int) (hash * 31 + getYaw());
+        hash = (int) (hash * 31 + getPitch());
+        return hash * 31 + world.getName().hashCode();
+    }
+
+    @Override
     public Object clone() throws CloneNotSupportedException {
         Location object;
         try {
