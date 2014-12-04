@@ -1,15 +1,19 @@
 package com.marine.game;
 
+import java.util.UUID;
+
 import com.marine.net.Client;
 import com.marine.net.States;
 import com.marine.net.login.LoginSucessPacket;
-import com.marine.player.*;
+import com.marine.player.AbstractPlayer;
+import com.marine.player.IPlayer;
+import com.marine.player.Player;
+import com.marine.player.PlayerAbilites;
+import com.marine.player.PlayerID;
 import com.marine.util.Location;
 import com.marine.util.Position;
 import com.marine.util.UUIDHandler;
 import com.marine.world.World;
-
-import java.util.UUID;
 
 public class LoginHandler {
 	
@@ -44,8 +48,12 @@ public class LoginHandler {
 		
 	}
 	
-	public LoginResponse preJoin(String name, Client c) { // Returns null if login succeded, otherwise makes LoginInterceptor drop the client
+	private LoginResponse preJoin(String name, Client c) { // Returns null if login succeded, otherwise makes LoginInterceptor drop the client
 		UUID uuid = UUIDHandler.getUUID(name); //UUID.randomUUID();
+		
+		if(uuid == null) {
+			uuid = UUID.randomUUID();
+		}
 		
 		if(playerManager.isPlayerOnline(name))
 			return new LoginResponse("Failed to login player is allready connected.");
@@ -54,7 +62,7 @@ public class LoginHandler {
 		
 		//TODO: Check if player is banned in that case drop them.
 		
-		IPlayer p = new AbstractPlayer(playerManager.getServer(),playerManager.getServer().getWorldManager().getMainWorld(), new PlayerID(name, uuid), c, new PlayerAbilites(false, false, false, 10, 10), spawnLocation);
+		IPlayer p = new AbstractPlayer(playerManager.getServer(),playerManager.getServer().getWorldManager().getMainWorld(), new PlayerID(name, uuid), c, new PlayerAbilites(false, false, false, 0.1f, 0.2f), spawnLocation);
 
 		return new LoginResponse(p);
 	}
@@ -68,6 +76,11 @@ public class LoginHandler {
 		p.getClient().setState(States.INGAME);
 		
 		playerManager.joinGame(p);
+	}
+
+
+	public LoginResponse login(String name, Client c) {
+		return preJoin(name, c);
 	}
 
 }

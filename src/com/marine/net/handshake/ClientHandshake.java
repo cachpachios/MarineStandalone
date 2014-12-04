@@ -30,6 +30,7 @@ public class ClientHandshake extends Packet {
 		serverAddress = input.readUTF8();
 		port = input.readUnsignedShort();
 		nextState = input.readVarInt();
+		System.out.println(toString());
 	}
 	
 	public String toString() {

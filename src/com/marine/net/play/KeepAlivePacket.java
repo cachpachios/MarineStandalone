@@ -28,13 +28,10 @@ public class KeepAlivePacket extends Packet {
 	public void writeToStream(PacketOutputStream stream) throws IOException {
 		ByteData d = new ByteData();
 		
-		d.writeVarInt(getID());
-		
 		d.writeVarInt(aliveID);
 		
-		d.writePacketPrefix();
 		
-		stream.write(d.getBytes());
+		stream.write(getID(), d.getBytes());
 	}
 
 	@Override

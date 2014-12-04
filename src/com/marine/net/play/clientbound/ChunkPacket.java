@@ -24,10 +24,6 @@ public class ChunkPacket extends Packet{
 	public void writeToStream(PacketOutputStream stream) throws IOException {
 		ByteData d = new ByteData();
 		
-		d.writeVarInt(getID());
-		
-		c.getPos();
-		
 		d.writeInt(c.getPos().getX());
 		d.writeInt(c.getPos().getY());
 		
@@ -41,7 +37,7 @@ public class ChunkPacket extends Packet{
 		
 		d.writePacketPrefix();
 		
-		stream.write(d.getBytes());
+		stream.write(getID(), d.getBytes());
 	}
 
 	@Override

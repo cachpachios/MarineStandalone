@@ -19,18 +19,14 @@ public abstract class Packet {
 			States s = state;
 			
 			ByteData data = new ByteData(inputdata);
-			int id = ID;
 			
 			@Override
 			public void writeToStream(PacketOutputStream stream) throws IOException {
-					data.writeVarInt(0, id);
-					data.writePacketPrefix();
-					stream.write(data.getBytes());
+					stream.write(ID,data.getBytes());
 			}
 
 			@Override
 			public void readFromBytes(ByteData input) {
-				data = input;
 			}
 
 			@Override

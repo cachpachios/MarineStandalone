@@ -28,14 +28,11 @@ public class BlockChangePacket extends Packet {
 		
 		ByteData data = new ByteData();
 
-		data.writeVarInt(getID());
-		
 		data.writeVarInt(newBlock.toPacketBlock());
 		data.writeLong(pos.encode());
+
 		
-		data.writePacketPrefix();
-		
-		stream.write(data.getBytes());
+		stream.write(getID(), data.getBytes());
 		
 	}
 

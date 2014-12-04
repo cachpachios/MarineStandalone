@@ -4,6 +4,7 @@ import com.marine.StandaloneServer;
 import com.marine.net.States;
 import com.marine.net.play.clientbound.ChunkPacket;
 import com.marine.net.play.clientbound.JoinGamePacket;
+import com.marine.net.play.clientbound.MapChunkPacket;
 import com.marine.player.AbstractPlayer;
 import com.marine.player.IPlayer;
 import com.marine.player.Player;
@@ -132,13 +133,6 @@ public class PlayerManager {
 		
 		p.getClient().sendPacket(new JoinGamePacket(p));
 		
-		p.sendAbilites();
-		p.updateInventory();
-		p.sendCompassTarget(new Position(0,6,0));
-		
-		p.getClient().sendPacket(new ChunkPacket(p.getWorld().getChunk(0, 0)));
-
-		// Send initial position to spawn player
 		
 		p.sendPostion();
 	}

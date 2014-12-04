@@ -28,8 +28,6 @@ public class ClientboundPlayerLookPositionPacket extends Packet { //TODO Relativ
 	@Override
 	public void writeToStream(PacketOutputStream stream) throws IOException {
 		ByteData d = new ByteData();
-
-		d.writeVarInt(getID());
 		
 		Byte bitField = Byte.parseByte("01111111", 2); //TODO: Make this more generic(Changeable)
 		
@@ -41,10 +39,8 @@ public class ClientboundPlayerLookPositionPacket extends Packet { //TODO Relativ
 		d.writeFloat(l.getPitch());
 		
 		d.writeByte(bitField);
-		
-		d.writePacketPrefix();
-		
-		stream.write(d.getBytes());
+
+		stream.write(getID(), d.getBytes());
 	}
 
 	@Override

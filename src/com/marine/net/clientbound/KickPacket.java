@@ -23,9 +23,7 @@ public class KickPacket extends Packet{
 
 	@Override
 	public void writeToStream(PacketOutputStream stream) throws IOException {
-		stream.write(ByteEncoder.writeInt(getID()));
-		stream.write(ByteEncoder.writeUTFPrefixedString(msg));
-		
+		stream.write(getID(), ByteEncoder.writeUTFPrefixedString(msg));
 	}
 
 

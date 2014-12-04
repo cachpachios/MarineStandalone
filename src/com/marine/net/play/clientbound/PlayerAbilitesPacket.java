@@ -24,9 +24,6 @@ public class PlayerAbilitesPacket extends Packet {
 	@Override
 	public void writeToStream(PacketOutputStream stream) throws IOException {
 		ByteData d = new ByteData();
-		
-		d.writeVarInt(getID());
-		
 
         @SuppressWarnings("unused")
 		byte flags = (byte) ((abilites.isInCreativeMode() ? 8 : 0) | (abilites.canFly() ? 4 : 0) | (false ? 2 : 0) | (abilites.isInCreativeMode() ? 1 : 0));		
@@ -34,9 +31,7 @@ public class PlayerAbilitesPacket extends Packet {
 		d.writeFloat(abilites.getFlySpeed());
 		d.writeFloat(abilites.getWalkSpeed());
 		
-		d.writePacketPrefix();
-		
-		stream.write(d.getBytes());
+		stream.write(getID(), d.getBytes());
 		
 		
 	}

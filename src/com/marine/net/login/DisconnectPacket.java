@@ -25,11 +25,9 @@ public class DisconnectPacket extends Packet {
 	@Override
 	public void writeToStream(PacketOutputStream stream) throws IOException {
 		ByteData data = new ByteData();
-		data.writeVarInt(getID());
 		data.writeUTF8(new ChatComponent(msg,true,true,false,false, ChatColor.randomColor()).toString());
-		data.writePacketPrefix();
-		
-		stream.write(data.getBytes());
+
+		stream.write(getID(), data.getBytes());
 	}
 
 	@Override

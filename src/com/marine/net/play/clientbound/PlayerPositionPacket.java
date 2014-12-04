@@ -32,7 +32,7 @@ public class PlayerPositionPacket extends Packet {
 		
 		d.writePacketPrefix();
 		
-		stream.write(d.getBytes());
+		stream.write(getID(), d.getBytes());
 	}
 	@Override
 	public void readFromBytes(ByteData input) {}

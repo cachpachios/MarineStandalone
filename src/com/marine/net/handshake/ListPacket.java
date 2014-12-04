@@ -58,9 +58,6 @@ public class ListPacket extends Packet {
             player.put("name", p.getName());
             samples.add(player);
         }
-
-        String faviicon = getImage();
-
         
         ListResponse response = new ListResponse(Marine.getMOTD(), Marine.getPlayers().size(), 100, samples, getImage());
         ListEvent event = new ListEvent(response);
@@ -69,11 +66,9 @@ public class ListPacket extends Packet {
 
         ByteData data = new ByteData();
 		
-		data.writeVarInt(getID());
 		data.writeUTF8(encode(event.getResponse()));
-		data.writePacketPrefix();
-		
-		stream.write(data.getBytes());
+
+		stream.write(getID(), data.getBytes());
 	}
 
 	@Override

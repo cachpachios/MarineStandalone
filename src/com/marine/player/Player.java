@@ -138,7 +138,7 @@ public class Player extends Entity implements IPlayer, CommandSender {
 
 	@Override
 	public Position getRealtivePosition() {
-		return this.getRealtivePosition();
+		return this.getLocation().getRelativePosition();
 	}
 
 	public PlayerManager getPlayerManager() {

@@ -18,6 +18,8 @@ public class Client {
 	
 	private final PacketOutputStream output;
 	
+	private int compressionThreshold = -1;
+	
 	public Client(NetworkManager network, Socket s) throws IOException {
 		this.state = States.HANDSHAKE;
 		this.networkManager = network;
@@ -130,10 +132,22 @@ public class Client {
 		return ConnectionStatus.PROCESSED;
 }
 	
+	public int getCompressionThreshold() {
+		return compressionThreshold;
+	}
+
+	public void setCompressionThreshold(int compressionThreshold) {
+		this.compressionThreshold = compressionThreshold;
+	}
+
 	public enum ConnectionStatus {
 		EMPTY,
 		CONNECTION_PROBLEMS,
 		PROCESSED
+	}
+
+	public boolean compressionEnabled() {
+		return compressionThreshold != -1;
 	}
 
 	

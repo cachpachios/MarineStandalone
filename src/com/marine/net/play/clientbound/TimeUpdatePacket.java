@@ -25,13 +25,15 @@ public class TimeUpdatePacket extends Packet{
 	@Override
 	public void writeToStream(PacketOutputStream stream) throws IOException {
 		ByteData d = new ByteData();
-		d.writeVarInt(getID());
+		
+		d.writeLong(worldAge);
+		d.writeLong(worldTime);
+		
+		stream.write(getID(), d.getBytes());
 	}
 
 	@Override
 	public void readFromBytes(ByteData input) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
