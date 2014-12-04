@@ -1,7 +1,5 @@
 package com.marine.player;
 
-import java.util.UUID;
-
 import com.marine.game.PlayerManager;
 import com.marine.game.chat.ChatComponent;
 import com.marine.game.chat.ChatMessage;
@@ -18,6 +16,10 @@ import com.marine.util.Position;
 import com.marine.world.World;
 import com.marine.world.entity.Entity;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 public class Player extends Entity implements IPlayer, CommandSender {
 	
 	private byte nextWindowID = 0; // Used for windows
@@ -29,13 +31,16 @@ public class Player extends Entity implements IPlayer, CommandSender {
 	private PlayerInventory inventory;
 	
 	private Gamemode gamemode; 
-		private boolean gamemodeUpdate; //Keep tracks if gamemode have been change without the client getting the info
+
+    private boolean gamemodeUpdate; //Keep tracks if gamemode have been change without the client getting the info
 	
 	private Client connection;
 	
-	private PlayerAbilites abilites;
-	
-	public Player(PlayerManager manager, Client connection, PlayerID id, PlayerInventory inventory, int entityID, World world, Location pos, PlayerAbilites abilites, Gamemode gamemode) {
+	private PlayerAbilities abilites;
+
+    private final List<String> permissions;
+
+	public Player(PlayerManager manager, Client connection, PlayerID id, PlayerInventory inventory, int entityID, World world, Location pos, PlayerAbilities abilites, Gamemode gamemode) {
 		super(entityID, world, pos);
 		this.inventory = inventory;
 		this.manager = manager;
@@ -44,6 +49,7 @@ public class Player extends Entity implements IPlayer, CommandSender {
 		this.connection = connection;
 		this.gamemode = gamemode;
 		this.gamemodeUpdate = false;
+        this.permissions = new ArrayList<>();
 	}
 
 	public Player(AbstractPlayer player, Gamemode gm) {
@@ -108,6 +114,29 @@ public class Player extends Entity implements IPlayer, CommandSender {
     }
 
     @Override
+    public boolean hasPermission(String permission) {
+        if (permission.contains(permission)) return true;
+        String[] parts = permission.split(".");
+        if(parts.length < 2) return false;
+        StringBuilder builder;
+        int min = 0;
+        int max = parts.length;
+        while(true) {
+            builder = new StringBuilder();
+            if(max < 2) return false;
+            for(int i = min; i < max; i++) {
+                builder.append(parts[i]);
+                if(i + 1 < max)
+                    builder.append(".");
+            }
+            if(permission.contains(builder.toString())) {
+                return true;
+            }
+            --max;
+        }
+    }
+
+    @Override
     public void sendMessage(String message) {
 
     }
@@ -145,7 +174,7 @@ public class Player extends Entity implements IPlayer, CommandSender {
 		return manager;
 	}
 
-	public PlayerAbilites getAbilities() {
+	public PlayerAbilities getAbilities() {
 		return abilites;
 	}
 
