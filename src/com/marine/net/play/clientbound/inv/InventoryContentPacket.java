@@ -30,14 +30,9 @@ public class InventoryContentPacket extends Packet{
 		d.writeByte(inv.getID());
 		
 		d.writeShort((short) inv.getSlots().length);
-		
-<<<<<<< HEAD
+
 		for(PacketWrapper<Item> slot : inv.getSlots())
-			if(slot==null)
-=======
-		for(ItemSlot slot : inv.getSlots())
 			if(slot == null)
->>>>>>> origin/master
 				d.writeShort(ItemID.EMPTY.getID());
 			else
 				d.writeByte(slot.getBytes());
