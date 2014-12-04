@@ -13,10 +13,6 @@ public final class PlayerInventory extends Inventory {
 		return "inventory";
 	}
 
-	@Override
-	public ChatComponent getName() {
-		return new ChatComponent("Inventory");
-	}
 
 	@Override
 	public byte getNumberOfSlots() {
@@ -26,6 +22,11 @@ public final class PlayerInventory extends Inventory {
 	@Override
 	public byte getID() {
 		return 0; // Player inventory is always 0
+	}
+
+	@Override
+	public ChatComponent getTitle() {
+		return new ChatComponent("Inventory");
 	}
 
 }
