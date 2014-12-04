@@ -104,6 +104,11 @@ public class Location extends Vector3d implements JSONAware, Cloneable { // Used
         return o;
     }
 
+    /**
+     * Where the actual distance is important
+     * @param l2 Other location
+     * @return distance (actual)
+     */
     public double getEuclideanDistance(Location l2) {
         double x = getX() - l2.getX();
         double y = getY() - l2.getY();
@@ -112,9 +117,22 @@ public class Location extends Vector3d implements JSONAware, Cloneable { // Used
         return Math.sqrt(x + y + z);
     }
 
+    /**
+     * Where distance isn't really important, you just want to compare them
+     * @param l2 Other location
+     * @return distance squared
+     */
     public double getEuclideanDistanceSquared(Location l2) {
         double x = getX() - l2.getX(), y = getY() - l2.getY(), z = getZ() - l2.getZ();
         return (x * x) + (y * y) + (z * z);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(!(o instanceof Location)) return false;
+        Location loc = (Location) o;
+        return (loc.getX().equals(getX()) && loc.getY().equals(getY()) && loc.getZ().equals(getZ())
+                && loc.getYaw() == getYaw() && loc.getPitch() == getPitch() && loc.getWorld().getName().equals(getWorld().getName()));
     }
 
     @Override
