@@ -35,8 +35,16 @@ public class IngameInterceptor implements PacketInterceptor{
         } else if(id == 0x01) {
         	IncomingChatPacket p = new IncomingChatPacket();
         	p.readFromBytes(data);
-        	 if(p.getMessage().startsWith("/")) {
-                 players.getPlayerByClient(c).sendMessage("Commands are not implemented yet");
+             if(p.getMessage().startsWith("/")) {
+                 String[] parts = p.getMessage().split(" ");
+                 String[] args;
+                 if(parts.length < 2) {
+                     args = new String[] {};
+                 } else {
+                     args = new String[parts.length - 1];
+                     System.arraycopy(parts, 1, args, 0, parts.length - 1);
+                 }
+                 Marine.getServer().getServer().getPlayerManager().getPlayerByClient(c).executeCommand(parts[0], args);
              } else {
                  ChatManagment.getInstance().sendChatMessage(
                          players.getPlayerByClient(c).getName(), p.getMessage());

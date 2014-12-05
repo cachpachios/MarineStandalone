@@ -1,5 +1,6 @@
 package com.marine.player;
 
+import com.marine.game.CommandManager;
 import com.marine.game.PlayerManager;
 import com.marine.game.chat.ChatComponent;
 import com.marine.game.chat.ChatMessage;
@@ -18,7 +19,6 @@ import com.marine.world.World;
 import com.marine.world.entity.Entity;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -51,7 +51,7 @@ public class Player extends Entity implements IPlayer, CommandSender {
 		this.connection = connection;
 		this.gamemode = gamemode;
 		this.gamemodeUpdate = false;
-        this.permissions = Collections.synchronizedList(new ArrayList<>());
+        this.permissions = new ArrayList<>();
     }
 
 	public Player(AbstractPlayer player, Gamemode gm) {
@@ -111,7 +111,12 @@ public class Player extends Entity implements IPlayer, CommandSender {
 
     @Override
     public void executeCommand(String command, String[] arguments) {
-
+        Command c = CommandManager.getInstance().getCommand(command.toLowerCase().substring(1));
+        if (c == null) {
+            sendMessage("There is no such command");
+        } else {
+            c.execute(this, arguments);
+        }
     }
 
     @Override

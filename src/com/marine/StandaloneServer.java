@@ -1,9 +1,11 @@
 package com.marine;
 
 import com.marine.events.Listener;
+import com.marine.game.CommandManager;
 import com.marine.game.PlayerManager;
 import com.marine.game.WorldManager;
 import com.marine.game.chat.ChatColor;
+import com.marine.game.commands.Info;
 import com.marine.net.NetworkManager;
 import com.marine.player.Gamemode;
 import com.marine.server.Marine;
@@ -57,6 +59,12 @@ public class StandaloneServer implements Listener {
         }
         Marine.setStandalone(this);
         Marine.setServer(this.server);
+        // Register commands
+        registerDefaultCommands();
+    }
+
+    private void registerDefaultCommands() {
+        CommandManager.getInstance().registerCommand(new Info());
     }
 
 	public void start() {

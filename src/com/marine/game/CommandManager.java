@@ -32,6 +32,12 @@ public class CommandManager {
         return instance;
     }
 
+    public Command getCommand(String cmd) {
+        if(stringMap.containsKey(cmd))
+            return stringMap.get(cmd);
+        return null;
+    }
+
     public void registerCommand(Command command) throws RuntimeException {
     	synchronized(commandMap) { synchronized(stringMap) {
         if (stringMap.containsKey(command.toString())) {
