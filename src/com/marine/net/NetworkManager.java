@@ -80,7 +80,10 @@ public class NetworkManager {
 	
 	private void terminate(Client client) {
 		synchronized(cleanUpList) {
-			Logging.getLogger().info("Client Ping Terminated At: " + client.getAdress().getHostAddress());
+			if(client.getState() != States.INGAME)
+				Logging.getLogger().info("Client Ping Terminated At: " + client.getAdress().getHostAddress());
+			else
+				Logging.getLogger().info("Player "+client.getUserName()+" Terminated At: " + client.getAdress().getHostAddress());
 			connectedClients.remove(client);
 			client.terminate();
 		}
