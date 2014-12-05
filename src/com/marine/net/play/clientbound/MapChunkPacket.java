@@ -30,9 +30,7 @@ public class MapChunkPacket extends Packet {
 	@Override
 	public void writeToStream(PacketOutputStream stream) throws IOException {
 		ByteData data = new ByteData();
-		
-		data.writeVarInt(getID());
-		
+
 		data.writeBoolean(world.getDimension() == Dimension.OVERWORLD);
 		
 		data.writeVarInt(chunks.size());
@@ -50,7 +48,7 @@ public class MapChunkPacket extends Packet {
 			data.writeend(c.getByteData(true));
 		}
 		
-		data.writePacketPrefix();
+		stream.write(getID(), data);
 	}
 
 	@Override

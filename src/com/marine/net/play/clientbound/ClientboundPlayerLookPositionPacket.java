@@ -40,7 +40,7 @@ public class ClientboundPlayerLookPositionPacket extends Packet { //TODO Relativ
 		
 		d.writeByte(bitField);
 
-		stream.write(getID(), d.getBytes());
+		stream.write(getID(), d);
 	}
 
 	@Override

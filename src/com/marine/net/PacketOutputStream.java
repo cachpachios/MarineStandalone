@@ -17,10 +17,13 @@ public class PacketOutputStream  { // Here we enable encryption and compression 
 	}
 
 	public void write(int id, byte[] b) throws IOException {
-			//TODO Compress and encrypt :D
-			ByteData fD = new ByteData(b);
-			fD.writeVarInt(0,id);
-			fD.writePacketPrefix();
-			stream.write(fD.getBytes());
+		write(id, new ByteData(b));
+	}
+	
+	public void write(int id, ByteData data) throws IOException {
+		//TODO Compress and encrypt :D
+		data.writeVarInt(0,id);
+		data.writePacketPrefix();
+		stream.write(data.getBytes());
 	}
 }

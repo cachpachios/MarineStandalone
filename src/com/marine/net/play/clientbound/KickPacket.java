@@ -26,7 +26,7 @@ public class KickPacket extends Packet{
 		ByteData d = new ByteData();
 		System.out.println("Kicked: " + msg);
 		d.writeUTF8(new ChatComponent(msg).toString());
-		stream.write(getID(), d.getBytes());
+		stream.write(getID(), d);
 	}
 
 

@@ -65,6 +65,7 @@ public class TimeoutManager extends Thread {
 	}
 	private void disconnect(Player p) {
 		players.disconnect(p, "Connection Timed Out");
+		cleanUp(p);
 	}
 	
 	@Override

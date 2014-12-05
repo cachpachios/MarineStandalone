@@ -35,9 +35,7 @@ public class ChunkPacket extends Packet{
 		
 		d.writeByte(data);
 		
-		d.writePacketPrefix();
-		
-		stream.write(getID(), d.getBytes());
+		stream.write(getID(), d);
 	}
 
 	@Override

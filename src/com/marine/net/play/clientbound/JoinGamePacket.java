@@ -37,7 +37,7 @@ public class JoinGamePacket extends Packet{
 		d.writeUTF8("flat");
 		d.writeBoolean(false);
 		
-		stream.write(getID(), d.getBytes());
+		stream.write(getID(), d);
 	}
 
 	@Override

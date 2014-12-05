@@ -75,7 +75,8 @@ public class NetworkManager {
 	}
 
 	public void cleanUp(Client c) {
-		cleanUpList.add(c);
+		if(!cleanUpList.contains(c))
+			cleanUpList.add(c);
 	}
 	
 	private void terminate(Client client) {
@@ -90,7 +91,6 @@ public class NetworkManager {
 	}
 	
 	public boolean processAll() {
-
 		synchronized(connectedClients) {		
 			if(connectedClients.isEmpty())
 				return false;
