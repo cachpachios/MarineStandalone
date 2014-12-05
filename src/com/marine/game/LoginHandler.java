@@ -4,7 +4,6 @@ import com.marine.game.async.ChatManagment;
 import com.marine.net.Client;
 import com.marine.net.States;
 import com.marine.net.login.LoginSucessPacket;
-import com.marine.net.play.clientbound.PlayerListHeaderPacket;
 import com.marine.player.*;
 import com.marine.util.Location;
 import com.marine.util.Position;
@@ -79,8 +78,11 @@ public class LoginHandler {
 		playerManager.joinGame(p);
 
         ChatManagment.getInstance().sendJoinMessage(p);
-        p.getClient().sendPacket(new PlayerListHeaderPacket("&cWelcome to the server", "&6" + player.getName())); //TODO: Custom msg and event :D and togglable
-	}
+        //p.getClient().sendPacket(new PlayerListHeaderPacket("&cWelcome to the server", "&6" + player.getName())); //TODO: Custom msg and event :D and togglable
+
+        TablistManager.getInstance().setHeaderAndFooter("&cWelcome to the server", "&6" + player.getName(), p);
+        TablistManager.getInstance().addItem(p, p);
+    }
 
 
 	public LoginResponse login(String name, Client c) {
