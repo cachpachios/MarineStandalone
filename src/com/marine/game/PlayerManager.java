@@ -6,9 +6,11 @@ import com.marine.net.Client;
 import com.marine.net.States;
 import com.marine.net.play.clientbound.JoinGamePacket;
 import com.marine.net.play.clientbound.KickPacket;
+import com.marine.net.play.clientbound.MapChunkPacket;
 import com.marine.player.AbstractPlayer;
 import com.marine.player.IPlayer;
 import com.marine.player.Player;
+import com.marine.world.Chunk;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -147,6 +149,8 @@ public class PlayerManager {
 		timeout.addPlayerToManager(p);
 	 	
 		p.getClient().sendPacket(new JoinGamePacket(p));
+	
+		p.sendAbilites();
 		
 		p.sendPostion();
 	}

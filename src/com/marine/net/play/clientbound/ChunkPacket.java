@@ -24,16 +24,16 @@ public class ChunkPacket extends Packet{
 	public void writeToStream(PacketOutputStream stream) throws IOException {
 		ByteData d = new ByteData();
 		
-		d.writeInt(c.getPos().getX());
-		d.writeInt(c.getPos().getY());
+		//d.writeInt(c.getPos().getX());
+		//d.writeInt(c.getPos().getY());
 		
-		d.writeShort(c.getSectionBitMap());
+		//d.writeShort(c.getSectionBitMap());
 		
-		byte[] data = c.getByteData(true);
+		//byte[] data = c.getByteData(true);
 		
-		d.writeVarInt(data.length);
+		//d.writeVarInt(data.length);
 		
-		d.writeByte(data);
+		//d.writeByte(data);
 		
 		stream.write(getID(), d);
 	}

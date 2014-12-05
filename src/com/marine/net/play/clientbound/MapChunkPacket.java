@@ -40,7 +40,8 @@ public class MapChunkPacket extends Packet {
 			data.writeInt(c.getPos().getX());
 			data.writeInt(c.getPos().getY());
 			data.writeShort(c.getSectionBitMap());
-		
+		}
+		for(Chunk c : chunks) {
 			// Write Data length
 			data.writeVarInt(c.getByteData(true).length);
 			
