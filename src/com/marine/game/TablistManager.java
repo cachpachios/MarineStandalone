@@ -25,6 +25,10 @@ public class TablistManager {
     }
 
     public void addItem(final Player toAdd, final Player affected) {
-        affected.getClient().sendPacket(new PlayerListItemPacket(PlayerListItemPacket.Action.ADD_PLAYER, 8, toAdd));
+        affected.getClient().sendPacket(new PlayerListItemPacket(PlayerListItemPacket.Action.ADD_PLAYER, toAdd));
+    }
+
+    public void removeItem(final Player toRemove, final Player affected) {
+        affected.getClient().sendPacket(new PlayerListItemPacket(PlayerListItemPacket.Action.REMOVE_PLAYER, toRemove));
     }
 }

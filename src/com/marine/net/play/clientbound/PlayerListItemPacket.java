@@ -16,12 +16,10 @@ import java.io.IOException;
 public class PlayerListItemPacket extends Packet {
 
     private final Action action;
-    private final int length;
     private final Player player;
 
-    public PlayerListItemPacket(Action action, int length, Player player) {
+    public PlayerListItemPacket(Action action, Player player) {
         this.action = action;
-        this.length = length;
         this.player = player;
     }
 
@@ -46,6 +44,23 @@ public class PlayerListItemPacket extends Packet {
                 data.writeBoolean(false);
             }
             break;
+            case UPDATE_GAME_MODE:
+            {
+                data.writeVarInt(player.getGamemode().getID());
+            }
+            break;
+            case UPDATE_LATENCY:
+            {
+                data.writeVarInt(10);
+            }
+            break;
+            case UPDATE_DISPLAY_NAME:
+            {
+                data.writeBoolean(false);
+            }
+            break;
+            case REMOVE_PLAYER:
+                break;
             default:
                 return;
         }
