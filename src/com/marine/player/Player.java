@@ -18,6 +18,7 @@ import com.marine.world.World;
 import com.marine.world.entity.Entity;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -50,8 +51,8 @@ public class Player extends Entity implements IPlayer, CommandSender {
 		this.connection = connection;
 		this.gamemode = gamemode;
 		this.gamemodeUpdate = false;
-        this.permissions = new ArrayList<>();
-	}
+        this.permissions = Collections.synchronizedList(new ArrayList<>());
+    }
 
 	public Player(AbstractPlayer player, Gamemode gm) {
 		this(player.getServer().getPlayerManager(),player.getClient(),player.getInfo(), new PlayerInventory(), Entity.generateEntityID(), player.getWorld(), player.getLocation(), player.getAbilites(), gm);
@@ -75,6 +76,10 @@ public class Player extends Entity implements IPlayer, CommandSender {
 		this.gamemode = gm;
 		this.gamemodeUpdate = true;
 	}
+	
+    public void sendAboveActionbarMessage(String message) {
+        getClient().sendPacket(new ChatPacket(message, 2)); // TODO Event
+    }
 	
 	@Override
 	public void update() {

@@ -23,7 +23,6 @@ public class LoginHandler {
 		this.spawnLocation = new Location(spawnLocation, w);
 	
 		this.playerManager = playerManager;
-		//players = Collections.synchronizedMap(new ConcurrentHashMap<Client, IPlayer>());
 	}
 	
 	public class LoginResponse {
@@ -46,8 +45,10 @@ public class LoginHandler {
 		
 	}
 	
-	private LoginResponse preJoin(String name, Client c) { // Returns null if login succeded, otherwise makes LoginInterceptor drop the client
-		UUID uuid = UUIDHandler.getUUID(name); //UUID.randomUUID();
+	private LoginResponse preJoin(String preName, Client c) { // Returns null if login succeded, otherwise makes LoginInterceptor drop the client
+		UUID uuid = UUIDHandler.getUUID(preName); //UUID.randomUUID();
+		String name = UUIDHandler.getName(uuid);
+		
 		
 		if(uuid == null) {
 			uuid = UUID.randomUUID();
@@ -62,6 +63,8 @@ public class LoginHandler {
 		
 		IPlayer p = new AbstractPlayer(playerManager.getServer(),playerManager.getServer().getWorldManager().getMainWorld(), new PlayerID(name, uuid), c, new PlayerAbilities(false, false, false, 0.1f, 0.2f), spawnLocation);
 
+		c.setUserName(name);
+		
 		return new LoginResponse(p);
 	}
 	
@@ -76,7 +79,7 @@ public class LoginHandler {
 		playerManager.joinGame(p);
 
         ChatManagment.getInstance().sendJoinMessage(p);
-        p.getClient().sendPacket(new PlayerListHeaderPacket("&cWelcome to the server", "&6" + player.getName()));
+        p.getClient().sendPacket(new PlayerListHeaderPacket("&cWelcome to the server", "&6" + player.getName())); //TODO: Custom msg and event :D and togglable
 	}
 
 

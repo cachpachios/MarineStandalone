@@ -154,7 +154,7 @@ public class Client {
 	private String userName;
 	
 	public void setUserName(String name) {
-		if(userName == null)
+		if(userName != null)
 			return;
 		userName = name;
 	}

@@ -144,8 +144,6 @@ public class PlayerManager {
 			cleanUp(p); return;
 		}
 		
-		p.getClient().setUserName(p.getName());
-		
 		timeout.addPlayerToManager(p);
 	 	
 		p.getClient().sendPacket(new JoinGamePacket(p));

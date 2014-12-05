@@ -1,6 +1,5 @@
 package com.marine.game.async;
 
-import com.marine.net.play.clientbound.ChatPacket;
 import com.marine.player.Player;
 import com.marine.server.Marine;
 
@@ -15,7 +14,7 @@ public class ChatManagment {
 
     public void sendJoinMessage(Player player) {
         Marine.broadcastMessage(String.format("%s joined the game", player.getName()));
-        sendAboveActionbarMessage(player, "Welcome online " + player.getName());
+        player.sendAboveActionbarMessage("Welcome online " + player.getName()); // TODO Custom Message, event and toggleabel
     }
 
     public void sendLeaveMessage(Player player) {
@@ -27,7 +26,4 @@ public class ChatManagment {
         Marine.broadcastMessage(String.format("<%s> %s", player, message));
     }
 
-    public void sendAboveActionbarMessage(Player player, String message) {
-        player.getClient().sendPacket(new ChatPacket(message, 2));
-    }
 }

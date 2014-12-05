@@ -11,6 +11,8 @@ public class IngameInterceptor implements PacketInterceptor{
 
 	PlayerManager players;
 	
+	int lastID; // Just for debugging shall be removed later
+	
 	public IngameInterceptor(PlayerManager m) {
 		players = m;
 	}
@@ -19,7 +21,10 @@ public class IngameInterceptor implements PacketInterceptor{
 	public boolean intercept(ByteData data, Client c) {
 		int id = data.readVarInt();
 
-		System.out.println("ID: " + id);
+		if(id != lastID) {
+			System.out.println("ID: " + id);
+			lastID = id;
+		}
 		
 		if(id == 0x00) {
             KeepAlivePacket p = new KeepAlivePacket();

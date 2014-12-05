@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.marine.game.PlayerManager;
 import com.marine.net.play.KeepAlivePacket;
+import com.marine.net.play.clientbound.ChatPacket;
 import com.marine.player.Player;
 
 public class TimeoutManager extends Thread {
@@ -80,7 +81,7 @@ public class TimeoutManager extends Thread {
 					lastRecive.remove(p);
 					lastRecive.put(p, t + 1);
 			
-					if(t >= 30)
+					if(t >= 10)
 						disconnect(p);
 				}
 				
