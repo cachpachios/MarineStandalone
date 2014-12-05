@@ -50,4 +50,8 @@ public class CommandManager {
     	}} // Synchornization end.
     }
 
+    public List<Command> getCommands() {
+        return new ArrayList<>(commandMap.keySet());
+    }
+
 }
