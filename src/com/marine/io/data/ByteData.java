@@ -6,6 +6,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 import com.marine.Logging;
 import com.marine.util.Position;
@@ -321,5 +322,10 @@ public class ByteData implements Iterable<Byte> {
 	@Override
 	public Iterator<Byte> iterator() {
 		return bytes.iterator();
+	}
+
+	public void writeUUID(UUID uuid) {
+		writeLong(uuid.getMostSignificantBits());
+        writeLong(uuid.getLeastSignificantBits());
 	}
 }

@@ -24,7 +24,6 @@ public class KickPacket extends Packet{
 	@Override
 	public void writeToStream(PacketOutputStream stream) throws IOException {
 		ByteData d = new ByteData();
-		System.out.println("Kicked: " + msg);
 		d.writeUTF8(new ChatComponent(msg).toString());
 		stream.write(getID(), d);
 	}

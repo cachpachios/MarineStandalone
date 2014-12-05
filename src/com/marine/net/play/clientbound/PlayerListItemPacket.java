@@ -33,17 +33,16 @@ public class PlayerListItemPacket extends Packet {
     @Override
     public void writeToStream(PacketOutputStream stream) throws IOException {
         ByteData data = new ByteData();
-        data.writeInt(action.getActionID());
-        data.writeInt(1);
-        data.writeLong(player.getUUID().getMostSignificantBits());
-        data.writeLong(player.getUUID().getLeastSignificantBits());
+        data.writeVarInt(action.getActionID());
+        data.writeVarInt(1);
+        data.writeUUID(player.getUUID());
         switch (action) {
             case ADD_PLAYER:
             {
                 data.writeUTF8(player.getName());
-                data.writeInt(0);
-                data.writeInt(player.getGamemode().getID());
-                data.writeInt(10);
+                data.writeVarInt(0);
+                data.writeVarInt(player.getGamemode().getID());
+                data.writeVarInt(10);
                 data.writeBoolean(false);
             }
             break;
