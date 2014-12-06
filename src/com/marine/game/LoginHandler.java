@@ -60,7 +60,7 @@ public class LoginHandler {
 		
 		//TODO: Check if player is banned in that case drop them.
 		
-		IPlayer p = new AbstractPlayer(playerManager.getServer(),playerManager.getServer().getWorldManager().getMainWorld(), new PlayerID(name, uuid), c, new PlayerAbilities(false, false, false, 0.1f, 0.2f), spawnLocation);
+		IPlayer p = new AbstractPlayer(playerManager.getServer(),playerManager.getServer().getWorldManager().getMainWorld(), new PlayerID(name, uuid), c, new PlayerAbilities(false, true, false, 0.1f, 0.2f), spawnLocation);
 
 		c.setUserName(name);
 		
