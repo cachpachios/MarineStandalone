@@ -47,7 +47,7 @@ public class MojangUtils {
         ONLINE("Service is online"),
         ISSUES("There might be some issues"),
         OFFLINE("Service is offline"),
-        UNKNOWN("Could not connec to service");
+        UNKNOWN("Could not connect to service");
 
         private final String desc;
 
