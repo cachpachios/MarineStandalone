@@ -3,6 +3,7 @@ package com.marine.game;
 import com.marine.net.play.clientbound.PlayerListHeaderPacket;
 import com.marine.net.play.clientbound.PlayerListItemPacket;
 import com.marine.player.Player;
+import com.marine.server.Marine;
 
 /**
  * Created 2014-12-05 for MarineStandalone
@@ -24,15 +25,28 @@ public class TablistManager {
         player.getClient().sendPacket(new PlayerListHeaderPacket(header, footer));
     }
 
-    public void addItem(final Player toAdd, final Player affected) {
-        affected.getClient().sendPacket(new PlayerListItemPacket(PlayerListItemPacket.Action.ADD_PLAYER, toAdd));
+    public void addItem(final Player toAdd) {
+        for(Player affected : Marine.getPlayers()) {
+            affected.getClient().sendPacket(new PlayerListItemPacket(PlayerListItemPacket.Action.ADD_PLAYER, toAdd));
+        }
     }
 
-    public void removeItem(final Player toRemove, final Player affected) {
-        affected.getClient().sendPacket(new PlayerListItemPacket(PlayerListItemPacket.Action.REMOVE_PLAYER, toRemove));
+    public void removeItem(final Player toRemove) {
+        for(Player affected : Marine.getPlayers()) {
+            affected.getClient().sendPacket(new PlayerListItemPacket(PlayerListItemPacket.Action.REMOVE_PLAYER, toRemove));
+        }
     }
 
-    public void setDisplayName(final Player toChange, final Player affected) {
-        affected.getClient().sendPacket(new PlayerListItemPacket(PlayerListItemPacket.Action.UPDATE_DISPLAY_NAME, toChange));
+    public void joinList(final Player joined) {
+        for(Player player : Marine.getServer().getPlayers()) {
+            if(player.getUUID().equals(joined.getUUID())) continue;
+            joined.getClient().sendPacket(new PlayerListItemPacket(PlayerListItemPacket.Action.ADD_PLAYER, player));
+        }
+    }
+
+    public void setDisplayName(final Player toChange) {
+        for(Player affected : Marine.getPlayers()) {
+            affected.getClient().sendPacket(new PlayerListItemPacket(PlayerListItemPacket.Action.UPDATE_DISPLAY_NAME, toChange));
+        }
     }
 }

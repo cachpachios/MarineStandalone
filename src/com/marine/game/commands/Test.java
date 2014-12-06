@@ -59,10 +59,10 @@ public class Test extends Command {
             case "display_name":
                 if(arguments.length > 1) {
                     player.setDisplayName(arguments[1]);
-                    TablistManager.getInstance().setDisplayName(player, player);
+                    TablistManager.getInstance().setDisplayName(player);
                 } else {
                     player.setDisplayName(player.getName());
-                    TablistManager.getInstance().setDisplayName(player, player);
+                    TablistManager.getInstance().setDisplayName(player);
                 }
                 break;
             case "tab":

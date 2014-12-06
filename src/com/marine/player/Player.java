@@ -169,6 +169,11 @@ public class Player extends Entity implements IPlayer, CommandSender {
     }
 
     @Override
+    public String toString() {
+        return getName();
+    }
+
+    @Override
     public void sendMessage(String message) {
         getClient().sendPacket(new ChatPacket(message));
     }

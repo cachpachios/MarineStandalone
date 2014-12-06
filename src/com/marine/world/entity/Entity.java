@@ -40,6 +40,11 @@ public abstract class Entity {
 		}
 	    ++ticksLived;
 	}
+
+    @Override
+    public String toString() {
+        return "MarineEntity{\"id\":" + getEntityID() + "}";
+    }
 	
 	public int getEntityID() {
 		return entityID;

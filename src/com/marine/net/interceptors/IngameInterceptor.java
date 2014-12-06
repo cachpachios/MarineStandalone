@@ -1,7 +1,7 @@
 package com.marine.net.interceptors;
 
 import com.marine.game.PlayerManager;
-import com.marine.game.async.ChatManagment;
+import com.marine.game.async.ChatManagement;
 import com.marine.io.data.ByteData;
 import com.marine.net.Client;
 import com.marine.net.play.KeepAlivePacket;
@@ -46,7 +46,7 @@ public class IngameInterceptor implements PacketInterceptor{
                  }
                  Marine.getServer().getServer().getPlayerManager().getPlayerByClient(c).executeCommand(parts[0], args);
              } else {
-                 ChatManagment.getInstance().sendChatMessage(
+                 ChatManagement.getInstance().sendChatMessage(
                          players.getPlayerByClient(c), p.getMessage());
              }
         } else if(id == 0x06) {

@@ -1,20 +1,21 @@
 package com.marine.game.async;
 
+import com.marine.game.chat.ChatColor;
 import com.marine.player.Player;
 import com.marine.server.Marine;
 
-public class ChatManagment {
+public class ChatManagement {
 
-    private static ChatManagment instance;
+    private static ChatManagement instance;
 
-    public static ChatManagment getInstance() {
-        if(instance == null) instance = new ChatManagment();
+    public static ChatManagement getInstance() {
+        if(instance == null) instance = new ChatManagement();
         return instance;
     }
 
     public void sendJoinMessage(Player player) {
         Marine.broadcastMessage(String.format("%s joined the game", player.getName()));
-        player.sendAboveActionbarMessage("Welcome online " + player.getName()); // TODO Custom Message, event and toggleabel
+        player.sendAboveActionbarMessage("Welcome online " + ChatColor.BOLD + player.getName()); // TODO Custom Message, event and toggleabel
     }
 
     public void sendLeaveMessage(Player player) {

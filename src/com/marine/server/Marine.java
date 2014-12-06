@@ -63,7 +63,7 @@ public class Marine {
         for(Player player : getPlayers()) {
             player.sendMessage(ChatColor.transform('&', string));
         }
-        Logging.getLogger().log(string);
+        Logging.getLogger().log(string.replace("<", "&lt;").replace(">", "&gt;"));
     }
 
 }
