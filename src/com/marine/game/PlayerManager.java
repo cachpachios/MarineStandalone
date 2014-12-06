@@ -10,7 +10,7 @@ import com.marine.net.play.clientbound.MapChunkPacket;
 import com.marine.player.AbstractPlayer;
 import com.marine.player.IPlayer;
 import com.marine.player.Player;
-import com.marine.world.Chunk;
+import com.marine.world.chunk.Chunk;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;

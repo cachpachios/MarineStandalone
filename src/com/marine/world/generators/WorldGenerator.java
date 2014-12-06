@@ -1,8 +1,8 @@
 package com.marine.world.generators;
 
-import com.marine.world.Chunk;
 import com.marine.world.Dimension;
 import com.marine.world.World;
+import com.marine.world.chunk.Chunk;
 
 public abstract class WorldGenerator {
 	

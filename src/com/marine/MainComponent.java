@@ -9,6 +9,10 @@ public class MainComponent {
 
     public static List<String> ARGS;
 	public static void main(String[] args) {
+		
+		byte b2 = -1;
+		System.out.println(Integer.toBinaryString(b2 & 0xFF));
+		
         ARGS = Arrays.asList(args);
 
         ServerSettings.getInstance();

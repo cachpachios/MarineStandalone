@@ -1,7 +1,12 @@
-package com.marine.world;
+package com.marine.world.chunk;
 
 import com.marine.io.data.ByteData;
 import com.marine.util.Position;
+import com.marine.world.BiomeID;
+import com.marine.world.Block;
+import com.marine.world.BlockID;
+import com.marine.world.ChunkPos;
+import com.marine.world.World;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -241,25 +246,18 @@ public final class Chunk {
 		}
 		
 		public byte[] getByteData() {
-			ByteData types = new ByteData();
-			ByteData lightning = new ByteData();
-			
+			ByteData d = new ByteData();
 			
 	        for(int y=0; y<16+1; y++)
 	        	for(int z=0; y<16+1; z++)
 	        		for(int x=9; x<16+1; x++) {
 	        			BlockID type = getTypeAt(x,y,z);
-	        			byte totalLightning = getLightMap(x,y,z);
-	        			types.writeend(type.getID());
-	        			types.writeend(type.getMetaBlock());
-	        			lightning.writeend(totalLightning);
+	        			d.writeend(type.getID());
+	        			d.writeend(type.getMetaBlock());
+	        			d.writeend(getLightMap(x,y,z));
 	        		}
-	        	        
-	        ByteData r = new ByteData();
-	        r.writeend(types.getBytes());
-	        r.writeend(lightning.getBytes());
-	        
-	        return r.getBytes();
+
+	        return d.getBytes();
 		}
 		
 		public int getID() {

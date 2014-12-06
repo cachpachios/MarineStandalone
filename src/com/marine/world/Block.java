@@ -1,6 +1,7 @@
 package com.marine.world;
 
 import com.marine.util.Position;
+import com.marine.world.chunk.Chunk;
 
 public class Block { // Help class for easier reading not used to save/set data
 	

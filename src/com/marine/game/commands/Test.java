@@ -1,5 +1,7 @@
 package com.marine.game.commands;
 
+import java.util.Arrays;
+
 import com.marine.game.TablistManager;
 import com.marine.game.chat.ChatColor;
 import com.marine.game.command.Command;
@@ -9,9 +11,6 @@ import com.marine.game.inventory.PlayerInventory;
 import com.marine.net.play.clientbound.GameStateChangePacket;
 import com.marine.net.play.clientbound.KickPacket;
 import com.marine.player.Player;
-import com.sun.deploy.util.StringUtils;
-
-import java.util.Arrays;
 
 /**
  * Created 2014-12-06 for MarineStandalone
@@ -37,8 +36,8 @@ public class Test extends Command {
             return;
         }
         if(arguments == null || arguments.length < 1 || !Arrays.asList(acceptableArguments).contains(arguments[0])) {
-            sender.sendMessage("§c[§6*§c] §6Unknown test type, acceptable types§c: §6"
-                    + StringUtils.join(Arrays.asList(acceptableArguments), "§c, §6"));
+            //sender.sendMessage("§c[§6*§c] §6Unknown test type, acceptable types§c: §6"
+            //        + StringUtils.join(Arrays.asList(acceptableArguments), "§c, §6"));
             return;
         }
         Player player = (Player) sender;

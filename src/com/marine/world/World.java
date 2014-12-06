@@ -1,6 +1,7 @@
 package com.marine.world;
 
 import com.marine.util.Position;
+import com.marine.world.chunk.Chunk;
 import com.marine.world.generators.LevelType;
 import com.marine.world.generators.WorldGenerator;
 

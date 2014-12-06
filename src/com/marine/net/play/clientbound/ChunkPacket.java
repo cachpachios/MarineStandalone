@@ -6,7 +6,7 @@ import com.marine.io.data.ByteData;
 import com.marine.net.Packet;
 import com.marine.net.PacketOutputStream;
 import com.marine.net.States;
-import com.marine.world.Chunk;
+import com.marine.world.chunk.Chunk;
 
 public class ChunkPacket extends Packet{
 	final Chunk c;
