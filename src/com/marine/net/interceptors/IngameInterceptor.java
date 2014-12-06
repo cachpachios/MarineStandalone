@@ -47,7 +47,7 @@ public class IngameInterceptor implements PacketInterceptor{
                  Marine.getServer().getServer().getPlayerManager().getPlayerByClient(c).executeCommand(parts[0], args);
              } else {
                  ChatManagment.getInstance().sendChatMessage(
-                         players.getPlayerByClient(c).getName(), p.getMessage());
+                         players.getPlayerByClient(c), p.getMessage());
              }
         } else if(id == 0x06) {
 			ServerboundPlayerLookPositionPacket packet = new ServerboundPlayerLookPositionPacket();

@@ -21,7 +21,7 @@ import java.util.Arrays;
 public class Test extends Command {
 
     final String[] acceptableArguments = new String[] {
-            "inventory", "kick", "tab", "anvil", "crafting", "credits"
+            "inventory", "kick", "tab", "anvil", "crafting", "credits", "display_name"
     };
 
     public Test() {
@@ -55,6 +55,15 @@ public class Test extends Command {
                 break;
             case "crafting":
                 player.openInventory(new CraftingInventory());
+                break;
+            case "display_name":
+                if(arguments.length > 1) {
+                    player.setDisplayName(arguments[1]);
+                    TablistManager.getInstance().setDisplayName(player, player);
+                } else {
+                    player.setDisplayName(player.getName());
+                    TablistManager.getInstance().setDisplayName(player, player);
+                }
                 break;
             case "tab":
                 if(arguments.length < 3) {

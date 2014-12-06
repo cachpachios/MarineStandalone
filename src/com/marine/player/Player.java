@@ -44,6 +44,8 @@ public class Player extends Entity implements IPlayer, CommandSender {
 
     private final List<String> permissions;
 
+    private String displayName;
+
 	public Player(PlayerManager manager, Client connection, PlayerID id, PlayerInventory inventory, int entityID, World world, Location pos, PlayerAbilities abilites, Gamemode gamemode) {
 		super(entityID, world, pos);
 		this.inventory = inventory;
@@ -54,6 +56,7 @@ public class Player extends Entity implements IPlayer, CommandSender {
 		this.gamemode = gamemode;
 		this.gamemodeUpdate = false;
         this.permissions = new ArrayList<>();
+        this.displayName = id.name;
     }
 
 	public Player(AbstractPlayer player, Gamemode gm) {
@@ -109,6 +112,18 @@ public class Player extends Entity implements IPlayer, CommandSender {
     @Override
     public void executeCommand(String command) {
 
+    }
+
+    public boolean hasDisplayName() {
+        return !(this.displayName.equals(this.id.name));
+    }
+
+    public String getDisplayName() {
+        return this.displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
     @Override

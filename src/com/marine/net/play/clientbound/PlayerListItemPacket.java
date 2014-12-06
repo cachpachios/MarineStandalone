@@ -1,5 +1,6 @@
 package com.marine.net.play.clientbound;
 
+import com.marine.game.chat.ChatComponent;
 import com.marine.io.data.ByteData;
 import com.marine.net.Packet;
 import com.marine.net.PacketOutputStream;
@@ -17,11 +18,20 @@ public class PlayerListItemPacket extends Packet {
 
     private final Action action;
     private final Player player;
+    private final String s;
 
     public PlayerListItemPacket(Action action, Player player) {
         this.action = action;
         this.player = player;
+        this.s = "";
     }
+
+    public PlayerListItemPacket(Action action, Player player, String s) {
+        this.action = action;
+        this.player = player;
+        this.s = s;
+    }
+
 
     @Override
     public int getID() {
@@ -56,7 +66,10 @@ public class PlayerListItemPacket extends Packet {
             break;
             case UPDATE_DISPLAY_NAME:
             {
-                data.writeBoolean(false);
+                boolean hasDisplayName = player.hasDisplayName();
+                data.writeBoolean(hasDisplayName);
+                if(hasDisplayName)
+                    data.writeUTF8(new ChatComponent(player.getDisplayName()).toString());
             }
             break;
             case REMOVE_PLAYER:

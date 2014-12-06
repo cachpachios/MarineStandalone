@@ -22,8 +22,8 @@ public class ChatManagment {
     }
 
 
-    public void sendChatMessage(String player, String message) {
-        Marine.broadcastMessage(String.format("<%s> %s", player, message));
+    public void sendChatMessage(Player player, String message) {
+        Marine.broadcastMessage(String.format("<%s> %s", player.getDisplayName(), message));
     }
 
 }

@@ -31,4 +31,8 @@ public class TablistManager {
     public void removeItem(final Player toRemove, final Player affected) {
         affected.getClient().sendPacket(new PlayerListItemPacket(PlayerListItemPacket.Action.REMOVE_PLAYER, toRemove));
     }
+
+    public void setDisplayName(final Player toChange, final Player affected) {
+        affected.getClient().sendPacket(new PlayerListItemPacket(PlayerListItemPacket.Action.UPDATE_DISPLAY_NAME, toChange));
+    }
 }
