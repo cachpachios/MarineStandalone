@@ -1,9 +1,12 @@
 package com.marine.game.commands;
 
+import com.marine.game.TablistManager;
 import com.marine.game.chat.ChatColor;
 import com.marine.game.command.Command;
 import com.marine.game.command.CommandSender;
+import com.marine.game.inventory.CraftingInventory;
 import com.marine.game.inventory.PlayerInventory;
+import com.marine.net.play.clientbound.GameStateChangePacket;
 import com.marine.net.play.clientbound.KickPacket;
 import com.marine.player.Player;
 import com.sun.deploy.util.StringUtils;
@@ -18,7 +21,7 @@ import java.util.Arrays;
 public class Test extends Command {
 
     final String[] acceptableArguments = new String[] {
-            "inventory", "kick"
+            "inventory", "kick", "tab", "anvil", "crafting", "credits"
     };
 
     public Test() {
@@ -34,7 +37,7 @@ public class Test extends Command {
             return;
         }
         if(arguments == null || arguments.length < 1 || !Arrays.asList(acceptableArguments).contains(arguments[0])) {
-            sender.sendMessage("§c[§6*§c] §6Unknown test type, acceptable types§c: "
+            sender.sendMessage("§c[§6*§c] §6Unknown test type, acceptable types§c: §6"
                     + StringUtils.join(Arrays.asList(acceptableArguments), "§c, §6"));
             return;
         }
@@ -46,6 +49,21 @@ public class Test extends Command {
                 break;
             case "kick":
                 player.getClient().sendPacket(new KickPacket(ChatColor.randomColor() + "Kick Worked! xD"));
+                break;
+            case "credits":
+                player.getClient().sendPacket(new GameStateChangePacket(GameStateChangePacket.Reason.DEMO_MESSAGES, 0f));
+                break;
+            case "crafting":
+                player.openInventory(new CraftingInventory());
+                break;
+            case "tab":
+                if(arguments.length < 3) {
+                    player.sendMessage("You need to specify two strings (_ instead of spaces)");
+                } else {
+                    String header = arguments[1].replace('_', ' ');
+                    String footer = arguments[2].replace('_', ' ');
+                    TablistManager.getInstance().setHeaderAndFooter(header, footer, player);
+                }
                 break;
             default:
                 break;
