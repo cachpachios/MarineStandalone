@@ -10,7 +10,7 @@ import com.marine.game.chat.ChatComponent;
 public class CraftingInventory extends Inventory {
 
     public CraftingInventory() {
-        super(45);
+        super(45, (byte) 0);
     }
 
     @Override

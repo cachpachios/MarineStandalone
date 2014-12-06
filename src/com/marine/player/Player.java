@@ -6,6 +6,7 @@ import com.marine.game.chat.ChatComponent;
 import com.marine.game.chat.ChatMessage;
 import com.marine.game.command.Command;
 import com.marine.game.command.CommandSender;
+import com.marine.game.inventory.Inventory;
 import com.marine.game.inventory.PlayerInventory;
 import com.marine.net.Client;
 import com.marine.net.play.clientbound.ChatPacket;
@@ -13,6 +14,7 @@ import com.marine.net.play.clientbound.ClientboundPlayerLookPositionPacket;
 import com.marine.net.play.clientbound.PlayerAbilitesPacket;
 import com.marine.net.play.clientbound.SpawnPointPacket;
 import com.marine.net.play.clientbound.inv.InventoryContentPacket;
+import com.marine.net.play.clientbound.inv.InventoryOpenPacket;
 import com.marine.util.Location;
 import com.marine.util.Position;
 import com.marine.world.World;
@@ -55,7 +57,7 @@ public class Player extends Entity implements IPlayer, CommandSender {
     }
 
 	public Player(AbstractPlayer player, Gamemode gm) {
-		this(player.getServer().getPlayerManager(),player.getClient(),player.getInfo(), new PlayerInventory(), Entity.generateEntityID(), player.getWorld(), player.getLocation(), player.getAbilites(), gm);
+		this(player.getServer().getPlayerManager(),player.getClient(),player.getInfo(), new PlayerInventory((byte) 0x00), Entity.generateEntityID(), player.getWorld(), player.getLocation(), player.getAbilites(), gm);
 	}
 
 	@Override
@@ -124,6 +126,10 @@ public class Player extends Entity implements IPlayer, CommandSender {
 
     }
 
+    public void openInventory(final Inventory inventory) {
+        getClient().sendPacket(new InventoryOpenPacket(inventory));
+    }
+
     @Override
     public boolean hasPermission(String permission) {
         if (permission.contains(permission)) return true;
@@ -166,9 +172,8 @@ public class Player extends Entity implements IPlayer, CommandSender {
         return true;
     }
 
-    public int nextWindowID() {
-    	nextWindowID++;
-    	return nextWindowID;
+    public byte nextWindowID() {
+    	return (byte) nextWindowID++;
     }
     
 	@Override

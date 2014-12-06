@@ -4,8 +4,8 @@ import com.marine.game.chat.ChatComponent;
 
 public final class PlayerInventory extends Inventory {
 
-	public PlayerInventory() {
-		super(44);
+	public PlayerInventory(byte uid) {
+		super(44, uid);
 	}
 	
 	@Override

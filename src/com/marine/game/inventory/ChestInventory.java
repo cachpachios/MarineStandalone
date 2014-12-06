@@ -11,13 +11,13 @@ public class ChestInventory extends Inventory {
 
     private final String title;
 
-    public ChestInventory(int rows, String title) {
-        super(rows * 9);
+    public ChestInventory(int rows, String title, byte uid) {
+        super(rows * 9, uid);
         this.title = title;
     }
 
-    public ChestInventory(int rows) {
-        this(rows, "Chest");
+    public ChestInventory(int rows, byte uid) {
+        this(rows, "Chest", uid);
     }
 
     @Override

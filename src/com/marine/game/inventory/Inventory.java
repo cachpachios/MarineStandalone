@@ -7,12 +7,20 @@ import com.marine.game.item.ItemSlot;
 import com.marine.util.PacketWrapper;
 
 public abstract class Inventory {
+
+    private final byte uid;
+
 	public PacketWrapper<Item>[] slots;
 	
-	public Inventory(int size) {
-		slots = new ItemSlot[size];
+	public Inventory(int size, byte uid) {
+        this.uid = uid;
+        this.slots = new ItemSlot[size];
 	}
-	
+
+    public byte getUID() {
+        return this.uid;
+    }
+
 	public abstract byte getID();
 	
 	public abstract String getType();

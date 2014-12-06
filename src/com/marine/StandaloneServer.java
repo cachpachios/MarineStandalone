@@ -7,6 +7,7 @@ import com.marine.game.WorldManager;
 import com.marine.game.chat.ChatColor;
 import com.marine.game.commands.Help;
 import com.marine.game.commands.Info;
+import com.marine.game.commands.Test;
 import com.marine.net.NetworkManager;
 import com.marine.player.Gamemode;
 import com.marine.server.Marine;
@@ -67,6 +68,7 @@ public class StandaloneServer implements Listener {
     private void registerDefaultCommands() {
         CommandManager.getInstance().registerCommand(new Info());
         CommandManager.getInstance().registerCommand(new Help());
+        CommandManager.getInstance().registerCommand(new Test());
     }
 
 	public void start() {
