@@ -8,14 +8,23 @@ import com.marine.net.PacketOutputStream;
 import com.marine.net.States;
 import com.marine.util.Position;
 import com.marine.world.Block;
+import com.marine.world.BlockID;
 
 public class BlockChangePacket extends Packet {
 	public Position pos;
-	public Block newBlock;
+	public int newBlock;
 	
-	public BlockChangePacket(Position pos, Block toBlock) {
+	public BlockChangePacket(Block toBlock) {
+		this(toBlock.getBlockPos(), toBlock.getType().getPacketID());
+	}
+
+	public BlockChangePacket(Position pos, int b) {
 		this.pos = pos;
-		this.newBlock = toBlock;
+		this.newBlock = b;
+	}
+
+	public BlockChangePacket(Position p, BlockID b) {
+		this(p,b.getID());
 	}
 
 	@Override
@@ -28,9 +37,8 @@ public class BlockChangePacket extends Packet {
 		
 		ByteData data = new ByteData();
 
-		data.writeVarInt(newBlock.toPacketBlock());
-		data.writeLong(pos.encode());
-
+		data.writePosition(pos);
+		data.writeVarInt(newBlock);
 		
 		stream.write(getID(), data.getBytes());
 		

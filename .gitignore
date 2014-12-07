@@ -107,3 +107,6 @@ dist/
 nbdist/
 nbactions.xml
 nb-configuration.xml
+src/com/marine/util/Vector3d.java
+src/com/marine/util/Vector3.java
+src/com/marine/util/Vector3d.java

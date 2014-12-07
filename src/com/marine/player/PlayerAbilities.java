@@ -73,5 +73,9 @@ public class PlayerAbilities {
 		this.walkSpeed = walkSpeed;
 		this.needUpdate = true;
 	}
+
+	public boolean isFlying() {
+		return true;
+	}
 	
 }
