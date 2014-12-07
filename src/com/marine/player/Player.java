@@ -1,5 +1,6 @@
 package com.marine.player;
 
+import com.marine.Logging;
 import com.marine.game.CommandManager;
 import com.marine.game.PlayerManager;
 import com.marine.game.chat.ChatComponent;
@@ -19,8 +20,10 @@ import com.marine.util.Location;
 import com.marine.util.Position;
 import com.marine.world.World;
 import com.marine.world.entity.Entity;
+import com.sun.deploy.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -47,6 +50,7 @@ public class Player extends Entity implements IPlayer, CommandSender {
     private String displayName;
 
     public int levels = 0;
+
     public float exp = 0f;
 
 	public Player(PlayerManager manager, Client connection, PlayerID id, PlayerInventory inventory, int entityID, World world, Location pos, PlayerAbilities abilites, Gamemode gamemode) {
@@ -155,6 +159,12 @@ public class Player extends Entity implements IPlayer, CommandSender {
         if (c == null) {
             sendMessage("There is no such command");
         } else {
+            String args = StringUtils.join(Arrays.asList(arguments), " ");
+            args = args.substring(0, args.length() - 1);
+            Logging.getLogger().log(
+                    String.format("%s executed command: %s",
+                            getName(), command + " " + args)
+            );
             c.execute(this, arguments);
         }
     }
