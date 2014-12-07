@@ -30,7 +30,7 @@ public class ChatManagement {
     private String translate(String s, Object ... strs) {
         for(Object object : strs) {
             if(object instanceof Player) {
-                s = s.replace("%plr", ((Player) object).getName());
+                s = s.replace("%plr", ((Player) object).getDisplayName());
             } else if(object instanceof String) {
                 s = s.replace("%msg", object.toString());
             }
@@ -43,7 +43,7 @@ public class ChatManagement {
         Marine.getServer().callEvent(event);
         if(!event.isCancelled()) {
             Marine.broadcastMessage(
-                translate(CHAT_FORMAT, player, message)
+                translate(CHAT_FORMAT, player, event.getMessage())
             );
         }
     }

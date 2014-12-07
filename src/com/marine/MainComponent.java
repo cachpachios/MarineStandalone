@@ -12,8 +12,7 @@ public class MainComponent {
         //System.setErr(Logging.getLogger());
 
 		byte b2 = -1;
-		System.out.println(Integer.toBinaryString(b2 & 0xFF));
-		
+
         ARGS = Arrays.asList(args);
 
         ServerSettings.getInstance();
@@ -27,7 +26,7 @@ public class MainComponent {
         if(tickrate > 0)
             settings.tickrate = 0;
 
-		StandaloneServer server = new StandaloneServer(settings.port,  /*settings.tickrate*/ 120); // Port and TickRate
+		StandaloneServer server = new StandaloneServer(settings.port,  20); // Port and TickRate
 		
 		if(!ARGS.contains("nogui")) {// Check if GUI should'nt be shown (Yes lazy implementation...)
             Logging.getLogger().createConsoleWindow(); // Create the simplest gui you will ever see :)
@@ -36,7 +35,11 @@ public class MainComponent {
 
         if (!ServerProperties.BUILD_STABLE)
             Logging.getLogger().warn("You are running an unstable build");
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> origin/master
         server.start();
 	}
 

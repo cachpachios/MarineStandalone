@@ -9,26 +9,30 @@ import com.marine.net.States;
 import com.marine.player.Player;
 import com.marine.server.Marine;
 import com.marine.util.ListResponse;
+import org.apache.commons.io.FileUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Base64;
 import java.util.UUID;
 
 public class ListPacket extends Packet {
 
     private String img;
-	synchronized private String getImage() {
+	private String getImage() {
         try {
             if (img == null || img.equals("")) {
-                File file = new File("./favicon.png");
+                File file = new File("./res/favicon.png");
                 if(file.exists()) {
-                    // TODO: Get this working, it sorta worked before but...
+                    byte[] bytes = FileUtils.readFileToByteArray(file);
+                    this.img = new String(Base64.getEncoder().encode(bytes));
                 }
-                return "";
+                return img;
             }
         } catch(Throwable e) {
+            e.printStackTrace();
             return "";
         }
         return img;
@@ -103,7 +107,7 @@ public class ListPacket extends Packet {
         json.put("description", description);
 
         if(response.FAVICON != null && response.FAVICON.length() > 0)
-            json.put("favicon", "data:image/png;base64," + response.FAVICON + "<data>");
+            json.put("favicon", "data:image/png;base64," + response.FAVICON);
 
 		return json.toJSONString();
 		

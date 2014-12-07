@@ -1,7 +1,7 @@
 package com.marine.util;
 
-import org.json.JSONObject;
 import org.json.JSONTokener;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import java.io.BufferedReader;
@@ -37,10 +37,10 @@ public class MojangUtils {
         return new URL(String.format("https://sessionserver.mojang.com/session/minecraft/hasJoined?username=%s&serverId=%s", username, serverHash));
     }
 
-    public JSONObject hasJoined(final String username, final String serverHash) throws Throwable {
+    public org.json.JSONObject hasJoined(final String username, final String serverHash) throws Throwable {
         final URLConnection connection = getConnection(getAuthenticationURL(username, serverHash));
         final JSONTokener tokener = new JSONTokener(connection.getInputStream());
-        return new JSONObject(tokener);
+        return new org.json.JSONObject(tokener);
     }
 
     public static enum Status {
@@ -81,19 +81,25 @@ public class MojangUtils {
     }
 
     public static enum MinecraftService {
-        WEB("minecraft.net"),
-        LOGIN("login.minecraft.net"),
-        SKIN("skins.minecraft.net"),
-        ACCOUNT("account.mojang.com"),
-        MOJANG_SESSION("sessionserver.mojang.com"),
-        AUTHSERVER("authserver.mojang.com"),
-        AUTH("auth.mojang.com"),
-        MINECRAFT_SESSION("session.minecraft.net");
+        WEB("minecraft.net", "Web"),
+        LOGIN("login.minecraft.net", "Login"),
+        SKIN("skins.minecraft.net", "Skin"),
+        ACCOUNT("account.mojang.com", "Account"),
+        MOJANG_SESSION("sessionserver.mojang.com", "Mojang Sessions"),
+        AUTHSERVER("authserver.mojang.com", "Mojang Authentication"),
+        AUTH("auth.mojang.com", "Authentication"),
+        MINECRAFT_SESSION("session.minecraft.net", "Minecraft Session");
 
-        private final String url;
+        private final String url, name;
 
-        MinecraftService(final String url) {
+        MinecraftService(final String url, final String name) {
             this.url = url;
+            this.name = name;
+        }
+
+        @Override
+        public String toString() {
+            return this.name;
         }
 
         public String getURL() {
@@ -111,6 +117,7 @@ public class MojangUtils {
             status = (String) jsonObject.get(service.getURL());
             input.close();
         } catch(Exception e) {
+            e.printStackTrace();
             return Status.UNKNOWN;
         }
         return status(status);
