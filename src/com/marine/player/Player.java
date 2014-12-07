@@ -10,10 +10,7 @@ import com.marine.game.command.CommandSender;
 import com.marine.game.inventory.Inventory;
 import com.marine.game.inventory.PlayerInventory;
 import com.marine.net.Client;
-import com.marine.net.play.clientbound.ChatPacket;
-import com.marine.net.play.clientbound.ClientboundPlayerLookPositionPacket;
-import com.marine.net.play.clientbound.PlayerAbilitesPacket;
-import com.marine.net.play.clientbound.SpawnPointPacket;
+import com.marine.net.play.clientbound.*;
 import com.marine.net.play.clientbound.inv.InventoryContentPacket;
 import com.marine.net.play.clientbound.inv.InventoryOpenPacket;
 import com.marine.util.Location;
@@ -93,12 +90,18 @@ public class Player extends Entity implements IPlayer, CommandSender {
         exp = Math.min(exp, 1.0f);
         exp = Math.max(exp, 0.0f);
         this.exp = exp;
+        this.updateExp();
     }
 
     public void setLevels(int levels) {
         levels = Math.min(levels, 255);
         levels = Math.max(levels, 0);
         this.levels = levels;
+        this.updateExp();
+    }
+
+    private void updateExp() {
+        getClient().sendPacket(new ExperiencePacket(this));
     }
 
     public int getLevels() {
