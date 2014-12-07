@@ -11,8 +11,6 @@ public class MainComponent {
 	public static void main(String[] args) {
         //System.setErr(Logging.getLogger());
 
-		byte b2 = -1;
-
         ARGS = Arrays.asList(args);
 
         ServerSettings.getInstance();
@@ -35,11 +33,7 @@ public class MainComponent {
 
         if (!ServerProperties.BUILD_STABLE)
             Logging.getLogger().warn("You are running an unstable build");
-<<<<<<< HEAD
         
-=======
-
->>>>>>> origin/master
         server.start();
 	}
 

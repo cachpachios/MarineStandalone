@@ -2,6 +2,7 @@ package com.marine.net.handshake;
 
 import com.marine.ServerProperties;
 import com.marine.events.ListEvent;
+import com.marine.io.BinaryFile;
 import com.marine.io.data.ByteData;
 import com.marine.net.Packet;
 import com.marine.net.PacketOutputStream;
@@ -9,7 +10,7 @@ import com.marine.net.States;
 import com.marine.player.Player;
 import com.marine.server.Marine;
 import com.marine.util.ListResponse;
-import org.apache.commons.io.FileUtils;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -26,8 +27,9 @@ public class ListPacket extends Packet {
             if (img == null || img.equals("")) {
                 File file = new File("./res/favicon.png");
                 if(file.exists()) {
-                    byte[] bytes = FileUtils.readFileToByteArray(file);
-                    this.img = new String(Base64.getEncoder().encode(bytes));
+                	BinaryFile f = new BinaryFile(file);
+                	f.readBinary();
+                    this.img = new String(Base64.getEncoder().encode(f.getData().getBytes()));
                 }
                 return img;
             }
