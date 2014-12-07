@@ -41,9 +41,10 @@ public abstract class Command {
     public String[] replaceAll(String[] args, CommandSender sender) {
         String[] returner = new String[args.length];
         for(int x = 0; x < args.length; x++) {
-            returner[x] = args[x].replace("@p", getClosestPlayer(sender).getName());
-            returner[x] = args[x].replace("@a", getAllPlayers());
-            returner[x] = args[x].replace("@e", getClosestEntity(sender).toString());
+            returner[x] = args[x];
+            returner[x] = returner[x].replace("@p", getClosestPlayer(sender).getName());
+            returner[x] = returner[x].replace("@a", getAllPlayers());
+            returner[x] = returner[x].replace("@e", getClosestEntity(sender).toString());
         }
         return returner;
     }
