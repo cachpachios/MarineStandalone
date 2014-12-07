@@ -118,14 +118,22 @@ public class ConsoleWindow extends OutputStream { // Simple console window :)
 
     private String s;
 
+    private java.util.List<Character> validChars;
+
     @Override
     public void write(int b) throws IOException {
+        if(validChars == null) {
+            validChars = new ArrayList<>();
+            for(char c : " \t\\/abcdefghjiklmnopqrstuvwxyzABCDEFGHJIKLMNOPQRSTUVWXYZ0123456789._,:;[](){}".toCharArray()) {
+                validChars.add(c);
+            }
+        }
         char c = (char) b;
         if(c == '\n') {
             //write(s);
             Logging.getLogger().error(s);
             s = "";
-        } else {
+        } else if(validChars.contains(c)) {
             s += c;
         }
     }
