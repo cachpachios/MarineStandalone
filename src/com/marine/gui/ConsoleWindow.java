@@ -120,7 +120,7 @@ public class ConsoleWindow extends OutputStream { // Simple console window :)
 
     @Override
     public void write(int b) throws IOException {
-        char c = Character.toChars(b)[0];
+        char c = (char) b;
         if(c == '\n') {
             //write(s);
             Logging.getLogger().error(s);
