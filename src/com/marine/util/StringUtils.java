@@ -14,7 +14,8 @@ public class StringUtils {
         for(Object o : e) {
             builder.append(o).append(s);
         }
-        return builder.toString();
+        String r = builder.toString();
+        return r.substring(0, r.length() - s.length());
     }
 
 }
