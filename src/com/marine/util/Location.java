@@ -16,15 +16,31 @@ public class Location extends Vector3d implements JSONAware, Cloneable { // Used
     private final World world;
     private float yaw, pitch;
 
+    /**
+     * Create a new world with default yaw and pitch (0, 0)
+     * @param world World
+     * @param x X Coord
+     * @param y Y Coord
+     * @param z Z Coord
+     */
     public Location(World world, double x, double y, double z) {
         this(world, x, y, z, 0f, 0f);
     }
 
+    /**
+     * Get a new location based on a world and a vector
+     * @param world World
+     * @param v Vector3
+     */
     @SuppressWarnings("rawtypes")
     public Location(World world, Vector3 v) {
         this(world, (double) v.getX(), (double) v.getY(), (double) v.getZ());
     }
 
+    /**
+     * Create a new location from a json string
+     * @param json JSON string
+     */
     public Location(String json) {
         super(0d, 0d, 0d);
         JSONObject object = (JSONObject) JSONValue.parse(json);
@@ -36,6 +52,15 @@ public class Location extends Vector3d implements JSONAware, Cloneable { // Used
         this.pitch = (float) object.get("pitch");
     }
 
+    /**
+     * Create a new location
+     * @param world World
+     * @param x X Coord
+     * @param y Y Coord
+     * @param z Z Coord
+     * @param yaw Yaw
+     * @param pitch Pitch
+     */
     public Location(World world, double x, double y, double z, float yaw, float pitch) {
         super(x, y, z);
         this.yaw = yaw;
@@ -43,37 +68,59 @@ public class Location extends Vector3d implements JSONAware, Cloneable { // Used
         this.world = world;
     }
 
+    /**
+     * Create a new location
+     * @param spawnLocation Spawn position
+     * @param w World
+     */
     public Location(Position spawnLocation, World w) {
         this(w, (double) spawnLocation.getX(), (double) spawnLocation.getY(), (double) spawnLocation.getZ());
     }
 
+    /**
+     * Get the world
+     * @return world
+     */
     public World getWorld() {
         return this.world;
     }
 
+    /**
+     * Get the yaw
+     * @return yaw
+     */
     public float getYaw() {
         return this.yaw;
     }
 
+    /**
+     * Get the relative position
+     * @return Position at rounded values
+     */
     public Position getRelativePosition() {
         return new Position(getX().intValue(), getY().intValue(), getZ().intValue());
     }
 
+    /**
+     * Get the pitch
+     * @return pitch
+     */
     public float getPitch() {
         return this.pitch;
     }
 
+    /**
+     * Face the yaw towards the specified location
+     * @param p Location too look towards
+     * @return New Location (this)
+     */
     public Location lookAt(Location p) {
         double l = p.getX() - getX();
         double w = p.getZ() - getX();
         double c = Math.sqrt(l * l + w * w);
         double alpha1 = -Math.asin(l / c) / Math.PI * 180;
         double alpha2 = Math.acos(w / c) / Math.PI * 180;
-        if (alpha2 > 90)
-            yaw = (float) (180 - alpha1);
-        else
-            yaw = (float) alpha1;
-
+        this.yaw = (float) ((alpha2 > 90) ? (180 - alpha1) : alpha1);
         return this;
     }
 
@@ -89,6 +136,12 @@ public class Location extends Vector3d implements JSONAware, Cloneable { // Used
         return o.toJSONString();
     }
 
+    /**
+     * Turn the location into a JSON Object
+     * <br>
+     * Contains: x, y, z, yaw, pitch & world
+     * @return JSON Object
+     */
     public org.json.JSONObject toJSONObject() {
         org.json.JSONObject o = new org.json.JSONObject();
         try {

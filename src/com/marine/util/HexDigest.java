@@ -21,7 +21,7 @@ public class HexDigest {
         digest.update(s.getBytes("UTF-8"));
         byte[] h = digest.digest();
         boolean n = (h[0] & 0x80) == 0x80;
-        if (n) h = twosCompliement(h);
+        if (n) h = twosComplement(h);
         String d = getHexString(h);
         if (d.startsWith("0"))
             d = d.replaceFirst("0", d);
@@ -41,7 +41,7 @@ public class HexDigest {
         return new String(hChars);
     }
 
-    private byte[] twosCompliement(byte[] p) {
+    private byte[] twosComplement(byte[] p) {
         boolean carry = true;
         for (int x = p.length - 1; x >= 0; x--) {
             p[x] = (byte) ~p[x];
