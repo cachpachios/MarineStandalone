@@ -3,6 +3,7 @@ package com.marine.server;
 import com.marine.Logging;
 import com.marine.StandaloneServer;
 import com.marine.game.chat.ChatColor;
+import com.marine.net.play.clientbound.KickPacket;
 import com.marine.player.Player;
 import com.marine.world.World;
 
@@ -48,6 +49,9 @@ public class Marine {
     }
 
     public static void stop() {
+        for(Player player : getPlayers()) {
+            player.getClient().sendPacket(new KickPacket(ChatColor.RED + "" + ChatColor.BOLD + "Server stopped"));
+        }
         standaloneServer.stop();
     }
 
