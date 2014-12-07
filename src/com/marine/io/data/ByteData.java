@@ -328,4 +328,12 @@ public class ByteData implements Iterable<Byte> {
 		writeLong(uuid.getMostSignificantBits());
         writeLong(uuid.getLeastSignificantBits());
 	}
+ 
+	public List<Byte> getByteList() {
+		return bytes;
+	}
+	
+	public void writeData(ByteData data) {
+		bytes.addAll(data.getByteList());
+	}
 }

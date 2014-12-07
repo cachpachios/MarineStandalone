@@ -42,11 +42,8 @@ public class MapChunkPacket extends Packet {
 			data.writeShort(c.getSectionBitMap());
 		}
 		for(Chunk c : chunks) {
-			// Write Data length
-			data.writeVarInt(c.getByteData(true).length);
-			
 			// Write Chunk data
-			data.writeend(c.getByteData(true));
+			data.writeData(c.getData(true, true));
 		}
 		
 		stream.write(getID(), data);

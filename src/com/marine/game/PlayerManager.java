@@ -147,7 +147,11 @@ public class PlayerManager {
 		timeout.addPlayerToManager(p);
 	 	
 		p.getClient().sendPacket(new JoinGamePacket(p));
-	
+
+		p.sendPostion();
+		
+		p.sendMapData(p.getWorld().getChunks(0, 0, 7, 7));
+		
 		p.sendAbilites();
 		
 		p.sendPostion();

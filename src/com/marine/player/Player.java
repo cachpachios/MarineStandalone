@@ -1,5 +1,10 @@
 package com.marine.player;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
+
 import com.marine.Logging;
 import com.marine.game.CommandManager;
 import com.marine.game.PlayerManager;
@@ -10,19 +15,20 @@ import com.marine.game.command.CommandSender;
 import com.marine.game.inventory.Inventory;
 import com.marine.game.inventory.PlayerInventory;
 import com.marine.net.Client;
-import com.marine.net.play.clientbound.*;
+import com.marine.net.play.clientbound.ChatPacket;
+import com.marine.net.play.clientbound.ClientboundPlayerLookPositionPacket;
+import com.marine.net.play.clientbound.ExperiencePacket;
+import com.marine.net.play.clientbound.MapChunkPacket;
+import com.marine.net.play.clientbound.PlayerAbilitesPacket;
+import com.marine.net.play.clientbound.SpawnPointPacket;
 import com.marine.net.play.clientbound.inv.InventoryContentPacket;
 import com.marine.net.play.clientbound.inv.InventoryOpenPacket;
 import com.marine.util.Location;
 import com.marine.util.Position;
+import com.marine.util.StringUtils;
 import com.marine.world.World;
+import com.marine.world.chunk.Chunk;
 import com.marine.world.entity.Entity;
-import com.sun.deploy.util.StringUtils;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
 
 public class Player extends Entity implements IPlayer, CommandSender {
 	
@@ -289,5 +295,11 @@ public class Player extends Entity implements IPlayer, CommandSender {
 		this.getClient().sendPacket(new ClientboundPlayerLookPositionPacket(this.getLocation()));
 	}
 	
+	public void sendMapData(List<Chunk> chunks) {
+		this.getClient().sendPacket(new MapChunkPacket(this.getWorld(), chunks));
+	}
 	
+	public void sendMapData(Chunk... chunks) {
+		this.sendMapData(Arrays.asList(chunks));
+	}
 }
