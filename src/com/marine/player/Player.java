@@ -46,6 +46,9 @@ public class Player extends Entity implements IPlayer, CommandSender {
 
     private String displayName;
 
+    public int levels = 0;
+    public float exp = 0f;
+
 	public Player(PlayerManager manager, Client connection, PlayerID id, PlayerInventory inventory, int entityID, World world, Location pos, PlayerAbilities abilites, Gamemode gamemode) {
 		super(entityID, world, pos);
 		this.inventory = inventory;
@@ -81,6 +84,26 @@ public class Player extends Entity implements IPlayer, CommandSender {
 		this.gamemode = gm;
 		this.gamemodeUpdate = true;
 	}
+
+    public void setExp(float exp) {
+        exp = Math.min(exp, 1.0f);
+        exp = Math.max(exp, 0.0f);
+        this.exp = exp;
+    }
+
+    public void setLevels(int levels) {
+        levels = Math.min(levels, 255);
+        levels = Math.max(levels, 0);
+        this.levels = levels;
+    }
+
+    public int getLevels() {
+        return this.levels;
+    }
+
+    public float getExp() {
+        return exp;
+    }
 	
     public void sendAboveActionbarMessage(String message) {
         getClient().sendPacket(new ChatPacket(message, 2)); // TODO Event

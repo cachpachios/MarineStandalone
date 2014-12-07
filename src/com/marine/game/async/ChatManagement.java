@@ -8,6 +8,11 @@ public class ChatManagement {
 
     private static ChatManagement instance;
 
+    public static String CHAT_FORMAT = "<%plr> %msg",
+                         JOIN_MESSAGE = "%plr joined the game",
+                         LEAVE_MESSAGE = "%plr left the game",
+                         WELCOME_MESSAGE = "Welcome online §l%plr";
+
     public static ChatManagement getInstance() {
         if(instance == null) instance = new ChatManagement();
         return instance;
