@@ -26,7 +26,7 @@ public class MainComponent {
         if(tickrate > 0)
             settings.tickrate = 0;
 
-		StandaloneServer server = new StandaloneServer(settings.port,  /*settings.tickrate*/ 120); // Port and TickRate
+		StandaloneServer server = new StandaloneServer(settings.port,  20); // Port and TickRate
 		
 		if(!ARGS.contains("nogui")) {// Check if GUI should'nt be shown (Yes lazy implementation...)
             Logging.getLogger().createConsoleWindow(); // Create the simplest gui you will ever see :)

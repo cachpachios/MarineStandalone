@@ -109,7 +109,7 @@ public class StandaloneServer implements Listener {
 		long lastTime = startTime;
 		
 		long lastRunTime = startTime;
-		
+
 		int ups = 0;
 		
 		while(shouldRun) {
