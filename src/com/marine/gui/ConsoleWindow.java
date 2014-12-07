@@ -37,7 +37,7 @@ public class ConsoleWindow extends OutputStream { // Simple console window :)
 		jFrame.setTitle("MarineStandalone " + ServerProperties.BUILD_VERSION + " " + ServerProperties.BUILD_TYPE + " (" + ServerProperties.BUILD_NAME + ")");
 		jFrame.setSize(600, 400);
 		jFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-
+        jFrame.setIconImage(new ImageIcon("./res/icon.png").getImage());
         WindowListener exitListener = new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
