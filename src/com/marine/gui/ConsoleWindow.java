@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 
-public class ConsoleWindow extends OutputStream { // Simple console window :)
+public class ConsoleWindow extends OutputStream {
 	private JFrame jFrame;
 	
 	private JTextPane text;

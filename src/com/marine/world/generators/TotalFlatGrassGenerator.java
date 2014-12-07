@@ -1,7 +1,7 @@
 package com.marine.world.generators;
 
 import com.marine.world.BlockID;
-import com.marine.world.ChunkPos;
+import com.marine.world.chunk.ChunkPos;
 import com.marine.world.Dimension;
 import com.marine.world.chunk.Chunk;
 
@@ -17,11 +17,11 @@ public final class TotalFlatGrassGenerator extends WorldGenerator{
 		
 		for(int xx = 0; xx < 16;xx++)
 			for(int zz = 0; zz < 16;zz++) {
-				r.setTypeAt(xx, 0, zz, BlockID.BEDROCK);
-				r.setTypeAt(xx, 1, zz, BlockID.DIRT);
-				r.setTypeAt(xx, 2, zz, 	BlockID.DIRT);
-				r.setTypeAt(xx, 3, zz, BlockID.DIRT);
-				r.setTypeAt(xx, 4, zz, BlockID.GRASS);
+				r.setBlock(xx, 0, zz, BlockID.BEDROCK);
+				r.setBlock(xx, 1, zz, BlockID.DIRT);
+				r.setBlock(xx, 2, zz, 	BlockID.DIRT);
+				r.setBlock(xx, 3, zz, BlockID.DIRT);
+				r.setBlock(xx, 4, zz, BlockID.GRASS);
 			}
 				
 		
