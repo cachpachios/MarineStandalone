@@ -30,6 +30,8 @@ public class ListPacket extends Packet {
                     BinaryFile f = new BinaryFile(file);
                     f.readBinary();
                     this.img = new String(Base64.getEncoder().encode(f.getData().getBytes()));
+                } else {
+                    this.img = "";
                 }
                 return img;
             }
