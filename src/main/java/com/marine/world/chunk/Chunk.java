@@ -72,12 +72,11 @@ public final class Chunk {
     }
 
     public short getSectionBitMap() {
-        return -32768;
-        //short r = 0;
-        //for(ChunkSection s : sections)
-        //	if(s != null)
-        //		r |= 1 << s.getID();
-        //return r;
+        short r = 0;
+        for(ChunkSection s : sections)
+        	if(s != null)
+        		r |= 1 << s.getID();
+        return r;
     }
 
     public World getWorld() {
