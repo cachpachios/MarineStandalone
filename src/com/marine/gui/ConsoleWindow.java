@@ -71,7 +71,7 @@ public class ConsoleWindow { // Simple console window :)
 	}
 	
 	public void write(String s) {
-		console.add(format(s));
+		console.add(format(s.replace("<", "&lt;").replace(">", "&gt;")));
 		update();
 	}
 
