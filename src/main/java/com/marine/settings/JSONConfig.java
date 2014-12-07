@@ -19,6 +19,13 @@ public class JSONConfig {
     private final File path, file;
     private final String name;
 
+    public JSONConfig(File file) {
+        this.path = file.getParentFile();
+        this.file = file;
+        this.name = file.getName();
+        this.map = new JSONObject();
+    }
+
     public JSONConfig(File path, String name) {
         this.path = path;
         this.name = name;

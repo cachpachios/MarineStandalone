@@ -32,7 +32,10 @@ public class ConsoleWindow extends OutputStream {
 
     public void initWindow() {
         jFrame = new JFrame();
-        jFrame.setTitle("MarineStandalone " + ServerProperties.BUILD_VERSION + " " + ServerProperties.BUILD_TYPE + " (" + ServerProperties.BUILD_NAME + ")");
+        jFrame.setTitle("MarineStandalone " +
+                ServerProperties.BUILD_VERSION +
+                " " + ServerProperties.BUILD_TYPE +
+                " (" + ServerProperties.BUILD_NAME + ")");
         jFrame.setSize(600, 400);
         jFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         jFrame.setIconImage(new ImageIcon("./res/icon.png").getImage());
