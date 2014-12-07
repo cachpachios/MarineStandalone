@@ -2,24 +2,25 @@ package com.marine;
 
 import com.marine.gui.ConsoleWindow;
 
+import java.io.PrintStream;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import static java.lang.System.out;
 
-public class Logging {
+public class Logging extends PrintStream {
 	
 	private static Logging instance;
 
 	private boolean haveWindow;
 	
 	Calendar calendar = GregorianCalendar.getInstance();
-	
-	public Logging() {
-		haveWindow = false;
-		c = new ConsoleWindow(50);
+
+	public Logging(ConsoleWindow window) {
+        super(window);
+        haveWindow = false;
+        c = window;
 	}
-	
+
 	public void createConsoleWindow() {
 		c.initWindow();
 		haveWindow = true;
@@ -32,9 +33,11 @@ public class Logging {
 	private ConsoleWindow c;
 	
 	public static Logging getLogger() {
-		if(instance == null)
-			instance = new Logging();
-		return instance;
+		if(instance == null) {
+            ConsoleWindow window = new ConsoleWindow(50);
+            instance = new Logging(window);
+        }
+        return instance;
 	}
 	
 	public boolean hasBeenTerminated() {
@@ -43,32 +46,32 @@ public class Logging {
 	
 	public void log(String s) {
         c.write(format('3', s));
-        out.println(format(s));
+        System.out.println(format(s));
 	}
 	
 	public void info(String s) {
         c.write(format('9', "INFO", s));
-        out.println(format("INFO", s));
+        System.out.println(format("INFO", s));
     }
 	
 	public void debug(String s) {
         c.write(format('1', "DEBUG", s));
-        out.println(format("DEBUG", s));
+        System.out.println(format("DEBUG", s));
     }
 	
 	public void fatal(String s) {
         c.write(format('c', "FATAL", s));
-        out.println(format("FATAL", s));
+        System.out.println(format("FATAL", s));
     }
 	
 	public void error(String s) {
         c.write(format('c', "ERROR", s));
-        out.println(format("ERROR", s));
+        System.out.println(format("ERROR", s));
     }
 	
 	public void warn(String s) {
         c.write(format('c', "WARNING", s));
-        out.println(format("WARNING", s));
+        System.out.println(format("WARNING", s));
     }
 
     private String format(char color, String prefix, String msg) {

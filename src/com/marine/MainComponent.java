@@ -9,7 +9,8 @@ public class MainComponent {
 
     public static List<String> ARGS;
 	public static void main(String[] args) {
-		
+        System.setErr(Logging.getLogger());
+
 		byte b2 = -1;
 		System.out.println(Integer.toBinaryString(b2 & 0xFF));
 		
@@ -35,6 +36,12 @@ public class MainComponent {
 
         if (!ServerProperties.BUILD_STABLE)
             Logging.getLogger().warn("You are running an unstable build");
+
+        try {
+            int x = (1/0);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
 
         server.start();
 	}

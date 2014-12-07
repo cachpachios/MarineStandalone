@@ -15,7 +15,7 @@ public class TestListener implements Listener {
     public void onChat(ChatEvent event) {
         if(!event.isCancelled()) {
             event.setMessage(
-                    ChatColor.stripColors(ChatColor.transform('&', event.getMessage()))
+                    ChatColor.transform('&', event.getMessage())
             );
         }
     }

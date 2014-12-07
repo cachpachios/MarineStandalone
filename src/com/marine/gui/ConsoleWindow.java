@@ -1,5 +1,6 @@
 package com.marine.gui;
 
+import com.marine.Logging;
 import com.marine.ServerProperties;
 import com.marine.game.chat.ChatColor;
 import com.marine.server.Marine;
@@ -9,9 +10,11 @@ import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 
-public class ConsoleWindow { // Simple console window :)
+public class ConsoleWindow extends OutputStream { // Simple console window :)
 	private JFrame jFrame;
 	
 	private JTextPane text;
@@ -69,10 +72,16 @@ public class ConsoleWindow { // Simple console window :)
 
 		jFrame.setVisible(true);
 	}
-	
+
+    @Override
+    public void write(byte[] s) {
+        this.write(new String(s));
+    }
+
 	public void write(String s) {
 		console.add(format(s.replace("<", "&lt;").replace(">", "&gt;")));
 		update();
+
 	}
 
     private String format(String string) {
@@ -106,5 +115,18 @@ public class ConsoleWindow { // Simple console window :)
 	public boolean isClosed() {
 		return !jFrame.isVisible();
 	}
-	
+
+    private String s;
+
+    @Override
+    public void write(int b) throws IOException {
+        char c = Character.toChars(b)[0];
+        if(c == '\n') {
+            //write(s);
+            Logging.getLogger().error(s);
+            s = "";
+        } else {
+            s += c;
+        }
+    }
 }
