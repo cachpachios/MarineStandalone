@@ -67,7 +67,18 @@ public class Player extends Entity implements IPlayer, CommandSender {
             this.playerFile = new PlayerFile(this);
         } catch(Exception e) {
             Logging.getLogger().error("Could not load/create player data file for: " + getName());
+            return;
         }
+        try {
+            this.exp = (float) playerFile.map.getDouble("exp");
+            this.levels = playerFile.map.getInt("levels");
+        } catch(Exception e) {
+            Logging.getLogger().warn("Could not load in values for player " + getName());
+        }
+    }
+
+    public void loginPopulation() {
+        getClient().sendPacket(new ExperiencePacket(this));
     }
 
 	public Player(AbstractPlayer player, Gamemode gm) {
@@ -97,6 +108,7 @@ public class Player extends Entity implements IPlayer, CommandSender {
         exp = Math.min(exp, 1.0f);
         exp = Math.max(exp, 0.0f);
         this.exp = exp;
+        this.playerFile.set("exp", exp);
         this.updateExp();
     }
 
@@ -104,6 +116,7 @@ public class Player extends Entity implements IPlayer, CommandSender {
         levels = Math.min(levels, 255);
         levels = Math.max(levels, 0);
         this.levels = levels;
+        this.playerFile.set("levels", levels);
         this.updateExp();
     }
 

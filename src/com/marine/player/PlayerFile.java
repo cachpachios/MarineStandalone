@@ -1,6 +1,8 @@
 package com.marine.player;
 
 import com.marine.settings.JSONConfig;
+import com.marine.util.Location;
+import com.marine.world.World;
 
 import java.io.File;
 
@@ -18,6 +20,24 @@ public class PlayerFile extends JSONConfig {
             if(!map.isNull("username")) map.remove("username");
             map.put("username", player.getName());
         }
-        super.saveFile();
+        if(map.isNull("exp") && map.isNull("levels")) {
+            map.put("exp", 0d);
+            map.put("levels", 0);
+        }
+        if(map.isNull("location")) {
+            map.put("location", new Location(new World("world"), 0d, 0d, 0d).toJSONObject());
+        }
+    }
+
+    public void set(String s, Object o) {
+        if(!map.isNull(s))
+            map.remove(s);
+        try {
+            map.put(s, o);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        saveFile();
+        read();
     }
 }

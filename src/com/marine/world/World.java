@@ -23,7 +23,14 @@ public class World { // TODO Save and unload chunks...
 	private int time;
 	
 	private WorldGenerator generator;
-	
+
+    public World(final String name) {
+        this.generator = null; //this should use the default generator
+        this.uuid = UUID.randomUUID();
+        this.name = name;
+        this.dimension = Dimension.OVERWORLD;
+    }
+
 	public World(final String name, WorldGenerator generator) { //TODO Make it able to load world
 		
 		this.generator = generator;
