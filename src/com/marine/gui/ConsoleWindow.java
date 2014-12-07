@@ -15,28 +15,26 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 
 public class ConsoleWindow extends OutputStream {
-	private JFrame jFrame;
-	
-	private JTextPane text;
-	private JTextPane input;
-
-	private ArrayList<String> console;
-	
-	private final int maxLines;
-
+    private final int maxLines;
     private final boolean showHTML;
+    private JFrame jFrame;
+    private JTextPane text;
+    private JTextPane input;
+    private ArrayList<String> console;
+    private String s;
+    private java.util.List<Character> validChars;
 
-	public ConsoleWindow(int maxLines) {
-		this.maxLines = maxLines;
-		console = new ArrayList<>();
+    public ConsoleWindow(int maxLines) {
+        this.maxLines = maxLines;
+        console = new ArrayList<>();
         this.showHTML = false;
-	}
-	
-	public void initWindow() {
-		jFrame = new JFrame();
-		jFrame.setTitle("MarineStandalone " + ServerProperties.BUILD_VERSION + " " + ServerProperties.BUILD_TYPE + " (" + ServerProperties.BUILD_NAME + ")");
-		jFrame.setSize(600, 400);
-		jFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+    }
+
+    public void initWindow() {
+        jFrame = new JFrame();
+        jFrame.setTitle("MarineStandalone " + ServerProperties.BUILD_VERSION + " " + ServerProperties.BUILD_TYPE + " (" + ServerProperties.BUILD_NAME + ")");
+        jFrame.setSize(600, 400);
+        jFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         jFrame.setIconImage(new ImageIcon("./res/icon.png").getImage());
         WindowListener exitListener = new WindowAdapter() {
             @Override
@@ -50,45 +48,45 @@ public class ConsoleWindow extends OutputStream {
         jFrame.addWindowListener(exitListener);
 
         GridBagConstraints c = new GridBagConstraints();
-		
-		jFrame.setLayout(new GridBagLayout());
-		
-		text = new JTextPane();
+
+        jFrame.setLayout(new GridBagLayout());
+
+        text = new JTextPane();
         input = new JTextPane();
 
-        if(!showHTML)
+        if (!showHTML)
             text.setContentType("text/html");
-		text.setEditable(false);
+        text.setEditable(false);
         text.setBackground(Color.BLACK);
 
-		c.fill = GridBagConstraints.BOTH;
-		c.gridx = 1;
-		c.gridy = 1;
-		c.weightx = 1.5D;
-		c.weighty = 1;
-		
-		c.insets = new Insets(1, 1, 1, 1);
-		jFrame.add(new JScrollPane(text), c);
+        c.fill = GridBagConstraints.BOTH;
+        c.gridx = 1;
+        c.gridy = 1;
+        c.weightx = 1.5D;
+        c.weighty = 1;
 
-		jFrame.setVisible(true);
-	}
+        c.insets = new Insets(1, 1, 1, 1);
+        jFrame.add(new JScrollPane(text), c);
+
+        jFrame.setVisible(true);
+    }
 
     @Override
     public void write(byte[] s) {
         this.write(new String(s));
     }
 
-	public void write(String s) {
-		console.add(format(s.replace("<", "&lt;").replace(">", "&gt;")));
-		update();
+    public void write(String s) {
+        console.add(format(s.replace("<", "&lt;").replace(">", "&gt;")));
+        update();
 
-	}
+    }
 
     private String format(String string) {
         string = string.replace("§0", "§f");
         string = "<font face='MarineStandalone'>" + string;
-        for(ChatColor color : ChatColor.values()) {
-            if(color.isColor()) {
+        for (ChatColor color : ChatColor.values()) {
+            if (color.isColor()) {
                 string = string.replace("§" + color.getOldSystemID(), "</b></u></i></s><font color='#" + color.getHexa() + "'>");
             }
         }
@@ -99,41 +97,36 @@ public class ConsoleWindow extends OutputStream {
         return string + "</font>";
     }
 
-	
-	public void update() { // TODO remove old lines.
-		if(console.size() > maxLines)
-			console.remove(0);
-		String str = "";
-		for(String s : console) {
-			str += s;
-			str += "<br>";
-		}
-		
-		text.setText(str);
-	}
-	
-	public boolean isClosed() {
-		return !jFrame.isVisible();
-	}
+    public void update() { // TODO remove old lines.
+        if (console.size() > maxLines)
+            console.remove(0);
+        String str = "";
+        for (String s : console) {
+            str += s;
+            str += "<br>";
+        }
 
-    private String s;
+        text.setText(str);
+    }
 
-    private java.util.List<Character> validChars;
+    public boolean isClosed() {
+        return !jFrame.isVisible();
+    }
 
     @Override
     public void write(int b) throws IOException {
-        if(validChars == null) {
+        if (validChars == null) {
             validChars = new ArrayList<>();
-            for(char c : " \t\\/abcdefghjiklmnopqrstuvwxyzABCDEFGHJIKLMNOPQRSTUVWXYZ0123456789._,:;[](){}".toCharArray()) {
+            for (char c : " \t\\/abcdefghjiklmnopqrstuvwxyzABCDEFGHJIKLMNOPQRSTUVWXYZ0123456789._,:;[](){}".toCharArray()) {
                 validChars.add(c);
             }
         }
         char c = (char) b;
-        if(c == '\n') {
+        if (c == '\n') {
             //write(s);
             Logging.getLogger().error(s);
             s = "";
-        } else if(validChars.contains(c)) {
+        } else if (validChars.contains(c)) {
             s += c;
         }
     }

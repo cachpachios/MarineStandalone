@@ -11,41 +11,42 @@ import com.marine.util.PacketWrapper;
 
 import java.io.IOException;
 
-public class InventoryContentPacket extends Packet{
+public class InventoryContentPacket extends Packet {
 
-	final Inventory inv;
-	
-	public InventoryContentPacket(Inventory inventory) {
-		this.inv = inventory;
-	}
+    final Inventory inv;
 
-	@Override
-	public int getID() {
-		return 0x30;
-	}
+    public InventoryContentPacket(Inventory inventory) {
+        this.inv = inventory;
+    }
 
-	@Override
-	public void writeToStream(PacketOutputStream stream) throws IOException {
-		ByteData d = new ByteData();
-		d.writeByte(inv.getID());
-		
-		d.writeShort((short) inv.getSlots().length);
+    @Override
+    public int getID() {
+        return 0x30;
+    }
 
-		for(PacketWrapper<Item> slot : inv.getSlots())
-			if(slot == null)
-				d.writeShort(ItemID.EMPTY.getID());
-			else
-				d.writeByte(slot.getBytes());
-		
-		stream.write(getID(), d.getBytes());
-	}
+    @Override
+    public void writeToStream(PacketOutputStream stream) throws IOException {
+        ByteData d = new ByteData();
+        d.writeByte(inv.getID());
 
-	@Override
-	public void readFromBytes(ByteData input) {}
+        d.writeShort((short) inv.getSlots().length);
 
-	@Override
-	public States getPacketState() {
-		return States.INGAME;
-	}
-	
+        for (PacketWrapper<Item> slot : inv.getSlots())
+            if (slot == null)
+                d.writeShort(ItemID.EMPTY.getID());
+            else
+                d.writeByte(slot.getBytes());
+
+        stream.write(getID(), d.getBytes());
+    }
+
+    @Override
+    public void readFromBytes(ByteData input) {
+    }
+
+    @Override
+    public States getPacketState() {
+        return States.INGAME;
+    }
+
 }

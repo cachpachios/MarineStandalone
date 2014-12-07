@@ -2,29 +2,32 @@ package com.marine.util;
 
 import org.json.JSONObject;
 
+/**
+ * Position class
+ */
 public class Position extends Vector3i {
-	
-	public Position(int x, int y, int z) { // Used for relative posisitions (Blocks etc)
-		super(x,y,z);
-	}
-	
-	public Position() {
-		this(0,0,0);
-	}
-	
-	public void decode(long l) {
-		 setX((int) (l >> 38));
-		 setY((int) ((l >> 26) & 0xFFF));
-		 setZ((int) (l << 38 >> 38));
-	}
-	
-	public long encode() {
-		return  ((getX() & 0x3FFFFFF) << 38) | ((getY() & 0xFFF) << 26) | (getZ() & 0x3FFFFFF);
-	}
 
-	public Location toLocation() {
-		return new Location(null, getX(), getY(), getZ(),0,0);
-	}
+    public Position(int x, int y, int z) { // Used for relative posisitions (Blocks etc)
+        super(x, y, z);
+    }
+
+    public Position() {
+        this(0, 0, 0);
+    }
+
+    public void decode(long l) {
+        setX((int) (l >> 38));
+        setY((int) ((l >> 26) & 0xFFF));
+        setZ((int) (l << 38 >> 38));
+    }
+
+    public long encode() {
+        return ((getX() & 0x3FFFFFF) << 38) | ((getY() & 0xFFF) << 26) | (getZ() & 0x3FFFFFF);
+    }
+
+    public Location toLocation() {
+        return new Location(null, getX(), getY(), getZ(), 0, 0);
+    }
 
     public JSONObject toJSONObject() {
         JSONObject o = new JSONObject();
@@ -32,7 +35,7 @@ public class Position extends Vector3i {
             o.put("x", getX());
             o.put("y", getY());
             o.put("z", getZ());
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return o;

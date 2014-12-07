@@ -45,8 +45,7 @@ public class PlayerListItemPacket extends Packet {
         data.writeVarInt(1);
         data.writeUUID(player.getUUID());
         switch (action) {
-            case ADD_PLAYER:
-            {
+            case ADD_PLAYER: {
                 data.writeUTF8(player.getName());
                 data.writeVarInt(0);
                 data.writeVarInt(player.getGamemode().getID());
@@ -54,21 +53,18 @@ public class PlayerListItemPacket extends Packet {
                 data.writeBoolean(false);
             }
             break;
-            case UPDATE_GAME_MODE:
-            {
+            case UPDATE_GAME_MODE: {
                 data.writeVarInt(player.getGamemode().getID());
             }
             break;
-            case UPDATE_LATENCY:
-            {
+            case UPDATE_LATENCY: {
                 data.writeVarInt(10);
             }
             break;
-            case UPDATE_DISPLAY_NAME:
-            {
+            case UPDATE_DISPLAY_NAME: {
                 boolean hasDisplayName = player.hasDisplayName();
                 data.writeBoolean(hasDisplayName);
-                if(hasDisplayName)
+                if (hasDisplayName)
                     data.writeUTF8(new ChatComponent(player.getDisplayName()).toString());
             }
             break;

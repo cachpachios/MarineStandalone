@@ -19,13 +19,13 @@ public class MojangUtils {
 
     private static MojangUtils instance;
 
+    public MojangUtils() {
+    }
+
     public static MojangUtils getInstance() {
         if (instance == null) instance = new MojangUtils();
         return instance;
     }
-
-    public MojangUtils() {}
-
 
     private URLConnection getConnection(URL url) throws Throwable {
         URLConnection connection = url.openConnection();
@@ -41,6 +41,38 @@ public class MojangUtils {
         final URLConnection connection = getConnection(getAuthenticationURL(username, serverHash));
         final JSONTokener tokener = new JSONTokener(connection.getInputStream());
         return new org.json.JSONObject(tokener);
+    }
+
+    public Status getStatus(MinecraftService service) {
+        String status = null;
+        try {
+            URL url = new URL("http://status.mojang.com/check?service=" + service.getURL());
+            BufferedReader input = new BufferedReader(new InputStreamReader(url.openStream()));
+            Object object = new JSONParser().parse(input);
+            JSONObject jsonObject = (JSONObject) object;
+            status = (String) jsonObject.get(service.getURL());
+            input.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Status.UNKNOWN;
+        }
+        return status(status);
+    }
+
+    private Status status(String status) {
+        switch (status.toLowerCase()) {
+            case "green":
+                return Status.ONLINE;
+
+            case "yellow":
+                return Status.ISSUES;
+
+            case "red":
+                return Status.OFFLINE;
+
+            default:
+                return Status.UNKNOWN;
+        }
     }
 
     public static enum Status {
@@ -104,38 +136,6 @@ public class MojangUtils {
 
         public String getURL() {
             return this.url;
-        }
-    }
-
-    public Status getStatus(MinecraftService service){
-        String status = null;
-        try {
-            URL url = new URL("http://status.mojang.com/check?service=" + service.getURL());
-            BufferedReader input = new BufferedReader(new InputStreamReader(url.openStream()));
-            Object object = new JSONParser().parse(input);
-            JSONObject jsonObject = (JSONObject) object;
-            status = (String) jsonObject.get(service.getURL());
-            input.close();
-        } catch(Exception e) {
-            e.printStackTrace();
-            return Status.UNKNOWN;
-        }
-        return status(status);
-    }
-
-    private Status status(String status) {
-        switch (status.toLowerCase()) {
-            case "green":
-                return Status.ONLINE;
-
-            case "yellow":
-                return Status.ISSUES;
-
-            case "red":
-                return Status.OFFLINE;
-
-            default:
-                return Status.UNKNOWN;
         }
     }
 

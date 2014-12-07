@@ -9,19 +9,19 @@ import java.util.UUID;
 
 public interface IPlayer {
 
-	public PlayerID getInfo();
-	
-	public String getName();
-	
-	public Client getClient();
-	
-	public World getWorld();
-	
-	public Location getLocation();
+    public PlayerID getInfo();
 
-	public Position getRelativePosition();
+    public String getName();
 
-	public UUID getUUID();
-	
-	public void update();
+    public Client getClient();
+
+    public World getWorld();
+
+    public Location getLocation();
+
+    public Position getRelativePosition();
+
+    public UUID getUUID();
+
+    public void update();
 }

@@ -13,69 +13,48 @@ import com.marine.world.World;
 import java.util.UUID;
 
 public class LoginHandler {
-	
-	private final PlayerManager playerManager;
-	
-	private Location spawnLocation;
-	
-	public LoginHandler(PlayerManager playerManager, World w, Position spawnLocation) {
-		this.spawnLocation = new Location(spawnLocation, w);
-	
-		this.playerManager = playerManager;
-	}
-	
-	public class LoginResponse {
-		public final IPlayer player;
-		public final String response;
-		
-		public LoginResponse(IPlayer p) {
-			player = p;
-			response = null;
-		}
-		
-		public LoginResponse(String responseString) {
-			player = null;
-			response = responseString;
-		}
-		
-		public boolean succeed() {
-			return player !=  null;
-		}
-		
-	}
-	
-	private LoginResponse preJoin(String preName, Client c) { // Returns null if login succeded, otherwise makes LoginInterceptor drop the client
-		UUID uuid = UUIDHandler.getUUID(preName); //UUID.randomUUID();
-		String name = UUIDHandler.getName(uuid);
-		
-		
-		if(uuid == null) {
-			uuid = UUID.randomUUID();
-		}
-		
-		if(playerManager.isPlayerOnline(name))
-			return new LoginResponse("Failed to login player is allready connected.");
-		if(playerManager.isPlayerOnline(uuid))
-			return new LoginResponse("Failed to login player is allready connected.");
-		
-		//TODO: Check if player is banned in that case drop them.
-		
-		IPlayer p = new AbstractPlayer(playerManager.getServer(),playerManager.getServer().getWorldManager().getMainWorld(), new PlayerID(name, uuid), c, new PlayerAbilities(false, true, false, 0.2f, 0.2f), spawnLocation);
 
-		c.setUserName(name);
-		
-		return new LoginResponse(p);
-	}
-	
+    private final PlayerManager playerManager;
 
-	public void passPlayer(IPlayer player) { //TODO: Encryption
-		Player p = playerManager.passFromLogin(player);
-		
-		p.getClient().sendPacket(new LoginSucessPacket(p));
-		
-		p.getClient().setState(States.INGAME);
-		
-		playerManager.joinGame(p);
+    private Location spawnLocation;
+
+    public LoginHandler(PlayerManager playerManager, World w, Position spawnLocation) {
+        this.spawnLocation = new Location(spawnLocation, w);
+
+        this.playerManager = playerManager;
+    }
+
+    private LoginResponse preJoin(String preName, Client c) { // Returns null if login succeded, otherwise makes LoginInterceptor drop the client
+        UUID uuid = UUIDHandler.getUUID(preName); //UUID.randomUUID();
+        String name = UUIDHandler.getName(uuid);
+
+
+        if (uuid == null) {
+            uuid = UUID.randomUUID();
+        }
+
+        if (playerManager.isPlayerOnline(name))
+            return new LoginResponse("Failed to login player is allready connected.");
+        if (playerManager.isPlayerOnline(uuid))
+            return new LoginResponse("Failed to login player is allready connected.");
+
+        //TODO: Check if player is banned in that case drop them.
+
+        IPlayer p = new AbstractPlayer(playerManager.getServer(), playerManager.getServer().getWorldManager().getMainWorld(), new PlayerID(name, uuid), c, new PlayerAbilities(false, true, false, 0.2f, 0.2f), spawnLocation);
+
+        c.setUserName(name);
+
+        return new LoginResponse(p);
+    }
+
+    public void passPlayer(IPlayer player) { //TODO: Encryption
+        Player p = playerManager.passFromLogin(player);
+
+        p.getClient().sendPacket(new LoginSucessPacket(p));
+
+        p.getClient().setState(States.INGAME);
+
+        playerManager.joinGame(p);
 
         ChatManagement.getInstance().sendJoinMessage(p);
         //p.getClient().sendPacket(new PlayerListHeaderPacket("&cWelcome to the server", "&6" + player.getName())); //TODO: Custom msg and event :D and togglable
@@ -85,10 +64,29 @@ public class LoginHandler {
         TablistManager.getInstance().joinList(p);
     }
 
+    public LoginResponse login(String name, Client c) {
+        return preJoin(name, c);
+    }
 
-	public LoginResponse login(String name, Client c) {
-		return preJoin(name, c);
-	}
+    public class LoginResponse {
+        public final IPlayer player;
+        public final String response;
+
+        public LoginResponse(IPlayer p) {
+            player = p;
+            response = null;
+        }
+
+        public LoginResponse(String responseString) {
+            player = null;
+            response = responseString;
+        }
+
+        public boolean succeed() {
+            return player != null;
+        }
+
+    }
 
 }
 

@@ -1,11 +1,11 @@
 package com.marine.net.play.serverbound;
 
-import java.io.IOException;
-
 import com.marine.io.data.ByteData;
 import com.marine.net.Packet;
 import com.marine.net.PacketOutputStream;
 import com.marine.net.States;
+
+import java.io.IOException;
 
 /**
  * Created 2014-12-04 for MarineStandalone
@@ -13,6 +13,8 @@ import com.marine.net.States;
  * @author Citymonstret
  */
 public class IncomingChatPacket extends Packet {
+
+    private String msg;
 
     @Override
     public int getID() {
@@ -24,15 +26,13 @@ public class IncomingChatPacket extends Packet {
 
     }
 
-    private String msg;
-    
     @Override
     public void readFromBytes(ByteData input) {
         msg = input.readUTF8();
     }
-    
+
     public String getMessage() {
-    	return msg;
+        return msg;
     }
 
     @Override

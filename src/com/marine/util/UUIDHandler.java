@@ -23,8 +23,9 @@ public class UUIDHandler {
     private final static BiMap<StringWrapper, UUID> uuidMap = HashBiMap.create(new HashMap<StringWrapper, UUID>());
 
     private static UUIDSaver uuidSaver;
+
     protected static UUIDSaver uuidHandler() {
-        if(uuidSaver == null)
+        if (uuidSaver == null)
             uuidSaver = new MarineUUIDSaver();
         return uuidSaver;
     }
@@ -46,6 +47,7 @@ public class UUIDHandler {
             uuidMap.put(name, uuid);
         }
     }
+
     /**
      * @param name to use as key
      * @return uuid
@@ -126,6 +128,7 @@ public class UUIDHandler {
         }
         return "";
     }
+
     /**
      * @param name to use as key
      * @return UUID (name hash)
@@ -135,6 +138,7 @@ public class UUIDHandler {
         add(name, uuid);
         return uuid;
     }
+
     /**
      * @param uuid to use as key
      * @return String - name

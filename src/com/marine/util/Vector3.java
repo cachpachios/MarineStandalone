@@ -18,31 +18,34 @@ public abstract class Vector3<T> {
     }
 
     public abstract void add(Vector3<T> v2);
+
     public abstract void subtract(Vector3<T> v2);
+
     public abstract void multiply(int n);
+
     public abstract void divide(int n);
-
-    public void setX(T x) {
-        this.x = x;
-    }
-
-    public void setY(T y) {
-        this.y = y;
-    }
-
-    public void setZ(T z) {
-        this.z = z;
-    }
 
     public T getX() {
         return this.x;
+    }
+
+    public void setX(T x) {
+        this.x = x;
     }
 
     public T getY() {
         return this.y;
     }
 
+    public void setY(T y) {
+        this.y = y;
+    }
+
     public T getZ() {
         return this.z;
+    }
+
+    public void setZ(T z) {
+        this.z = z;
     }
 }

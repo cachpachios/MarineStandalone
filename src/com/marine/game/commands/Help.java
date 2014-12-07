@@ -15,7 +15,7 @@ import java.util.List;
 public class Help extends Command {
 
     public Help() {
-        super("help", new String[] {"h"}, "Display this help list");
+        super("help", new String[]{"h"}, "Display this help list");
     }
 
     @Override
@@ -23,7 +23,7 @@ public class Help extends Command {
         List<Command> commands = CommandManager.getInstance().getCommands();
         StringBuilder message = new StringBuilder();
         message.append(ChatColor.BLUE).append("§lCommands:");
-        for(Command command : commands) {
+        for (Command command : commands) {
             message.append("\n /").append(command.toString()).append(" §l-§r ").append(command.getDescription());
         }
         sender.sendMessage(message.toString());

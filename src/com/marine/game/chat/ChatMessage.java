@@ -7,16 +7,16 @@ import java.util.Collections;
 import java.util.List;
 
 public class ChatMessage {
-	public List<ChatComponent> components;
-	
-	public ChatMessage() {
-		components = Collections.synchronizedList(new ArrayList<ChatComponent>());
-	}
-	
-	@SuppressWarnings("unchecked")
-	public String toString() {
-		JSONObject obj = new JSONObject();
-		
+    public List<ChatComponent> components;
+
+    public ChatMessage() {
+        components = Collections.synchronizedList(new ArrayList<ChatComponent>());
+    }
+
+    @SuppressWarnings("unchecked")
+    public String toString() {
+        JSONObject obj = new JSONObject();
+
 		/*int i = 0;
 		for(ChatComponent c : components) {
 			i++;	
@@ -24,6 +24,6 @@ public class ChatMessage {
 		}*/
 
 
-		return obj.toJSONString();
-	}
+        return obj.toJSONString();
+    }
 }

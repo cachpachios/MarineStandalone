@@ -14,6 +14,7 @@ public interface UUIDSaver {
      * @throws Exception
      */
     public UUID mojangUUID(final String name) throws Exception;
+
     /**
      * Fetch username from mojang servers
      *

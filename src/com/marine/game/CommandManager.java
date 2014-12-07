@@ -15,11 +15,10 @@ import java.util.Map;
  */
 public class CommandManager {
 
-    // These are already async-optimized
-    private final Map<Command, List<String>> 	commandMap;
-    private final Map<String, Command> 			stringMap;
-
     private static CommandManager instance;
+    // These are already async-optimized
+    private final Map<Command, List<String>> commandMap;
+    private final Map<String, Command> stringMap;
 
     public CommandManager() {
         commandMap = HashBiMap.create();
@@ -27,27 +26,29 @@ public class CommandManager {
     }
 
     public static CommandManager getInstance() {
-        if(instance == null)
+        if (instance == null)
             instance = new CommandManager();
         return instance;
     }
 
     public Command getCommand(String cmd) {
-        if(stringMap.containsKey(cmd))
+        if (stringMap.containsKey(cmd))
             return stringMap.get(cmd);
         return null;
     }
 
     public void registerCommand(Command command) throws RuntimeException {
-    	synchronized(commandMap) { synchronized(stringMap) {
-        if (stringMap.containsKey(command.toString())) {
-            throw new RuntimeException(String.format("Command Name '%s' is already taken", command.toString()));
-        }
-        stringMap.put(command.toString(), command);
-        List<String> s = new ArrayList<>(Arrays.asList(command.getAliases()));
-        s.add(command.toString());
-        commandMap.put(command, s);
-    	}} // Synchornization end.
+        synchronized (commandMap) {
+            synchronized (stringMap) {
+                if (stringMap.containsKey(command.toString())) {
+                    throw new RuntimeException(String.format("Command Name '%s' is already taken", command.toString()));
+                }
+                stringMap.put(command.toString(), command);
+                List<String> s = new ArrayList<>(Arrays.asList(command.getAliases()));
+                s.add(command.toString());
+                commandMap.put(command, s);
+            }
+        } // Synchornization end.
     }
 
     public List<Command> getCommands() {

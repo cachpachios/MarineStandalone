@@ -10,77 +10,74 @@ import java.util.UUID;
 
 /**
  * Abstract Player Class
- *
+ * <p/>
  * Used for communication with the client/login process
  */
 public class AbstractPlayer implements IPlayer {
 
-	private final StandaloneServer s;
-	
-	private final PlayerID id;
-	
-	private PlayerAbilities abilities;
-	
-	private final Client client;
-	
-	private Location location;
-	
-	private World w;
-	
-	public AbstractPlayer(StandaloneServer server, World w, PlayerID id, Client c, PlayerAbilities abilites, Location spawnLocation) {
-		this.s = server;
-		this.w = w;
-		this.client = c;
-		this.location = spawnLocation;
-		this.abilities = abilites;
-		this.id = id;
-	}
-	
-	public String getName() {
-		return id.getName();
-	}
+    private final StandaloneServer s;
 
-	@Override
-	public PlayerID getInfo() {
-		return id;
-	}
+    private final PlayerID id;
+    private final Client client;
+    private PlayerAbilities abilities;
+    private Location location;
 
-	public PlayerAbilities getAbilities() {
-		return abilities;
-	}
-	
-	@Override
-	public Client getClient() {
-		return client;
-	}
+    private World w;
 
-	@Override
-	public UUID getUUID() {
-		return id.getUUID();
-	}
+    public AbstractPlayer(StandaloneServer server, World w, PlayerID id, Client c, PlayerAbilities abilites, Location spawnLocation) {
+        this.s = server;
+        this.w = w;
+        this.client = c;
+        this.location = spawnLocation;
+        this.abilities = abilites;
+        this.id = id;
+    }
 
-	@Override
-	public void update() {
-		if(abilities.needUpdate())
-			client.sendPacket(abilities.getPacket());
-	}
+    public String getName() {
+        return id.getName();
+    }
 
-	@Override
-	public World getWorld() {
-		return w;
-	}
+    @Override
+    public PlayerID getInfo() {
+        return id;
+    }
 
-	@Override
-	public Location getLocation() {
-		return location;
-	}
+    public PlayerAbilities getAbilities() {
+        return abilities;
+    }
 
-	@Override
-	public Position getRelativePosition() {
-		return location.getRelativePosition();
-	}
+    @Override
+    public Client getClient() {
+        return client;
+    }
 
-	public StandaloneServer getServer() {
-		return s;
-	}	
+    @Override
+    public UUID getUUID() {
+        return id.getUUID();
+    }
+
+    @Override
+    public void update() {
+        if (abilities.needUpdate())
+            client.sendPacket(abilities.getPacket());
+    }
+
+    @Override
+    public World getWorld() {
+        return w;
+    }
+
+    @Override
+    public Location getLocation() {
+        return location;
+    }
+
+    @Override
+    public Position getRelativePosition() {
+        return location.getRelativePosition();
+    }
+
+    public StandaloneServer getServer() {
+        return s;
+    }
 }

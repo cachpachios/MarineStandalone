@@ -20,12 +20,12 @@ public class ChatEvent extends MarineEvent implements Cancellable {
         this.cancelled = false;
     }
 
-    public void setMessage(String newMessage) {
-        this.message = newMessage;
-    }
-
     public String getMessage() {
         return this.message;
+    }
+
+    public void setMessage(String newMessage) {
+        this.message = newMessage;
     }
 
     public Player getSender() {

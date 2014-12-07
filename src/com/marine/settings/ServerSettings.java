@@ -17,13 +17,11 @@ import java.util.Properties;
 public class ServerSettings {
 
     private static ServerSettings instance;
-
-    private Properties config;
-
     public int port = 25565;
     public int tickrate = 20;
     public String host = "0.0.0.0";
     public String motd = "&cNo MOTD";
+    private Properties config;
 
     public ServerSettings() {
         try {
@@ -45,14 +43,14 @@ public class ServerSettings {
 
             boolean changed = false;
 
-            for(String string : options.keySet()) {
-                if(!config.containsKey(string)) {
+            for (String string : options.keySet()) {
+                if (!config.containsKey(string)) {
                     config.setProperty(string, options.get(string));
                     changed = true;
                 }
             }
 
-            if(changed)
+            if (changed)
                 config.store(new FileOutputStream(file), null);
 
             this.port = getInt(config.getProperty("port"));
@@ -60,28 +58,28 @@ public class ServerSettings {
             this.motd = config.getProperty("motd");
             this.tickrate = getInt(config.getProperty("tickrate"));
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public int getInt(String value) {
-        try {
-            return Integer.parseInt(value);
-        } catch(Throwable e) {
-            return -1;
-        }
-    }
-
     public static ServerSettings getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new ServerSettings();
         }
         return instance;
     }
 
+    public int getInt(String value) {
+        try {
+            return Integer.parseInt(value);
+        } catch (Throwable e) {
+            return -1;
+        }
+    }
+
     public void verbose() {
-        for(Map.Entry entry : config.entrySet()) {
+        for (Map.Entry entry : config.entrySet()) {
             Logging.getLogger().log("Key: " + entry.getKey() + " | Value: " + entry.getValue());
         }
     }

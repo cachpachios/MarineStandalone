@@ -5,11 +5,14 @@ package com.marine.util;
  *
  * @author Citymonstret
  */
+
 /**
  * @author Empire92
  */
 public class StringWrapper {
+
     public final String value;
+
     /**
      * Constructor
      *
@@ -18,6 +21,7 @@ public class StringWrapper {
     public StringWrapper(final String value) {
         this.value = value;
     }
+
     /**
      * Check if a wrapped string equals another one
      *
@@ -26,18 +30,13 @@ public class StringWrapper {
      */
     @Override
     public boolean equals(final Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final StringWrapper other = (StringWrapper) obj;
-        return other.value.toLowerCase().equals(this.value.toLowerCase());
+        return (this == obj) &&
+                (obj != null) &&
+                (getClass() == obj.getClass()) &&
+                (obj instanceof StringWrapper) &&
+                ((StringWrapper) obj).value.toLowerCase().equals(this.value.toLowerCase());
     }
+
     /**
      * Get the string value
      *
@@ -47,6 +46,7 @@ public class StringWrapper {
     public String toString() {
         return this.value;
     }
+
     /**
      * Get the hash value
      *

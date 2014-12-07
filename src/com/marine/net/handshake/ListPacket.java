@@ -10,7 +10,6 @@ import com.marine.net.States;
 import com.marine.player.Player;
 import com.marine.server.Marine;
 import com.marine.util.ListResponse;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -22,38 +21,39 @@ import java.util.UUID;
 public class ListPacket extends Packet {
 
     private String img;
-	private String getImage() {
+
+    private String getImage() {
         try {
             if (img == null || img.equals("")) {
                 File file = new File("./res/favicon.png");
-                if(file.exists()) {
-                	BinaryFile f = new BinaryFile(file);
-                	f.readBinary();
+                if (file.exists()) {
+                    BinaryFile f = new BinaryFile(file);
+                    f.readBinary();
                     this.img = new String(Base64.getEncoder().encode(f.getData().getBytes()));
                 }
                 return img;
             }
-        } catch(Throwable e) {
+        } catch (Throwable e) {
             e.printStackTrace();
             return "";
         }
         return img;
     }
 
-	@Override
-	public int getID() {
-		return 0x00;
-	}
+    @Override
+    public int getID() {
+        return 0x00;
+    }
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public void writeToStream(PacketOutputStream stream) throws IOException {
+    @SuppressWarnings("unchecked")
+    @Override
+    public void writeToStream(PacketOutputStream stream) throws IOException {
         JSONArray samples = new JSONArray();
         JSONObject player = new JSONObject();
 
-        if(Marine.getServer().getPlayerCount() < 1) {
-        	player.put("id", UUID.fromString("1-1-3-3-7").toString());
-        	player.put("name", "§cThere is nobody online!");
+        if (Marine.getServer().getPlayerCount() < 1) {
+            player.put("id", UUID.fromString("1-1-3-3-7").toString());
+            player.put("name", "§cThere is nobody online!");
         }
         samples.add(player);
 
@@ -63,33 +63,33 @@ public class ListPacket extends Packet {
             player.put("name", p.getName());
             samples.add(player);
         }
-        
+
         ListResponse response = new ListResponse(Marine.getMOTD(), Marine.getPlayers().size(), Marine.getMaxPlayers(), samples, getImage());
         ListEvent event = new ListEvent(response);
 
         Marine.getServer().callEvent(event);
 
         ByteData data = new ByteData();
-		
-		data.writeUTF8(encode(event.getResponse()));
 
-		stream.write(getID(), data.getBytes());
-	}
+        data.writeUTF8(encode(event.getResponse()));
 
-	@Override
-	public void readFromBytes(ByteData input)  {
-		
-	}
+        stream.write(getID(), data.getBytes());
+    }
 
-	@Override
-	public States getPacketState() {
-		return States.INTRODUCE;
-	}
-	
-	
-	@SuppressWarnings("unchecked")
-	public String encode(ListResponse response) {
-		JSONObject json = new JSONObject();
+    @Override
+    public void readFromBytes(ByteData input) {
+
+    }
+
+    @Override
+    public States getPacketState() {
+        return States.INTRODUCE;
+    }
+
+
+    @SuppressWarnings("unchecked")
+    public String encode(ListResponse response) {
+        JSONObject json = new JSONObject();
 
         JSONObject version = new JSONObject();
         version.put("name", ServerProperties.MINECRAFT_NAME);
@@ -108,11 +108,11 @@ public class ListPacket extends Packet {
         description.put("text", response.MOTD);
         json.put("description", description);
 
-        if(response.FAVICON != null && response.FAVICON.length() > 0)
+        if (response.FAVICON != null && response.FAVICON.length() > 0)
             json.put("favicon", "data:image/png;base64," + response.FAVICON);
 
-		return json.toJSONString();
-		
-	}
+        return json.toJSONString();
+
+    }
 }
 

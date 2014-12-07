@@ -10,40 +10,40 @@ public abstract class Inventory {
 
     private final byte uid;
 
-	public PacketWrapper<Item>[] slots;
-	
-	public Inventory(int size, byte uid) {
+    public PacketWrapper<Item>[] slots;
+
+    public Inventory(int size, byte uid) {
         this.uid = uid;
         this.slots = new ItemSlot[size];
-	}
+    }
 
     public byte getUID() {
         return this.uid;
     }
 
-	public abstract byte getID();
-	
-	public abstract String getType();
-	
-	public PacketWrapper<Item>[] getSlots() {
-		return slots;
-	}
-	
-	public ItemSlot getSlot(int id) {
-		return (ItemSlot) slots[id];
-	}
-	
-	public void setSlot(int id, Item data) {
-		slots[id] = new ItemSlot(data);
-	}
-	
-	public void clear() {
-		for(int i = 0; i < slots.length;i++)
-			slots[i] = new ItemSlot(new Item(ItemID.EMPTY));
-	}
-	
-	public abstract ChatComponent getTitle();
-	
-	public abstract byte getNumberOfSlots();
-	
+    public abstract byte getID();
+
+    public abstract String getType();
+
+    public PacketWrapper<Item>[] getSlots() {
+        return slots;
+    }
+
+    public ItemSlot getSlot(int id) {
+        return (ItemSlot) slots[id];
+    }
+
+    public void setSlot(int id, Item data) {
+        slots[id] = new ItemSlot(data);
+    }
+
+    public void clear() {
+        for (int i = 0; i < slots.length; i++)
+            slots[i] = new ItemSlot(new Item(ItemID.EMPTY));
+    }
+
+    public abstract ChatComponent getTitle();
+
+    public abstract byte getNumberOfSlots();
+
 }

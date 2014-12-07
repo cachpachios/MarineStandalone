@@ -44,52 +44,52 @@ public class Item {
         return lore;
     }
 
+    public void setLore(String... lore) {
+        this.lore = Arrays.asList(lore);
+    }
+
     public short getDamage() {
         return damage;
-    }
-
-    public byte getData() {
-        return data;
-    }
-
-    public int getAmount() {
-        return amount;
-    }
-
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    public void setLore(List<String> lore) {
-        if(lore == null) {
-            setLore();
-        } else {
-            this.lore = lore;
-        }
-    }
-
-    public void setLore(String ... lore) {
-        this.lore = Arrays.asList(lore);
     }
 
     public void setDamage(short damage) {
         this.damage = damage;
     }
 
+    public byte getData() {
+        return data;
+    }
+
     public void setData(byte data) {
         this.data = data;
     }
 
+    public int getAmount() {
+        return amount;
+    }
+
     public void setAmount(int amount) {
-        if(amount < 0) amount = 1;
+        if (amount < 0) amount = 1;
         this.amount = amount;
     }
 
+    public String getDisplayName() {
+        return displayName;
+    }
+
     public void setDisplayName(String displayName) {
-        if(displayName.equals("")) {
+        if (displayName.equals("")) {
             displayName = ChatColor.WHITE.toString();
         }
         this.displayName = displayName;
+    }
+
+    public void setLore(List<String> lore) {
+        if (lore == null) {
+            setLore();
+        } else {
+            this.lore = lore;
+        }
     }
 
     public boolean canTakeDamage() {
@@ -98,10 +98,11 @@ public class Item {
 
     /**
      * Get either the friendly name or the block name
+     *
      * @return Name
      */
     public String getFriendlyName() {
-        if(isItem()) {
+        if (isItem()) {
             return ((ItemID) id).getFriendlyName();
         } else {
             return ((BlockID) id).getName();
