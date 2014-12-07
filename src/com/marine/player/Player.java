@@ -1,5 +1,10 @@
 package com.marine.player;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
+
 import com.marine.Logging;
 import com.marine.game.CommandManager;
 import com.marine.game.PlayerManager;
@@ -10,7 +15,11 @@ import com.marine.game.command.CommandSender;
 import com.marine.game.inventory.Inventory;
 import com.marine.game.inventory.PlayerInventory;
 import com.marine.net.Client;
-import com.marine.net.play.clientbound.*;
+import com.marine.net.play.clientbound.ChatPacket;
+import com.marine.net.play.clientbound.ClientboundPlayerLookPositionPacket;
+import com.marine.net.play.clientbound.ExperiencePacket;
+import com.marine.net.play.clientbound.MapChunkPacket;
+import com.marine.net.play.clientbound.SpawnPointPacket;
 import com.marine.net.play.clientbound.inv.InventoryContentPacket;
 import com.marine.net.play.clientbound.inv.InventoryOpenPacket;
 import com.marine.util.Location;
@@ -19,11 +28,6 @@ import com.marine.util.StringUtils;
 import com.marine.world.World;
 import com.marine.world.chunk.Chunk;
 import com.marine.world.entity.Entity;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
 
 public class Player extends Entity implements IPlayer, CommandSender {
 
@@ -37,11 +41,11 @@ public class Player extends Entity implements IPlayer, CommandSender {
     private Gamemode gamemode;
     private boolean gamemodeUpdate; //Keep tracks if gamemode have been change without the client getting the info
     private Client connection;
-    private PlayerAbilities abilites;
+    private PlayerAbilites abilites;
     private String displayName;
     private PlayerFile playerFile;
 
-    public Player(PlayerManager manager, Client connection, PlayerID id, PlayerInventory inventory, int entityID, World world, Location pos, PlayerAbilities abilites, Gamemode gamemode) {
+    public Player(PlayerManager manager, Client connection, PlayerID id, PlayerInventory inventory, int entityID, World world, Location pos, PlayerAbilites abilites, Gamemode gamemode) {
         super(entityID, world, pos);
         this.inventory = inventory;
         this.manager = manager;
@@ -254,7 +258,7 @@ public class Player extends Entity implements IPlayer, CommandSender {
         return manager;
     }
 
-    public PlayerAbilities getAbilities() {
+    public PlayerAbilites getAbilities() {
         return abilites;
     }
 
@@ -263,7 +267,7 @@ public class Player extends Entity implements IPlayer, CommandSender {
     }
 
     public void sendAbilites() {
-        this.getClient().sendPacket(new PlayerAbilitiesPacket(abilites));
+        this.getClient().sendPacket(abilites.getPacket());
     }
 
     public void sendCompassTarget(Position pos) {

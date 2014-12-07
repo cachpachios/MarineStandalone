@@ -6,13 +6,13 @@ import com.marine.io.data.ByteData;
 import com.marine.net.Packet;
 import com.marine.net.PacketOutputStream;
 import com.marine.net.States;
-import com.marine.player.PlayerAbilities;
+import com.marine.player.PlayerAbilites;
 
 public class PlayerAbilitesPacket extends Packet {
 
-	final PlayerAbilities abilites;
+	final PlayerAbilites abilites;
 	
-	public PlayerAbilitesPacket(PlayerAbilities abilites) {
+	public PlayerAbilitesPacket(PlayerAbilites abilites) {
 		this.abilites = abilites;
 	}
 	
@@ -25,7 +25,6 @@ public class PlayerAbilitesPacket extends Packet {
 	public void writeToStream(PacketOutputStream stream) throws IOException {
 		ByteData d = new ByteData();
 
-        @SuppressWarnings("unused")
 		byte flags = (byte) ((abilites.isInCreativeMode() ? 8 : 0) | (abilites.canFly() ? 4 : 0) | (abilites.isFlying() ? 2 : 0) | (abilites.isInCreativeMode() ? 1 : 0));		
 		d.writeByte(flags);
 		d.writeFloat(abilites.getFlySpeed());
