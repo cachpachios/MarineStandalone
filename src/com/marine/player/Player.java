@@ -159,19 +159,19 @@ public class Player extends Entity implements IPlayer, CommandSender {
         if (c == null) {
             sendMessage("There is no such command");
         } else {
-            String args = StringUtils.join(Arrays.asList(arguments), " ");
-            args = args.substring(0, args.length() - 1);
-            Logging.getLogger().log(
-                    String.format("%s executed command: %s",
-                            getName(), command + " " + args)
-            );
-            c.execute(this, arguments);
+            this.executeCommand(c, arguments);
         }
     }
 
     @Override
     public void executeCommand(Command command, String[] arguments) {
-
+        String args = StringUtils.join(Arrays.asList(arguments), " ");
+        args = args.substring(0, args.length() - 1);
+        Logging.getLogger().log(
+                String.format("%s executed command: %s",
+                        getName(), command + " " + args)
+        );
+        command.execute(this, arguments);
     }
 
     public void openInventory(final Inventory inventory) {
