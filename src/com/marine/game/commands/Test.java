@@ -21,7 +21,7 @@ import java.util.Arrays;
 public class Test extends Command {
 
     final String[] acceptableArguments = new String[] {
-            "inventory", "kick", "tab", "anvil", "crafting", "credits", "display_name"
+            "inventory", "kick", "tab", "anvil", "crafting", "credits", "display_name", "exp"
     };
 
     public Test() {
@@ -64,6 +64,10 @@ public class Test extends Command {
                     player.setDisplayName(player.getName());
                     TablistManager.getInstance().setDisplayName(player);
                 }
+                break;
+            case "exp":
+                player.setExp((float) Math.random());
+                player.setLevels((int)(Math.ceil(Math.random() * 255)));
                 break;
             case "tab":
                 if(arguments.length < 3) {
