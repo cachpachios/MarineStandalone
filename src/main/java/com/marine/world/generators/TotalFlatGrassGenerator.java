@@ -17,7 +17,7 @@ public final class TotalFlatGrassGenerator extends WorldGenerator {
 
         for (int xx = 0; xx < 16; xx++)
             for (int zz = 0; zz < 16; zz++) {
-                r.setBlock(xx, 0, zz, BlockID.GRASS);
+                r.setBlock(xx, 0, zz, BlockID.BEDROCK);
             }
 
 

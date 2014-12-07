@@ -6,11 +6,11 @@ import com.marine.world.BlockID;
 public class ChunkSection {
     private int sectionID;
 
-    private byte[][][] blockMap;
+    private short[][][] blockMap;
 
     public ChunkSection(int y) {
         this.sectionID = y;
-        this.blockMap = new byte[16][16][16];
+        this.blockMap = new short[16][16][16];
     }
 
     public ByteData getData(boolean skyLight) {
@@ -19,8 +19,7 @@ public class ChunkSection {
         for (int y = 0; y < 16; y++)
             for (int z = 0; z < 16; z++)
                 for (int x = 0; x < 16; x++) {
-                    data.writeend(blockMap[x][y][z]);
-                    data.writeend((byte)1);
+                    data.writeShort(getBlockID(x,y,z));
                     if (skyLight)
                         data.writeend((byte) -1);
                     else if ((i & 2) == 0)
@@ -33,20 +32,15 @@ public class ChunkSection {
     }
 
     public void setBlock(int x, int y, int z, BlockID id) {
-        blockMap[x][y][z] = id.getID();
+        blockMap[x][y][z] = id.getNumericID();
     }
 
-    public byte getBlockID(int x, int y, int z) {
-        if (x > 16 || x < 0) return 0;
-        if (y > 16 || y < 0) return 0;
-        if (z > 16 || z < 0) return 0;
-
-
+    public short getBlockID(int x, int y, int z) {
         return blockMap[x][y][z];
     }
 
     public BlockID getBlock(int x, int y, int z) {
-        return BlockID.AIR;
+        return BlockID.BEDROCK;
     }
 
     public int getID() {
