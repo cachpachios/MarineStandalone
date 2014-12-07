@@ -50,6 +50,8 @@ public class Player extends Entity implements IPlayer, CommandSender {
 
     public float exp = 0f;
 
+    private PlayerFile playerFile;
+
 	public Player(PlayerManager manager, Client connection, PlayerID id, PlayerInventory inventory, int entityID, World world, Location pos, PlayerAbilities abilites, Gamemode gamemode) {
 		super(entityID, world, pos);
 		this.inventory = inventory;
@@ -61,6 +63,11 @@ public class Player extends Entity implements IPlayer, CommandSender {
 		this.gamemodeUpdate = false;
         this.permissions = new ArrayList<>();
         this.displayName = id.name;
+        try {
+            this.playerFile = new PlayerFile(this);
+        } catch(Exception e) {
+            Logging.getLogger().error("Could not load/create player data file for: " + getName());
+        }
     }
 
 	public Player(AbstractPlayer player, Gamemode gm) {
