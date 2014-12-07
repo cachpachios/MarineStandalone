@@ -12,7 +12,7 @@ import com.marine.game.command.CommandSender;
 public class Info extends Command {
 
     public Info() {
-        super("info", new String[] { "version", "i" }, "Display server info");
+        super("info", new String[]{"version", "i"}, "Display server info");
     }
 
     @Override

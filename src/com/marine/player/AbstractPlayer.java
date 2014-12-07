@@ -1,80 +1,83 @@
 package com.marine.player;
 
-import java.util.UUID;
-
 import com.marine.StandaloneServer;
 import com.marine.net.Client;
 import com.marine.util.Location;
 import com.marine.util.Position;
 import com.marine.world.World;
 
-public class AbstractPlayer implements IPlayer{ // Used for communication with client/login process
-	private final StandaloneServer s;
-	
-	private PlayerID id;
-	
-	private PlayerAbilities abilites;
-	
-	private Client client;
-	
-	private Location location;
-	
-	private World w;
-	
-	public AbstractPlayer(StandaloneServer server, World w, PlayerID id, Client c, PlayerAbilities abilites, Location spawnLocation) {
-		this.s = server;
-		this.w = w;
-		this.client = c;
-		this.location = spawnLocation;
-		this.abilites = abilites;
-		this.id = id;
-	}
-	
-	public String getName() {
-		return id.getName();
-	}
+import java.util.UUID;
 
-	@Override
-	public PlayerID getInfo() {
-		return id;
-	}
+/**
+ * Abstract Player Class
+ * <p/>
+ * Used for communication with the client/login process
+ */
+public class AbstractPlayer implements IPlayer {
 
-	public PlayerAbilities getAbilites() {
-		return abilites;
-	}
-	
-	@Override
-	public Client getClient() {
-		return client;
-	}
+    private final StandaloneServer s;
 
-	@Override
-	public UUID getUUID() {
-		return id.getUUID();
-	}
+    private final PlayerID id;
+    private final Client client;
+    private PlayerAbilities abilities;
+    private Location location;
 
-	@Override
-	public void update() {
-		if(abilites.needUpdate())
-			client.sendPacket(abilites.getPacket());
-	}
+    private World w;
 
-	@Override
-	public World getWorld() {
-		return w;
-	}
+    public AbstractPlayer(StandaloneServer server, World w, PlayerID id, Client c, PlayerAbilities abilites, Location spawnLocation) {
+        this.s = server;
+        this.w = w;
+        this.client = c;
+        this.location = spawnLocation;
+        this.abilities = abilites;
+        this.id = id;
+    }
 
-	@Override
-	public Location getLocation() {
-		return location;
-	}
+    public String getName() {
+        return id.getName();
+    }
 
-	@Override
-	public Position getRealtivePosition() {
-		return location.getRelativePosition();
-	}
+    @Override
+    public PlayerID getInfo() {
+        return id;
+    }
 
-	public StandaloneServer getServer() {
-		return s;
-	}	
+    public PlayerAbilities getAbilities() {
+        return abilities;
+    }
+
+    @Override
+    public Client getClient() {
+        return client;
+    }
+
+    @Override
+    public UUID getUUID() {
+        return id.getUUID();
+    }
+
+    @Override
+    public void update() {
+        if (abilities.needUpdate())
+            client.sendPacket(abilities.getPacket());
+    }
+
+    @Override
+    public World getWorld() {
+        return w;
+    }
+
+    @Override
+    public Location getLocation() {
+        return location;
+    }
+
+    @Override
+    public Position getRelativePosition() {
+        return location.getRelativePosition();
+    }
+
+    public StandaloneServer getServer() {
+        return s;
+    }
 }

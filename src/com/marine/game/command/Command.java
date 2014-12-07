@@ -40,7 +40,7 @@ public abstract class Command {
 
     public String[] replaceAll(String[] args, CommandSender sender) {
         String[] returner = new String[args.length];
-        for(int x = 0; x < args.length; x++) {
+        for (int x = 0; x < args.length; x++) {
             returner[x] = args[x];
             returner[x] = returner[x].replace("@p", getClosestPlayer(sender).getName());
             returner[x] = returner[x].replace("@a", getAllPlayers());
@@ -50,7 +50,7 @@ public abstract class Command {
     }
 
     public Entity getClosestEntity(CommandSender sender) {
-        if(sender instanceof Player) return (Entity) sender;
+        if (sender instanceof Player) return (Entity) sender;
         return null;
     }
 
@@ -58,12 +58,12 @@ public abstract class Command {
         List<Player> players = Marine.getPlayers();
         StringBuilder s = new StringBuilder();
         Player lastPlayer;
-        if(players.size() > 1)
+        if (players.size() > 1)
             lastPlayer = players.get(players.size() - 2);
         else
             lastPlayer = null;
-        for(Player player : players) {
-            if(lastPlayer != null && player == lastPlayer)
+        for (Player player : players) {
+            if (lastPlayer != null && player == lastPlayer)
                 s.append(player.getName()).append(" and ");
             else
                 s.append(player.getName()).append(", ");
@@ -72,7 +72,7 @@ public abstract class Command {
     }
 
     public Player getClosestPlayer(CommandSender sender) {
-        if(sender instanceof Player) return (Player) sender;
+        if (sender instanceof Player) return (Player) sender;
         else return null;
     }
 }

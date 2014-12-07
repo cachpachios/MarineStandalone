@@ -3,8 +3,8 @@ package com.marine.util;
 public class Vector3d extends Vector3<Double> {
 
     public Vector3d() {
-		super(0d, 0d, 0d);
-	}
+        super(0d, 0d, 0d);
+    }
 
     public Vector3d(int x, int y, int z) {
         super((double) x, (double) y, (double) z);
@@ -14,17 +14,17 @@ public class Vector3d extends Vector3<Double> {
         super(x, y, z);
     }
 
-	public Vector3d(double t) {
-		super(t, t, t);
-	}
+    public Vector3d(double t) {
+        super(t, t, t);
+    }
 
-	public double getLength() {
-		return Math.sqrt(getX() * getX() + getY() * getY() + getZ() * getZ());
-	}
-	
-	public Vector3i toIntVector() {
-		return new Vector3i(getX().intValue(),getY().intValue(), getZ().intValue());
-	}
+    public double getLength() {
+        return Math.sqrt(getX() * getX() + getY() * getY() + getZ() * getZ());
+    }
+
+    public Vector3i toIntVector() {
+        return new Vector3i(getX().intValue(), getY().intValue(), getZ().intValue());
+    }
 
     @Override
     public void add(Vector3<Double> v2) {

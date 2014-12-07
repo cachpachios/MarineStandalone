@@ -13,7 +13,7 @@ public class TestListener implements Listener {
 
     @Subscribe
     public void onChat(ChatEvent event) {
-        if(!event.isCancelled()) {
+        if (!event.isCancelled()) {
             event.setMessage(
                     ChatColor.transform('&', event.getMessage())
             );

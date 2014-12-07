@@ -20,10 +20,6 @@ public class Marine {
     protected static MarineServer server;
     protected static StandaloneServer standaloneServer;
 
-    public static void setServer(MarineServer marine) {
-        server = marine;
-    }
-
     public static List<Player> getPlayers() {
         return server.getPlayers();
     }
@@ -40,16 +36,20 @@ public class Marine {
         return server.getWorld(name);
     }
 
-	public static String getMOTD() {
-		return server.getMOTD();
-	}
+    public static String getMOTD() {
+        return server.getMOTD();
+    }
 
     public static MarineServer getServer() {
         return server;
     }
 
+    public static void setServer(MarineServer marine) {
+        server = marine;
+    }
+
     public static void stop() {
-        for(Player player : getPlayers()) {
+        for (Player player : getPlayers()) {
             player.getClient().sendPacket(new KickPacket(ChatColor.RED + "" + ChatColor.BOLD + "Server stopped"));
         }
         standaloneServer.stop();
@@ -64,7 +64,7 @@ public class Marine {
     }
 
     public static void broadcastMessage(String string) {
-        for(Player player : getPlayers()) {
+        for (Player player : getPlayers()) {
             player.sendMessage(string);
         }
         Logging.getLogger().log(string);

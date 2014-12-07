@@ -4,38 +4,45 @@ import com.marine.io.data.ByteData;
 import com.marine.net.Packet;
 import com.marine.net.PacketOutputStream;
 import com.marine.net.States;
-import com.marine.util.Position;
+import com.marine.player.PlayerAbilities;
 
 import java.io.IOException;
 
-public class SpawnPointPacket extends Packet { // Only used to make the client know where the compass should point
+public class PlayerAbilitiesPacket extends Packet {
 
-    final Position spawnPoint;
+    final PlayerAbilities abilites;
 
-    public SpawnPointPacket(Position spawnPoint) {
-        this.spawnPoint = spawnPoint;
+    public PlayerAbilitiesPacket(PlayerAbilities abilites) {
+        this.abilites = abilites;
     }
 
     @Override
     public int getID() {
-        return 0x05;
+        return 0x39;
     }
 
     @Override
     public void writeToStream(PacketOutputStream stream) throws IOException {
         ByteData d = new ByteData();
-        d.writePosition(spawnPoint);
-        d.writePacketPrefix();
+
+        @SuppressWarnings("unused")
+        byte flags = (byte) ((abilites.isInCreativeMode() ? 8 : 0) | (abilites.canFly() ? 4 : 0) | (false ? 2 : 0) | (abilites.isInCreativeMode() ? 1 : 0));
+        d.writeByte(flags);
+        d.writeFloat(abilites.getFlySpeed());
+        d.writeFloat(abilites.getWalkSpeed());
 
         stream.write(getID(), d.getBytes());
+
+
     }
 
     @Override
     public void readFromBytes(ByteData input) {
-    } // Clientbound only
+    }// Clientbound only
 
     @Override
     public States getPacketState() {
         return States.INGAME;
     }
+
 }

@@ -9,9 +9,16 @@ import java.util.Collection;
  */
 public class StringUtils {
 
+    /**
+     * Join a collection as a string
+     *
+     * @param e Collection to join
+     * @param s Separator String
+     * @return E.cont#toString separated by s
+     */
     public static String join(Collection e, String s) {
         StringBuilder builder = new StringBuilder();
-        for(Object o : e) {
+        for (Object o : e) {
             builder.append(o).append(s);
         }
         String r = builder.toString();

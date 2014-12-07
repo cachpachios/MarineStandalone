@@ -31,7 +31,7 @@ public class GameStateChangePacket extends Packet {
     public void writeToStream(PacketOutputStream stream) throws IOException {
         ByteData data = new ByteData();
         data.writeByte((byte) reason.ordinal());
-        if(value > -1f)
+        if (value > -1f)
             data.writeFloat(value);
         stream.write(getID(), data.getBytes());
     }

@@ -1,7 +1,5 @@
 package com.marine.net.play.clientbound;
 
-import java.io.IOException;
-
 import com.marine.io.data.ByteData;
 import com.marine.net.Packet;
 import com.marine.net.PacketOutputStream;
@@ -10,7 +8,10 @@ import com.marine.util.Position;
 import com.marine.world.Block;
 import com.marine.world.BlockID;
 
+import java.io.IOException;
+
 public class BlockChangePacket extends Packet {
+<<<<<<< HEAD
 	public Position pos;
 	public int newBlock;
 	
@@ -54,4 +55,42 @@ public class BlockChangePacket extends Packet {
 		return States.INGAME;
 	}
 	
+=======
+    public Position pos;
+    public Block newBlock;
+
+    public BlockChangePacket(Position pos, Block toBlock) {
+        this.pos = pos;
+        this.newBlock = toBlock;
+    }
+
+    @Override
+    public int getID() {
+        return 0x23;
+    }
+
+    @Override
+    public void writeToStream(PacketOutputStream stream) throws IOException {
+
+        ByteData data = new ByteData();
+
+        data.writeVarInt(newBlock.toPacketBlock());
+        data.writeLong(pos.encode());
+
+
+        stream.write(getID(), data.getBytes());
+
+    }
+
+    @Override
+    public void readFromBytes(ByteData input) {
+        // Serversent packet :)
+    }
+
+    @Override
+    public States getPacketState() {
+        return States.INGAME;
+    }
+
+>>>>>>> origin/master
 }

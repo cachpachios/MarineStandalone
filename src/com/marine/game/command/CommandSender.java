@@ -9,10 +9,14 @@ import com.marine.util.Location;
  *
  * @author Citymonstret
  */
-public interface CommandSender extends ChatReciver{
+public interface CommandSender extends ChatReciver {
     public void executeCommand(String command);
+
     public void executeCommand(String command, String[] arguments);
+
     public void executeCommand(Command command, String[] arguments);
+
     public Location getLocation();
+
     public boolean hasPermission(String permission);
 }

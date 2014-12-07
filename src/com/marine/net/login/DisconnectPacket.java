@@ -1,7 +1,5 @@
 package com.marine.net.login;
 
-import java.io.IOException;
-
 import com.marine.game.chat.ChatColor;
 import com.marine.game.chat.ChatComponent;
 import com.marine.io.data.ByteData;
@@ -9,36 +7,38 @@ import com.marine.net.Packet;
 import com.marine.net.PacketOutputStream;
 import com.marine.net.States;
 
+import java.io.IOException;
+
 public class DisconnectPacket extends Packet {
 
-	String msg;
-	
-	public DisconnectPacket(String msg) {
-		this.msg = msg;
-	}
-	
-	@Override
-	public int getID() {
-		return 0x00;
-	}
+    String msg;
 
-	@Override
-	public void writeToStream(PacketOutputStream stream) throws IOException {
-		ByteData data = new ByteData();
-		data.writeUTF8(new ChatComponent(msg,true,true,false,false, ChatColor.randomColor()).toString());
+    public DisconnectPacket(String msg) {
+        this.msg = msg;
+    }
 
-		stream.write(getID(), data.getBytes());
-	}
+    @Override
+    public int getID() {
+        return 0x00;
+    }
 
-	@Override
-	public void readFromBytes(ByteData input) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void writeToStream(PacketOutputStream stream) throws IOException {
+        ByteData data = new ByteData();
+        data.writeUTF8(new ChatComponent(msg, true, true, false, false, ChatColor.randomColor()).toString());
 
-	@Override
-	public States getPacketState() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+        stream.write(getID(), data.getBytes());
+    }
+
+    @Override
+    public void readFromBytes(ByteData input) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public States getPacketState() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

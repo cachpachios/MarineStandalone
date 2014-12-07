@@ -12,7 +12,7 @@ import com.marine.server.Marine;
 public class Stop extends Command {
 
     public Stop() {
-        super("stop", new String[] {}, "Stop the server");
+        super("stop", new String[]{}, "Stop the server");
     }
 
     @Override

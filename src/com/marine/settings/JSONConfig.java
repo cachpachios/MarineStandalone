@@ -15,25 +15,25 @@ import java.util.Set;
  */
 public class JSONConfig {
 
+    public final JSONObject map;
     private final File path, file;
     private final String name;
-    public final JSONObject map;
 
     public JSONConfig(File path, String name) {
         this.path = path;
         this.name = name;
-        if(!path.exists()) {
-            if(!path.mkdirs()) {
+        if (!path.exists()) {
+            if (!path.mkdirs()) {
                 throw new RuntimeException("Could not create parent folders for " + name + ".json");
             }
         }
         this.file = new File(path + File.separator + name + ".json");
-        if(!file.exists()) {
+        if (!file.exists()) {
             try {
-                if(!file.createNewFile()) {
+                if (!file.createNewFile()) {
                     throw new RuntimeException("Could not create " + name + ".json");
                 }
-            } catch(IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -45,7 +45,7 @@ public class JSONConfig {
             BufferedWriter writer = new BufferedWriter(new FileWriter(file));
             map.write(writer);
             writer.close();
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -54,12 +54,12 @@ public class JSONConfig {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(file));
             org.json.simple.JSONObject object = (org.json.simple.JSONObject) new JSONParser().parse(reader);
-            for(Map.Entry me : (Set<Map.Entry>) object.entrySet()) {
+            for (Map.Entry me : (Set<Map.Entry>) object.entrySet()) {
                 object.put(me.getKey(), me.getValue());
             }
             reader.close();
-        } catch(ParseException | IOException e) {
-            if(!(e instanceof ParseException)) e.printStackTrace();
+        } catch (ParseException | IOException e) {
+            if (!(e instanceof ParseException)) e.printStackTrace();
         }
     }
 

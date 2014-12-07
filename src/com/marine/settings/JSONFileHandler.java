@@ -2,8 +2,8 @@ package com.marine.settings;
 
 import com.marine.StandaloneServer;
 import com.marine.util.UUIDHandler;
-import org.json.JSONObject;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.File;
 
@@ -54,7 +54,7 @@ public class JSONFileHandler {
                 object.put("banned-players", defaultValues);
             }
             if (object.isNull("banned-ips")) {
-                object.put("banned-ips", new JSONArray(new String[] { "127.0.0.1" } ));
+                object.put("banned-ips", new JSONArray(new String[]{"127.0.0.1"}));
             }
         }
         // Whitelist

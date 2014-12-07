@@ -10,38 +10,38 @@ import com.marine.net.login.LoginPacket;
 
 public class LoginInterceptor implements PacketInterceptor {
 
-	final StandaloneServer server;
-	
-	public LoginInterceptor(StandaloneServer server) {
-		this.server = server;	
-	}
-	
-	@Override
-	public boolean intercept(ByteData data, Client c) {
-		int ID = data.readVarInt();
-		if(ID == 0x00) {
-			LoginPacket packet = new LoginPacket();
-			packet.readFromBytes(data);
-			
-			Logging.instance().info("Player: " + packet.name + " connected.");
-			
-			LoginHandler.LoginResponse loginReturn = server.getPlayerManager().getLoginManager().login(packet.name, c);
-			if(!loginReturn.succeed()) {
-				DisconnectPacket nopePacket = new DisconnectPacket(loginReturn.response);
-				c.sendPacket(nopePacket);
-				server.getNetwork().cleanUp(c);
-				return true;
-			}
+    final StandaloneServer server;
+
+    public LoginInterceptor(StandaloneServer server) {
+        this.server = server;
+    }
+
+    @Override
+    public boolean intercept(ByteData data, Client c) {
+        int ID = data.readVarInt();
+        if (ID == 0x00) {
+            LoginPacket packet = new LoginPacket();
+            packet.readFromBytes(data);
+
+            Logging.instance().info("Player: " + packet.name + " connected.");
+
+            LoginHandler.LoginResponse loginReturn = server.getPlayerManager().getLoginManager().login(packet.name, c);
+            if (!loginReturn.succeed()) {
+                DisconnectPacket nopePacket = new DisconnectPacket(loginReturn.response);
+                c.sendPacket(nopePacket);
+                server.getNetwork().cleanUp(c);
+                return true;
+            }
 
             //TODO: Fix this
-			server.getPlayerManager().getLoginManager().passPlayer(loginReturn.player);
-			
-			return true;
-		}
-		
-		//TODO: Encryption Packets
-		
-		return false;
-	}
+            server.getPlayerManager().getLoginManager().passPlayer(loginReturn.player);
+
+            return true;
+        }
+
+        //TODO: Encryption Packets
+
+        return false;
+    }
 
 }

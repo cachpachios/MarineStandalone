@@ -6,15 +6,14 @@ import com.marine.server.Marine;
 
 public class ChatManagement {
 
+    public static String CHAT_FORMAT = "<%plr> %msg",
+            JOIN_MESSAGE = "%plr joined the game",
+            LEAVE_MESSAGE = "%plr left the game",
+            WELCOME_MESSAGE = "Welcome online §l%plr";
     private static ChatManagement instance;
 
-    public static String CHAT_FORMAT = "<%plr> %msg",
-                         JOIN_MESSAGE = "%plr joined the game",
-                         LEAVE_MESSAGE = "%plr left the game",
-                         WELCOME_MESSAGE = "Welcome online §l%plr";
-
     public static ChatManagement getInstance() {
-        if(instance == null) instance = new ChatManagement();
+        if (instance == null) instance = new ChatManagement();
         return instance;
     }
 
@@ -27,11 +26,11 @@ public class ChatManagement {
         Marine.broadcastMessage(translate(LEAVE_MESSAGE, player));
     }
 
-    private String translate(String s, Object ... strs) {
-        for(Object object : strs) {
-            if(object instanceof Player) {
+    private String translate(String s, Object... strs) {
+        for (Object object : strs) {
+            if (object instanceof Player) {
                 s = s.replace("%plr", ((Player) object).getDisplayName());
-            } else if(object instanceof String) {
+            } else if (object instanceof String) {
                 s = s.replace("%msg", object.toString());
             }
         }
@@ -41,9 +40,9 @@ public class ChatManagement {
     public void sendChatMessage(Player player, String message) {
         ChatEvent event = new ChatEvent(player, message);
         Marine.getServer().callEvent(event);
-        if(!event.isCancelled()) {
+        if (!event.isCancelled()) {
             Marine.broadcastMessage(
-                translate(CHAT_FORMAT, player, event.getMessage())
+                    translate(CHAT_FORMAT, player, event.getMessage())
             );
         }
     }

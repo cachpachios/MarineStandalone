@@ -20,23 +20,23 @@ import java.util.Arrays;
  */
 public class Test extends Command {
 
-    final String[] acceptableArguments = new String[] {
+    final String[] acceptableArguments = new String[]{
             "inventory", "kick", "tab", "anvil", "crafting", "credits", "display_name", "exp"
     };
 
     public Test() {
-        super("test", new String[] { "debug" }, "Debug");
+        super("test", new String[]{"debug"}, "Debug");
     }
 
 
     @Override
     public void execute(CommandSender sender, String[] arguments) {
         String test;
-        if(!(sender instanceof Player)) {
+        if (!(sender instanceof Player)) {
             sender.sendMessage("§cThis command can only be used by players");
             return;
         }
-        if(arguments == null || arguments.length < 1 || !Arrays.asList(acceptableArguments).contains(arguments[0])) {
+        if (arguments == null || arguments.length < 1 || !Arrays.asList(acceptableArguments).contains(arguments[0])) {
             sender.sendMessage("§c[§6*§c] §6Unknown test type, acceptable types§c: §6"
                     + StringUtils.join(Arrays.asList(acceptableArguments), "§c, §6"));
             return;
@@ -57,7 +57,7 @@ public class Test extends Command {
                 player.openInventory(new CraftingInventory());
                 break;
             case "display_name":
-                if(arguments.length > 1) {
+                if (arguments.length > 1) {
                     player.setDisplayName(arguments[1]);
                     TablistManager.getInstance().setDisplayName(player);
                 } else {
@@ -67,10 +67,10 @@ public class Test extends Command {
                 break;
             case "exp":
                 player.setExp((float) Math.random());
-                player.setLevels((int)(Math.ceil(Math.random() * 255)));
+                player.setLevels((int) (Math.ceil(Math.random() * 255)));
                 break;
             case "tab":
-                if(arguments.length < 3) {
+                if (arguments.length < 3) {
                     player.sendMessage("You need to specify two strings (_ instead of spaces)");
                 } else {
                     String header = arguments[1].replace('_', ' ');

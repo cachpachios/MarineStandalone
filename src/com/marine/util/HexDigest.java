@@ -10,6 +10,7 @@ import java.security.MessageDigest;
 public class HexDigest {
 
     private final char[] hex;
+
     public HexDigest() {
         this.hex = "0123456789ABCDEF".toCharArray();
     }
@@ -20,11 +21,11 @@ public class HexDigest {
         digest.update(s.getBytes("UTF-8"));
         byte[] h = digest.digest();
         boolean n = (h[0] & 0x80) == 0x80;
-        if(n) h = twosCompliement(h);
+        if (n) h = twosCompliement(h);
         String d = getHexString(h);
-        if(d.startsWith("0"))
+        if (d.startsWith("0"))
             d = d.replaceFirst("0", d);
-        if(n)
+        if (n)
             d = "-" + d;
         return d.toLowerCase();
     }
@@ -32,7 +33,7 @@ public class HexDigest {
     private String getHexString(byte[] bytes) {
         char[] hChars = new char[bytes.length * 2];
         int v;
-        for(int j = 0; j < bytes.length; j++) {
+        for (int j = 0; j < bytes.length; j++) {
             v = bytes[j] & 0xFF;
             hChars[j * 2] = hex[v >> 4];
             hChars[j * 2 + 1] = hex[v & 0x0F];
@@ -42,9 +43,9 @@ public class HexDigest {
 
     private byte[] twosCompliement(byte[] p) {
         boolean carry = true;
-        for(int x = p.length - 1; x >= 0; x--) {
-            p[x] = (byte)~p[x];
-            if(carry) {
+        for (int x = p.length - 1; x >= 0; x--) {
+            p[x] = (byte) ~p[x];
+            if (carry) {
                 carry = p[x] == 0xFF;
                 p[x]++;
             }

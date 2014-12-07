@@ -20,18 +20,21 @@ public interface MarineServer {
 
     /**
      * Get all online players
+     *
      * @return A list containing all players
      */
     public List<Player> getPlayers();
 
     /**
      * Get the current player count
+     *
      * @return The current Player Count
      */
     public int getPlayerCount();
 
     /**
      * Get a world based on its name
+     *
      * @param name World Name
      * @return World if found, else null
      */
@@ -39,12 +42,14 @@ public interface MarineServer {
 
     /**
      * Get all worlds
+     *
      * @return A list containg all worlds
      */
     public List<World> getWorlds();
 
     /**
      * Get a player from its uuid
+     *
      * @param uuid UUID
      * @return Player
      */
@@ -52,6 +57,7 @@ public interface MarineServer {
 
     /**
      * Get a player based on its username
+     *
      * @param username Username
      * @return Player
      */
@@ -63,11 +69,11 @@ public interface MarineServer {
 
     public void callEvent(MarineEvent event);
 
-	public String getMOTD();
-
-    public void setMaxPlayers(int n);
+    public String getMOTD();
 
     public int getMaxPlayers();
+
+    public void setMaxPlayers(int n);
 
 
 }
