@@ -1,7 +1,6 @@
 package com.marine.game.async;
 
 import com.marine.events.ChatEvent;
-import com.marine.game.chat.ChatColor;
 import com.marine.player.Player;
 import com.marine.server.Marine;
 
@@ -20,21 +19,31 @@ public class ChatManagement {
     }
 
     public void sendJoinMessage(Player player) {
-        Marine.broadcastMessage(String.format("%s joined the game", player.getName()));
-        player.sendAboveActionbarMessage("Welcome online " + ChatColor.BOLD + player.getName()); // TODO Custom Message, event and toggleabel
+        Marine.broadcastMessage(translate(JOIN_MESSAGE, player));
+        player.sendAboveActionbarMessage(translate(WELCOME_MESSAGE, player)); // TODO Custom Message, event and toggleable
     }
 
     public void sendLeaveMessage(Player player) {
-        Marine.broadcastMessage(String.format("%s left the game", player.getName()));
+        Marine.broadcastMessage(translate(LEAVE_MESSAGE, player));
     }
 
+    private String translate(String s, Object ... strs) {
+        for(Object object : strs) {
+            if(object instanceof Player) {
+                s = s.replace("%plr", ((Player) object).getName());
+            } else if(object instanceof String) {
+                s = s.replace("%msg", object.toString());
+            }
+        }
+        return s;
+    }
 
     public void sendChatMessage(Player player, String message) {
         ChatEvent event = new ChatEvent(player, message);
         Marine.getServer().callEvent(event);
         if(!event.isCancelled()) {
             Marine.broadcastMessage(
-                    String.format("<%s> %s", player.getDisplayName(), event.getMessage())
+                translate(CHAT_FORMAT, player, message)
             );
         }
     }
