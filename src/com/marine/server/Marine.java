@@ -65,7 +65,7 @@ public class Marine {
 
     public static void broadcastMessage(String string) {
         for(Player player : getPlayers()) {
-            player.sendMessage(ChatColor.transform('&', string));
+            player.sendMessage(string);
         }
         Logging.getLogger().log(string);
     }
