@@ -27,7 +27,10 @@ public final class Chunk {
             if (id != BlockID.AIR)
                 sections[section] = new ChunkSection(section);
             else return;
-        sections[section].setBlock(x, y / (section + 1), z, id);
+        if(section > 0)
+        	sections[section].setBlock(x, y / (section ), z, id);
+        if(section == 0)
+        	sections[section].setBlock(x, y, z, id);
     }
 
     public byte getBlock(int x, int y, int z) {

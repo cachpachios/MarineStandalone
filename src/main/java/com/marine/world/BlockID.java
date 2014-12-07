@@ -285,11 +285,6 @@ public enum BlockID implements IDObject {
     DOOR_JUNGLE(195, "jungle_door"),
     DOOR_ACACIA(196, "acacia_door"),
     DOOR_DARKOAK(197, "dark_oak_door");
-    // Index lookup
-    private static ConcurrentHashMap<String, BlockID> name_index;
-    private static ConcurrentHashMap<Byte, BlockID> id_index;
-    private static ConcurrentHashMap<String, BlockID> meta_index;
-
     private final byte ID;
     private final String NAME;
 
@@ -299,58 +294,16 @@ public enum BlockID implements IDObject {
         this.ID = (byte) ID;
         this.NAME = NAME;
         this.metaData = -1;
-        putThis();
     }
 
     private BlockID(int ID, String NAME, byte metaType) {
         this.ID = (byte) ID;
         this.NAME = NAME;
         this.metaData = -1;
-        putThis();
-    }
-
-    public static BlockID getFromString(String s) {
-        if (id_index.containsKey(s.toLowerCase()))
-            return id_index.get(s.toLowerCase());
-        else
-            return null;
-    }
-
-    public static BlockID getFromID(int id) {
-        if (id_index.containsKey(id))
-            return id_index.get(id);
-        else
-            return null;
-    }
-
-    public static BlockID getFromIDMeta(int id, int meta) {
-        if (meta_index.containsKey(id + " " + meta))
-            return meta_index.get(id + " " + meta);
-        else
-            return null;
     }
 
     public boolean isMetaBlock() {
         return metaData != -1;
-    }
-
-    private void putThis() {
-
-        if (name_index == null)
-            name_index = new ConcurrentHashMap<String, BlockID>();
-
-        if (id_index == null)
-            id_index = new ConcurrentHashMap<Byte, BlockID>();
-
-        if (meta_index == null)
-            meta_index = new ConcurrentHashMap<String, BlockID>();
-
-        if (!isMetaBlock()) {
-            name_index.put(NAME, this);
-            id_index.put(ID, this);
-        } else {
-            meta_index.put(ID + " " + metaData, this);
-        }
     }
 
     public byte getID() {
@@ -366,7 +319,10 @@ public enum BlockID implements IDObject {
     }
 
     public int getPacketID() {
-        return getID() << 4 | 0;
+    	if(getMetaBlock() == -1)
+    		return getID() << 4 | 0;
+    	else
+            return getID() << 4 | getMetaBlock();
     }
 
     @Override
@@ -376,7 +332,7 @@ public enum BlockID implements IDObject {
 
     @Override
     public short getNumericID() {
-        return this.getID();
+        return getID();
     }
 
     @Override
