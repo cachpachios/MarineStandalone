@@ -166,7 +166,6 @@ public class Player extends Entity implements IPlayer, CommandSender {
     @Override
     public void executeCommand(Command command, String[] arguments) {
         String args = StringUtils.join(Arrays.asList(arguments), " ");
-        args = args.substring(0, args.length() - 1);
         Logging.getLogger().log(
                 String.format("%s executed command: %s",
                         getName(), command + " " + args)

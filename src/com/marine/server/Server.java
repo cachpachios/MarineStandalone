@@ -1,7 +1,9 @@
 package com.marine.server;
 
+import com.google.common.eventbus.AsyncEventBus;
 import com.google.common.eventbus.EventBus;
 import com.marine.StandaloneServer;
+import com.marine.events.AsyncEvent;
 import com.marine.events.Listener;
 import com.marine.events.MarineEvent;
 import com.marine.player.Player;
@@ -9,6 +11,7 @@ import com.marine.world.World;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.Executor;
 
 /**
  * Created 2014-12-02 for MarineStandalone
@@ -19,10 +22,17 @@ public class Server implements MarineServer {
 
     private final EventBus eventBus;
     private final StandaloneServer server;
+    private final AsyncEventBus asyncEventBus;
 
     public Server(StandaloneServer server) {
         this.server = server;
         this.eventBus = new EventBus();
+        this.asyncEventBus = new AsyncEventBus(new Executor() {
+            @Override
+            public void execute(Runnable command) {
+                command.run();
+            }
+        });
     }
 
     @Override
@@ -72,7 +82,11 @@ public class Server implements MarineServer {
 
     @Override
     public void callEvent(MarineEvent event) {
-        eventBus.post(event);
+        if (event instanceof AsyncEvent) {
+            asyncEventBus.post(event);
+        } else {
+            eventBus.post(event);
+        }
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.marine;
 
 import com.marine.events.Listener;
+import com.marine.events.TestListener;
 import com.marine.game.CommandManager;
 import com.marine.game.PlayerManager;
 import com.marine.game.WorldManager;
@@ -64,6 +65,8 @@ public class StandaloneServer implements Listener {
         Marine.setServer(this.server);
         // Register commands
         registerDefaultCommands();
+
+        getServer().registerListener(new TestListener());
     }
 
     private void registerDefaultCommands() {

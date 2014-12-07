@@ -3,7 +3,7 @@ package com.marine.game.commands;
 import com.marine.game.command.Command;
 import com.marine.game.command.CommandSender;
 import com.marine.server.Marine;
-import com.sun.deploy.util.StringUtils;
+import com.marine.util.StringUtils;
 
 import java.util.Arrays;
 

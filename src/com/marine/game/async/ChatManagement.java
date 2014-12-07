@@ -1,5 +1,6 @@
 package com.marine.game.async;
 
+import com.marine.events.ChatEvent;
 import com.marine.game.chat.ChatColor;
 import com.marine.player.Player;
 import com.marine.server.Marine;
@@ -29,7 +30,13 @@ public class ChatManagement {
 
 
     public void sendChatMessage(Player player, String message) {
-        Marine.broadcastMessage(String.format("<%s> %s", player.getDisplayName(), message));
+        ChatEvent event = new ChatEvent(player, message);
+        Marine.getServer().callEvent(event);
+        if(!event.isCancelled()) {
+            Marine.broadcastMessage(
+                    String.format("<%s> %s", player.getDisplayName(), event.getMessage())
+            );
+        }
     }
 
 }
