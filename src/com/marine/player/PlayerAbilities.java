@@ -1,9 +1,13 @@
 package com.marine.player;
 
-import com.marine.net.play.clientbound.PlayerAbilitesPacket;
+import com.marine.net.play.clientbound.PlayerAbilitiesPacket;
 
+/**
+ * Player abilities
+ */
 public class PlayerAbilities {
-	private boolean godMode, canFly, creativeMode;
+
+    private boolean godMode, canFly, creativeMode;
 	
 	private float flySpeed, walkSpeed;
 
@@ -17,8 +21,8 @@ public class PlayerAbilities {
 		this.walkSpeed = walkSpeed;
 	}
 
-	public PlayerAbilitesPacket getPacket() {
-		return new PlayerAbilitesPacket(this);
+	public PlayerAbilitiesPacket getPacket() {
+		return new PlayerAbilitiesPacket(this);
 	}
 	
 	public boolean isGodMode() {

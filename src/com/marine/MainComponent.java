@@ -28,7 +28,7 @@ public class MainComponent {
 
 		StandaloneServer server = new StandaloneServer(settings.port,  20); // Port and TickRate
 		
-		if(!ARGS.contains("nogui")) {// Check if GUI should'nt be shown (Yes lazy implementation...)
+		if(!ARGS.contains("nogui")) {// Check if GUI shouldn't be shown (Yes lazy implementation...)
             Logging.getLogger().createConsoleWindow(); // Create the simplest gui you will ever see :)
             //ServerSettings.getInstance().verbose();
         }

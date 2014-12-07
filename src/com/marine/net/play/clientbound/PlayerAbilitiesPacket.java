@@ -8,11 +8,11 @@ import com.marine.net.PacketOutputStream;
 import com.marine.net.States;
 import com.marine.player.PlayerAbilities;
 
-public class PlayerAbilitesPacket extends Packet {
+public class PlayerAbilitiesPacket extends Packet {
 
 	final PlayerAbilities abilites;
 	
-	public PlayerAbilitesPacket(PlayerAbilities abilites) {
+	public PlayerAbilitiesPacket(PlayerAbilities abilites) {
 		this.abilites = abilites;
 	}
 	

@@ -1,11 +1,11 @@
 package com.marine.player;
 
-import java.util.UUID;
-
 import com.marine.net.Client;
 import com.marine.util.Location;
 import com.marine.util.Position;
 import com.marine.world.World;
+
+import java.util.UUID;
 
 public interface IPlayer {
 
@@ -18,9 +18,9 @@ public interface IPlayer {
 	public World getWorld();
 	
 	public Location getLocation();
-	public Position getRealtivePosition();
-	
-	
+
+	public Position getRelativePosition();
+
 	public UUID getUUID();
 	
 	public void update();
