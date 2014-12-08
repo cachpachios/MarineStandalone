@@ -4,7 +4,7 @@ import com.google.common.eventbus.Subscribe;
 import com.marine.events.standardevents.ChatEvent;
 import com.marine.events.standardevents.ListEvent;
 import com.marine.game.chat.ChatColor;
-import com.marine.util.ListResponse;
+import com.marine.net.handshake.ListResponse;
 
 /**
  * Created 2014-12-07 for MarineStandalone

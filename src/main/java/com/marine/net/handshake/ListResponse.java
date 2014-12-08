@@ -1,4 +1,4 @@
-package com.marine.util;
+package com.marine.net.handshake;
 
 import org.json.simple.JSONArray;
 

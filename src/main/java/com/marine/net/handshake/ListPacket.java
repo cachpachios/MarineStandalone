@@ -17,7 +17,6 @@ import com.marine.net.PacketOutputStream;
 import com.marine.net.States;
 import com.marine.player.Player;
 import com.marine.server.Marine;
-import com.marine.util.ListResponse;
 
 public class ListPacket extends Packet {
 

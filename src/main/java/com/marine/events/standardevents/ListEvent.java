@@ -1,7 +1,7 @@
 package com.marine.events.standardevents;
 
 import com.marine.events.MarineEvent;
-import com.marine.util.ListResponse;
+import com.marine.net.handshake.ListResponse;
 
 /**
  * Created 2014-12-02 for MarineStandalone
