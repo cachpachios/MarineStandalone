@@ -158,7 +158,7 @@ public class Player extends Entity implements IPlayer, CommandSender {
 
     @Override
     public void executeCommand(String command) {
-
+        executeCommand(command, new String[]{});
     }
 
     public boolean hasDisplayName() {
