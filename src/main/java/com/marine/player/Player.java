@@ -14,6 +14,7 @@ import com.marine.net.Client;
 import com.marine.net.play.clientbound.ChatPacket;
 import com.marine.net.play.clientbound.ClientboundPlayerLookPositionPacket;
 import com.marine.net.play.clientbound.ExperiencePacket;
+import com.marine.net.play.clientbound.KickPacket;
 import com.marine.net.play.clientbound.inv.InventoryContentPacket;
 import com.marine.net.play.clientbound.inv.InventoryOpenPacket;
 import com.marine.net.play.clientbound.world.MapChunkPacket;
@@ -304,9 +305,24 @@ public class Player extends Entity implements IPlayer, CommandSender {
 		this.getClient().sendPacket(new TimeUpdatePacket(getWorld()));
 	}
 
+    public void kick(String reason) {
+        LeaveEvent event = new LeaveEvent(this, LeaveEvent.QuitReason.KICKED);
+        Marine.getServer().callEvent(event);
+        Marine.broadcastMessage(event.getMessage().replace("%plr", getName()));
+        getClient().sendPacket(new KickPacket(
+                (reason.length() > 0) ? reason : "Kicked"
+        ));
+        cleanup();
+    }
+
+    private void cleanup() {
+        // TODO: Save stuff :P
+    }
+
 	public void disconnect() {
 		LeaveEvent event = new LeaveEvent(this, LeaveEvent.QuitReason.NORMAL);
         Marine.getServer().callEvent(event);
         Marine.broadcastMessage(event.getMessage().replace("%plr", getName()));
+        cleanup();
     }
 }
