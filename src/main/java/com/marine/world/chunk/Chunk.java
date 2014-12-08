@@ -46,8 +46,17 @@ public final class Chunk {
 
         for (ChunkSection s : sections) {
             if (s != null)
-                d.writeData(s.getData(skyLight));
+                d.writeData(s.getBlockData());
         }
+        for (ChunkSection s : sections) {
+            if (s != null)
+                d.writeData(s.getBlockLightData());
+        }
+        for (ChunkSection s : sections) {
+            if (s != null)
+                d.writeData(s.getSkyLightData());
+        }
+        
         if (biomes)
             d.writeData(getBiomeData());
 
@@ -56,17 +65,13 @@ public final class Chunk {
     }
 
     public ByteData getBiomeData() {
-        Random r = new Random();
-
         ByteData d = new ByteData();
         for (int z = 0; z < 16; z++)
             for (int x = 0; x < 16; x++)
                 if (biomes[x][z] != null)
                     d.writeend(biomes[x][z].getID());
-                else if (r.nextBoolean())
-                    d.writeend(BiomeID.PLAINS.getID());
                 else
-                    d.writeend(BiomeID.FOREST.getID());
+                    d.writeend(BiomeID.PLAINS.getID());
         return d;
     }
 

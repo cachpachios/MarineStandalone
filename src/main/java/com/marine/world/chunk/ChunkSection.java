@@ -13,16 +13,38 @@ public class ChunkSection {
         this.blockMap = new byte[16*16*16];
     }
 
-    public ByteData getData(boolean skyLight) {
+    public ByteData getBlockData() {
         ByteData data = new ByteData();
-        int i = 0;
         for (byte id : blockMap) {
-        	data.writeShort(id);
-            if (skyLight)
-            	data.writeend((byte) -1);
-            else if ((i & 2) == 0)
-                data.writeend((byte) -1);
-            i++;
+        	data.writeend((byte) 0); // Meta
+        	data.writeend(id);
+        }
+    	return data;
+    }
+   
+    public ByteData getSkyLightData() {
+    	ByteData data = new ByteData();
+    	boolean skip = false;
+        for (byte id : blockMap) { //TODO LightMap
+        	if(!skip) {
+        	data.writeend((byte) -1);
+        	skip = true;
+        	}
+        	else 
+        		skip = false;
+        }
+    	return data;
+    }
+    public ByteData getBlockLightData() {
+    	ByteData data = new ByteData();
+    	boolean skip = false;
+        for (byte id : blockMap) { //TODO LightMap
+        	if(!skip) {
+        	data.writeend((byte) -1);
+        	skip = true;
+        	}
+        	else 
+        		skip = false;
         }
     	return data;
     }
