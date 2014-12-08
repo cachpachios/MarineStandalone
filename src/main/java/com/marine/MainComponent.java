@@ -1,17 +1,17 @@
 package com.marine;
 
-import com.marine.settings.ServerSettings;
-
 import java.util.Arrays;
 import java.util.List;
+
+import com.marine.settings.ServerSettings;
 
 public class MainComponent {
 
     public static List<String> ARGS;
 
     public static void main(String[] args) {
-        //System.setErr(Logging.getLogger());
-
+        //System.setErr(Logging.getLogger()); // Not working gives error
+    	
         ARGS = Arrays.asList(args);
 
         ServerSettings.getInstance();

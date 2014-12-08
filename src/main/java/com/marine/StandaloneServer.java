@@ -1,12 +1,18 @@
 package com.marine;
 
+import java.io.File;
+
 import com.marine.events.Listener;
 import com.marine.events.TestListener;
 import com.marine.game.CommandManager;
 import com.marine.game.PlayerManager;
 import com.marine.game.WorldManager;
 import com.marine.game.chat.ChatColor;
-import com.marine.game.commands.*;
+import com.marine.game.commands.Help;
+import com.marine.game.commands.Info;
+import com.marine.game.commands.Say;
+import com.marine.game.commands.Stop;
+import com.marine.game.commands.Test;
 import com.marine.net.NetworkManager;
 import com.marine.player.Gamemode;
 import com.marine.server.Marine;
@@ -15,8 +21,6 @@ import com.marine.server.Server;
 import com.marine.settings.JSONFileHandler;
 import com.marine.settings.ServerSettings;
 import com.marine.world.Difficulty;
-
-import java.io.File;
 
 public class StandaloneServer implements Listener {
 

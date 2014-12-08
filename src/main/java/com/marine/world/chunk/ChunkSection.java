@@ -6,37 +6,33 @@ import com.marine.world.BlockID;
 public class ChunkSection {
     private int sectionID;
 
-    private short[][][] blockMap;
+    private byte[] blockMap;
 
     public ChunkSection(int y) {
         this.sectionID = y;
-        this.blockMap = new short[16][16][16];
+        this.blockMap = new byte[16*16*16];
     }
 
     public ByteData getData(boolean skyLight) {
         ByteData data = new ByteData();
         int i = 0;
-        for (int y = 0; y < 16; y++)
-            for (int z = 0; z < 16; z++)
-                for (int x = 0; x < 16; x++) {
-                    data.writeShort(getBlockID(x,y,z));
-                    if (skyLight)
-                        data.writeend((byte) -1);
-                    else if ((i & 2) == 0)
-                        data.writeend((byte) -1);
-                    i++;
-                }
-
-
-        return data;
+        for (byte id : blockMap) {
+        	data.writeShort(id);
+            if (skyLight)
+            	data.writeend((byte) -1);
+            else if ((i & 2) == 0)
+                data.writeend((byte) -1);
+            i++;
+        }
+    	return data;
     }
 
     public void setBlock(int x, int y, int z, BlockID id) {
-        blockMap[x][y][z] = id.getNumericID();
+        blockMap[getIndex(x,y,z)] = id.getID();
     }
 
-    public short getBlockID(int x, int y, int z) {
-        return blockMap[x][y][z];
+    public byte getBlockID(int x, int y, int z) {
+        return blockMap[getIndex(x,y,z)];
     }
 
     public BlockID getBlock(int x, int y, int z) {
@@ -45,6 +41,10 @@ public class ChunkSection {
 
     public int getID() {
         return sectionID;
+    }
+    
+    public static int getIndex(int x, int y, int z) {
+        return ((y & 0xf) << 8) | (z << 4) | x;
     }
 
 }

@@ -350,6 +350,6 @@ public class ByteData implements Iterable<Byte> {
     }
 
     public void writeData(ByteData data) {
-        this.writeend(data.getBytes());
+        bytes.addAll(data.getByteList());
     }
 }
