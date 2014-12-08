@@ -3,6 +3,7 @@ package com.marine.server;
 import com.marine.Logging;
 import com.marine.StandaloneServer;
 import com.marine.game.chat.ChatColor;
+import com.marine.game.scheduler.Scheduler;
 import com.marine.net.play.clientbound.KickPacket;
 import com.marine.player.Player;
 import com.marine.world.World;
@@ -61,6 +62,10 @@ public class Marine {
 
     public static int getMaxPlayers() {
         return server.getMaxPlayers();
+    }
+
+    public static Scheduler getScheduler() {
+        return getServer().getServer().getScheduler();
     }
 
     public static void broadcastMessage(String string) {

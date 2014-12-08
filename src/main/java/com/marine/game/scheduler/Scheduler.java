@@ -40,18 +40,10 @@ public class Scheduler extends Thread {
         return id;
     }
 
-    private final long total = (1000 / 20);
-    private long lastTick = -1l;
+    private int tick = 0;
 
     @Override
     public void run() {
-        if(lastTick == -1l) {
-            lastTick = System.currentTimeMillis();
-        }
-        if((System.currentTimeMillis() - lastTick) >= total) {
-            lastTick = System.currentTimeMillis();
-            tickAll();
-        }
-        run();
+        tickAll();
     }
 }

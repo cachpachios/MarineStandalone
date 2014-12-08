@@ -7,6 +7,7 @@ import com.marine.game.PlayerManager;
 import com.marine.game.WorldManager;
 import com.marine.game.chat.ChatColor;
 import com.marine.game.commands.*;
+import com.marine.game.scheduler.Scheduler;
 import com.marine.net.NetworkManager;
 import com.marine.player.Gamemode;
 import com.marine.server.Marine;
@@ -17,6 +18,8 @@ import com.marine.settings.ServerSettings;
 import com.marine.world.Difficulty;
 
 import java.io.File;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class StandaloneServer implements Listener {
 
@@ -27,6 +30,7 @@ public class StandaloneServer implements Listener {
     private final WorldManager worlds;
     private final Server server;
     private final JSONFileHandler jsonHandler;
+    private final Scheduler scheduler;
     private final int targetTickRate; // For use in the loop should be same as (skipTime * 1000000000)
     public int ticks;
     public int refreshesPerSecound;
@@ -59,6 +63,17 @@ public class StandaloneServer implements Listener {
         registerDefaultCommands();
 
         getServer().registerListener(new TestListener());
+        this.scheduler = new Scheduler();
+        new Timer("scheduler").scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                scheduler.run();
+            }
+        }, 0l, (1000 / 20));
+    }
+
+    public Scheduler getScheduler() {
+        return this.scheduler;
     }
 
     private void registerDefaultCommands() {
@@ -83,6 +98,8 @@ public class StandaloneServer implements Listener {
     }
 
     private void run() {
+
+
         Logging.getLogger().log(String.format("Marine Standalone Server starting - Protocol Version §c§o%d§0 (Minecraft §c§o%s§0)", ServerProperties.PROTOCOL_VERSION, ServerProperties.MINECRAFT_NAME));
 
         network = new NetworkManager(this, port);
