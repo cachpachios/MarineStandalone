@@ -121,10 +121,14 @@ public class NetworkManager {
     }
 
     public boolean hasClientsConnected() {
-        return !connectedClients.isEmpty();
+    	synchronized(connectedClients) {
+    		return !connectedClients.isEmpty();
+    	}
     }
 
     public void tryConnections() {
+    	if(hasClientsConnected())
+    	synchronized(connectedClients) {
     	for(Client c: connectedClients) {
     		if(!c.isActive())  {
     			if(c.getUserName() != null)
@@ -132,7 +136,7 @@ public class NetworkManager {
     			cleanUp(c);
     		}
     	}
-    }
+    }}
     
     // Client processing thread
 
