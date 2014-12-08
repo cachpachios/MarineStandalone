@@ -52,20 +52,8 @@ public class ClientboundPlayerLookPositionPacket extends Packet { //TODO Relativ
             d.writeFloat(l.getYaw());
             d.writeFloat(l.getPitch());
             }
-        
-        byte bitmap = 0;
-        
-		if(l != null) {
-			bitmap |= 1 << 0x01;
-			bitmap |= 1 << 0x02;
-			bitmap |= 1 << 0x04;
-		}
-        
-		bitmap |= 1 << 0x08;
-		bitmap |= 1 << 0x10;
-		
-		
-        d.writeByte(bitmap);
+
+        d.writeByte((byte)0);
 
         stream.write(getID(), d);
     }
