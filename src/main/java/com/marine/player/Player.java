@@ -307,6 +307,7 @@ public class Player extends Entity implements IPlayer, CommandSender {
 	}
 
 	public void disconnect() {
+		this.manager.getChat().sendLeaveMessage(this);
 		// TODO Save data etc.
 		
 	}
