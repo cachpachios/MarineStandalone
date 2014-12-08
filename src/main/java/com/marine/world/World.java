@@ -41,7 +41,7 @@ public class World { // TODO Save and unload chunks...
 
         loadedChunks = Collections.synchronizedMap(new ConcurrentHashMap<Long, Chunk>());
 
-        spawnPoint = new Position(0, 3, 0); //TODO make this get loaded from world or generate random based on worldgenerator
+        spawnPoint = new Position(0, 5, 0); //TODO make this get loaded from world or generate random based on worldgenerator
 
         
 

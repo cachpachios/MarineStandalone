@@ -38,7 +38,7 @@ public final class Chunk {
         if (sections[section] == null)
             return 0;
         else
-            return sections[section].getBlockID(x, y / section, z);
+            return (short) sections[section].getBlockID(x, y / section, z);
     }
 
     public ByteData getData(boolean biomes, boolean skyLight) {
