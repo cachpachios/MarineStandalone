@@ -1,45 +1,66 @@
 package com.marine;
 
+import com.marine.settings.ServerSettings;
+
 import java.util.Arrays;
 import java.util.List;
 
-import com.marine.settings.ServerSettings;
-
 public class MainComponent {
 
-    public static List<String> ARGS;
+    public static List<String> arguments;
+
+    private static double getJavaVersion() {
+        try {
+            return Double.parseDouble(System.getProperty("java.specification.version"));
+        } catch(Throwable e) {
+            return -1;
+        }
+    }
 
     public static void main(String[] args) {
         //System.setErr(Logging.getLogger()); // Not working gives error
-    	
-        ARGS = Arrays.asList(args);
-
+    	if(getJavaVersion() < 1.7) {
+            System.out.println("-- Could not start MarineStandalone: Requires java 1.7 or above --");
+            System.exit(0);
+        }
+        // Get the arguments
+        arguments = Arrays.asList(args);
+        // Init. ServerSettings
         ServerSettings.getInstance();
-
-        StartSettings settings = new StartSettings(ServerSettings.getInstance().port, ServerSettings.getInstance().tickrate);
-
+        // Create a new StartSetting instance
+        StartSettings settings = new StartSettings();
+        // Start settings
         int port = getInteger("port");
-        if (port > 0)
-            settings.port = 0;
         int tickrate = getInteger("tickrate");
-        if (tickrate > 0)
-            settings.tickrate = 0;
-
-        StandaloneServer server = new StandaloneServer(settings.port, 20); // Port and TickRate
-
-        if (!ARGS.contains("nogui")) {// Check if GUI shouldn't be shown (Yes lazy implementation...)
+        if(port != -1) {
+            port = Math.min(port, 65535);
+            port = Math.max(port, 0);
+        } else {
+            port = 25565;
+        }
+        if(tickrate != -1) {
+            tickrate = Math.min(tickrate, 120);
+            tickrate = Math.max(tickrate, 0);
+        } else {
+            tickrate = 20;
+        }
+        settings.port = port;
+        settings.tickrate = tickrate;
+        StandaloneServer server = new StandaloneServer(settings); // Port and TickRate
+        // Check for GUI and init it
+        if (!MainComponent.arguments.contains("nogui")) {// Check if GUI shouldn't be shown (Yes lazy implementation...)
             Logging.getLogger().createConsoleWindow(); // Create the simplest gui you will ever see :)
             //ServerSettings.getInstance().verbose();
         }
-
+        // Check if the build is stable
         if (!ServerProperties.BUILD_STABLE)
             Logging.getLogger().warn("You are running an unstable build");
-
+        // Start the server
         server.start();
     }
 
     private static int getInteger(String argument) {
-        for (String s : ARGS) {
+        for (String s : arguments) {
             if (s.contains(argument)) {
                 String[] ss = s.split(":");
                 if (ss.length < 2) {
@@ -55,12 +76,14 @@ public class MainComponent {
         return -1;
     }
 
-    private static class StartSettings {
+    public static class StartSettings {
 
-        public int port = 25565;
-        public int tickrate = 20;
+        public int port;
+        public int tickrate;
 
         public StartSettings() {
+            this.port = 25565;
+            this.tickrate = 20;
         }
 
         public StartSettings(int port, int tickrate) {

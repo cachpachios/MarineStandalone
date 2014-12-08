@@ -1,18 +1,12 @@
 package com.marine;
 
-import java.io.File;
-
 import com.marine.events.Listener;
 import com.marine.events.TestListener;
 import com.marine.game.CommandManager;
 import com.marine.game.PlayerManager;
 import com.marine.game.WorldManager;
 import com.marine.game.chat.ChatColor;
-import com.marine.game.commands.Help;
-import com.marine.game.commands.Info;
-import com.marine.game.commands.Say;
-import com.marine.game.commands.Stop;
-import com.marine.game.commands.Test;
+import com.marine.game.commands.*;
 import com.marine.net.NetworkManager;
 import com.marine.player.Gamemode;
 import com.marine.server.Marine;
@@ -21,6 +15,8 @@ import com.marine.server.Server;
 import com.marine.settings.JSONFileHandler;
 import com.marine.settings.ServerSettings;
 import com.marine.world.Difficulty;
+
+import java.io.File;
 
 public class StandaloneServer implements Listener {
 
@@ -43,10 +39,10 @@ public class StandaloneServer implements Listener {
     private boolean shouldRun;
     private String newMOTD = null;
 
-    public StandaloneServer(final int port, final int targetTickRate) {
-        this.port = port;
-        this.skipTime = 1000000000 / targetTickRate; // nanotime
-        this.targetTickRate = targetTickRate;
+    public StandaloneServer(MainComponent.StartSettings settings) {
+        this.port = settings.port;
+        this.skipTime = 1000000000 / settings.tickrate; // nanotime
+        this.targetTickRate = settings.tickrate;
         this.worlds = new WorldManager();
         this.players = new PlayerManager(this);
         this.server = new Server(this);
