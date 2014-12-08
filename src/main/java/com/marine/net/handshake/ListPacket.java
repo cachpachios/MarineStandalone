@@ -1,7 +1,15 @@
 package com.marine.net.handshake;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.UUID;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 import com.marine.ServerProperties;
 import com.marine.events.ListEvent;
+import com.marine.io.Base64Encoding;
 import com.marine.io.BinaryFile;
 import com.marine.io.data.ByteData;
 import com.marine.net.Packet;
@@ -10,13 +18,6 @@ import com.marine.net.States;
 import com.marine.player.Player;
 import com.marine.server.Marine;
 import com.marine.util.ListResponse;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.Base64;
-import java.util.UUID;
 
 public class ListPacket extends Packet {
 
@@ -29,7 +30,7 @@ public class ListPacket extends Packet {
                 if (file.exists()) {
                     BinaryFile f = new BinaryFile(file);
                     f.readBinary();
-                    this.img = new String(Base64.getEncoder().encode(f.getData().getBytes()));
+                    this.img = new String(Base64Encoding.encode(f.getData().getBytes()));
                 } else {
                     this.img = "";
                 }
