@@ -1,6 +1,6 @@
 package com.marine.game.async;
 
-import com.marine.events.ChatEvent;
+import com.marine.events.standardevents.ChatEvent;
 import com.marine.game.PlayerManager;
 import com.marine.net.play.clientbound.ChatPacket;
 import com.marine.player.Player;

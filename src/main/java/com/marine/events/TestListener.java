@@ -1,6 +1,8 @@
 package com.marine.events;
 
 import com.google.common.eventbus.Subscribe;
+import com.marine.events.standardevents.ChatEvent;
+import com.marine.events.standardevents.ListEvent;
 import com.marine.game.chat.ChatColor;
 import com.marine.util.ListResponse;
 

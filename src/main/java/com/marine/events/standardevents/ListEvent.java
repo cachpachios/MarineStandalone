@@ -1,5 +1,6 @@
-package com.marine.events;
+package com.marine.events.standardevents;
 
+import com.marine.events.MarineEvent;
 import com.marine.util.ListResponse;
 
 /**

@@ -1,12 +1,7 @@
 package com.marine.player;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
-
 import com.marine.Logging;
+import com.marine.events.standardevents.LeaveEvent;
 import com.marine.game.CommandManager;
 import com.marine.game.PlayerManager;
 import com.marine.game.chat.ChatComponent;
@@ -24,12 +19,15 @@ import com.marine.net.play.clientbound.inv.InventoryOpenPacket;
 import com.marine.net.play.clientbound.world.MapChunkPacket;
 import com.marine.net.play.clientbound.world.SpawnPointPacket;
 import com.marine.net.play.clientbound.world.TimeUpdatePacket;
+import com.marine.server.Marine;
 import com.marine.util.Location;
 import com.marine.util.Position;
 import com.marine.util.StringUtils;
 import com.marine.world.World;
 import com.marine.world.chunk.Chunk;
 import com.marine.world.entity.Entity;
+
+import java.util.*;
 
 public class Player extends Entity implements IPlayer, CommandSender {
 
@@ -307,8 +305,8 @@ public class Player extends Entity implements IPlayer, CommandSender {
 	}
 
 	public void disconnect() {
-		this.manager.getChat().sendLeaveMessage(this);
-		// TODO Save data etc.
-		
-	}
+		LeaveEvent event = new LeaveEvent(this, LeaveEvent.QuitReason.NORMAL);
+        Marine.getServer().callEvent(event);
+        Marine.broadcastMessage(event.getMessage().replace("%plr", getName()));
+    }
 }
