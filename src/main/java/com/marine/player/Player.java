@@ -20,6 +20,7 @@ import com.marine.net.play.clientbound.ClientboundPlayerLookPositionPacket;
 import com.marine.net.play.clientbound.ExperiencePacket;
 import com.marine.net.play.clientbound.MapChunkPacket;
 import com.marine.net.play.clientbound.SpawnPointPacket;
+import com.marine.net.play.clientbound.TimeUpdatePacket;
 import com.marine.net.play.clientbound.inv.InventoryContentPacket;
 import com.marine.net.play.clientbound.inv.InventoryOpenPacket;
 import com.marine.util.Location;
@@ -289,4 +290,8 @@ public class Player extends Entity implements IPlayer, CommandSender {
     public void sendMapData(Chunk... chunks) {
         this.sendMapData(Arrays.asList(chunks));
     }
+
+	public void sendTime() {
+		this.getClient().sendPacket(new TimeUpdatePacket(getWorld()));
+	}
 }

@@ -20,6 +20,7 @@ public class World { // TODO Save and unload chunks...
     private Map<Long, Chunk> loadedChunks;
     private Position spawnPoint;
 
+    private long age;
     private int time;
 
     private WorldGenerator generator;
@@ -29,10 +30,14 @@ public class World { // TODO Save and unload chunks...
         this.uuid = UUID.randomUUID();
         this.name = name;
         this.dimension = Dimension.OVERWORLD;
+        this.time = 0;
+        this.age = 0;
     }
 
     public World(final String name, WorldGenerator generator) { //TODO Make it able to load world
-
+        this.time = 0;
+        this.age = 0;
+        
         this.generator = generator;
         this.generator.setWorld(this);
 
@@ -95,6 +100,7 @@ public class World { // TODO Save and unload chunks...
             time++;
         else
             time = 0;
+        age++;
     }
     
     public int getTime() {
@@ -105,5 +111,9 @@ public class World { // TODO Save and unload chunks...
     public LevelType getLevelType() {
         return generator.getLevelType();
     }
+
+	public long getWorldAge() {
+		return age;
+	}
 
 }

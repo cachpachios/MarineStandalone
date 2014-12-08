@@ -129,6 +129,7 @@ public class StandaloneServer implements Listener {
 
             if (startTime - lastTime >= 1000000000) {
                 ticks = ups;
+                players.updateThemAll();
                 ups = 0;
                 lastTime = startTime;
             }
@@ -143,6 +144,8 @@ public class StandaloneServer implements Listener {
                     System.exit(0);
 
             // Advance the tick clock.
+            players.tickAllPlayers();
+            worlds.tick();
             ServerProperties.tick();
 
             ups++;

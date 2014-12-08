@@ -4,6 +4,7 @@ import com.marine.io.data.ByteData;
 import com.marine.net.Packet;
 import com.marine.net.PacketOutputStream;
 import com.marine.net.States;
+import com.marine.world.World;
 
 import java.io.IOException;
 
@@ -15,6 +16,10 @@ public class TimeUpdatePacket extends Packet {
         super();
         this.worldTime = worldTime;
         this.worldAge = worldAge;
+    }
+    
+    public TimeUpdatePacket(World w) {
+    	this(w.getTime(),w.getWorldAge());
     }
 
     @Override

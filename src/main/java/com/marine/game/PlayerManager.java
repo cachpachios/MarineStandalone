@@ -33,8 +33,10 @@ public class PlayerManager {
     }
 
     public void updateThemAll() {
-        for (Player p : allPlayers)
+        for (Player p : allPlayers) {
             p.update();
+            p.sendTime();
+        }
     }
 
     public StandaloneServer getServer() {
@@ -152,7 +154,7 @@ public class PlayerManager {
         p.sendAbilites();
 
         p.sendPostion();
-
+        p.sendTime();
         p.loginPopulation();
     }
 

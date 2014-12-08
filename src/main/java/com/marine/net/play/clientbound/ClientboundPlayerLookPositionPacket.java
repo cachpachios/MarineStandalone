@@ -37,7 +37,7 @@ public class ClientboundPlayerLookPositionPacket extends Packet { //TODO Relativ
         d.writeFloat(l.getYaw());
         d.writeFloat(l.getPitch());
 
-        d.writeByte((byte) -1);
+        d.writeByte((byte) -1); // Bitmap TODO make it dynamic
 
         stream.write(getID(), d);
     }
