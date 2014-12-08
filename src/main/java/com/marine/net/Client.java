@@ -72,8 +72,6 @@ public class Client {
     }
 
     public ConnectionStatus process() { // Returns true if connection is closed.
-
-        if (this.state != States.INGAME)
             try { // Write a 0 bit to check if available
                 getConnection().getOutputStream().write(ByteEncoder.writeBoolean(false));
             } catch (IOException e1) {
@@ -95,18 +93,6 @@ public class Client {
 
 
         if (a == 0) return ConnectionStatus.EMPTY;
-
-        
-        int x = 0;
-		try {
-			x = getConnection().getInputStream().read();
-		} catch (IOException e1) {
-			 return ConnectionStatus.CONNECTION_PROBLEMS;
-		}
-		if(x == -1) {
-			return ConnectionStatus.CLOSED;
-		}
-		
         
 
         byte[] allData = new byte[a];
@@ -118,7 +104,6 @@ public class Client {
         }
 
         ByteData data = new ByteData(allData);
-        data.write(0, (byte)x);
 
         ArrayList<ByteData> packages = new ArrayList<ByteData>();
 
