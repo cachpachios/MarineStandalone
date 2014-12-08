@@ -15,7 +15,9 @@ public class World { // TODO Save and unload chunks...
     private final String name;
     private final UUID uuid;
     private final Dimension dimension;
-    private Map<ChunkPos, Chunk> loadedChunks;
+    
+    //Data:
+    private Map<Long, Chunk> loadedChunks;
     private Position spawnPoint;
 
     private int time;
@@ -37,7 +39,7 @@ public class World { // TODO Save and unload chunks...
         uuid = UUID.randomUUID();
         this.name = name;
 
-        loadedChunks = Collections.synchronizedMap(new ConcurrentHashMap<ChunkPos, Chunk>());
+        loadedChunks = Collections.synchronizedMap(new ConcurrentHashMap<Long, Chunk>());
 
         spawnPoint = new Position(0, 3, 0); //TODO make this get loaded from world or generate random based on worldgenerator
 
@@ -47,15 +49,18 @@ public class World { // TODO Save and unload chunks...
     }
 
     public boolean isChunkLoaded(int x, int y) {
-        return loadedChunks.containsKey(new ChunkPos(x, y));
+        return loadedChunks.containsKey(ChunkPos.Encode(x, y));
     }
 
     public void generateChunk(int x, int z) {
-        loadedChunks.put(new ChunkPos(x, z), generator.generateChunk(x, z));
+        loadedChunks.put(ChunkPos.Encode(x,z), generator.generateChunk(x, z));
     }
 
     public Chunk getChunk(int x, int z) {
-        return generator.generateChunk(x, z);
+    	if(!isChunkLoaded(x,z))
+    		return generator.generateChunk(x, z); // TODO Load world
+    	else
+    		return loadedChunks.get(ChunkPos.Encode(x, z));
     }
 
     public List<Chunk> getChunks(int x, int z, int amtX, int amtY) {
@@ -90,6 +95,10 @@ public class World { // TODO Save and unload chunks...
             time++;
         else
             time = 0;
+    }
+    
+    public int getTime() {
+    	return time;
     }
 
 
