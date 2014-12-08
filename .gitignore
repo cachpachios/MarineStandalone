@@ -1,7 +1,8 @@
 ## Custom ##
 .package
 .classpath
-
+players/
+storage/
 ### Eclipse ###
 *.pydevproject
 .metadata
