@@ -1,6 +1,6 @@
 package com.marine.player;
 
-import com.marine.net.play.clientbound.PlayerAbilitesPacket;
+import com.marine.net.play.clientbound.player.PlayerAbilitesPacket;
 
 /**
  * Player abilities

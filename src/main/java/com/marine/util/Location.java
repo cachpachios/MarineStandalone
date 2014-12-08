@@ -16,6 +16,8 @@ public class Location extends Vector3d implements JSONAware, Cloneable { // Used
     private final World world;
     private float yaw, pitch;
 
+    private boolean onGround;
+    
     /**
      * Create a new world with default yaw and pitch (0, 0)
      * @param world World
@@ -61,11 +63,17 @@ public class Location extends Vector3d implements JSONAware, Cloneable { // Used
      * @param yaw Yaw
      * @param pitch Pitch
      */
-    public Location(World world, double x, double y, double z, float yaw, float pitch) {
+    
+    public Location(World w, double x, double y, double z, float yaw, float pitch) {
+    	this(w,x,y,z,yaw,pitch,false);
+    }
+    
+    public Location(World world, double x, double y, double z, float yaw, float pitch, boolean onGround) {
         super(x, y, z);
         this.yaw = yaw;
         this.pitch = pitch;
         this.world = world;
+        this.onGround = onGround;
     }
 
     /**
@@ -108,7 +116,17 @@ public class Location extends Vector3d implements JSONAware, Cloneable { // Used
     public float getPitch() {
         return this.pitch;
     }
+    
+    public void setPitch(float v) {
+    	this.pitch = v;
+    }
 
+    public void setYaw(float v) {
+    	this.yaw = v;
+    }
+    
+    
+    
     /**
      * Face the yaw towards the specified location
      * @param p Location too look towards
@@ -218,4 +236,12 @@ public class Location extends Vector3d implements JSONAware, Cloneable { // Used
             return object;
         }
     }
+
+	public boolean isOnGround() {
+		return onGround;
+	}
+
+	public void setOnGround(boolean v) {
+		onGround = v;
+	}
 }

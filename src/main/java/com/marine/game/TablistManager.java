@@ -1,7 +1,7 @@
 package com.marine.game;
 
-import com.marine.net.play.clientbound.PlayerListHeaderPacket;
-import com.marine.net.play.clientbound.PlayerListItemPacket;
+import com.marine.net.play.clientbound.player.PlayerListHeaderPacket;
+import com.marine.net.play.clientbound.player.PlayerListItemPacket;
 import com.marine.player.Player;
 import com.marine.server.Marine;
 

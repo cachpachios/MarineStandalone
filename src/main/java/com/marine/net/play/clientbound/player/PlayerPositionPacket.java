@@ -1,54 +1,50 @@
-package com.marine.net.play.clientbound;
+package com.marine.net.play.clientbound.player;
 
 import com.marine.io.data.ByteData;
 import com.marine.net.Packet;
 import com.marine.net.PacketOutputStream;
 import com.marine.net.States;
-import com.marine.net.play.serverbound.player.ServerboundPlayerLookPositionPacket;
 import com.marine.util.Location;
 
 import java.io.IOException;
 
-public class ClientboundPlayerLookPositionPacket extends Packet { //TODO Relative positions
+public class PlayerPositionPacket extends Packet {
 
     final Location l;
 
-    public ClientboundPlayerLookPositionPacket(Location l) {
+    public PlayerPositionPacket(Location l) {
         this.l = l;
-    }
-
-    public ClientboundPlayerLookPositionPacket(ServerboundPlayerLookPositionPacket l) {
-        this.l = l.getLocation();
     }
 
     @Override
     public int getID() {
-        return 0x08;
+        return 0x04;
     }
 
     @Override
     public void writeToStream(PacketOutputStream stream) throws IOException {
         ByteData d = new ByteData();
-        
+        d.writeVarInt(getID());
+
         d.writeDouble(l.getX());
         d.writeDouble(l.getY());
         d.writeDouble(l.getZ());
 
-        d.writeFloat(l.getYaw());
-        d.writeFloat(l.getPitch());
+        d.writeBoolean(true);
 
-        d.writeByte((byte) -1); // Bitmap TODO make it dynamic
+        d.writePacketPrefix();
 
-        stream.write(getID(), d);
+        stream.write(getID(), d.getBytes());
     }
 
     @Override
     public void readFromBytes(ByteData input) {
-
     }
 
     @Override
     public States getPacketState() {
         return States.INGAME;
     }
+
+
 }

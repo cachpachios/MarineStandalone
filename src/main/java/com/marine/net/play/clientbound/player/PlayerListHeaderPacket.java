@@ -1,4 +1,4 @@
-package com.marine.net.play.clientbound;
+package com.marine.net.play.clientbound.player;
 
 import com.marine.game.chat.ChatColor;
 import com.marine.io.data.ByteData;

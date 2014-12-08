@@ -166,13 +166,13 @@ public class PlayerManager {
 
         p.getClient().sendPacket(new JoinGamePacket(p));
 
-        p.sendPostion();
+        p.sendPosition();
 
         p.sendMapData(p.getWorld().getChunks(0, 0, 7, 7));
 
         p.sendAbilites();
 
-        p.sendPostion();
+        p.sendPosition();
         p.sendTime();
         p.loginPopulation();
     }

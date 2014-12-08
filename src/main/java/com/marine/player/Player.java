@@ -1,5 +1,11 @@
 package com.marine.player;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
+
 import com.marine.Logging;
 import com.marine.events.standardevents.LeaveEvent;
 import com.marine.game.CommandManager;
@@ -12,11 +18,12 @@ import com.marine.game.inventory.Inventory;
 import com.marine.game.inventory.PlayerInventory;
 import com.marine.net.Client;
 import com.marine.net.play.clientbound.ChatPacket;
-import com.marine.net.play.clientbound.ClientboundPlayerLookPositionPacket;
-import com.marine.net.play.clientbound.ExperiencePacket;
 import com.marine.net.play.clientbound.KickPacket;
 import com.marine.net.play.clientbound.inv.InventoryContentPacket;
 import com.marine.net.play.clientbound.inv.InventoryOpenPacket;
+import com.marine.net.play.clientbound.player.ClientboundPlayerLookPositionPacket;
+import com.marine.net.play.clientbound.player.ExperiencePacket;
+import com.marine.net.play.clientbound.player.PlayerLookPacket;
 import com.marine.net.play.clientbound.world.MapChunkPacket;
 import com.marine.net.play.clientbound.world.SpawnPointPacket;
 import com.marine.net.play.clientbound.world.TimeUpdatePacket;
@@ -27,8 +34,6 @@ import com.marine.util.StringUtils;
 import com.marine.world.World;
 import com.marine.world.chunk.Chunk;
 import com.marine.world.entity.Entity;
-
-import java.util.*;
 
 public class Player extends Entity implements IPlayer, CommandSender {
 
@@ -282,10 +287,19 @@ public class Player extends Entity implements IPlayer, CommandSender {
         this.getClient().sendPacket(new InventoryContentPacket(getInventory()));
     }
 
-    public void sendPostion() {
+    public void sendPostionAndLook() {
         this.getClient().sendPacket(new ClientboundPlayerLookPositionPacket(this.getLocation()));
     }
 
+    public void sendLook() {
+        this.getClient().sendPacket(new PlayerLookPacket(this.getLocation()));
+    }
+   
+    public void sendPosition() {
+    	sendPostionAndLook();
+    }
+    
+    
     public void sendMapData(List<Chunk> chunks) {
         this.getClient().sendPacket(new MapChunkPacket(this.getWorld(), chunks));
         for(Chunk c : chunks)

@@ -17,8 +17,7 @@ public class PlayerFile extends JSONConfig {
         super(new File("./players"), player.getUUID().toString());
         super.read();
         if (map.isNull("username") || !map.getString("username").equals(player.getName())) {
-            if (!map.isNull("username")) map.remove("username");
-            map.put("username", player.getName());
+        	set("username", player.getName());
         }
         if (map.isNull("exp") && map.isNull("levels")) {
             map.put("exp", 0d);

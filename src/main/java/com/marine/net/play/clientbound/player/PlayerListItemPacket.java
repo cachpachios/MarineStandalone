@@ -1,4 +1,4 @@
-package com.marine.net.play.clientbound;
+package com.marine.net.play.clientbound.player;
 
 import com.marine.game.chat.ChatComponent;
 import com.marine.io.data.ByteData;
