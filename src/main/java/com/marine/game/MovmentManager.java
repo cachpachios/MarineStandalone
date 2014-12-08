@@ -32,8 +32,6 @@ public class MovmentManager { // Used to keep track of player movments and send 
 			
 			p.getLocation().setOnGround(target.isOnGround());
 
-			//p.sendPostionAndLook();
-
 			// TODO Send to every other players in a sphere of ? blocks
 		}
 		else {
@@ -50,7 +48,6 @@ public class MovmentManager { // Used to keep track of player movments and send 
 	public boolean checkMovment(Player p, Location target) { // Current position is p.getLocation();
 		if(p.getLocation().getEuclideanDistance(target) > MAX_PACKET_MOVMENT)
 			return false;
-		else
 		return true; // TODO : Some cheat check in diffrent levels :P
 	}
 	
