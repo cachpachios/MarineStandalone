@@ -4,7 +4,7 @@ import com.marine.io.data.ByteData;
 import com.marine.net.Packet;
 import com.marine.net.PacketOutputStream;
 import com.marine.net.States;
-import com.marine.net.play.serverbound.ServerboundPlayerLookPositionPacket;
+import com.marine.net.play.serverbound.player.ServerboundPlayerLookPositionPacket;
 import com.marine.util.Location;
 
 import java.io.IOException;

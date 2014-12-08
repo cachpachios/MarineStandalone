@@ -1,4 +1,4 @@
-package com.marine.net.play.clientbound;
+package com.marine.net.play.clientbound.world;
 
 import com.marine.io.data.ByteData;
 import com.marine.net.Packet;

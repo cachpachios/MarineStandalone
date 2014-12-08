@@ -53,7 +53,6 @@ public class ByteData implements Iterable<Byte> {
 
         if (!canReadAnother()) {
             Logging.getLogger().error("ByteData ran out of bytes");
-            new Exception().printStackTrace();
             return 0;
         }
 
@@ -328,6 +327,10 @@ public class ByteData implements Iterable<Byte> {
 
     public void writePosition(Position pos) {
         writeend(ByteEncoder.writeLong(pos.encode()));
+    }
+    
+    public Position readPosition() {
+    	return Position.Decode(readLong());
     }
 
     public void writePacketPrefix() {

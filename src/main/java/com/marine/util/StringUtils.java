@@ -17,6 +17,10 @@ public class StringUtils {
      * @return E.cont#toString separated by s
      */
     public static String join(Collection e, String s) {
+    	if(s.length() == 0)
+    		return "";
+    	if(e.size() == 0)
+    		return "";
         StringBuilder builder = new StringBuilder();
         for (Object o : e) {
             builder.append(o).append(s);

@@ -2,6 +2,8 @@ package com.marine.util;
 
 import org.json.JSONObject;
 
+import com.marine.world.chunk.ChunkPos;
+
 /**
  * Position class
  */
@@ -21,6 +23,14 @@ public class Position extends Vector3i {
         setZ((int) (l << 38 >> 38));
     }
 
+    
+    public static Position Decode(long l) {
+        int x = ((int) (l >> 38));
+        int y =((int) ((l >> 26) & 0xFFF));
+        int z =((int) (l << 38 >> 38));
+        return new Position(x,y,z);
+    }
+    
     public long encode() {
         return ((getX() & 0x3FFFFFF) << 38) | ((getY() & 0xFFF) << 26) | (getZ() & 0x3FFFFFF);
     }
@@ -40,5 +50,13 @@ public class Position extends Vector3i {
         }
         return o;
     }
+
+	public ChunkPos getChunkPos() {
+		return new ChunkPos(getX() >> 4, getZ() >> 4);
+	}
+	
+	public Position getChunkBlockPos() {
+		return new Position(getX()/16, getY(), getZ()/16);
+	}
 
 }

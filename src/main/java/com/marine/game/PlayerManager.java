@@ -1,17 +1,23 @@
 package com.marine.game;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+
 import com.marine.StandaloneServer;
+import com.marine.game.async.ChatManager;
 import com.marine.game.async.TimeoutManager;
 import com.marine.net.Client;
+import com.marine.net.Packet;
 import com.marine.net.States;
 import com.marine.net.play.clientbound.JoinGamePacket;
 import com.marine.net.play.clientbound.KickPacket;
 import com.marine.player.AbstractPlayer;
 import com.marine.player.IPlayer;
 import com.marine.player.Player;
-
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class PlayerManager {
 
@@ -21,6 +27,8 @@ public class PlayerManager {
     private Map<String, Player> playerNames;
     private LoginHandler loginManager;
     private TimeoutManager timeout;
+    
+    private ChatManager chat;
 
     public PlayerManager(StandaloneServer server) {
         this.server = server;
@@ -29,9 +37,19 @@ public class PlayerManager {
         playerIDs = Collections.synchronizedMap(new ConcurrentHashMap<UUID, Player>());
         playerNames = Collections.synchronizedMap(new ConcurrentHashMap<String, Player>());
         timeout = new TimeoutManager(this);
+        chat = new ChatManager(this);
         timeout.start();
     }
+    
+    public ChatManager getChat() {
+    	return chat;
+    }
 
+    public void brodcastPacket(Packet packet) {
+    	for(Player p : allPlayers)
+    		p.getClient().sendPacket(packet);
+    }
+    
     public void updateThemAll() {
         for (Player p : allPlayers) {
             p.update();
@@ -133,6 +151,7 @@ public class PlayerManager {
     }
 
     public void disconnect(Player p, String msg) {
+    	p.disconnect();
         p.getClient().sendPacket(new KickPacket(msg));
         cleanUp(p);
     }

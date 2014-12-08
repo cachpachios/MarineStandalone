@@ -104,13 +104,10 @@ public class TimeoutManager extends Thread {
     public void keepAlive(Player p, int ID) {
         synchronized (lastSent) {
             synchronized (lastRecive) {
-                if (!lastSent.containsKey(p))
-                    players.disconnect(p, "Invalid keepAliveID");
-                else {
-                    lastSent.remove(p);
-                    lastRecive.remove(p);
-                    lastRecive.put(p, 0);
-                }
+                 lastSent.remove(p);
+                 lastRecive.remove(p);
+                 lastRecive.put(p, 0);
+            
             }
         }
     }

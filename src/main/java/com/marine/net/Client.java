@@ -96,6 +96,18 @@ public class Client {
 
         if (a == 0) return ConnectionStatus.EMPTY;
 
+        
+        int x = 0;
+		try {
+			x = getConnection().getInputStream().read();
+		} catch (IOException e1) {
+			 return ConnectionStatus.CONNECTION_PROBLEMS;
+		}
+		if(x == -1) {
+			return ConnectionStatus.CLOSED;
+		}
+		
+        
 
         byte[] allData = new byte[a];
 
@@ -106,6 +118,7 @@ public class Client {
         }
 
         ByteData data = new ByteData(allData);
+        data.write(0, (byte)x);
 
         ArrayList<ByteData> packages = new ArrayList<ByteData>();
 
@@ -146,15 +159,14 @@ public class Client {
     }
 
     public void setUserName(String name) {
-        if (userName != null)
-            return;
         userName = name;
     }
 
     public enum ConnectionStatus {
         EMPTY,
         CONNECTION_PROBLEMS,
-        PROCESSED
+        PROCESSED,
+        CLOSED
     }
 
 

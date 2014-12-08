@@ -57,15 +57,26 @@ public class World { // TODO Save and unload chunks...
         return loadedChunks.containsKey(ChunkPos.Encode(x, y));
     }
 
+    public boolean isChunkLoaded(ChunkPos p) {
+        return loadedChunks.containsKey(p.encode());
+    }
+    
     public void generateChunk(int x, int z) {
         loadedChunks.put(ChunkPos.Encode(x,z), generator.generateChunk(x, z));
     }
 
-    public Chunk getChunk(int x, int z) {
+    public Chunk getChunk(int x, int z) { // Will generate/loadchunk if not loaded
     	if(!isChunkLoaded(x,z))
     		return generator.generateChunk(x, z); // TODO Load world
     	else
     		return loadedChunks.get(ChunkPos.Encode(x, z));
+    }
+    
+    public Chunk getChunk(ChunkPos p) { // Will generate/loadchunk if not loaded
+    	if(!isChunkLoaded(p))
+    		return generator.generateChunk(p.getX(), p.getY()); // TODO Load world
+    	else
+    		return loadedChunks.get(p.encode());
     }
 
     public List<Chunk> getChunks(int x, int z, int amtX, int amtY) {
@@ -114,6 +125,19 @@ public class World { // TODO Save and unload chunks...
 
 	public long getWorldAge() {
 		return age;
+	}
+
+	public void setTypeAt(Position blockPos, BlockID target, boolean loadIfEmpty) {
+		ChunkPos p = blockPos.getChunkPos();
+		if(isChunkLoaded(p)) {
+			Position pos = blockPos.getChunkBlockPos();
+    		loadedChunks.get(p.encode()).setBlock(pos.getX(), pos.getY(), pos.getZ(), target);
+		}
+		else
+		if(loadIfEmpty) {
+			Position pos = blockPos.getChunkBlockPos();
+			getChunk(p).setBlock(pos.getX(), pos.getY(), pos.getZ(), target);
+		}
 	}
 
 }

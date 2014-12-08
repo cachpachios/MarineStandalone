@@ -2,6 +2,7 @@ package com.marine.player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,11 +19,11 @@ import com.marine.net.Client;
 import com.marine.net.play.clientbound.ChatPacket;
 import com.marine.net.play.clientbound.ClientboundPlayerLookPositionPacket;
 import com.marine.net.play.clientbound.ExperiencePacket;
-import com.marine.net.play.clientbound.MapChunkPacket;
-import com.marine.net.play.clientbound.SpawnPointPacket;
-import com.marine.net.play.clientbound.TimeUpdatePacket;
 import com.marine.net.play.clientbound.inv.InventoryContentPacket;
 import com.marine.net.play.clientbound.inv.InventoryOpenPacket;
+import com.marine.net.play.clientbound.world.MapChunkPacket;
+import com.marine.net.play.clientbound.world.SpawnPointPacket;
+import com.marine.net.play.clientbound.world.TimeUpdatePacket;
 import com.marine.util.Location;
 import com.marine.util.Position;
 import com.marine.util.StringUtils;
@@ -45,6 +46,8 @@ public class Player extends Entity implements IPlayer, CommandSender {
     private PlayerAbilites abilites;
     private String displayName;
     private PlayerFile playerFile;
+    
+    private List<Long> loadedChunks;
 
     public Player(PlayerManager manager, Client connection, PlayerID id, PlayerInventory inventory, int entityID, World world, Location pos, PlayerAbilites abilites, Gamemode gamemode) {
         super(entityID, world, pos);
@@ -63,6 +66,7 @@ public class Player extends Entity implements IPlayer, CommandSender {
             Logging.getLogger().error("Could not load/create player data file for: " + getName());
             return;
         }
+        loadedChunks = Collections.synchronizedList(new ArrayList<Long>());
         try {
             this.exp = (float) playerFile.map.getDouble("exp");
             this.levels = playerFile.map.getInt("levels");
@@ -285,13 +289,25 @@ public class Player extends Entity implements IPlayer, CommandSender {
 
     public void sendMapData(List<Chunk> chunks) {
         this.getClient().sendPacket(new MapChunkPacket(this.getWorld(), chunks));
+        for(Chunk c : chunks)
+        	if(!loadedChunks.contains(c.getPos().encode()))
+        		this.loadedChunks.add(c.getPos().encode());
     }
 
     public void sendMapData(Chunk... chunks) {
         this.sendMapData(Arrays.asList(chunks));
     }
+    
+    public void sendChunk(Chunk c) {
+    	
+    }
 
 	public void sendTime() {
 		this.getClient().sendPacket(new TimeUpdatePacket(getWorld()));
+	}
+
+	public void disconnect() {
+		// TODO Save data etc.
+		
 	}
 }

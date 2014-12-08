@@ -93,7 +93,19 @@ public class NetworkManager {
             for (Client c : connectedClients) {
                 Client.ConnectionStatus status = c.process();
                 if (status == Client.ConnectionStatus.CONNECTION_PROBLEMS)
-                    cleanUp(c);
+                	if(c.getUserName() != null) {
+                		this.marineServer.getPlayerManager().disconnect(marineServer.getPlayerManager().getPlayerByClient(c),"Client Disconnected");
+                	}
+                	else
+                		cleanUp(c);
+                else
+                if(status == Client.ConnectionStatus.CLOSED) {
+                	if(c.getUserName() != null) {
+                		this.marineServer.getPlayerManager().disconnect(marineServer.getPlayerManager().getPlayerByClient(c),"Client Disconnected");
+                	}
+                	else
+                		cleanUp(c);
+                }
                 if (status == Client.ConnectionStatus.PROCESSED)
                     didProccessSomething = true;
 
