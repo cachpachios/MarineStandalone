@@ -15,6 +15,8 @@ public class TimeoutManager extends Thread {
     private Map<Player, Integer> lastRecive; // Contains last recived in seconds
     private Map<Player, Integer> lastSent; // Contains last sent KeepAlivePacketID
 
+    private static final long sleepTime = 1500;
+    
     public TimeoutManager(PlayerManager manager) {
         rand = new Random();
         this.players = manager;
@@ -71,8 +73,11 @@ public class TimeoutManager extends Thread {
     @Override
     public void run() { // Will update each second :D
         long lastTime = getMiliTime();
+        long time;
         while (true) {
-            long time = getMiliTime();
+        	if(!players.hasAnyPlayers())
+				try { TimeoutManager.sleep(sleepTime); } catch (InterruptedException e1) {}
+        	time = getMiliTime();
 
             if (time - lastTime >= 1000) {
                 synchronized (lastRecive) {

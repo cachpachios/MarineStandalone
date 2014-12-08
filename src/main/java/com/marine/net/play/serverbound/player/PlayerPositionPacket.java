@@ -32,8 +32,7 @@ public class PlayerPositionPacket extends Packet {
 
     @Override
     public States getPacketState() {
-        // TODO Auto-generated method stub
-        return null;
+        return States.INGAME;
     }
 
 }

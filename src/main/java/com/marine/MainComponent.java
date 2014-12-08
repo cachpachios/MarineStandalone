@@ -18,10 +18,10 @@ public class MainComponent {
     }
 
     public static void main(String[] args) {
-        //System.setErr(Logging.getLogger()); // Not working gives error
+        System.setErr(Logging.getLogger()); // Not working gives error
     	if(getJavaVersion() < 1.7) {
             System.out.println("-- Could not start MarineStandalone: Requires java 1.7 or above --");
-            System.exit(0);
+            System.exit(1);
         }
         // Get the arguments
         arguments = Arrays.asList(args);

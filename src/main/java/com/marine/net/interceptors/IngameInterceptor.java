@@ -6,7 +6,10 @@ import com.marine.io.data.ByteData;
 import com.marine.net.Client;
 import com.marine.net.play.KeepAlivePacket;
 import com.marine.net.play.serverbound.IncomingChatPacket;
+import com.marine.net.play.serverbound.player.PlayerLookPacket;
+import com.marine.net.play.serverbound.player.PlayerPositionPacket;
 import com.marine.net.play.serverbound.player.ServerboundPlayerLookPositionPacket;
+import com.marine.util.Location;
 
 public class IngameInterceptor implements PacketInterceptor {
 
@@ -52,9 +55,19 @@ public class IngameInterceptor implements PacketInterceptor {
         } else if (id == 0x06) {
             ServerboundPlayerLookPositionPacket packet = new ServerboundPlayerLookPositionPacket();
             packet.readFromBytes(data);
-
+            players.getMovmentManager().registerMovment(players.getPlayerByClient(c), packet.getLocation());
+            return true;
+        } else if (id == 0x05) {
+            PlayerLookPacket packet = new PlayerLookPacket();
+            packet.readFromBytes(data);
+            players.getMovmentManager().registerLook(players.getPlayerByClient(c), packet.getYaw(), packet.getPitch());
+            return true;
+        } else if (id == 0x04) {
+            PlayerPositionPacket packet = new PlayerPositionPacket();
+            packet.readFromBytes(data);
+            players.getMovmentManager().registerMovment(players.getPlayerByClient(c), new Location(null, packet.X, packet.Y, packet.Z));
+            return true;
         }
-
         return false;
     }
 

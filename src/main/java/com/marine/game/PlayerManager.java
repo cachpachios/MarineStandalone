@@ -28,6 +28,7 @@ public class PlayerManager {
     private LoginHandler loginManager;
     private TimeoutManager timeout;
     
+    private MovmentManager movment;
     private ChatManager chat;
 
     public PlayerManager(StandaloneServer server) {
@@ -36,8 +37,11 @@ public class PlayerManager {
         allPlayers = Collections.synchronizedList(new ArrayList<Player>());
         playerIDs = Collections.synchronizedMap(new ConcurrentHashMap<UUID, Player>());
         playerNames = Collections.synchronizedMap(new ConcurrentHashMap<String, Player>());
+        
         timeout = new TimeoutManager(this);
         chat = new ChatManager(this);
+        movment = new MovmentManager(this);
+        
         timeout.start();
     }
     
@@ -183,4 +187,12 @@ public class PlayerManager {
         timeout.keepAlive(getPlayer(name), ID);
 
     }
+
+	public MovmentManager getMovmentManager() {
+		return movment;
+	}
+
+	public boolean hasAnyPlayers() {
+		return !allPlayers.isEmpty();
+	}
 }

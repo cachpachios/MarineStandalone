@@ -288,11 +288,11 @@ public class Player extends Entity implements IPlayer, CommandSender {
     }
 
     public void sendPostionAndLook() {
-        this.getClient().sendPacket(new ClientboundPlayerLookPositionPacket(this.getLocation()));
+        this.getClient().sendPacket(new ClientboundPlayerLookPositionPacket(getPosition()));
     }
 
     public void sendLook() {
-        this.getClient().sendPacket(new PlayerLookPacket(this.getLocation()));
+        this.getClient().sendPacket(new PlayerLookPacket(getPosition()));
     }
    
     public void sendPosition() {

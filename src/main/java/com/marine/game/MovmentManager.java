@@ -21,7 +21,7 @@ public class MovmentManager { // Used to keep track of player movments and send 
 	}
 	
 	public void registerMovment(Player p, Location target) {
-		boolean allowed = checkMovment(p, target);
+		boolean allowed = true; //checkMovment(p, target);
 		if(allowed) {
 			p.getLocation().setX(target.getX());
 			p.getLocation().setY(target.getY());
@@ -32,7 +32,7 @@ public class MovmentManager { // Used to keep track of player movments and send 
 			
 			p.getLocation().setOnGround(target.isOnGround());
 
-			p.sendPostionAndLook();
+			//p.sendPostionAndLook();
 
 			// TODO Send to every other players in a sphere of ? blocks
 		}
