@@ -65,19 +65,25 @@ public class Client {
 
     public void terminate() {
         try {
+        	this.connection.getOutputStream().flush();
+        	this.connection.getOutputStream().close();
+        	this.connection.getInputStream().close();
             this.connection.close();
         } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
+    
+    public boolean isActive() {
+        try { // Write a 0 bit to check if available
+            getConnection().getOutputStream().write(ByteEncoder.writeBoolean(false));
+        } catch (IOException e1) {
+            return false;
+        }
+        return true;
+    }
+    
     public ConnectionStatus process() { // Returns true if connection is closed.
-            try { // Write a 0 bit to check if available
-                getConnection().getOutputStream().write(ByteEncoder.writeBoolean(false));
-            } catch (IOException e1) {
-                return ConnectionStatus.CONNECTION_PROBLEMS;
-            }
-
 
         // Read from client:
         if (getConnection().isClosed()) {

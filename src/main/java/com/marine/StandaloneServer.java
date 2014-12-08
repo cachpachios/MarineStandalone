@@ -137,6 +137,9 @@ public class StandaloneServer implements Listener {
             if (ups >= targetTickRate) {
                 continue;
             }
+            //Check networkConnections
+            network.tryConnections();
+            
             // Stuff:
 
             if (Logging.getLogger().isDisplayed())

@@ -113,7 +113,8 @@ public class NetworkManager {
             }
             synchronized (cleanUpList) {
                 for (Client c : cleanUpList)
-                    terminate(c);
+                	if(connectedClients.contains(c))
+                		terminate(c);
                 cleanUpList.clear();
             }
 
@@ -125,6 +126,16 @@ public class NetworkManager {
         return !connectedClients.isEmpty();
     }
 
+    public void tryConnections() {
+    	for(Client c: connectedClients) {
+    		if(!c.isActive())  {
+    			if(c.getUserName() != null)
+    				marineServer.getPlayerManager().disconnect(marineServer.getPlayerManager().getPlayerByClient(c),"Connection Quit");
+    			cleanUp(c);
+    		}
+    	}
+    }
+    
     // Client processing thread
 
     public class ClientProcessor extends Thread {
