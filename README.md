@@ -1,5 +1,6 @@
 MarineStandalone
 ================
+[![Build Status](https://travis-ci.org/MarineAPI/MarineStandalone.svg?branch=master)](https://travis-ci.org/MarineAPI/MarineStandalone)
 
 A Minecraft Server software and an API.
 
