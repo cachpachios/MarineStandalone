@@ -8,7 +8,7 @@ import com.google.common.collect.HashBiMap;
  *
  * @author Citymonstret
  */
-public class Scheduler {
+public class Scheduler extends Thread {
 
     private long id;
     private final BiMap<Long, MarineRunnable> runnables;
@@ -38,5 +38,20 @@ public class Scheduler {
         long id = getNextId();
         runnables.put(id, runnable);
         return id;
+    }
+
+    private final long total = (1000 / 20);
+    private long lastTick = -1l;
+
+    @Override
+    public void run() {
+        if(lastTick == -1l) {
+            lastTick = System.currentTimeMillis();
+        }
+        if((System.currentTimeMillis() - lastTick) >= total) {
+            lastTick = System.currentTimeMillis();
+            tickAll();
+        }
+        run();
     }
 }
