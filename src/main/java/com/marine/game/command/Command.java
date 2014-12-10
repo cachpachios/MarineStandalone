@@ -45,6 +45,7 @@ public abstract class Command {
             returner[x] = returner[x].replace("@p", getClosestPlayer(sender).getName());
             returner[x] = returner[x].replace("@a", getAllPlayers());
             returner[x] = returner[x].replace("@e", getClosestEntity(sender).toString());
+            returner[x] = returner[x].replace("@r", getRandomPlayer());
         }
         return returner;
     }
@@ -52,6 +53,11 @@ public abstract class Command {
     public Entity getClosestEntity(CommandSender sender) {
         if (sender instanceof Player) return (Entity) sender;
         return null;
+    }
+
+    public String getRandomPlayer() {
+        List<Player> players = Marine.getPlayers();
+        return players.get((int)(Math.random() * players.size())).getName();
     }
 
     public String getAllPlayers() {

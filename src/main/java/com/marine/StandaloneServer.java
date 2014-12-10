@@ -106,6 +106,8 @@ public class StandaloneServer implements Listener {
         CommandManager.getInstance().registerCommand(new Say());
         CommandManager.getInstance().registerCommand(new Stop());
         CommandManager.getInstance().registerCommand(new Plugins());
+        CommandManager.getInstance().registerCommand(new SendAboveActionBarMessage());
+        CommandManager.getInstance().registerCommand(new Teleport());
     }
 
     public void start() {

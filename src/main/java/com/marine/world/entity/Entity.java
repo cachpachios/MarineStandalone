@@ -75,7 +75,6 @@ public abstract class Entity {
         return position;
     }
 
-
     public int getSecoundsLived() {
         return ticksLived / 20;
     }
