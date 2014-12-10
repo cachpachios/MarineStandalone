@@ -11,11 +11,13 @@ import com.google.common.collect.HashBiMap;
 public class Scheduler extends Thread {
 
     private long id;
-    private final BiMap<Long, MarineRunnable> runnables;
+    private final BiMap<Long, MarineRunnable> asyncRunnables;
+    private final BiMap<Long, MarineRunnable> syncRunnables;
 
     public Scheduler() {
         this.id = 0;
-        this.runnables = HashBiMap.create();
+        this.asyncRunnables = HashBiMap.create();
+        this.syncRunnables = HashBiMap.create();
     }
 
     public long getNextId() {
@@ -23,20 +25,34 @@ public class Scheduler extends Thread {
     }
 
     public void removeTask(final long l) {
-        if(runnables.containsKey(l)) {
-            runnables.remove(l);
+        if(syncRunnables.containsKey(l)) {
+            syncRunnables.remove(l);
+        } else if(asyncRunnables.containsKey(l)) {
+            asyncRunnables.remove(l);
         }
     }
 
-    private void tickAll() {
-        for(MarineRunnable runnable : runnables.values()) {
+    private void tickAsync() {
+        for(MarineRunnable runnable : asyncRunnables.values()) {
             runnable.tick();
         }
     }
 
-    public long createTask(final MarineRunnable runnable) {
+    public void tickSync() {
+        for(MarineRunnable runnable : syncRunnables.values()) {
+            runnable.tick();
+        }
+    }
+
+    public long createAsyncTask(final MarineRunnable runnable) {
         long id = getNextId();
-        runnables.put(id, runnable);
+        asyncRunnables.put(id, runnable);
+        return id;
+    }
+
+    public long createSyncTask(final MarineRunnable runnable) {
+        long id = getNextId();
+        syncRunnables.put(id, runnable);
         return id;
     }
 
@@ -44,6 +60,6 @@ public class Scheduler extends Thread {
 
     @Override
     public void run() {
-        tickAll();
+        tickAsync();
     }
 }

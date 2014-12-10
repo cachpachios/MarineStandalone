@@ -15,6 +15,7 @@ import com.marine.server.MarineServer;
 import com.marine.server.Server;
 import com.marine.settings.JSONFileHandler;
 import com.marine.settings.ServerSettings;
+import com.marine.util.LagTester;
 import com.marine.world.Difficulty;
 
 import java.io.File;
@@ -70,6 +71,8 @@ public class StandaloneServer implements Listener {
                 scheduler.run();
             }
         }, 0l, (1000 / 20));
+        // TPS and stuff
+        scheduler.createSyncTask(new LagTester());
     }
 
     public Scheduler getScheduler() {
@@ -163,7 +166,7 @@ public class StandaloneServer implements Listener {
             players.tickAllPlayers();
             worlds.tick();
             ServerProperties.tick();
-
+            scheduler.tickSync();
             ups++;
         }// Loop End
     }

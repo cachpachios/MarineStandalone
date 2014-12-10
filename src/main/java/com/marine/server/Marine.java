@@ -21,14 +21,27 @@ public class Marine {
     protected static MarineServer server;
     protected static StandaloneServer standaloneServer;
 
+    /**
+     * Get all players
+     * @return List containing all players
+     */
     public static List<Player> getPlayers() {
         return server.getPlayers();
     }
 
+    /**
+     * Get a player based on the username
+     * @param username Username
+     * @return Player
+     */
     public static Player getPlayer(String username) {
         return null;
     }
 
+    /**
+     * @param uuid
+     * @return
+     */
     public static Player getPlayer(UUID uuid) {
         return null;
     }
