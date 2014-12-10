@@ -23,6 +23,14 @@ public class MainComponent {
             System.out.println("-- Could not start MarineStandalone: Requires java 1.7 or above --");
             System.exit(1);
         }
+        try { // Check OS Arch and warn if lower than 64bit
+            if (Integer.parseInt(System.getProperty("sun.arch.data.model")) < 64) {
+                Logging.getLogger().warn("Warning Server is running on 32bit this is highly not recommended and can mean fatal errors or lag!");
+                Logging.getLogger().warn("Consider update java or your hardware.");
+            }
+        } catch (SecurityException e) { // If blocked print an error
+            Logging.getLogger().error("Unable to retrieve computer arch! Perhaps blocked by the OS.");
+        }
         // Get the arguments
         arguments = Arrays.asList(args);
         // Init. ServerSettings
