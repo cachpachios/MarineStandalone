@@ -1,5 +1,6 @@
 package com.marine.game.commands;
 
+import com.marine.game.chat.ChatColor;
 import com.marine.game.command.Command;
 import com.marine.game.command.CommandSender;
 import com.marine.server.Marine;
@@ -21,6 +22,6 @@ public class Say extends Command {
     @Override
     public void execute(CommandSender sender, String[] arguments) {
         arguments = replaceAll(arguments, sender);
-        Marine.broadcastMessage(StringUtils.join(Arrays.asList(arguments), " "));
+        Marine.broadcastMessage(ChatColor.transform('&', (StringUtils.join(Arrays.asList(arguments), " "))));
     }
 }
