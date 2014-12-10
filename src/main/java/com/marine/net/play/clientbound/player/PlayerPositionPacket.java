@@ -24,7 +24,6 @@ public class PlayerPositionPacket extends Packet {
     @Override
     public void writeToStream(PacketOutputStream stream) throws IOException {
         ByteData d = new ByteData();
-        d.writeVarInt(getID());
 
         d.writeDouble(l.getX());
         d.writeDouble(l.getY());
