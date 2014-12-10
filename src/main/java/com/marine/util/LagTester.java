@@ -27,7 +27,7 @@ public class LagTester extends MarineRunnable {
     public static double getTPS(final int ticks) {
         if(TC < ticks)
             return 20.0D;
-        final int t = (TC - 1 - ticks) % T.length;
+        final int t = (TC - ticks) % T.length;
         final long e = System.currentTimeMillis() - T[t];
         return ticks / (e / 1000.0D);
     }
@@ -47,6 +47,5 @@ public class LagTester extends MarineRunnable {
     @Override
     public void run() {
         T[TC++ % T.length] = System.currentTimeMillis();
-        System.out.println("Current TPS: " + getTPS());
     }
 }

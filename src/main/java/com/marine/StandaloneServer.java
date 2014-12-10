@@ -10,6 +10,8 @@ import com.marine.game.commands.*;
 import com.marine.game.scheduler.Scheduler;
 import com.marine.net.NetworkManager;
 import com.marine.player.Gamemode;
+import com.marine.plugins.PluginLoader;
+import com.marine.plugins.PluginManager;
 import com.marine.server.Marine;
 import com.marine.server.MarineServer;
 import com.marine.server.Server;
@@ -32,6 +34,7 @@ public class StandaloneServer implements Listener {
     private final Server server;
     private final JSONFileHandler jsonHandler;
     private final Scheduler scheduler;
+    private final PluginLoader pluginLoader;
     private final int targetTickRate; // For use in the loop should be same as (skipTime * 1000000000)
     public int ticks;
     public int refreshesPerSecound;
@@ -54,7 +57,7 @@ public class StandaloneServer implements Listener {
         this.jsonHandler = new JSONFileHandler(this, new File("./settings"), new File("./storage"));
         this.jsonHandler.loadAll();
         try {
-            this.jsonHandler.defaultValues();
+            //this.jsonHandler.defaultValues();
         } catch (Throwable e) {
             e.printStackTrace();
         }
@@ -73,10 +76,26 @@ public class StandaloneServer implements Listener {
         }, 0l, (1000 / 20));
         // TPS and stuff
         scheduler.createSyncTask(new LagTester());
+        this.pluginLoader = new PluginLoader(new PluginManager());
     }
 
     public Scheduler getScheduler() {
         return this.scheduler;
+    }
+
+    private void loadPlugins() {
+        File pluginFolder = new File("./plugins");
+        Logging.getLogger().log("Plugin Folder: " + pluginFolder.getPath());
+        if(!pluginFolder.exists()) {
+            if(!pluginFolder.mkdir()) {
+                Logging.getLogger().error("Could not create plugin folder");
+                return;
+            }
+        }
+        Logging.getLogger().log("Loading Plugins...");
+        this.pluginLoader.loadAllPlugins(pluginFolder);
+        Logging.getLogger().log("Enabling Plugins...");
+        this.pluginLoader.enableAllPlugins();
     }
 
     private void registerDefaultCommands() {
@@ -119,6 +138,9 @@ public class StandaloneServer implements Listener {
         //TODO World loading
 
         network.openConnection();
+
+        // Load in and enable plugins
+        this.loadPlugins();
 
         long startTime = System.nanoTime();
         long lastTime = startTime;

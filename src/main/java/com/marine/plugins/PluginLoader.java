@@ -3,6 +3,7 @@ package com.marine.plugins;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.marine.Logging;
+import sun.misc.JarFilter;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -23,6 +24,27 @@ public class PluginLoader {
 
     public PluginLoader(PluginManager manager) {
         this.manager = manager;
+    }
+
+    public void loadAllPlugins(File folder) {
+        if(!folder.exists() || !folder.isDirectory()) {
+            throw new IllegalArgumentException("You have to provide a valid plugin folder");
+        }
+        File[] files = folder.listFiles(new JarFilter());
+        for(File file : files) {
+            try {
+                loadPlugin(file);
+            } catch(Throwable e) {
+                Logging.getLogger().log("Could not load in plugin: " + file.getName());
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void enableAllPlugins() {
+        for(Plugin plugin : manager.getPlugins()) {
+            enablePlugin(plugin);
+        }
     }
 
     public Plugin loadPlugin(final File file) throws Throwable {
@@ -95,11 +117,12 @@ public class PluginLoader {
         if(desc == null)
             throw new RuntimeException("Could not find desc.json in file: " + file.getName());
         InputStream stream = jar.getInputStream(desc);
+        PluginFile f = new PluginFile(stream);
         try {
             jar.close();
         } catch(Exception e) {
             e.printStackTrace();
         }
-        return new PluginFile(stream);
+        return f;
     }
 }

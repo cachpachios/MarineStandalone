@@ -75,7 +75,7 @@ public class PluginClassLoader extends URLClassLoader {
     }
 
     synchronized void create(Plugin plugin) {
-        if (this.plugin != null || this.init != null)
+        if (this.init != null)
             throw new RuntimeException(plugin.getName() + " is already created");
         this.init = plugin;
         plugin.create(desc, data, this);

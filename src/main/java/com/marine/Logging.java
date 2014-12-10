@@ -1,6 +1,7 @@
 package com.marine;
 
 import com.marine.gui.ConsoleWindow;
+import com.marine.plugins.PluginLogger;
 
 import java.io.PrintStream;
 import java.util.Calendar;
@@ -43,6 +44,10 @@ public class Logging extends PrintStream {
 
     public boolean hasBeenTerminated() {
         return c.isClosed();
+    }
+
+    public void log(PluginLogger.PluginMessage message) {
+        log(message.getMessage());
     }
 
     public void log(String s) {

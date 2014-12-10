@@ -18,7 +18,7 @@ public class MainComponent {
     }
 
     public static void main(String[] args) {
-        System.setErr(Logging.getLogger()); // Not working gives error
+        // System.setErr(Logging.getLogger()); // Not working gives error
     	if(getJavaVersion() < 1.7) {
             System.out.println("-- Could not start MarineStandalone: Requires java 1.7 or above --");
             System.exit(1);
@@ -46,12 +46,12 @@ public class MainComponent {
         }
         settings.port = port;
         settings.tickrate = tickrate;
-        StandaloneServer server = new StandaloneServer(settings); // Port and TickRate
         // Check for GUI and init it
         if (!MainComponent.arguments.contains("nogui")) {// Check if GUI shouldn't be shown (Yes lazy implementation...)
             Logging.getLogger().createConsoleWindow(); // Create the simplest gui you will ever see :)
             //ServerSettings.getInstance().verbose();
         }
+        StandaloneServer server = new StandaloneServer(settings); // Port and TickRate
         // Check if the build is stable
         if (!ServerProperties.BUILD_STABLE)
             Logging.getLogger().warn("You are running an unstable build");

@@ -10,34 +10,35 @@ import java.util.UUID;
  */
 public class Plugin {
 
-    private UUID uuid;
+    private final UUID uuid;
     private boolean enabled;
 
-    private String name;
-    private String version;
-    private String author;
-
-    private PluginFile desc;
+    private String name, version, author;
 
     private File data;
 
     private PluginClassLoader classLoader;
+
+    private PluginFile desc;
+
+    private PluginLogger logger;
 
     public Plugin() {
         this.uuid = UUID.randomUUID();
         this.enabled = false;
     }
 
-    public void create(final PluginFile desc, final File data, final PluginClassLoader classLoader) {
+    final public void create(final PluginFile desc, final File data, final PluginClassLoader classLoader) {
         this.desc = desc;
-        this.data = data;
-        this.name = desc.name;
-        this.version = desc.version;
-        this.author = desc.author;
         this.classLoader = classLoader;
+        this.name = desc.name;
+        this.data = data;
+        this.author = desc.author;
+        this.version = desc.version;
+        this.logger = new PluginLogger(this);
     }
 
-    public PluginClassLoader getClassLoader() {
+    final public PluginClassLoader getClassLoader() {
         return this.classLoader;
     }
 
@@ -117,6 +118,10 @@ public class Plugin {
 
     public PluginFile getDesc() {
         return this.desc;
+    }
+
+    public PluginLogger getLogger() {
+        return this.logger;
     }
 
     @Override
