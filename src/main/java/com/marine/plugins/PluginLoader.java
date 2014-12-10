@@ -26,6 +26,10 @@ public class PluginLoader {
         this.manager = manager;
     }
 
+    public PluginManager getManager() {
+        return this.manager;
+    }
+
     public void loadAllPlugins(File folder) {
         if(!folder.exists() || !folder.isDirectory()) {
             throw new IllegalArgumentException("You have to provide a valid plugin folder");

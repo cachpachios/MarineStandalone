@@ -23,12 +23,17 @@ public class Plugin {
 
     private PluginLogger logger;
 
+    /**
+     * Constructor
+     */
     public Plugin() {
         this.uuid = UUID.randomUUID();
         this.enabled = false;
     }
 
     final public void create(final PluginFile desc, final File data, final PluginClassLoader classLoader) {
+        if (this.desc != null)
+            throw new RuntimeException("Plugin already created: " + desc.name);
         this.desc = desc;
         this.classLoader = classLoader;
         this.name = desc.name;
@@ -38,6 +43,10 @@ public class Plugin {
         this.logger = new PluginLogger(this);
     }
 
+    /**
+     * Get the plugin class loader
+     * @return Plugin class loader
+     */
     final public PluginClassLoader getClassLoader() {
         return this.classLoader;
     }
@@ -108,18 +117,30 @@ public class Plugin {
      * Get the plugin uuid
      * @return UUID
      */
-    public UUID getUUID() {
+    final public UUID getUUID() {
         return this.uuid;
     }
 
+    /**
+     * Get the plugin data folder
+     * @return Plugin data folder
+     */
     public File getDataFolder() {
         return this.data;
     }
 
+    /**
+     * Get the plugin description file
+     * @return Plugin Desc. file
+     */
     public PluginFile getDesc() {
         return this.desc;
     }
 
+    /**
+     * Get the plugin logger
+     * @return plugin logger
+     */
     public PluginLogger getLogger() {
         return this.logger;
     }
@@ -137,5 +158,10 @@ public class Plugin {
     @Override
     public int hashCode() {
         return 3 * uuid.hashCode() + 37 * getName().toLowerCase().hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return this.name;
     }
 }

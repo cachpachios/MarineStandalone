@@ -1,7 +1,6 @@
 package com.marine;
 
 import com.marine.events.Listener;
-import com.marine.events.TestListener;
 import com.marine.game.CommandManager;
 import com.marine.game.PlayerManager;
 import com.marine.game.WorldManager;
@@ -17,7 +16,6 @@ import com.marine.server.MarineServer;
 import com.marine.server.Server;
 import com.marine.settings.JSONFileHandler;
 import com.marine.settings.ServerSettings;
-import com.marine.util.LagTester;
 import com.marine.world.Difficulty;
 
 import java.io.File;
@@ -56,18 +54,20 @@ public class StandaloneServer implements Listener {
         this.server = new Server(this);
         this.jsonHandler = new JSONFileHandler(this, new File("./settings"), new File("./storage"));
         this.jsonHandler.loadAll();
-        try {
-            //this.jsonHandler.defaultValues();
+        /*try {
+            this.jsonHandler.defaultValues();
         } catch (Throwable e) {
             e.printStackTrace();
-        }
+        }*/
+        // Set the static standalone server
         Marine.setStandalone(this);
+        // Server the server
         Marine.setServer(this.server);
         // Register commands
         registerDefaultCommands();
-
-        getServer().registerListener(new TestListener());
+        // Create a new scheduler instance
         this.scheduler = new Scheduler();
+        // Set it to run 20 times per second
         new Timer("scheduler").scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
@@ -75,7 +75,8 @@ public class StandaloneServer implements Listener {
             }
         }, 0l, (1000 / 20));
         // TPS and stuff
-        scheduler.createSyncTask(new LagTester());
+        // scheduler.createSyncTask(new LagTester());
+        // Create a new plugin loader
         this.pluginLoader = new PluginLoader(new PluginManager());
     }
 
@@ -104,6 +105,7 @@ public class StandaloneServer implements Listener {
         CommandManager.getInstance().registerCommand(new Test());
         CommandManager.getInstance().registerCommand(new Say());
         CommandManager.getInstance().registerCommand(new Stop());
+        CommandManager.getInstance().registerCommand(new Plugins());
     }
 
     public void start() {
@@ -237,5 +239,9 @@ public class StandaloneServer implements Listener {
 
     public void setGamemode(Gamemode gm) {
         this.standard_gamemode = gm;
+    }
+
+    public PluginLoader getPluginLoader() {
+        return this.pluginLoader;
     }
 }
