@@ -1,10 +1,10 @@
 package com.marine.game.command;
 
+import java.util.Iterator;
+
 import com.marine.player.Player;
 import com.marine.server.Marine;
 import com.marine.world.entity.Entity;
-
-import java.util.List;
 
 /**
  * Created 2014-12-01 for MarineStandalone
@@ -55,15 +55,11 @@ public abstract class Command {
     }
 
     public String getAllPlayers() {
-        List<Player> players = Marine.getPlayers();
         StringBuilder s = new StringBuilder();
-        Player lastPlayer;
-        if (players.size() > 1)
-            lastPlayer = players.get(players.size() - 2);
-        else
-            lastPlayer = null;
-        for (Player player : players) {
-            if (lastPlayer != null && player == lastPlayer)
+        Iterator<Player> i = Marine.getPlayers().iterator();
+        while(i.hasNext()) {
+        	Player player = i.next();
+            if (!i.hasNext())
                 s.append(player.getName()).append(" and ");
             else
                 s.append(player.getName()).append(", ");

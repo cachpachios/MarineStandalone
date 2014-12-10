@@ -41,10 +41,6 @@ public class MovmentManager { // Used to keep track of player movments and send 
 		
 	}
 	
-	
-	
-	
-	
 	public boolean checkMovment(Player p, Location target) { // Current position is p.getLocation();
 		if(p.getLocation().getEuclideanDistance(target) > MAX_PACKET_MOVMENT)
 			return false;

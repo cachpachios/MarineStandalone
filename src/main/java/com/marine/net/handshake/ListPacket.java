@@ -57,7 +57,7 @@ public class ListPacket extends Packet {
             player.put("id", UUID.fromString("1-1-3-3-7").toString());
             player.put("name", "§cThere is nobody online!");
         }
-        samples.add(player);
+
 
         for (Player p : Marine.getPlayers()) {
             player = new JSONObject();
@@ -65,7 +65,9 @@ public class ListPacket extends Packet {
             player.put("name", p.getName());
             samples.add(player);
         }
-
+        
+        samples.add(player);
+        
         ListResponse response = new ListResponse(Marine.getMOTD(), Marine.getPlayers().size(), Marine.getMaxPlayers(), samples, getImage());
         ListEvent event = new ListEvent(response);
 

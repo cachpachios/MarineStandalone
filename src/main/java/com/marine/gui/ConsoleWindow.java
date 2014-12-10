@@ -1,33 +1,46 @@
 package com.marine.gui;
 
-import com.marine.Logging;
-import com.marine.ServerProperties;
-import com.marine.game.chat.ChatColor;
-import com.marine.server.Marine;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextPane;
+
+import com.marine.Logging;
+import com.marine.ServerProperties;
+import com.marine.game.chat.ChatColor;
+import com.marine.server.Marine;
 
 public class ConsoleWindow extends OutputStream {
     private final int maxLines;
     private final boolean showHTML;
     private JFrame jFrame;
     private JTextPane text;
-    private JTextPane input;
-    private ArrayList<String> console;
+    @SuppressWarnings("unused")
+	private JTextPane input;
+    private List<String> console;
     private String s;
     private java.util.List<Character> validChars;
 
     public ConsoleWindow(int maxLines) {
         this.maxLines = maxLines;
-        console = new ArrayList<>();
+        console = Collections.synchronizedList(new ArrayList<>());
         this.showHTML = false;
+        text = new JTextPane();
+        input = new JTextPane();
     }
 
     public void initWindow() {
@@ -53,9 +66,6 @@ public class ConsoleWindow extends OutputStream {
         GridBagConstraints c = new GridBagConstraints();
 
         jFrame.setLayout(new GridBagLayout());
-
-        text = new JTextPane();
-        input = new JTextPane();
 
         if (!showHTML)
             text.setContentType("text/html");

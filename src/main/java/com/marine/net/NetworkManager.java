@@ -1,28 +1,34 @@
 package com.marine.net;
 
-import com.marine.Logging;
-import com.marine.StandaloneServer;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+
+import com.marine.Logging;
+import com.marine.StandaloneServer;
 
 public class NetworkManager {
     private final StandaloneServer marineServer;
     public PacketHandler packetHandler;
     public ServerSocket server;
     public ClientProcessor clientHandler;
-    private List<Client> connectedClients;
+    private Collection<Client> clientList;
     private List<Client> cleanUpList;
+    
     private ConnectionThread connector;
 
-    public NetworkManager(StandaloneServer marineServer, int port) {
+    public NetworkManager(StandaloneServer marineServer, int port, boolean hashing) {
         this.marineServer = marineServer;
-        connectedClients = Collections.synchronizedList(new ArrayList<Client>());
-        cleanUpList = Collections.synchronizedList(new ArrayList<Client>());
+        if(hashing)
+        	clientList = Collections.synchronizedSet(new HashSet<Client>());
+        else
+        	clientList = Collections.synchronizedList(new ArrayList<Client>());
+        cleanUpList = new ArrayList<Client>();
         try {
             server = new ServerSocket(port, 100); //Port and num "queued" connections
         } catch (IOException e) {
@@ -46,14 +52,14 @@ public class NetworkManager {
         clientHandler.start(); // Start the connection thread to intercept any packages
     }
 
-    public List<Client> getClients() {
-        return connectedClients;
+    public Collection<Client> getClients() {
+    	return clientList;
     }
 
 
     public void broadcastPacket(Packet p) {
-        synchronized (connectedClients) {
-            for (Client c : connectedClients)
+        synchronized (clientList) {
+            for (Client c : clientList)
                 c.sendPacket(p);
         }
     }
@@ -65,7 +71,7 @@ public class NetworkManager {
         } catch (IOException e) {
             return;
         }
-        connectedClients.add(c);
+        clientList.add(c);
     }
 
     public void cleanUp(Client c) {
@@ -74,21 +80,18 @@ public class NetworkManager {
     }
 
     private void terminate(Client client) {
-        synchronized (cleanUpList) {
-            if (client.getState() != States.INGAME)
-                Logging.getLogger().info("Client Ping Terminated At: " + client.getAdress().getHostAddress());
-            connectedClients.remove(client);
-            client.terminate();
-        }
+    	if (client.getState() != States.INGAME)
+    		Logging.getLogger().info("Client Ping Terminated At: " + client.getAdress().getHostAddress() +":"+ client.getConnection().getPort());
+    	clientList.remove(client);
+        client.terminate();
     }
 
     public boolean processAll() {
-        synchronized (connectedClients) {
-            if (connectedClients.isEmpty())
+            if (clientList.isEmpty())
                 return false;
 
             boolean didProccessSomething = false;
-            for (Client c : connectedClients) {
+            for (Client c : clientList) {
                 Client.ConnectionStatus status = c.process();
                 if (status == Client.ConnectionStatus.CONNECTION_PROBLEMS)
                 	if(c.getUserName() != null) {
@@ -109,27 +112,20 @@ public class NetworkManager {
 
 
             }
-            synchronized (cleanUpList) {
                 for (Client c : cleanUpList)
-                	if(connectedClients.contains(c))
                 		terminate(c);
                 cleanUpList.clear();
-            }
-
             return didProccessSomething;
-        }
     }
 
     public boolean hasClientsConnected() {
-    	synchronized(connectedClients) {
-    		return !connectedClients.isEmpty();
-    	}
+    		return !clientList.isEmpty();
     }
 
     public void tryConnections() {
     	if(hasClientsConnected())
-    	synchronized(connectedClients) {
-    	for(Client c: connectedClients) {
+    	synchronized(clientList) {
+    	for(Client c: clientList) {
     		if(!c.isActive())  {
     			if(c.getUserName() != null)
     				marineServer.getPlayerManager().disconnect(marineServer.getPlayerManager().getPlayerByClient(c),"Connection Quit");
@@ -152,7 +148,7 @@ public class NetworkManager {
             while (true)
                 if (!host.processAll())
                     try {
-                        ClientProcessor.sleep(1, 100);
+                        ClientProcessor.sleep(0, 1000);
                     } catch (InterruptedException e) {
                         continue;
                     }

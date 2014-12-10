@@ -23,7 +23,7 @@ public class Logging extends PrintStream {
 
     public static Logging getLogger() {
         if (instance == null) {
-            ConsoleWindow window = new ConsoleWindow(50);
+            ConsoleWindow window = new ConsoleWindow(25);
             instance = new Logging(window);
         }
         return instance;

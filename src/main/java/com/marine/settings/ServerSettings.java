@@ -22,6 +22,7 @@ public class ServerSettings {
     public String host = "0.0.0.0";
     public String motd = "&cNo MOTD";
     private Properties config;
+    public boolean useHasing;
 
     public ServerSettings() {
         try {
@@ -33,11 +34,13 @@ public class ServerSettings {
             }
             config.load(new FileInputStream(file));
             Map<String, String> options = new HashMap<String, String>() {
-                {
+				private static final long serialVersionUID = 0L;
+				{
                     put("host", "127.0.0.1");
                     put("port", "25565");
                     put("motd", "&cTesting...");
                     put("tickrate", "20");
+                    put("useHashing", "false"); // Depending on what server you are running hashing is best for big servers with many players online, linear scanning for small servers with less players
                 }
             };
 
@@ -57,6 +60,7 @@ public class ServerSettings {
             this.host = config.getProperty("host");
             this.motd = config.getProperty("motd");
             this.tickrate = getInt(config.getProperty("tickrate"));
+            this.useHasing = getBoolean(config.getProperty("useHashing"));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -70,6 +74,13 @@ public class ServerSettings {
         return instance;
     }
 
+    public boolean getBoolean(String value) {
+    	if(value == "true")
+    		return true;
+    	else
+    		return false;
+    }
+    
     public int getInt(String value) {
         try {
             return Integer.parseInt(value);
@@ -78,7 +89,8 @@ public class ServerSettings {
         }
     }
 
-    public void verbose() {
+    @SuppressWarnings("rawtypes")
+	public void verbose() {
         for (Map.Entry entry : config.entrySet()) {
             Logging.getLogger().log("Key: " + entry.getKey() + " | Value: " + entry.getValue());
         }

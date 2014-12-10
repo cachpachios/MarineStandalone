@@ -1,9 +1,9 @@
 package com.marine.game;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -22,7 +22,7 @@ import com.marine.player.Player;
 public class PlayerManager {
 
     private final StandaloneServer server;
-    private List<Player> allPlayers;
+    private Set<Player> allPlayers;
     private Map<UUID, Player> playerIDs;
     private Map<String, Player> playerNames;
     private LoginHandler loginManager;
@@ -34,7 +34,7 @@ public class PlayerManager {
     public PlayerManager(StandaloneServer server) {
         this.server = server;
         loginManager = new LoginHandler(this, this.server.getWorldManager().getMainWorld(), this.server.getWorldManager().getMainWorld().getSpawnPoint());
-        allPlayers = Collections.synchronizedList(new ArrayList<Player>());
+        allPlayers = Collections.synchronizedSet(new HashSet<Player>());
         playerIDs = Collections.synchronizedMap(new ConcurrentHashMap<UUID, Player>());
         playerNames = Collections.synchronizedMap(new ConcurrentHashMap<String, Player>());
         
@@ -123,7 +123,7 @@ public class PlayerManager {
         return loginManager;
     }
 
-    public List<Player> getPlayers() {
+    public Set<Player> getPlayers() {
         return allPlayers;
     }
 
@@ -155,6 +155,8 @@ public class PlayerManager {
     }
 
     public void disconnect(Player p, String msg) {
+    	if(p == null)
+    		return;
     	p.disconnect();
         p.getClient().sendPacket(new KickPacket(msg));
         cleanUp(p);
@@ -178,7 +180,7 @@ public class PlayerManager {
 
         p.sendPosition();
         p.sendTime();
-        p.loginPopulation();
+        //p.loginPopulation();
     }
 
     public void keepAlive(String name, int ID) {

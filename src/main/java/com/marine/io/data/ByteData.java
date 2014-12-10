@@ -1,8 +1,5 @@
 package com.marine.io.data;
 
-import com.marine.Logging;
-import com.marine.util.Position;
-
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
@@ -10,6 +7,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
+import java.util.Vector;
+
+import com.marine.Logging;
+import com.marine.util.Position;
 
 public class ByteData implements Iterable<Byte> {
 
@@ -29,7 +30,7 @@ public class ByteData implements Iterable<Byte> {
     }
 
     public ByteData() {
-        this.bytes = new ArrayList<Byte>();
+        this.bytes = new Vector<Byte>();
     }
 
     public void writeByte(byte... b) {

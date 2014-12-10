@@ -79,7 +79,7 @@ public class StandaloneServer implements Listener {
         // Create a new plugin loader
         this.pluginLoader = new PluginLoader(new PluginManager());
     }
-
+    
     public Scheduler getScheduler() {
         return this.scheduler;
     }
@@ -126,7 +126,7 @@ public class StandaloneServer implements Listener {
 
         Logging.getLogger().log(String.format("Marine Standalone Server starting - Protocol Version §c§o%d§0 (Minecraft §c§o%s§0)", ServerProperties.PROTOCOL_VERSION, ServerProperties.MINECRAFT_NAME));
 
-        network = new NetworkManager(this, port);
+        network = new NetworkManager(this, port, ServerSettings.getInstance().useHasing);
 
         //TODO World loading
 
