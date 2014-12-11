@@ -33,7 +33,7 @@ public class PluginMain extends Plugin {
                 Marine.broadcastMessage(ChatColor.randomColor() + "Bajs");
             };
         });
-        Marine.getScheduler().createSyncTask(new TickTack(this));
+        // Marine.getScheduler().createSyncTask(new TickTack(this));
     }
 
 }

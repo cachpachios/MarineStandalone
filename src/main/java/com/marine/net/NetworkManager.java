@@ -1,16 +1,12 @@
 package com.marine.net;
 
+import com.marine.Logging;
+import com.marine.StandaloneServer;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-
-import com.marine.Logging;
-import com.marine.StandaloneServer;
+import java.util.*;
 
 public class NetworkManager {
     private final StandaloneServer marineServer;
@@ -36,6 +32,10 @@ public class NetworkManager {
             System.exit(1);
         }
         Logging.getLogger().log("Binding to port: §c" + port);
+        if(port != 25565) {
+            Logging.getLogger().warn(
+                    "You are not running on the default port (§c25565§0)");
+        }
         connector = new ConnectionThread(this);
 
         packetHandler = new PacketHandler(marineServer);
