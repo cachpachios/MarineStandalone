@@ -18,7 +18,11 @@ public class MovmentManager { // Used to keep track of player movments and send 
         // TODO Send to every other players in a sphere of ? blocks
 
     }
-
+    
+    public void teleport(Player p, Location target) {
+    	
+    }
+    
     public void registerMovment(Player p, Location target) {
         boolean allowed = true; //checkMovment(p, target);
         if (allowed) {

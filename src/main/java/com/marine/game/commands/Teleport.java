@@ -32,7 +32,7 @@ public class Teleport extends Command {
         player.teleport(new Location(player.getWorld(), x, y, z));
     }
 
-    private Location getRelative(Location location, String x, String y, String z) {
+    private Location getRelative(Location location, String x, String y, String z) throws NumberFormatException{
         // ~, ~-
         if (x.startsWith("~-")) {
             location.setX(location.getX() - Double.parseDouble(x.substring(2)));
