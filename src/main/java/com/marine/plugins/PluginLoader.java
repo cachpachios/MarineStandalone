@@ -7,7 +7,9 @@ import sun.misc.JarFilter;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -30,15 +32,15 @@ public class PluginLoader {
         return this.manager;
     }
 
-    public void loadAllPlugins(File folder) {
+    public void loadAllPlugins(File folder) throws PluginHandlerException {
         if (!folder.exists() || !folder.isDirectory()) {
-            throw new IllegalArgumentException("You have to provide a valid plugin folder");
+            throw new PluginHandlerException(this, "Invalid plugin folder (doesn't exist)");
         }
         File[] files = folder.listFiles(new JarFilter());
         for (File file : files) {
             try {
                 loadPlugin(file);
-            } catch (Throwable e) {
+            } catch (PluginHandlerException e) {
                 Logging.getLogger().log("Could not load in plugin: " + file.getName());
                 e.printStackTrace();
             }
@@ -51,9 +53,9 @@ public class PluginLoader {
         }
     }
 
-    public Plugin loadPlugin(final File file) throws Throwable {
+    public Plugin loadPlugin(final File file) throws PluginHandlerException {
         if (!file.exists())
-            throw new FileNotFoundException("Could not load plugin -> File cannot be null");
+            throw new PluginHandlerException(this, "Could not load plugin -> File cannot be null", new FileNotFoundException(file.getPath() + " does not exist"));
         final PluginFile desc = getPluginFile(file);
         final File parent = file.getParentFile(), data = new File(parent, desc.name);
         if (!data.exists()) {
@@ -61,7 +63,12 @@ public class PluginLoader {
                 Logging.getLogger().warn("Could not create data folder for " + desc.name);
             }
         }
-        PluginClassLoader loader = new PluginClassLoader(this, desc, file);
+        PluginClassLoader loader;
+        try {
+            loader = new PluginClassLoader(this, desc, file);
+        } catch(MalformedURLException e) {
+            throw new PluginHandlerException(this, "Could not get the PluginClassLoader", e);
+        }
         loaders.put(desc.name, loader);
         loader.create(loader.plugin);
         manager.addPlugin(loader.plugin);
@@ -115,13 +122,28 @@ public class PluginLoader {
         }
     }
 
-    private PluginFile getPluginFile(File file) throws Throwable {
-        JarFile jar = new JarFile(file);
+    private PluginFile getPluginFile(File file) throws PluginHandlerException {
+        JarFile jar;
+        try {
+            jar = new JarFile(file);
+        }  catch(IOException ioe) {
+            throw new PluginHandlerException(this, "Could not load in " + file.getName(), ioe);
+        }
         JarEntry desc = jar.getJarEntry("desc.json");
         if (desc == null)
-            throw new RuntimeException("Could not find desc.json in file: " + file.getName());
-        InputStream stream = jar.getInputStream(desc);
-        PluginFile f = new PluginFile(stream);
+            throw new PluginHandlerException(this, "Could not find desc.json in file: " + file.getName());
+        InputStream stream;
+        try {
+            stream = jar.getInputStream(desc);
+        } catch(IOException ioe) {
+            throw new PluginHandlerException(this, "Could not get stream for desc.json", ioe);
+        }
+        PluginFile f;
+        try {
+            f = new PluginFile(stream);
+        } catch(Exception e) {
+            throw new PluginHandlerException(this, "Could not load in plugin file from stream", e);
+        }
         try {
             jar.close();
         } catch (Exception e) {

@@ -51,7 +51,8 @@ public class Player extends Entity implements IPlayer, CommandSender {
 
     private List<Long> loadedChunks;
 
-    public Player(PlayerManager manager, Client connection, PlayerID id, PlayerInventory inventory, int entityID, World world, Location pos, PlayerAbilites abilites, Gamemode gamemode) {
+    public Player(final PlayerManager manager, final Client connection, final PlayerID id, final PlayerInventory inventory,
+                  final int entityID, final World world, final Location pos, final PlayerAbilites abilites, final Gamemode gamemode) {
         super(EntityType.PLAYER, entityID, world, pos);
         this.inventory = inventory;
         this.manager = manager;
@@ -68,7 +69,7 @@ public class Player extends Entity implements IPlayer, CommandSender {
             Logging.getLogger().error("Could not load/create player data file for: " + getName());
             return;
         }
-        loadedChunks = Collections.synchronizedList(new ArrayList<Long>());
+        this.loadedChunks = Collections.synchronizedList(new ArrayList<Long>());
     }
 
     public Player(AbstractPlayer player, Gamemode gm) {

@@ -26,37 +26,32 @@ public class JSONConfig {
         this.map = new JSONObject();
     }
 
-    public JSONConfig(File path, String name) {
+    public JSONConfig(File path, String name) throws JSONConfigException {
         this.path = path;
         this.name = name;
         if (!path.exists()) {
-            if (!path.mkdirs()) {
-                throw new RuntimeException("Could not create parent folders for " + name + ".json");
-            }
+            if (!path.mkdirs())
+                throw new JSONConfigException(name, "Could not create parent folders");
         }
         this.file = new File(path + File.separator + name + ".json");
-        boolean created = false;
         if (!file.exists()) {
             try {
-                if (!file.createNewFile()) {
-                    throw new RuntimeException("Could not create " + name + ".json");
-                }
-                created = true;
+                if (!file.createNewFile())
+                    throw new JSONConfigException(name, "Could not create the config");
             } catch (Exception e) {
-                e.printStackTrace();
+                throw new JSONConfigException(name, "Could not be created", e);
+            } finally {
+                this.map = new JSONObject();
             }
-        }
-        if (!created) {
+        } else {
             try {
                 BufferedReader reader = new BufferedReader(new FileReader(file));
                 JSONTokener tokener = new JSONTokener(reader);
                 this.map = new JSONObject(tokener);
                 reader.close();
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (IOException e) {
+                throw new JSONConfigException(name, "Could not load in the config", e);
             }
-        } else {
-            this.map = new JSONObject();
         }
         for(Map.Entry<String, Object> entry : defaultValues().entrySet()) {
             setIfNull(entry.getKey(), entry.getValue());
@@ -67,30 +62,33 @@ public class JSONConfig {
         return new HashMap<>();
     }
 
-    public void setIfNull(String s, Object o) {
+    public void setIfNull(String s, Object o) throws JSONConfigException {
         if (map.isNull(s))
 			try {
 				map.put(s, o);
-			} catch (JSONException e) {}
+			} catch (JSONException e) {
+                throw new JSONConfigException(name, "Could not set the value", e);
+            }
     }
 
-    public void set(String s, Object o) {
+    public void set(String s, Object o) throws JSONConfigException {
         if (!map.isNull(s))
             map.remove(s);
         try {
             map.put(s, o);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new JSONConfigException(name, "Could not set the value", e);
         }
     }
 
-    public void saveFile() {
+    public void saveFile() throws JSONConfigException {
+        BufferedWriter writer;
         try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+            writer = new BufferedWriter(new FileWriter(file));
             map.write(writer);
             writer.close();
         } catch(Exception e) {
-            e.printStackTrace();
+            throw new JSONConfigException(name, "Could not be saved", e);
         }
     }
 }

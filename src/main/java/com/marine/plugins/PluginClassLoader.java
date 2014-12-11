@@ -22,7 +22,7 @@ public class PluginClassLoader extends URLClassLoader {
     private final BiMap<String, Class> classes = HashBiMap.create();
     public Plugin plugin, init;
 
-    public PluginClassLoader(final PluginLoader loader, final PluginFile desc, final File file) throws MalformedURLException {
+    public PluginClassLoader(final PluginLoader loader, final PluginFile desc, final File file) throws MalformedURLException, PluginHandlerException {
         super(new URL[]{file.toURI().toURL()}, loader.getClass().getClassLoader());
         this.loader = loader;
         this.desc = desc;
@@ -33,12 +33,12 @@ public class PluginClassLoader extends URLClassLoader {
         try {
             jar = Class.forName(desc.mainClass, true, this);
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException(desc.name + ": Could not find main class");
+            throw new PluginHandlerException(this, "Could not find main class. Plugin: " + desc.name + ", Main class: " + desc.mainClass);
         }
         try {
             plg = jar.asSubclass(Plugin.class);
         } catch (ClassCastException e) {
-            throw new RuntimeException(desc.name + ": Plugin main class is not an instance of Plugin");
+            throw new PluginHandlerException(this, "Plugin main class for " + desc.name + " is not an instance of Plugin");
         }
         try {
             this.plugin = plg.newInstance();

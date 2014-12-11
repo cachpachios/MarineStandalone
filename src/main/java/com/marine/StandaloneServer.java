@@ -170,11 +170,15 @@ public class StandaloneServer implements Listener {
             */
 
             // Advance the tick clock.
-            players.tickAllPlayers();
-            worlds.tick();
-            ServerProperties.tick();
-            scheduler.tickSync();
-
+            try {
+                players.tickAllPlayers();
+                worlds.tick();
+                ServerProperties.tick();
+                scheduler.tickSync();
+            } catch(Throwable e) {
+                // Oh noes :(
+                e.printStackTrace();
+            }
             // ++# instead of ups++, as we are not using it as reference when increasing the value
             // Not too big of a deal, but it's good practise.
             // http://stackoverflow.com/questions/4752761/the-difference-between-n-vs-n-in-java

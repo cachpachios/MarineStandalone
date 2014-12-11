@@ -124,14 +124,18 @@ public abstract class Command {
     public String getAllPlayers() {
         StringBuilder s = new StringBuilder();
         Iterator<Player> i = Marine.getPlayers().iterator();
+        int lastL = 0;
         while (i.hasNext()) {
             Player player = i.next();
-            if (!i.hasNext())
+            if (!i.hasNext()) {
                 s.append(player.getName()).append(" and ");
-            else
+                lastL = 5;
+            } else {
                 s.append(player.getName()).append(", ");
+                lastL = 2;
+            }
         }
-        return s.toString().substring(0, s.toString().length() - 2);
+        return s.toString().substring(0, s.toString().length() - lastL);
     }
 
     /**
