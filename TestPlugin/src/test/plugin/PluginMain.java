@@ -31,7 +31,13 @@ public class PluginMain extends Plugin {
             @Override
             public void execute(CommandSender sender, String[] arguments) {
                 Marine.broadcastMessage(ChatColor.randomColor() + "Bajs");
-            };
+            }
+        });
+        CommandManager.getInstance().registerCommand(new Command("potatis", new String[0], "") {
+            @Override
+            public void execute(CommandSender sender, String[] arguments) {
+                Marine.broadcastMessage(ChatColor.DARK_AQUA + "Hello World" + replaceAll(new String[] { "@p is @a when @r is @e" }, sender)[0]);
+            }
         });
         // Marine.getScheduler().createSyncTask(new TickTack(this));
     }

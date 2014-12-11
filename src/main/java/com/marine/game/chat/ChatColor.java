@@ -31,6 +31,48 @@ public enum ChatColor {
 
     public static final char COLOR_CHARACTER = '\u00A7';
 
+    /**
+     * Constants, you can use these instead of
+     * the enums when sending normal messages.
+     */
+    public static final String
+            black = COLOR_CHARACTER + "0",
+            dark_blue = COLOR_CHARACTER + "1",
+            dark_green = COLOR_CHARACTER + "2",
+            dark_aqua = COLOR_CHARACTER + "3",
+            dark_red = COLOR_CHARACTER + "4",
+            dark_purple = COLOR_CHARACTER + "5",
+            gold = COLOR_CHARACTER + "6",
+            gray = COLOR_CHARACTER + "7",
+            dark_gray = COLOR_CHARACTER + "8",
+            blue = COLOR_CHARACTER + "9",
+            green = COLOR_CHARACTER + "a",
+            aqua = COLOR_CHARACTER + "b",
+            red = COLOR_CHARACTER + "c",
+            light_purple = COLOR_CHARACTER + "d",
+            yellow = COLOR_CHARACTER + "e",
+            white = COLOR_CHARACTER + "f",
+            obfuscated = COLOR_CHARACTER + "k",
+            bold = COLOR_CHARACTER + "l",
+            strikethrough = COLOR_CHARACTER + "m",
+            underline = COLOR_CHARACTER + "n",
+            italic = COLOR_CHARACTER + "o",
+            reset = COLOR_CHARACTER + "r";
+
+    /**
+     * Get a list of the string contants (not the enums)
+     * @return String constants
+     */
+    public static String[] constants() {
+        return new String[] {
+                black, dark_purple, dark_green, dark_aqua,
+                dark_red, dark_purple, gold, gray, dark_gray,
+                blue, green, aqua, red, light_purple, yellow,
+                white, obfuscated, bold, strikethrough, underline,
+                italic, reset
+        };
+    }
+
     private final String packetData;
     private final char id; // Old System one char ID
     private final Color color;
