@@ -192,7 +192,7 @@ public class PlayerManager {
 
     private void cleanUp(Player p) {
         removePlayer(p);
-        timeout.cleanUp(p);
+        // timeout.cleanUp(p);
         //TODO: send player remove packet to every other client
         server.getNetwork().cleanUp(p.getClient());
     }
