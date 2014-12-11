@@ -171,7 +171,7 @@ public class PlayerManager {
         timeout.cleanUp(p);
         //TODO: send player remove packet to every other client
         server.getNetwork().cleanUp(p.getClient());
-        // forceGC(p);
+        //forceGC(p); TODO: Fix this :(
     }
 
     public void disconnect(Player p, String msg) {
@@ -209,13 +209,15 @@ public class PlayerManager {
         timeout.keepAlive(getPlayer(uid), ID);
     }
 
-    public void forceGC(Player player) {
-        WeakReference ref = new WeakReference<>(player);
-        player = null;
-        while (ref.get() != null) {
-            System.gc();
-        }
-    }
+    // TODO: Make this work, its just freezes the server now
+    
+//    public void forceGC(Player player) {
+//        WeakReference ref = new WeakReference<>(player);
+//        player = null;
+//        while (ref.get() != null) {
+//            System.gc();
+//        }
+//    }
 
     public MovementManager getMovementManager() {
         return movement;
