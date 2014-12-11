@@ -24,6 +24,20 @@ public abstract class MarineRunnable {
         this.tick = 0;
     }
 
+    /**
+     * Will cancel the task, and GC the object
+     * @param scheduler Scheduler class
+     */
+    public void cancel(final Scheduler scheduler, final long n) {
+        scheduler.removeTask(n);
+        this.requiredTick = Long.MIN_VALUE;
+        this.tick = Long.MAX_VALUE;
+        this.totalRuns = Long.MIN_VALUE;
+        this.ran = Long.MAX_VALUE;
+        // Will make sure to GC it, to free up some memory
+        scheduler.forceGC(this);
+    }
+
     final public void tick(Scheduler scheduler, long n) {
         ++this.tick;
         if(this.tick >= this.requiredTick) {
@@ -31,11 +45,10 @@ public abstract class MarineRunnable {
                 this.run();
                 this.tick = 0;
             } else {
-                scheduler.removeTask(n);
+                this.cancel(scheduler, n);
             }
         }
     }
 
     public abstract void run();
-
 }

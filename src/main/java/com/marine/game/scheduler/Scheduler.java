@@ -3,6 +3,9 @@ package com.marine.game.scheduler;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
+import java.lang.ref.WeakReference;
+import java.util.Map;
+
 /**
  * Created 2014-12-08 for MarineStandalone
  *
@@ -22,6 +25,22 @@ public class Scheduler extends Thread {
 
     public long getNextId() {
         return this.id++;
+    }
+
+    public boolean removeTask(final MarineRunnable runnable) {
+        for(Map.Entry<Long, MarineRunnable> sync : syncRunnables.entrySet()) {
+            if(sync.getValue().equals(runnable)) {
+                removeTask(sync.getKey());
+                return true;
+            }
+        }
+        for(Map.Entry<Long, MarineRunnable> async : asyncRunnables.entrySet()) {
+            if(async.getValue().equals(runnable)) {
+                removeTask(async.getKey());
+                return true;
+            }
+        }
+        return false;
     }
 
     public void removeTask(final long l) {
@@ -61,5 +80,13 @@ public class Scheduler extends Thread {
     @Override
     public void run() {
         tickAsync();
+    }
+
+    public void forceGC(MarineRunnable runnable) {
+        WeakReference ref = new WeakReference<>(runnable);
+        runnable = null;
+        while(ref.get() != null) {
+            System.gc();
+        }
     }
 }
