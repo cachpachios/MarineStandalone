@@ -30,6 +30,10 @@ public class Marine {
         return server.getPlayers();
     }
 
+    public Player getPlayer(short uid) {
+        return getServer().getPlayer(uid);
+    }
+
     /**
      * Get a player based on the username
      *

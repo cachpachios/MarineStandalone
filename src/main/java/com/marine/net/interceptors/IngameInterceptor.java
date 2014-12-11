@@ -33,7 +33,7 @@ public class IngameInterceptor implements PacketInterceptor {
         if (id == 0x00) {
             KeepAlivePacket p = new KeepAlivePacket();
             p.readFromBytes(data);
-            players.keepAlive(c.getUserName(), p.getID());
+            players.keepAlive(c.getUID(), p.getID());
         } else if (id == 0x01) {
             IncomingChatPacket p = new IncomingChatPacket();
             p.readFromBytes(data);

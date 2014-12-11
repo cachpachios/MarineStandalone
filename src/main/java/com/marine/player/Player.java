@@ -48,6 +48,7 @@ public class Player extends Entity implements IPlayer, CommandSender {
     private PlayerAbilites abilites;
     private String displayName;
     private PlayerFile playerFile;
+    private final short uid;
 
     private List<Long> loadedChunks;
 
@@ -63,6 +64,7 @@ public class Player extends Entity implements IPlayer, CommandSender {
         this.gamemodeUpdate = false;
         this.permissions = new ArrayList<>();
         this.displayName = id.name;
+        this.uid = connection.getUID();
         try {
             this.playerFile = new PlayerFile(this);
         } catch (Exception e) {
@@ -74,6 +76,10 @@ public class Player extends Entity implements IPlayer, CommandSender {
 
     public Player(AbstractPlayer player, Gamemode gm) {
         this(player.getServer().getPlayerManager(), player.getClient(), player.getInfo(), new PlayerInventory((byte) 0x00), Entity.generateEntityID(), player.getWorld(), player.getLocation(), player.getAbilities(), gm);
+    }
+
+    public short getUID() {
+        return this.uid;
     }
 
     public void teleport(Location location) {

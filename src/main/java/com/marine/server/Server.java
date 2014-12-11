@@ -37,6 +37,11 @@ public class Server implements MarineServer {
     }
 
     @Override
+    public Player getPlayer(short uid) {
+        return getServer().getPlayerManager().getPlayer(uid);
+    }
+
+    @Override
     public StandaloneServer getServer() {
         return server;
     }

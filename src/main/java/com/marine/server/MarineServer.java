@@ -33,6 +33,8 @@ public interface MarineServer {
      */
     public int getPlayerCount();
 
+    public Player getPlayer(short uid);
+
     /**
      * Get a world based on its name
      *

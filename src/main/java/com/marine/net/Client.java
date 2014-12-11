@@ -9,20 +9,24 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class Client {
+
     private final NetworkManager networkManager;
     private final Socket connection;
     private final PacketOutputStream output;
+
     private States state;
     private int compressionThreshold = -1;
+
     // For indexing in IngameInterceptor
-    private String userName;
+    // private String userName;
+    private short uid;
 
     public Client(NetworkManager network, Socket s) throws IOException {
         this.state = States.HANDSHAKE;
         this.networkManager = network;
         this.connection = s;
         output = new PacketOutputStream(this, s.getOutputStream());
-        this.userName = null;
+        this.uid = -1;
     }
 
     public void sendPacket(Packet packet) { //TODO: PacketBuffer
@@ -148,13 +152,12 @@ public class Client {
         return compressionThreshold != -1;
     }
 
-    public String getUserName() {
-        return userName;
+    public short getUID() {
+        return this.uid;
     }
 
-    public void setUserName(String name) {
-        userName = name;
-        System.out.println(name);
+    public void setUID(final short uid) {
+        this.uid = uid;
     }
 
     public enum ConnectionStatus {

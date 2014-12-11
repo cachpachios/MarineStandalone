@@ -43,7 +43,7 @@ public class ChatManager {
     }
 
     public void brodcastMessage(String msg) {
-        manager.brodcastPacket(new ChatPacket(msg));
+        manager.broadcastPacket(new ChatPacket(msg));
     }
 
     public void sendChatMessage(Player player, String message) {

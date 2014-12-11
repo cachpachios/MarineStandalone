@@ -12,6 +12,7 @@ import com.marine.player.AbstractPlayer;
 import com.marine.player.IPlayer;
 import com.marine.player.Player;
 
+import java.lang.ref.WeakReference;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -19,7 +20,9 @@ public class PlayerManager {
 
     private final StandaloneServer server;
     private Set<Player> allPlayers;
-    private Map<UUID, Player> playerIDs;
+    // private Map<UUID, Player> playerIDs;
+    private Map<Short, Player> uids;
+    private short uid = -1;
     private Map<String, Player> playerNames;
     private LoginHandler loginManager;
     private TimeoutManager timeout;
@@ -31,7 +34,8 @@ public class PlayerManager {
         this.server = server;
         loginManager = new LoginHandler(this, this.server.getWorldManager().getMainWorld(), this.server.getWorldManager().getMainWorld().getSpawnPoint());
         allPlayers = Collections.synchronizedSet(new HashSet<Player>());
-        playerIDs = Collections.synchronizedMap(new ConcurrentHashMap<UUID, Player>());
+        // playerIDs = Collections.synchronizedMap(new ConcurrentHashMap<UUID, Player>());
+        uids = Collections.synchronizedMap(new ConcurrentHashMap<Short, Player>());
         playerNames = Collections.synchronizedMap(new ConcurrentHashMap<String, Player>());
 
         timeout = new TimeoutManager(this);
@@ -45,7 +49,7 @@ public class PlayerManager {
         return chat;
     }
 
-    public void brodcastPacket(Packet packet) {
+    public void broadcastPacket(Packet packet) {
         for (Player p : allPlayers)
             p.getClient().sendPacket(packet);
     }
@@ -57,6 +61,10 @@ public class PlayerManager {
         }
     }
 
+    public short getNextUID() {
+        return ++uid;
+    }
+
     public StandaloneServer getServer() {
         return server;
     }
@@ -66,7 +74,14 @@ public class PlayerManager {
     }
 
     public boolean isPlayerOnline(UUID uid) {
-        return playerIDs.containsKey(uid);
+        for(Player player : uids.values())
+            if(player.getUUID().equals(uid))
+                return true;
+        return false;
+    }
+
+    public boolean isPlayerOnline(short uid) {
+        return uids.containsKey(uid);
     }
 
     protected void putPlayer(Player p) {
@@ -74,14 +89,25 @@ public class PlayerManager {
             return;
 
         allPlayers.add(p);
-        playerIDs.put(p.getUUID(), p);
+        //playerIDs.put(p.getUUID(), p);
+        uids.put(p.getUID(), p);
         playerNames.put(p.getName(), p);
     }
 
     public Player getPlayer(UUID uuid) {
-        if (!playerIDs.containsKey(uuid))
-            return null;
-        return playerIDs.get(uuid);
+        // if (!playerIDs.containsKey(uuid))
+        //    return null;
+        // return playerIDs.get(uuid);
+        for(Player player : uids.values())
+            if(player.getUUID().equals(uuid))
+                return player;
+        return null;
+    }
+
+    public Player getPlayer(short uid) {
+        if(uids.containsKey(uid))
+            return uids.get(uid);
+        return null;
     }
 
     public Player getPlayer(String displayName) {
@@ -93,11 +119,11 @@ public class PlayerManager {
 
     protected void removePlayer(Player p) {
         synchronized (allPlayers) {
-            synchronized (playerIDs) {
+            synchronized (uids) {
                 synchronized (playerNames) {
                     if (allPlayers.contains(p)) {
                         allPlayers.remove(p);
-                        playerIDs.remove(p.getUUID());
+                        uids.remove(p.getUID());
                         playerNames.remove(p.getName());
                     }
                 }
@@ -148,6 +174,7 @@ public class PlayerManager {
         timeout.cleanUp(p);
         //TODO: send player remove packet to every other client
         server.getNetwork().cleanUp(p.getClient());
+        forceGC(p);
     }
 
     public void disconnect(Player p, String msg) {
@@ -179,11 +206,18 @@ public class PlayerManager {
         //p.loginPopulation();
     }
 
-    public void keepAlive(String name, int ID) {
-        if (name == null)
+    public void keepAlive(short uid, int ID) {
+        if(uid == -1)
             return;
-        timeout.keepAlive(getPlayer(name), ID);
+        timeout.keepAlive(getPlayer(uid), ID);
+    }
 
+    public void forceGC(Player player) {
+        WeakReference ref = new WeakReference<>(player);
+        player = null;
+        while (ref.get() != null) {
+            System.gc();
+        }
     }
 
     public MovmentManager getMovmentManager() {

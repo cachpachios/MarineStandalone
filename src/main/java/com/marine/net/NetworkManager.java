@@ -94,12 +94,13 @@ public class NetworkManager {
         for (Client c : clientList) {
             Client.ConnectionStatus status = c.process();
             if (status == Client.ConnectionStatus.CONNECTION_PROBLEMS)
-                if (c.getUserName() != null) {
+                if (c.getUID() != -1) {
                     this.marineServer.getPlayerManager().disconnect(marineServer.getPlayerManager().getPlayerByClient(c), "Client Disconnected");
-                } else
+                } else {
                     cleanUp(c);
+                }
             else if (status == Client.ConnectionStatus.CLOSED) {
-                if (c.getUserName() != null) {
+                if (c.getUID() != -1) {
                     this.marineServer.getPlayerManager().disconnect(marineServer.getPlayerManager().getPlayerByClient(c), "Client Disconnected");
                 } else
                     cleanUp(c);
@@ -124,7 +125,7 @@ public class NetworkManager {
             synchronized (clientList) {
                 for (Client c : clientList) {
                     if (!c.isActive()) {
-                        if (c.getUserName() != null)
+                        if (c.getUID() != -1)
                             marineServer.getPlayerManager().disconnect(marineServer.getPlayerManager().getPlayerByClient(c), "Connection Quit");
                         cleanUp(c);
                     }

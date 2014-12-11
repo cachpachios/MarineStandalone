@@ -41,7 +41,8 @@ public class LoginHandler {
 
         IPlayer p = new AbstractPlayer(playerManager.getServer(), playerManager.getServer().getWorldManager().getMainWorld(), new PlayerID(name, uuid), c, new PlayerAbilites(false, true, false, 0.2f, 0.2f), spawnLocation);
 
-        c.setUserName(name);
+        // c.setUserName(name);
+        c.setUID(playerManager.getNextUID());
 
         return new LoginResponse(p);
     }
