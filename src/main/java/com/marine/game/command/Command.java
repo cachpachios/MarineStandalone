@@ -2,6 +2,7 @@ package com.marine.game.command;
 
 import com.marine.player.Player;
 import com.marine.server.Marine;
+import com.marine.util.Location;
 import com.marine.world.entity.Entity;
 
 import java.util.ArrayList;
@@ -42,12 +43,21 @@ public abstract class Command {
 
     public String[] replaceAll(String[] args, CommandSender sender) {
         String[] returner = new String[args.length];
+        // Retrieve the objects
+        Player closestPlayer = getClosestPlayer(sender), randomPlayer = getRandomPlayer();
+        Entity closestEntity = getClosestEntity(sender);
+        // Make strings
+        String cPlr = closestPlayer == null ? "none" : closestPlayer.getName();
+        String cEnt = closestEntity == null ? "none" : closestEntity.toString();
+        String rPlr = randomPlayer == null ? "none" : randomPlayer.getName();
+        String aPlr = getAllPlayers();
+        // Loop through the args
         for (int x = 0; x < args.length; x++) {
-            returner[x] = args[x];
-            returner[x] = returner[x].replace("@p", getClosestPlayer(sender).getName());
-            returner[x] = returner[x].replace("@a", getAllPlayers());
-            returner[x] = returner[x].replace("@e", getClosestEntity(sender).toString());
-            returner[x] = returner[x].replace("@r", getRandomPlayer());
+            returner[x] = args[x]
+                    .replace("@p", cPlr)
+                    .replace("@e", cEnt)
+                    .replace("@r", rPlr)
+                    .replace("@a", aPlr);
         }
         return returner;
     }
@@ -57,9 +67,9 @@ public abstract class Command {
         return null;
     }
 
-    public String getRandomPlayer() {
+    public Player getRandomPlayer() {
         List<Player> players = new ArrayList<>(Marine.getPlayers());
-        return players.get((int) (Math.random() * players.size())).getName();
+        return players.get((int) (Math.random() * players.size()));
     }
 
     public String getAllPlayers() {
@@ -77,6 +87,15 @@ public abstract class Command {
 
     public Player getClosestPlayer(CommandSender sender) {
         if (sender instanceof Player) return (Player) sender;
-        else return null;
+        Player closets = null;
+        double distance = Double.MAX_VALUE, current;
+        Location loc = sender.getLocation();
+        for(Player player : Marine.getPlayers()) {
+            if((current = loc.getEuclideanDistance(player.getLocation())) < distance) {
+                distance = current;
+                closets = player;
+            }
+        }
+        return closets;
     }
 }
