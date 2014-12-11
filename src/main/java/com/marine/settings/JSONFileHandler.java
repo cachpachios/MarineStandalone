@@ -24,7 +24,7 @@ public class JSONFileHandler {
             super(file);
         }
 
-        public StorageConfig(File parent, String file) {
+        public StorageConfig(File parent, String file) throws JSONException {
             super(parent, file);
         }
 
@@ -45,7 +45,7 @@ public class JSONFileHandler {
     private final JSONConfig administrators, banned, whitelist;
     private final File settingsPath, storagePath;
 
-    public JSONFileHandler(final StandaloneServer server, final File settingsPath, final File storagePath) {
+    public JSONFileHandler(final StandaloneServer server, final File settingsPath, final File storagePath) throws JSONException {
         this.server = server;
         this.settingsPath = settingsPath;
         this.storagePath = storagePath;

@@ -22,6 +22,8 @@ import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.json.JSONException;
+
 public class StandaloneServer implements Listener {
 
     public final int skipTime;
@@ -30,7 +32,7 @@ public class StandaloneServer implements Listener {
     private final PlayerManager players;
     private final WorldManager worlds;
     private final Server server;
-    private final JSONFileHandler jsonHandler;
+    private JSONFileHandler jsonHandler;
     private final Scheduler scheduler;
     private final PluginLoader pluginLoader;
     private final int targetTickRate; // For use in the loop should be same as (skipTime * 1000000000)
@@ -52,7 +54,13 @@ public class StandaloneServer implements Listener {
         this.worlds = new WorldManager();
         this.players = new PlayerManager(this);
         this.server = new Server(this);
-        this.jsonHandler = new JSONFileHandler(this, new File("./settings"), new File("./storage"));
+		this.jsonHandler = null;
+        try {
+			this.jsonHandler = new JSONFileHandler(this, new File("./settings"), new File("./storage"));
+		} catch (JSONException e) {
+			Logging.instance().fatal("Json Handler Init failed");
+			System.exit(1);
+		}
         /*try {
             this.jsonHandler.defaultValues();
         } catch (Throwable e) {
