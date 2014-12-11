@@ -1,5 +1,6 @@
 package com.marine.events.standardevents;
 
+import com.marine.events.Cancellable;
 import com.marine.events.MarineEvent;
 import com.marine.net.handshake.ListResponse;
 
@@ -8,13 +9,15 @@ import com.marine.net.handshake.ListResponse;
  *
  * @author Citymonstret
  */
-public class ListEvent extends MarineEvent {
+public class ListEvent extends MarineEvent implements Cancellable {
 
     private ListResponse response;
+    private boolean cancelled;
 
     public ListEvent(ListResponse response) {
         super("list");
         this.response = response;
+        this.cancelled = false;
     }
 
     public ListResponse getResponse() {
@@ -23,5 +26,15 @@ public class ListEvent extends MarineEvent {
 
     public void setResponse(ListResponse response) {
         this.response = response;
+    }
+
+    @Override
+    public boolean isCancelled() {
+        return this.cancelled;
+    }
+
+    @Override
+    public void setCancelled(boolean cancelled) {
+        this.cancelled = cancelled;
     }
 }

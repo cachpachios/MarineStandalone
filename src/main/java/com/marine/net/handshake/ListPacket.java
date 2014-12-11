@@ -1,12 +1,5 @@
 package com.marine.net.handshake;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.UUID;
-
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-
 import com.marine.ServerProperties;
 import com.marine.events.standardevents.ListEvent;
 import com.marine.io.Base64Encoding;
@@ -17,6 +10,12 @@ import com.marine.net.PacketOutputStream;
 import com.marine.net.States;
 import com.marine.player.Player;
 import com.marine.server.Marine;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.UUID;
 
 public class ListPacket extends Packet {
 
@@ -73,11 +72,11 @@ public class ListPacket extends Packet {
 
         Marine.getServer().callEvent(event);
 
-        ByteData data = new ByteData();
-
-        data.writeUTF8(encode(event.getResponse()));
-
-        stream.write(getID(), data.getBytes());
+        if(!event.isCancelled() /* This allows us to block listing for certain IPs and such */) {
+            ByteData data = new ByteData();
+            data.writeUTF8(encode(event.getResponse()));
+            stream.write(getID(), data.getBytes());
+        }
     }
 
     @Override

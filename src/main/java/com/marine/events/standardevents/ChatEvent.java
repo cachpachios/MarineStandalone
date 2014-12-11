@@ -1,7 +1,7 @@
 package com.marine.events.standardevents;
 
+import com.marine.PlayerEvent;
 import com.marine.events.Cancellable;
-import com.marine.events.MarineEvent;
 import com.marine.player.Player;
 
 /**
@@ -9,16 +9,14 @@ import com.marine.player.Player;
  *
  * @author Citymonstret
  */
-public class ChatEvent extends MarineEvent implements Cancellable {
+public class ChatEvent extends PlayerEvent implements Cancellable {
 
     private String message;
-    private Player sender;
     private boolean cancelled;
 
-    public ChatEvent(Player sender, String message) {
-        super("chat");
+    public ChatEvent(final Player sender, String message) {
+        super(sender, "chat");
         this.message = message;
-        this.sender = sender;
         this.cancelled = false;
     }
 
@@ -31,7 +29,7 @@ public class ChatEvent extends MarineEvent implements Cancellable {
     }
 
     public Player getSender() {
-        return this.sender;
+        return this.getPlayer();
     }
 
     @Override

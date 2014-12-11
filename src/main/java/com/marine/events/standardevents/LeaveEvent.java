@@ -1,6 +1,6 @@
 package com.marine.events.standardevents;
 
-import com.marine.events.MarineEvent;
+import com.marine.PlayerEvent;
 import com.marine.player.Player;
 
 /**
@@ -8,21 +8,15 @@ import com.marine.player.Player;
  *
  * @author Citymonstret
  */
-public class LeaveEvent extends MarineEvent {
+public class LeaveEvent extends PlayerEvent {
 
-    private final Player player;
     private final QuitReason reason;
     private String message;
 
     public LeaveEvent(final Player player, final QuitReason reason) {
-        super("leave");
-        this.player = player;
+        super(player, "leave");
         this.reason = reason;
         this.message = reason.getMessage();
-    }
-
-    public Player getPlayer() {
-        return this.player;
     }
 
     public QuitReason getReason() {
