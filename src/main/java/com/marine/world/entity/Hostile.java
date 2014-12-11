@@ -5,5 +5,5 @@ package com.marine.world.entity;
  *
  * @author Citymonstret
  */
-public interface Attacking {
+public interface Hostile {
 }
