@@ -1,5 +1,6 @@
 package com.marine.world;
 
+import com.marine.game.WorldManager;
 import com.marine.util.Position;
 import com.marine.world.chunk.Chunk;
 import com.marine.world.chunk.ChunkPos;
@@ -13,7 +14,7 @@ public class World { // TODO Save and unload chunks...
 
     // Identifiers:
     private final String name;
-    private final UUID uuid;
+    private final byte uid;
     private final Dimension dimension;
 
     //Data:
@@ -27,7 +28,7 @@ public class World { // TODO Save and unload chunks...
 
     public World(final String name) {
         this.generator = null; //this should use the default generator
-        this.uuid = UUID.randomUUID();
+        this.uid = WorldManager.getNextUID();
         this.name = name;
         this.dimension = Dimension.OVERWORLD;
         this.time = 0;
@@ -41,7 +42,7 @@ public class World { // TODO Save and unload chunks...
         this.generator = generator;
         this.generator.setWorld(this);
 
-        uuid = UUID.randomUUID();
+        uid = WorldManager.getNextUID();
         this.name = name;
 
         loadedChunks = Collections.synchronizedMap(new ConcurrentHashMap<Long, Chunk>());
@@ -93,10 +94,6 @@ public class World { // TODO Save and unload chunks...
         return dimension;
     }
 
-    public UUID getUUID() {
-        return uuid;
-    }
-
     public Position getSpawnPoint() {
         return spawnPoint;
     }
@@ -136,5 +133,9 @@ public class World { // TODO Save and unload chunks...
             getChunk(p).setBlock(pos.getX(), pos.getY(), pos.getZ(), target);
         }
     }
+
+	public byte getUID() {
+		return uid;
+	}
 
 }
