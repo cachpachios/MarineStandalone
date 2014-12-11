@@ -19,28 +19,28 @@ import java.util.concurrent.ConcurrentHashMap;
 public class PlayerManager {
 
     private final StandaloneServer server;
-    private Set<Player> allPlayers;
+    // private Set<Player> allPlayers;
     // private Map<UUID, Player> playerIDs;
-    private Map<Short, Player> uids;
+    private final Map<Short, Player> uids;
     private short uid = -1;
-    private Map<String, Player> playerNames;
+    private final Map<String, Player> playerNames;
     private LoginHandler loginManager;
     private TimeoutManager timeout;
 
-    private MovmentManager movment;
+    private MovementManager movement;
     private ChatManager chat;
 
     public PlayerManager(StandaloneServer server) {
         this.server = server;
         loginManager = new LoginHandler(this, this.server.getWorldManager().getMainWorld(), this.server.getWorldManager().getMainWorld().getSpawnPoint());
-        allPlayers = Collections.synchronizedSet(new HashSet<Player>());
+        // allPlayers = Collections.synchronizedSet(new HashSet<Player>());
         // playerIDs = Collections.synchronizedMap(new ConcurrentHashMap<UUID, Player>());
         uids = Collections.synchronizedMap(new ConcurrentHashMap<Short, Player>());
         playerNames = Collections.synchronizedMap(new ConcurrentHashMap<String, Player>());
 
         timeout = new TimeoutManager(this);
         chat = new ChatManager(this);
-        movment = new MovmentManager(this);
+        movement = new MovementManager(this);
 
         timeout.start();
     }
@@ -50,12 +50,12 @@ public class PlayerManager {
     }
 
     public void broadcastPacket(Packet packet) {
-        for (Player p : allPlayers)
+        for (Player p : uids.values())
             p.getClient().sendPacket(packet);
     }
 
     public void updateThemAll() {
-        for (Player p : allPlayers) {
+        for (Player p : uids.values()) {
             p.update();
             p.sendTime();
         }
@@ -85,10 +85,9 @@ public class PlayerManager {
     }
 
     protected void putPlayer(Player p) {
-        if (allPlayers.contains(p))
+        if (uids.containsValue(p))
             return;
-
-        allPlayers.add(p);
+        // al.add(p);
         //playerIDs.put(p.getUUID(), p);
         uids.put(p.getUID(), p);
         playerNames.put(p.getName(), p);
@@ -117,12 +116,10 @@ public class PlayerManager {
 
     }
 
-    protected void removePlayer(Player p) {
-        synchronized (allPlayers) {
+    protected void removePlayer(Player p) {{
             synchronized (uids) {
                 synchronized (playerNames) {
-                    if (allPlayers.contains(p)) {
-                        allPlayers.remove(p);
+                    if (uids.containsValue(p)) {
                         uids.remove(p.getUID());
                         playerNames.remove(p.getName());
                     }
@@ -132,8 +129,8 @@ public class PlayerManager {
     }
 
     public void tickAllPlayers() {
-        synchronized (allPlayers) {
-            for (IPlayer p : allPlayers)
+        synchronized (uids.values()) {
+            for (IPlayer p : uids.values())
                 if (p instanceof Player) {
                     Player pl = (Player) p;
                     pl.tick();
@@ -146,7 +143,7 @@ public class PlayerManager {
     }
 
     public Set<Player> getPlayers() {
-        return allPlayers;
+        return new HashSet<>(uids.values());
     }
 
     protected Player passFromLogin(IPlayer player) {
@@ -220,11 +217,11 @@ public class PlayerManager {
         }
     }
 
-    public MovmentManager getMovmentManager() {
-        return movment;
+    public MovementManager getMovementManager() {
+        return movement;
     }
 
     public boolean hasAnyPlayers() {
-        return !allPlayers.isEmpty();
+        return !uids.isEmpty();
     }
 }

@@ -18,7 +18,6 @@ import com.marine.net.play.clientbound.inv.InventoryOpenPacket;
 import com.marine.net.play.clientbound.player.ClientboundPlayerLookPositionPacket;
 import com.marine.net.play.clientbound.player.ExperiencePacket;
 import com.marine.net.play.clientbound.player.PlayerLookPacket;
-import com.marine.net.play.clientbound.player.PlayerPositionPacket;
 import com.marine.net.play.clientbound.world.MapChunkPacket;
 import com.marine.net.play.clientbound.world.SpawnPointPacket;
 import com.marine.net.play.clientbound.world.TimeUpdatePacket;
@@ -83,7 +82,7 @@ public class Player extends Entity implements IPlayer, CommandSender {
     }
 
     public void teleport(Location location) {
-    	manager.getMovmentManager().teleport(this, location);
+    	manager.getMovementManager().teleport(this, location);
     }
 
     public void loginPopulation() {

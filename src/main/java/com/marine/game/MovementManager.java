@@ -3,11 +3,11 @@ package com.marine.game;
 import com.marine.player.Player;
 import com.marine.util.Location;
 
-public class MovmentManager { // Used to keep track of player movments and send them to the player
+public class MovementManager { // Used to keep track of player movments and send them to the player
     public static int MAX_PACKET_MOVMENT = 5;
     private final PlayerManager players;
 
-    public MovmentManager(PlayerManager players) {
+    public MovementManager(PlayerManager players) {
         this.players = players;
     }
 

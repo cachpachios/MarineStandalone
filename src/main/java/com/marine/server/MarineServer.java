@@ -33,6 +33,12 @@ public interface MarineServer {
      */
     public int getPlayerCount();
 
+    /**
+     * Get a player based on its uid
+     *
+     * @param uid uid
+     * @return Null if not found, else the player
+     */
     public Player getPlayer(short uid);
 
     /**
