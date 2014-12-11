@@ -175,6 +175,11 @@ public class Location extends Vector3d implements JSONAware, Cloneable { // Used
         return o;
     }
 
+    @Override
+    public String toString() {
+        return String.format("\"location\": {\"world\": \"%s\", \"x\": %f, \"y\": %f, \"z\": %f}", getWorld().getName(), getX(), getY(), getZ());
+    }
+
     /**
      * Where the actual distance is important
      *

@@ -59,4 +59,9 @@ public class Position extends Vector3i {
 		return new Position(getX()/16, getY(), getZ()/16);
 	}
 
+    @Override
+    public String toString() {
+        return String.format("\"position\": {\"x\": %f, \"y\": %f, \"z\": %f}", getX(), getY(), getZ());
+    }
+
 }

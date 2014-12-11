@@ -2,6 +2,7 @@ package com.marine;
 
 import com.marine.gui.ConsoleWindow;
 import com.marine.plugins.PluginLogger;
+import com.marine.util.StringUtils;
 
 import java.io.PrintStream;
 import java.util.Calendar;
@@ -51,18 +52,7 @@ public class Logging extends PrintStream {
     }
 
     public void logf(String s, Object ... os) {
-        for(Object o : os) {
-            try {
-                if(o instanceof String) {
-                    s = s.replaceFirst("%s", o.toString());
-                } else if(o instanceof Integer || o instanceof Long) {
-                    s = s.replaceFirst("%d", "" + o);
-                } else if(o instanceof Float || o instanceof Double) {
-                    s = s.replaceFirst("%f", "" + o);
-                }
-            } catch(Throwable ignored) {}
-        }
-        this.log(s);
+        this.log(StringUtils.format(s, os));
     }
 
     public void log(String s) {
