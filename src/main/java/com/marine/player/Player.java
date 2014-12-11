@@ -119,11 +119,6 @@ public class Player extends Entity implements IPlayer, CommandSender {
         return this.levels;
     }
 
-    @Override
-    public World getWorld() {
-        return Marine.getServer().getWorlds().get(0);
-    }
-
     public void setLevels(int levels) {
         levels = Math.min(levels, 255);
         levels = Math.max(levels, 0);
