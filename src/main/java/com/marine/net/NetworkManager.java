@@ -24,7 +24,7 @@ public class NetworkManager {
         	clientList = Collections.synchronizedSet(new HashSet<Client>());
         else
         	clientList = Collections.synchronizedList(new ArrayList<Client>());
-        cleanUpList = new ArrayList<Client>();
+        cleanUpList = new ArrayList<>();
         try {
             server = new ServerSocket(port, 100); //Port and num "queued" connections
         } catch (IOException e) {
