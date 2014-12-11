@@ -29,6 +29,7 @@ import com.marine.util.StringUtils;
 import com.marine.world.World;
 import com.marine.world.chunk.Chunk;
 import com.marine.world.entity.Entity;
+import com.marine.world.entity.EntityType;
 
 import java.util.*;
 
@@ -51,7 +52,7 @@ public class Player extends Entity implements IPlayer, CommandSender {
     private List<Long> loadedChunks;
 
     public Player(PlayerManager manager, Client connection, PlayerID id, PlayerInventory inventory, int entityID, World world, Location pos, PlayerAbilites abilites, Gamemode gamemode) {
-        super(entityID, world, pos);
+        super(EntityType.PLAYER, entityID, pos);
         this.inventory = inventory;
         this.manager = manager;
         this.id = id;

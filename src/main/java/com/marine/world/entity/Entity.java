@@ -8,22 +8,27 @@ import com.marine.world.World;
 
 public abstract class Entity {
 
-    private static int nextEntityID;
-    private int entityID;
+    private static int nextEntityID = -1;
+    private final int entityID;
+    private final EntityType type;
     private World world;
     private Location position;
     private int ticksLived;
 
-    public Entity(int ID, World world, Location pos) {
+    public Entity(final EntityType type, final int ID, final Location pos) {
         this.entityID = ID;
-        this.world = world;
+        this.world = pos.getWorld();
         this.position = pos;
         this.ticksLived = 0;
+        this.type = type;
     }
 
     public static int generateEntityID() {
-        ++nextEntityID;
-        return nextEntityID;
+        return ++nextEntityID;
+    }
+
+    public EntityType getType() {
+        return this.type;
     }
 
     public abstract int getSendDistance();
