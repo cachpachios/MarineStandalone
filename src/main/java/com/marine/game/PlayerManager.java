@@ -31,6 +31,7 @@ import com.marine.player.AbstractPlayer;
 import com.marine.player.IPlayer;
 import com.marine.player.Player;
 
+import java.lang.ref.WeakReference;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
@@ -193,7 +194,7 @@ public class PlayerManager {
         timeout.cleanUp(p);
         //TODO: send player remove packet to every other client
         server.getNetwork().cleanUp(p.getClient());
-        //forceGC(p); TODO: Fix this :(
+        forceGC(p);
     }
 
     public void disconnect(Player p, String msg) {
@@ -233,13 +234,13 @@ public class PlayerManager {
 
     // TODO: Make this work, its just freezes the server now
 
-//    public void forceGC(Player player) {
-//        WeakReference ref = new WeakReference<>(player);
-//        player = null;
-//        while (ref.get() != null) {
-//            System.gc();
-//        }
-//    }
+    public void forceGC(Player player) {
+        WeakReference ref = new WeakReference<>(player);
+        player = null;
+        while (ref.get() != null) {
+            System.gc();
+        }
+    }
 
     public MovementManager getMovementManager() {
         return movement;
