@@ -7,7 +7,6 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 public class BinaryFile {
-
     File file;
 
     ByteData data;
@@ -22,7 +21,7 @@ public class BinaryFile {
         this.file = f;
     }
 
-    private static InputStream decompressStream(InputStream input) throws IOException {
+    public static InputStream decompressStream(InputStream input) throws IOException {
         PushbackInputStream pb = new PushbackInputStream(input, 2); //we need a pushbackstream to look ahead
         byte[] signature = new byte[2];
         pb.read(signature); //read the signature
@@ -37,8 +36,7 @@ public class BinaryFile {
     public BinaryFile readBinary() throws IOException {
         if (!file.canRead()) throw new IOException("Can't read file: " + file.getName());
         if (!file.exists()) throw new FileNotFoundException("File not found: " + file.getName());
-
-
+        
         byte[] r = new byte[(int) file.length()];
         InputStream input = new BufferedInputStream(new FileInputStream(file));
         input.read(r);
@@ -49,8 +47,7 @@ public class BinaryFile {
     public BinaryFile readGZIPBinary() throws IOException {
         if (!file.canRead()) throw new IOException("Can't read file: " + file.getName());
         if (!file.exists()) throw new FileNotFoundException("File not found: " + file.getName());
-
-
+        
         byte[] r = new byte[(int) file.length()];
         InputStream input = decompressStream(new BufferedInputStream(new FileInputStream(file)));
         input.read(r);

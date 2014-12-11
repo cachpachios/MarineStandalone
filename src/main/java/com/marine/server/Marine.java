@@ -1,5 +1,8 @@
 package com.marine.server;
 
+import java.util.Set;
+import java.util.UUID;
+
 import com.marine.Logging;
 import com.marine.StandaloneServer;
 import com.marine.game.chat.ChatColor;
@@ -7,9 +10,6 @@ import com.marine.game.scheduler.Scheduler;
 import com.marine.net.play.clientbound.KickPacket;
 import com.marine.player.Player;
 import com.marine.world.World;
-
-import java.util.List;
-import java.util.UUID;
 
 /**
  * Created 2014-12-02 for MarineStandalone
@@ -25,7 +25,7 @@ public class Marine {
      * Get all players
      * @return List containing all players
      */
-    public static List<Player> getPlayers() {
+    public static Set<Player> getPlayers() {
         return server.getPlayers();
     }
 

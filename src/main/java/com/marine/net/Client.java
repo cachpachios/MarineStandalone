@@ -1,12 +1,12 @@
 package com.marine.net;
 
-import com.marine.io.data.ByteData;
-import com.marine.io.data.ByteEncoder;
-
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
+
+import com.marine.io.data.ByteData;
+import com.marine.io.data.ByteEncoder;
 
 public class Client {
     private final NetworkManager networkManager;
@@ -22,9 +22,12 @@ public class Client {
         this.networkManager = network;
         this.connection = s;
         output = new PacketOutputStream(this, s.getOutputStream());
+        this.userName = null;
     }
 
     public void sendPacket(Packet packet) { //TODO: PacketBuffer
+    	if(packet==null)
+    		return;
         try {
             packet.writeToStream(output);
         } catch (IOException e) {
@@ -151,6 +154,7 @@ public class Client {
 
     public void setUserName(String name) {
         userName = name;
+        System.out.println(name);
     }
 
     public enum ConnectionStatus {
