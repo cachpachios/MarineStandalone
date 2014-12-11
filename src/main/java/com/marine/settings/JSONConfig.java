@@ -26,7 +26,7 @@ public class JSONConfig {
         this.map = new JSONObject();
     }
 
-    public JSONConfig(File path, String name) throws JSONConfigException {
+    public JSONConfig(File path, String name) throws JSONException {
         this.path = path;
         this.name = name;
         if (!path.exists()) {
