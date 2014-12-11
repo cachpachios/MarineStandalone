@@ -36,7 +36,6 @@ public class PlayerFile extends JSONConfig {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        saveFile();
         read();
     }
 }
