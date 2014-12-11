@@ -34,5 +34,4 @@ How to contribute
 
 License
 -
-  You may use this code in anyway you like :)
-  If you are contributing you are "giving" away the code and cannot claim it later. (To prevent a bukkit drama)
+  The project is licensed under GPLv2.0
