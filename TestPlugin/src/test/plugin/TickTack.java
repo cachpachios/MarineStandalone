@@ -13,7 +13,7 @@ public class TickTack extends MarineRunnable {
     private final Plugin plugin;
 
     public TickTack(final Plugin plugin) {
-        super(20l);
+        super(20l, 1/0l);
         this.plugin = plugin;
     }
 

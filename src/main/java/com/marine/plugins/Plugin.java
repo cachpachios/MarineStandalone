@@ -1,5 +1,8 @@
 package com.marine.plugins;
 
+import com.marine.Logging;
+import com.marine.game.chat.ChatColor;
+
 import java.io.File;
 import java.util.UUID;
 
@@ -57,8 +60,14 @@ public class Plugin {
     final public void enable() {
         if (this.enabled)
             throw new PluginException(this, "Plugin is already enabled");
-        this.enabled = true;
-        this.onEnable();
+        try {
+            this.enabled = true;
+            this.onEnable();
+        } catch(Exception e) {
+            this.enabled = false;
+            Logging.getLogger().error("Could not enable " + ChatColor.RED + getName() + ChatColor.WHITE + ", see stacktrace for more info");
+            throw new PluginException(this, "Could not enable plugin", e);
+        }
     }
 
     /**
