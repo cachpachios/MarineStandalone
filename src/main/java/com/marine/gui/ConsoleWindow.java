@@ -121,7 +121,7 @@ public class ConsoleWindow extends OutputStream {
     public void write(int b) throws IOException {
         if (validChars == null) {
             validChars = new ArrayList<>();
-            for (char c : " \t\\/abcdefghjiklmnopqrstuvwxyzABCDEFGHJIKLMNOPQRSTUVWXYZ0123456789._,:;[](){}".toCharArray()) {
+            for (char c : " \t\\\r/abcdefghjiklmnopqrstuvwxyzABCDEFGHJIKLMNOPQRSTUVWXYZ0123456789._,:;[](){}><-+\"$@#£€&=".toCharArray()) {
                 validChars.add(c);
             }
         }
@@ -132,6 +132,12 @@ public class ConsoleWindow extends OutputStream {
             s = "";
         } else if (validChars.contains(c)) {
             s += c;
+        } else {
+            s += "Unknown character: [" + c + "]";
         }
+        s = s.replaceAll("<", "&lt;");
+        s = s.replaceAll(">", "&gt;");
+        s = s.replaceAll("€", "&euro;");
+        s = s.replaceAll("£", "&pound;");
     }
 }
