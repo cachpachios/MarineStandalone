@@ -41,7 +41,7 @@ public class Player extends Entity implements IPlayer, CommandSender {
     private byte nextWindowID = 0; // Used for windows
     private PlayerID id;
     private PlayerInventory inventory;
-    private GameMode gameMode;
+    private Gamemode gamemode;
     private boolean gamemodeUpdate; //Keep tracks if gamemode have been change without the client getting the info
     private Client connection;
     private PlayerAbilites abilites;
@@ -50,14 +50,14 @@ public class Player extends Entity implements IPlayer, CommandSender {
     
     private List<Long> loadedChunks;
 
-    public Player(PlayerManager manager, Client connection, PlayerID id, PlayerInventory inventory, int entityID, World world, Location pos, PlayerAbilites abilites, GameMode gameMode) {
+    public Player(PlayerManager manager, Client connection, PlayerID id, PlayerInventory inventory, int entityID, World world, Location pos, PlayerAbilites abilites, Gamemode gamemode) {
         super(entityID, world, pos);
         this.inventory = inventory;
         this.manager = manager;
         this.id = id;
         this.abilites = abilites;
         this.connection = connection;
-        this.gameMode = gameMode;
+        this.gamemode = gamemode;
         this.gamemodeUpdate = false;
         this.permissions = new ArrayList<>();
         this.displayName = id.name;
@@ -76,7 +76,7 @@ public class Player extends Entity implements IPlayer, CommandSender {
         }
     }
 
-    public Player(AbstractPlayer player, GameMode gm) {
+    public Player(AbstractPlayer player, Gamemode gm) {
         this(player.getServer().getPlayerManager(), player.getClient(), player.getInfo(), new PlayerInventory((byte) 0x00), Entity.generateEntityID(), player.getWorld(), player.getLocation(), player.getAbilities(), gm);
     }
 
@@ -101,12 +101,12 @@ public class Player extends Entity implements IPlayer, CommandSender {
         return 200;
     }
 
-    public GameMode getGameMode() {
-        return gameMode;
+    public Gamemode getGamemode() {
+        return gamemode;
     }
 
-    public void setGameMode(GameMode gm) {
-        this.gameMode = gm;
+    public void setGamemode(Gamemode gm) {
+        this.gamemode = gm;
         this.gamemodeUpdate = true;
     }
 

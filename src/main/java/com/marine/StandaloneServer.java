@@ -8,7 +8,7 @@ import com.marine.game.chat.ChatColor;
 import com.marine.game.commands.*;
 import com.marine.game.scheduler.Scheduler;
 import com.marine.net.NetworkManager;
-import com.marine.player.GameMode;
+import com.marine.player.Gamemode;
 import com.marine.plugins.PluginLoader;
 import com.marine.plugins.PluginManager;
 import com.marine.server.Marine;
@@ -41,7 +41,7 @@ public class StandaloneServer implements Listener {
     private String standard_motd = "MarineStandalone | Development";
     private int standard_maxplayers = 99;
     private Difficulty standard_difficulty = Difficulty.PEACEFUL;
-    private GameMode standard_gameMode = GameMode.SURVIVAL;
+    private Gamemode standard_gamemode = Gamemode.SURVIVAL;
     private boolean shouldRun;
     private String newMOTD = null;
 
@@ -230,12 +230,12 @@ public class StandaloneServer implements Listener {
         this.standard_difficulty = difficulty;
     }
 
-    public GameMode getGamemode() {
-        return this.standard_gameMode;
+    public Gamemode getGamemode() {
+        return this.standard_gamemode;
     }
 
-    public void setGameMode(GameMode gm) {
-        this.standard_gameMode = gm;
+    public void setGameMode(Gamemode gm) {
+        this.standard_gamemode = gm;
     }
 
     public PluginLoader getPluginLoader() {
