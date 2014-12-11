@@ -1,3 +1,22 @@
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// MarineStandalone is a minecraft server software and API.
+// Copyright (C) IntellectualSites (marine.intellectualsites.com)
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 2 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License along
+// with this program; if not, write to the Free Software Foundation, Inc.,
+// 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 package com.marine.gui;
 
 import com.marine.Logging;
@@ -103,10 +122,17 @@ public class ConsoleWindow extends OutputStream {
         return string + "</font>";
     }
 
+<<<<<<< HEAD
     public void update() { synchronized(console) {
     	while(console.size() > maxLines)
         	console.remove(0);
         String sB = "";
+=======
+    public void update() { // TODO remove old lines.
+        while (console.size() > maxLines)
+            console.remove(0);
+        StringBuilder sB = new StringBuilder();
+>>>>>>> 88e6b8e66ccbea773f6cf80885da565bfb8aa53a
         for (String s : console) {
             sB += s;
             sB += "<br>";

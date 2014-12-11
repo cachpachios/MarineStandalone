@@ -1,3 +1,22 @@
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// MarineStandalone is a minecraft server software and API.
+// Copyright (C) IntellectualSites (marine.intellectualsites.com)
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 2 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License along
+// with this program; if not, write to the Free Software Foundation, Inc.,
+// 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 package com.marine.game;
 
 import com.marine.StandaloneServer;
@@ -12,8 +31,10 @@ import com.marine.player.AbstractPlayer;
 import com.marine.player.IPlayer;
 import com.marine.player.Player;
 
-import java.lang.ref.WeakReference;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class PlayerManager {
@@ -22,8 +43,8 @@ public class PlayerManager {
     // private Set<Player> allPlayers;
     // private Map<UUID, Player> playerIDs;
     private final Map<Short, Player> uids;
-    private short uid = -1;
     private final Map<String, Player> playerNames;
+    private short uid = -1;
     private LoginHandler loginManager;
     private TimeoutManager timeout;
 
@@ -74,8 +95,8 @@ public class PlayerManager {
     }
 
     public boolean isPlayerOnline(UUID uid) {
-        for(Player player : uids.values())
-            if(player.getUUID().equals(uid))
+        for (Player player : uids.values())
+            if (player.getUUID().equals(uid))
                 return true;
         return false;
     }
@@ -97,14 +118,14 @@ public class PlayerManager {
         // if (!playerIDs.containsKey(uuid))
         //    return null;
         // return playerIDs.get(uuid);
-        for(Player player : uids.values())
-            if(player.getUUID().equals(uuid))
+        for (Player player : uids.values())
+            if (player.getUUID().equals(uuid))
                 return player;
         return null;
     }
 
     public Player getPlayer(short uid) {
-        if(uids.containsKey(uid))
+        if (uids.containsKey(uid))
             return uids.get(uid);
         return null;
     }
@@ -116,7 +137,8 @@ public class PlayerManager {
 
     }
 
-    protected void removePlayer(Player p) {{
+    protected void removePlayer(Player p) {
+        {
             synchronized (uids) {
                 synchronized (playerNames) {
                     if (uids.containsValue(p)) {
@@ -204,13 +226,13 @@ public class PlayerManager {
     }
 
     public void keepAlive(short uid, int ID) {
-        if(uid == -1)
+        if (uid == -1)
             return;
         timeout.keepAlive(getPlayer(uid), ID);
     }
 
     // TODO: Make this work, its just freezes the server now
-    
+
 //    public void forceGC(Player player) {
 //        WeakReference ref = new WeakReference<>(player);
 //        player = null;

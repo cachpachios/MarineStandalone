@@ -1,3 +1,22 @@
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// MarineStandalone is a minecraft server software and API.
+// Copyright (C) IntellectualSites (marine.intellectualsites.com)
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 2 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License along
+// with this program; if not, write to the Free Software Foundation, Inc.,
+// 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 package com.marine.game;
 
 import com.marine.net.Client;
@@ -33,9 +52,9 @@ public class LoginHandler {
         }
 
         if (playerManager.isPlayerOnline(name))
-            return new LoginResponse("Failed to login player is allready connected.");
+            return new LoginResponse("Failed to login player is already connected.");
         if (playerManager.isPlayerOnline(uuid))
-            return new LoginResponse("Failed to login player is allready connected.");
+            return new LoginResponse("Failed to login player is already connected.");
 
         //TODO: Check if player is banned in that case drop them.
 
@@ -72,14 +91,14 @@ public class LoginHandler {
         public final IPlayer player;
         public final String response;
 
-        public LoginResponse(IPlayer p) {
-            player = p;
-            response = null;
+        public LoginResponse(final IPlayer p) {
+            this.player = p;
+            this.response = null;
         }
 
-        public LoginResponse(String responseString) {
-            player = null;
-            response = responseString;
+        public LoginResponse(final String response) {
+            this.player = null;
+            this.response = response;
         }
 
         public boolean succeed() {

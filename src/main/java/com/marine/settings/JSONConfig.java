@@ -1,3 +1,22 @@
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// MarineStandalone is a minecraft server software and API.
+// Copyright (C) IntellectualSites (marine.intellectualsites.com)
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 2 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License along
+// with this program; if not, write to the Free Software Foundation, Inc.,
+// 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 package com.marine.settings;
 
 import org.json.JSONException;
@@ -53,7 +72,7 @@ public class JSONConfig {
                 throw new JSONConfigException(name, "Could not load in the config", e);
             }
         }
-        for(Map.Entry<String, Object> entry : defaultValues().entrySet()) {
+        for (Map.Entry<String, Object> entry : defaultValues().entrySet()) {
             setIfNull(entry.getKey(), entry.getValue());
         }
     }
@@ -64,9 +83,9 @@ public class JSONConfig {
 
     public void setIfNull(String s, Object o) throws JSONConfigException {
         if (map.isNull(s))
-			try {
-				map.put(s, o);
-			} catch (JSONException e) {
+            try {
+                map.put(s, o);
+            } catch (JSONException e) {
                 throw new JSONConfigException(name, "Could not set the value", e);
             }
     }
@@ -87,7 +106,7 @@ public class JSONConfig {
             writer = new BufferedWriter(new FileWriter(file));
             map.write(writer);
             writer.close();
-        } catch(Exception e) {
+        } catch (Exception e) {
             throw new JSONConfigException(name, "Could not be saved", e);
         }
     }

@@ -1,3 +1,22 @@
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// MarineStandalone is a minecraft server software and API.
+// Copyright (C) IntellectualSites (marine.intellectualsites.com)
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 2 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License along
+// with this program; if not, write to the Free Software Foundation, Inc.,
+// 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 package com.marine.plugins;
 
 import com.google.common.collect.BiMap;
@@ -54,7 +73,7 @@ public class PluginLoader {
     }
 
     public void disableAllPlugins() {
-        for(Plugin plugin : manager.getPlugins()) {
+        for (Plugin plugin : manager.getPlugins()) {
             disablePlugin(plugin);
         }
     }
@@ -72,7 +91,7 @@ public class PluginLoader {
         PluginClassLoader loader;
         try {
             loader = new PluginClassLoader(this, desc, file);
-        } catch(MalformedURLException e) {
+        } catch (MalformedURLException e) {
             throw new PluginHandlerException(this, "Could not get the PluginClassLoader", e);
         }
         loaders.put(desc.name, loader);
@@ -132,7 +151,7 @@ public class PluginLoader {
         JarFile jar;
         try {
             jar = new JarFile(file);
-        }  catch(IOException ioe) {
+        } catch (IOException ioe) {
             throw new PluginHandlerException(this, "Could not load in " + file.getName(), ioe);
         }
         JarEntry desc = jar.getJarEntry("desc.json");
@@ -141,13 +160,13 @@ public class PluginLoader {
         InputStream stream;
         try {
             stream = jar.getInputStream(desc);
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             throw new PluginHandlerException(this, "Could not get stream for desc.json", ioe);
         }
         PluginFile f;
         try {
             f = new PluginFile(stream);
-        } catch(Exception e) {
+        } catch (Exception e) {
             throw new PluginHandlerException(this, "Could not load in plugin file from stream", e);
         }
         try {

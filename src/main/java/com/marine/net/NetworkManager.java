@@ -1,3 +1,22 @@
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// MarineStandalone is a minecraft server software and API.
+// Copyright (C) IntellectualSites (marine.intellectualsites.com)
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 2 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License along
+// with this program; if not, write to the Free Software Foundation, Inc.,
+// 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 package com.marine.net;
 
 import com.marine.Logging;
@@ -86,6 +105,7 @@ public class NetworkManager {
         client.terminate();
     }
 
+<<<<<<< HEAD
     public boolean processAll() { synchronized(clientList) {
         boolean didProccessSomething = false;
         for (Client c : clientList) {
@@ -104,12 +124,39 @@ public class NetworkManager {
             }
             if (status == Client.ConnectionStatus.PROCESSED)
                 didProccessSomething = true;
+=======
+    public boolean processAll() {
+        synchronized (clientList) {
+            if (clientList.isEmpty())
+                return false;
+
+            boolean didProccessSomething = false;
+            for (Client c : clientList) {
+                Client.ConnectionStatus status = c.process();
+                if (status == Client.ConnectionStatus.CONNECTION_PROBLEMS)
+                    if (c.getUID() != -1) {
+                        this.marineServer.getPlayerManager().disconnect(marineServer.getPlayerManager().getPlayerByClient(c), "Client Disconnected");
+                    } else {
+                        cleanUp(c);
+                    }
+                else if (status == Client.ConnectionStatus.CLOSED) {
+                    if (c.getUID() != -1) {
+                        this.marineServer.getPlayerManager().disconnect(marineServer.getPlayerManager().getPlayerByClient(c), "Client Disconnected");
+                    } else
+                        cleanUp(c);
+                }
+                if (status == Client.ConnectionStatus.PROCESSED)
+                    didProccessSomething = true;
+
+
+            }
+            for (Client c : cleanUpList)
+                terminate(c);
+            cleanUpList.clear();
+            return didProccessSomething;
+>>>>>>> 88e6b8e66ccbea773f6cf80885da565bfb8aa53a
         }
-        for (Client c : cleanUpList)
-            terminate(c);
-        cleanUpList.clear();
-        return didProccessSomething;
-    }}
+    }
 
     public boolean hasClientsConnected() {
         return clientList.size() > 0;
