@@ -50,6 +50,21 @@ public class Logging extends PrintStream {
         log(message.getMessage());
     }
 
+    public void logf(String s, Object ... os) {
+        for(Object o : os) {
+            try {
+                if(o instanceof String) {
+                    s = s.replaceFirst("%s", o.toString());
+                } else if(o instanceof Integer || o instanceof Long) {
+                    s = s.replaceFirst("%d", "" + o);
+                } else if(o instanceof Float || o instanceof Double) {
+                    s = s.replaceFirst("%f", "" + o);
+                }
+            } catch(Throwable ignored) {}
+        }
+        this.log(s);
+    }
+
     public void log(String s) {
         c.write(format('3', s));
         System.out.println(format(s));

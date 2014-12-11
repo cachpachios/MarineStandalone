@@ -48,13 +48,13 @@ public class PlayerListItemPacket extends Packet {
             case ADD_PLAYER: {
                 data.writeUTF8(player.getName());
                 data.writeVarInt(0);
-                data.writeVarInt(player.getGamemode().getID());
+                data.writeVarInt(player.getGameMode().getID());
                 data.writeVarInt(10);
                 data.writeBoolean(false);
             }
             break;
             case UPDATE_GAME_MODE: {
-                data.writeVarInt(player.getGamemode().getID());
+                data.writeVarInt(player.getGameMode().getID());
             }
             break;
             case UPDATE_LATENCY: {

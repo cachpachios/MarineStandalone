@@ -8,7 +8,7 @@ import com.marine.game.chat.ChatColor;
 import com.marine.game.commands.*;
 import com.marine.game.scheduler.Scheduler;
 import com.marine.net.NetworkManager;
-import com.marine.player.Gamemode;
+import com.marine.player.GameMode;
 import com.marine.plugins.PluginLoader;
 import com.marine.plugins.PluginManager;
 import com.marine.server.Marine;
@@ -41,7 +41,7 @@ public class StandaloneServer implements Listener {
     private String standard_motd = "MarineStandalone | Development";
     private int standard_maxplayers = 99;
     private Difficulty standard_difficulty = Difficulty.PEACEFUL;
-    private Gamemode standard_gamemode = Gamemode.SURVIVAL;
+    private GameMode standard_gameMode = GameMode.SURVIVAL;
     private boolean shouldRun;
     private String newMOTD = null;
 
@@ -124,42 +124,32 @@ public class StandaloneServer implements Listener {
     }
 
     private void run() {
-
-
-        Logging.getLogger().log(String.format("Marine Standalone Server starting - Protocol Version §c§o%d§0 (Minecraft §c§o%s§0)", ServerProperties.PROTOCOL_VERSION, ServerProperties.MINECRAFT_NAME));
-
-        network = new NetworkManager(this, port, ServerSettings.getInstance().useHasing);
-
+        Logging.getLogger().logf("Starting MarineStandalone Server - Protocol Version §c§o%d§0 (Minecraft §c§o%s§0)",
+                ServerProperties.PROTOCOL_VERSION, ServerProperties.MINECRAFT_NAME);
+        // Start the networking stuffz
+        this.network = new NetworkManager(this, port, ServerSettings.getInstance().useHasing);
         //TODO World loading
-
+        // Open connection
         network.openConnection();
-
         // Load in and enable plugins
         this.loadPlugins();
-
+        // Timings for loop
         long startTime = System.nanoTime();
         long lastTime = startTime;
-
         long lastRunTime = startTime;
-
         int ups = 0;
-
+        // Main loop
         while (shouldRun) {
-            startTime = System.nanoTime(); // Microtime
-
-            if ((startTime - lastRunTime < skipTime)) {
+            startTime = System.nanoTime(); // Nanotime
+            if ((startTime - lastRunTime) < skipTime) {
                 int sleepTime = (int) (skipTime - (startTime - lastRunTime));
-
                 if (sleepTime > 0)
                     try {
                         Thread.sleep(sleepTime / 1000000, sleepTime % 1000);
-                    } catch (InterruptedException e) {
-                    }
+                    } catch (InterruptedException ignored) { /* TODO Should this really be ignored? */ }
                 continue;
             }
-
             lastRunTime = startTime;
-
             if (startTime - lastTime >= 1000000000) {
                 ticks = ups;
                 players.updateThemAll();
@@ -167,25 +157,30 @@ public class StandaloneServer implements Listener {
                 lastTime = startTime;
             }
 
-            if (ups >= targetTickRate) {
+            if (ups >= targetTickRate)
                 continue;
-            }
-            //Check networkConnections
-            network.tryConnections();
-            
-            // Stuff:
 
+            // Check for network connections
+            network.tryConnections();
+
+            /*
+            This is no longer needed
             if (Logging.getLogger().isDisplayed())
                 if (Logging.getLogger().hasBeenTerminated())
                     System.exit(0);
+            */
 
             // Advance the tick clock.
             players.tickAllPlayers();
             worlds.tick();
             ServerProperties.tick();
             scheduler.tickSync();
-            ups++;
-        }// Loop End
+
+            // ++# instead of ups++, as we are not using it as reference when increasing the value
+            // Not too big of a deal, but it's good practise.
+            // http://stackoverflow.com/questions/4752761/the-difference-between-n-vs-n-in-java
+            ++ups;
+        }
     }
 
     public void stop() {
@@ -197,11 +192,11 @@ public class StandaloneServer implements Listener {
     }
 
     public NetworkManager getNetwork() {
-        return network;
+        return this.network;
     }
 
     public WorldManager getWorldManager() {
-        return worlds;
+        return this.worlds;
     }
 
     public String getMOTD() {
@@ -220,7 +215,7 @@ public class StandaloneServer implements Listener {
     }
 
     public int getMaxPlayers() {
-        return standard_maxplayers;
+        return this.standard_maxplayers;
     }
 
     public void setMaxPlayers(int maxplayers) {
@@ -228,19 +223,19 @@ public class StandaloneServer implements Listener {
     }
 
     public Difficulty getDifficulty() {
-        return standard_difficulty;
+        return this.standard_difficulty;
     }
 
     public void setDifficulty(Difficulty difficulty) {
         this.standard_difficulty = difficulty;
     }
 
-    public Gamemode getGamemode() {
-        return standard_gamemode;
+    public GameMode getGamemode() {
+        return this.standard_gameMode;
     }
 
-    public void setGamemode(Gamemode gm) {
-        this.standard_gamemode = gm;
+    public void setGameMode(GameMode gm) {
+        this.standard_gameMode = gm;
     }
 
     public PluginLoader getPluginLoader() {
