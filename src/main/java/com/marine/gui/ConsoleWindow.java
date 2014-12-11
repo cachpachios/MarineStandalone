@@ -43,6 +43,7 @@ public class ConsoleWindow extends OutputStream {
         jFrame.setSize(600, 400);
         jFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         jFrame.setIconImage(new ImageIcon("./res/icon.png").getImage());
+
         WindowListener exitListener = new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -52,6 +53,7 @@ public class ConsoleWindow extends OutputStream {
                 }
             }
         };
+
         jFrame.addWindowListener(exitListener);
 
         GridBagConstraints c = new GridBagConstraints();

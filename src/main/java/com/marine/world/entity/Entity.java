@@ -8,7 +8,7 @@ import com.marine.world.World;
 
 public abstract class Entity {
 
-    private static int nextEntityID = -1;
+    private static int nextEntityID = 0;
     private final int entityID;
     private final EntityType type;
     private World world;
@@ -28,7 +28,7 @@ public abstract class Entity {
     }
 
     public static int generateEntityID() {
-        return ++nextEntityID;
+        return nextEntityID++;
     }
 
     public EntityType getType() {

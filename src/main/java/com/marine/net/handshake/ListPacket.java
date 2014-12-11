@@ -72,9 +72,9 @@ public class ListPacket extends Packet {
 
         Marine.getServer().callEvent(event);
 
-            ByteData data = new ByteData();
-            data.writeUTF8(encode(event.getResponse()));
-            stream.write(getID(), data.getBytes());
+        ByteData data = new ByteData();
+        data.writeUTF8(encode(event.getResponse()));
+        stream.write(getID(), data.getBytes());
     }
 
     @Override

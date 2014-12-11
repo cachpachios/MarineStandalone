@@ -18,6 +18,8 @@ public class PlayerFile extends JSONConfig {
     public PlayerFile(Player player) throws Exception {
         super(new File("./players"), player.getUUID().toString());
         this.player = player;
+        if (!map.getString("name").equalsIgnoreCase(player.getName()))
+            set("name", player.getName());
     }
 
     @Override
