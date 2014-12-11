@@ -27,6 +27,7 @@ public class InventoryContentPacket extends Packet {
     @Override
     public void writeToStream(PacketOutputStream stream) throws IOException {
         ByteData d = new ByteData();
+        
         d.writeByte(inv.getID());
 
         d.writeShort((short) inv.getSlots().length);

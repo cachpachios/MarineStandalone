@@ -22,14 +22,7 @@ public class IngameInterceptor implements PacketInterceptor {
     }
 
     @Override
-    public boolean intercept(ByteData data, Client c) {
-        int id = data.readVarInt();
-
-        //if(id != lastID) {
-        //	System.out.println("ID: " + id);
-        //	lastID = id;
-        //}
-
+    public boolean intercept(int id, ByteData data, Client c) {
         if (id == 0x00) {
             KeepAlivePacket p = new KeepAlivePacket();
             p.readFromBytes(data);

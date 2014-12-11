@@ -5,6 +5,7 @@ import com.marine.io.data.ByteData;
 import com.marine.net.Packet;
 import com.marine.net.PacketOutputStream;
 import com.marine.net.States;
+
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
@@ -29,7 +30,8 @@ public class ChatPacket extends Packet {
         this.position = 0;
     }
 
-    public ChatPacket(final String message, final int position) {
+    @SuppressWarnings("unchecked")
+	public ChatPacket(final String message, final int position) {
         this.position = position;
         this.object = new JSONObject();
         object.put("text", message);
@@ -44,15 +46,19 @@ public class ChatPacket extends Packet {
     @Override
     public void writeToStream(PacketOutputStream stream) throws IOException {
         ByteData data = new ByteData();
-        data.writeUTF8(message);
+        
+        if(message.length() < 32767)
+        	data.writeUTF8(message);
+        else
+        	data.writeUTF8(message.substring(0, 32766));
+        
         data.writeByte((byte) position);
+        
         stream.write(getID(), data.getBytes());
     }
 
     @Override
-    public void readFromBytes(ByteData input) {
-
-    }
+    public void readFromBytes(ByteData input) {}
 
     @Override
     public States getPacketState() {

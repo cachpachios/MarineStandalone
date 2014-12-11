@@ -19,17 +19,13 @@ public class PacketHandler implements PacketInterceptor {
         ingame = new IngameInterceptor(server.getPlayerManager());
     }
 
-    public boolean intercept(ByteData data, Client c) {
-        if (c.getState().equals(States.HANDSHAKE))
-            return handshake.intercept(data, c);
-        else if (c.getState().equals(States.INTRODUCE))
-            return status.intercept(data, c);
-        else if (c.getState().equals(States.LOGIN))
-            return login.intercept(data, c);
-        else if (c.getState().equals(States.INGAME))
-            return ingame.intercept(data, c);
-
-        return false;
-
+    public boolean intercept(int id, ByteData data, Client c) {
+    	switch(c.getState()) {
+    		case HANDSHAKE	: return handshake	.intercept(id, data, c);
+    		case INTRODUCE	: return status		.intercept(id, data, c);
+    		case LOGIN 		: return login		.intercept(id, data, c);
+    		case INGAME 	: return ingame		.intercept(id, data, c);
+		default				: return false;
+    	}
     }
 }

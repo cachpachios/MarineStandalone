@@ -8,9 +8,7 @@ import com.marine.net.handshake.PingPacket;
 public class StatusInterceptor implements PacketInterceptor {
 
     @Override
-    public boolean intercept(ByteData data, Client c) {
-        int id = data.readVarInt();
-
+    public boolean intercept(int id, ByteData data, Client c) {
         if (id == 0x00) {
             ListPacket packet = new ListPacket();
             c.sendPacket(packet);

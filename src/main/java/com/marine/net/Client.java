@@ -26,8 +26,8 @@ public class Client {
     }
 
     public void sendPacket(Packet packet) { //TODO: PacketBuffer
-        if (packet == null)
-            return;
+    	System.out.println("Packet ID: " + packet.getID() + " was sent.");
+
         try {
             packet.writeToStream(output);
         } catch (IOException e) {
@@ -130,7 +130,9 @@ public class Client {
         }
 
         for (ByteData p : packages) {
-            getNetwork().packetHandler.intercept(p, this);
+        	int id = p.readVarInt();							// DEBUG TEMPORARY
+        	System.out.println("Packet intercepted: " + id);	// DEBUG TEMPORARY
+            getNetwork().packetHandler.intercept(id, p, this);
         }
 
         return ConnectionStatus.PROCESSED;
