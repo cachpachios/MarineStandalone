@@ -21,9 +21,10 @@ package com.marine.settings;
 
 import com.marine.Logging;
 
+import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -51,7 +52,9 @@ public class ServerSettings {
                 if (!file.createNewFile())
                     throw new RuntimeException("Failed to create settings.properties");
             }
-            config.load(new FileInputStream(file));
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            //config.load(new FileInputStream(file));
+            config.load(reader);
             Map<String, String> options = new HashMap<String, String>() {
                 private static final long serialVersionUID = 0L;
 
@@ -82,6 +85,7 @@ public class ServerSettings {
             this.tickrate = getInt(config.getProperty("tickrate"));
             this.useHasing = getBoolean(config.getProperty("useHashing"));
 
+            reader.close();
         } catch (Exception e) {
             e.printStackTrace();
         }

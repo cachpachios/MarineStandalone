@@ -30,9 +30,9 @@ import java.util.UUID;
 
 public class LoginSucessPacket extends Packet {
 
-    public Player p;
+    public final Player p;
 
-    public LoginSucessPacket(Player p) {
+    public LoginSucessPacket(final Player p) {
         this.p = p;
     }
 

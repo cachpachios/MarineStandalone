@@ -32,7 +32,7 @@ public class JoinGamePacket extends Packet {
 
     final Player p;
 
-    public JoinGamePacket(Player p) {
+    public JoinGamePacket(final Player p) {
         this.p = p;
     }
 
