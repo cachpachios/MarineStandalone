@@ -86,7 +86,7 @@ public class NetworkManager {
         client.terminate();
     }
 
-    public boolean processAll() {
+    public boolean processAll() { synchronized(clientList) {
         if (clientList.isEmpty())
             return false;
 
@@ -114,7 +114,7 @@ public class NetworkManager {
             terminate(c);
         cleanUpList.clear();
         return didProccessSomething;
-    }
+    }}
 
     public boolean hasClientsConnected() {
         return !clientList.isEmpty();
@@ -149,7 +149,6 @@ public class NetworkManager {
                     try {
                         ClientProcessor.sleep(0, 1000);
                     } catch (InterruptedException e) {
-                        continue;
                     }
         }
     }

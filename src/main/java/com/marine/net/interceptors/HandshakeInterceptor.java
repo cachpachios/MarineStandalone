@@ -7,10 +7,7 @@ import com.marine.net.handshake.ClientHandshake;
 public class HandshakeInterceptor implements PacketInterceptor {
 
     @Override
-    public boolean intercept(ByteData data, Client c) {
-
-        int id = data.readVarInt();
-
+    public boolean intercept(int id, ByteData data, Client c) {
         if (id == 0x00) {
             ClientHandshake packet = new ClientHandshake();
             packet.readFromBytes(data);

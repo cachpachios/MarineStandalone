@@ -104,15 +104,15 @@ public class ConsoleWindow extends OutputStream {
     }
 
     public void update() { // TODO remove old lines.
-        if (console.size() > maxLines)
-            console.remove(0);
-        String str = "";
+        while(console.size() > maxLines)
+        	console.remove(0);
+        StringBuilder sB = new StringBuilder();
         for (String s : console) {
-            str += s;
-            str += "<br>";
+            sB.append(s);
+            sB.append("<br>");
         }
 
-        text.setText(str);
+        text.setText(sB.toString());
     }
 
     public boolean isClosed() {

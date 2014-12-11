@@ -83,10 +83,7 @@ public class Player extends Entity implements IPlayer, CommandSender {
     }
 
     public void teleport(Location location) {
-        this.getLocation().setX(location.getX());
-        this.getLocation().setY(location.getY());
-        this.getLocation().setZ(location.getZ());
-        getClient().sendPacket(new PlayerPositionPacket(location));
+    	manager.getMovmentManager().teleport(this, location);
     }
 
     public void loginPopulation() {
@@ -289,7 +286,7 @@ public class Player extends Entity implements IPlayer, CommandSender {
         this.getClient().sendPacket(new SpawnPointPacket(pos));
     }
 
-    public void updateInventory() {
+    public void sendInventory() {
         this.getClient().sendPacket(new InventoryContentPacket(getInventory()));
     }
 

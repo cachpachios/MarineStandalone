@@ -1,9 +1,13 @@
 package com.marine.world.chunk;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.marine.io.data.ByteData;
 import com.marine.world.BiomeID;
 import com.marine.world.BlockID;
 import com.marine.world.World;
+import com.marine.world.entity.Entity;
 
 public final class Chunk {
     private final World w;
@@ -12,13 +16,22 @@ public final class Chunk {
     private ChunkSection[] sections;
     private BiomeID[][] biomes;
 
+    private List<Entity> entities;
+    
     public Chunk(World w, ChunkPos pos) {
         this.w = w;
         this.pos = pos;
         this.sections = new ChunkSection[16];
         this.biomes = new BiomeID[16][16];
+        this.entities = new ArrayList<Entity>();
     }
 
+    public void addEntity(Entity e) {
+    	if(!(e.getX() / 16 == pos.getX() && e.getZ() / 16 == pos.getY())) // Check if Entity is inside chunk
+    		return;
+    	entities.add(e);
+    }
+    
     public void setBlock(int x, int y, int z, BlockID id) {
         int section = y >> 4;
         if (sections[section] == null)

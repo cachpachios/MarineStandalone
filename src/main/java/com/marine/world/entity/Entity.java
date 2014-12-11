@@ -4,6 +4,7 @@ import com.marine.Logging;
 import com.marine.util.Location;
 import com.marine.util.Position;
 import com.marine.util.Vector3d;
+import com.marine.util.Vector3i;
 import com.marine.world.World;
 
 public abstract class Entity {
@@ -14,7 +15,7 @@ public abstract class Entity {
     private World world;
     private Location position;
     private int ticksLived;
-
+    
     public Entity(final EntityType type, final int ID, final Location pos) {
         this(type, ID, pos.getWorld(), pos);
     }
@@ -72,11 +73,15 @@ public abstract class Entity {
         return position.getZ();
     }
 
+    public Vector3i getRelativeLocation() {
+    	return position.getRelativePosition();
+    }
+    
     public Position getRelativePosition() {
         return position.getRelativePosition();
     }
 
-    public Vector3d getAbsolutePosition() {
+    public Vector3d getAbsoluteLocation() {
         return position;
     }
 
