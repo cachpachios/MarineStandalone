@@ -1,3 +1,22 @@
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// MarineStandalone is a minecraft server software and API.
+//     Copyright (C) IntellectualSites (marine.intellectualsites.com)
+//
+//     This program is free software; you can redistribute it and/or modify
+//     it under the terms of the GNU General Public License as published by
+//     the Free Software Foundation; either version 2 of the License, or
+//     (at your option) any later version.
+//
+//     This program is distributed in the hope that it will be useful,
+//     but WITHOUT ANY WARRANTY; without even the implied warranty of
+//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//     GNU General Public License for more details.
+//
+//     You should have received a copy of the GNU General Public License along
+//     with this program; if not, write to the Free Software Foundation, Inc.,
+//     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 package com.marine;
 
 import com.marine.events.Listener;
@@ -33,13 +52,13 @@ public class StandaloneServer implements Listener {
     private final PlayerManager players;
     private final WorldManager worlds;
     private final Server server;
-    private JSONFileHandler jsonHandler;
     private final Scheduler scheduler;
     private final PluginLoader pluginLoader;
     private final int targetTickRate; // For use in the loop should be same as (skipTime * 1000000000)
     public int ticks;
     public int refreshesPerSecound;
     NetworkManager network;
+    private JSONFileHandler jsonHandler;
     // Settings:
     private String standard_motd = "MarineStandalone | Development";
     private int standard_maxplayers = 99;
@@ -55,13 +74,13 @@ public class StandaloneServer implements Listener {
         this.worlds = new WorldManager();
         this.players = new PlayerManager(this);
         this.server = new Server(this);
-		this.jsonHandler = null;
+        this.jsonHandler = null;
         try {
-			this.jsonHandler = new JSONFileHandler(this, new File("./settings"), new File("./storage"));
-		} catch (JSONException e) {
-			Logging.instance().fatal("Json Handler Init failed");
-			System.exit(1);
-		}
+            this.jsonHandler = new JSONFileHandler(this, new File("./settings"), new File("./storage"));
+        } catch (JSONException e) {
+            Logging.instance().fatal("Json Handler Init failed");
+            System.exit(1);
+        }
         /*try {
             this.jsonHandler.defaultValues();
         } catch (Throwable e) {
@@ -184,7 +203,7 @@ public class StandaloneServer implements Listener {
                 worlds.tick();
                 ServerProperties.tick();
                 scheduler.tickSync();
-            } catch(Throwable e) {
+            } catch (Throwable e) {
                 // Oh noes :(
                 e.printStackTrace();
             }

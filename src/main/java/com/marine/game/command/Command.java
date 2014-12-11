@@ -1,3 +1,22 @@
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// MarineStandalone is a minecraft server software and API.
+//     Copyright (C) IntellectualSites (marine.intellectualsites.com)
+//
+//     This program is free software; you can redistribute it and/or modify
+//     it under the terms of the GNU General Public License as published by
+//     the Free Software Foundation; either version 2 of the License, or
+//     (at your option) any later version.
+//
+//     This program is distributed in the hope that it will be useful,
+//     but WITHOUT ANY WARRANTY; without even the implied warranty of
+//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//     GNU General Public License for more details.
+//
+//     You should have received a copy of the GNU General Public License along
+//     with this program; if not, write to the Free Software Foundation, Inc.,
+//     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 package com.marine.game.command;
 
 import com.marine.player.Player;
@@ -33,13 +52,14 @@ public abstract class Command {
 
     /**
      * Constructor
-     * @param command Command
-     * @param aliases Aliases
+     *
+     * @param command     Command
+     * @param aliases     Aliases
      * @param description Description
      */
     public Command(String command, String[] aliases, String description) {
         this.command = command.toLowerCase();
-        this.aliases = aliases == null ? new String[] {} : aliases;
+        this.aliases = aliases == null ? new String[]{} : aliases;
         this.description = description;
     }
 
@@ -50,6 +70,7 @@ public abstract class Command {
 
     /**
      * Get the command aliases
+     *
      * @return Array containing aliases
      */
     public String[] getAliases() {
@@ -58,6 +79,7 @@ public abstract class Command {
 
     /**
      * Get the command description
+     *
      * @return command description
      */
     public String getDescription() {
@@ -66,14 +88,16 @@ public abstract class Command {
 
     /**
      * Execute the command
-     * @param sender CommandSender
+     *
+     * @param sender    CommandSender
      * @param arguments Command arguments
      */
     public abstract void execute(CommandSender sender, String[] arguments);
 
     /**
      * Replace @p, @r, @a and @e
-     * @param args String[] arguments to be checked
+     *
+     * @param args   String[] arguments to be checked
      * @param sender CommandSender
      * @return replaced strings
      */
@@ -100,6 +124,7 @@ public abstract class Command {
 
     /**
      * Get the closets entity
+     *
      * @param sender CommandSender
      * @return Closets Entity
      */
@@ -110,6 +135,7 @@ public abstract class Command {
 
     /**
      * Get a random Player
+     *
      * @return Random player
      */
     public Player getRandomPlayer() {
@@ -119,6 +145,7 @@ public abstract class Command {
 
     /**
      * Get all players as a string
+     *
      * @return string containing all player names separated by "," and "and"
      */
     public String getAllPlayers() {
@@ -140,6 +167,7 @@ public abstract class Command {
 
     /**
      * Get the closets player
+     *
      * @param sender CommandSender
      * @return Closets player
      */
@@ -148,8 +176,8 @@ public abstract class Command {
         Player closets = null;
         double distance = Double.MAX_VALUE, current;
         Location loc = sender.getLocation();
-        for(Player player : Marine.getPlayers()) {
-            if((current = loc.getEuclideanDistance(player.getLocation())) < distance) {
+        for (Player player : Marine.getPlayers()) {
+            if ((current = loc.getEuclideanDistance(player.getLocation())) < distance) {
                 distance = current;
                 closets = player;
             }
