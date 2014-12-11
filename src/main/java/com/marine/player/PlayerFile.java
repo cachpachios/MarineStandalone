@@ -3,6 +3,8 @@ package com.marine.player;
 import com.marine.settings.JSONConfig;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created 2014-12-07 for MarineStandalone
@@ -11,20 +13,19 @@ import java.io.File;
  */
 public class PlayerFile extends JSONConfig {
 
+    private final Player player;
+
     public PlayerFile(Player player) throws Exception {
         super(new File("./players"), player.getUUID().toString());
-        super.read();
-        // TODO: Major remake
+        this.player = player;
     }
 
-    public void set(String s, Object o) {
-        if (!map.isNull(s))
-            map.remove(s);
-        try {
-            map.put(s, o);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        read();
+    @Override
+    public Map<String, Object> defaultValues() {
+        Map<String, Object> d = new HashMap<>();
+        d.put("exp", 0);
+        d.put("levels", 0);
+        d.put("name", "");
+        return d;
     }
 }

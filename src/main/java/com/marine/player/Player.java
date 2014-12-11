@@ -68,6 +68,7 @@ public class Player extends Entity implements IPlayer, CommandSender {
             Logging.getLogger().error("Could not load/create player data file for: " + getName());
             return;
         }
+        Logging.getLogger().log("exp: " + playerFile.map.getDouble("exp"));
         loadedChunks = Collections.synchronizedList(new ArrayList<Long>());
     }
 
@@ -329,7 +330,7 @@ public class Player extends Entity implements IPlayer, CommandSender {
     }
 
     private void cleanup() {
-
+        playerFile.saveFile();
     }
 
     public void disconnect() {

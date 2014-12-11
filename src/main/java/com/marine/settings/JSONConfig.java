@@ -1,12 +1,11 @@
 package com.marine.settings;
 
 import org.json.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import org.json.JSONTokener;
 
 import java.io.*;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Created 2014-12-03 for MarineStandalone
@@ -15,9 +14,9 @@ import java.util.Set;
  */
 public class JSONConfig {
 
-    public final JSONObject map;
-    private final File path, file;
-    private final String name;
+    public JSONObject map;
+    public File file, path;
+    public String name;
 
     public JSONConfig(File file) {
         this.path = file.getParentFile();
@@ -35,16 +34,51 @@ public class JSONConfig {
             }
         }
         this.file = new File(path + File.separator + name + ".json");
+        boolean created = false;
         if (!file.exists()) {
             try {
                 if (!file.createNewFile()) {
                     throw new RuntimeException("Could not create " + name + ".json");
                 }
-            } catch (IOException e) {
+                created = true;
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        this.map = new JSONObject();
+        if (!created) {
+            try {
+                BufferedReader reader = new BufferedReader(new FileReader(file));
+                JSONTokener tokener = new JSONTokener(reader);
+                this.map = new JSONObject(tokener);
+                reader.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            this.map = new JSONObject();
+        }
+        for(Map.Entry<String, Object> entry : defaultValues().entrySet()) {
+            setIfNull(entry.getKey(), entry.getValue());
+        }
+    }
+
+    public Map<String, Object> defaultValues() {
+        return new HashMap<String, Object>();
+    }
+
+    public void setIfNull(String s, Object o) {
+        if (map.isNull(s))
+            map.put(s, o);
+    }
+
+    public void set(String s, Object o) {
+        if (!map.isNull(s))
+            map.remove(s);
+        try {
+            map.put(s, o);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void saveFile() {
@@ -52,22 +86,8 @@ public class JSONConfig {
             BufferedWriter writer = new BufferedWriter(new FileWriter(file));
             map.write(writer);
             writer.close();
-        } catch (Exception e) {
+        } catch(Exception e) {
             e.printStackTrace();
         }
     }
-
-    public void read() {
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-            org.json.simple.JSONObject object = (org.json.simple.JSONObject) new JSONParser().parse(reader);
-            for (Map.Entry me : (Set<Map.Entry>) object.entrySet()) {
-                object.put(me.getKey(), me.getValue());
-            }
-            reader.close();
-        } catch (ParseException | IOException e) {
-            if (!(e instanceof ParseException)) e.printStackTrace();
-        }
-    }
-
 }

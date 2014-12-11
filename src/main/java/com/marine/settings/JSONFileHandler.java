@@ -30,12 +30,6 @@ public class JSONFileHandler {
                 new JSONConfig(storagePath, "whitelist");
     }
 
-    public void loadAll() {
-        this.administrators.read();
-        this.banned.read();
-        this.whitelist.read();
-    }
-
     public void defaultValues() throws Throwable {
         JSONObject object;
         JSONArray defaultValues = new JSONArray();
