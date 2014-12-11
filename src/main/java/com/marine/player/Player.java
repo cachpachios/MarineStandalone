@@ -10,7 +10,6 @@ import com.marine.game.command.Command;
 import com.marine.game.command.CommandSender;
 import com.marine.game.inventory.Inventory;
 import com.marine.game.inventory.PlayerInventory;
-import com.marine.game.scheduler.MarineRunnable;
 import com.marine.net.Client;
 import com.marine.net.play.clientbound.ChatPacket;
 import com.marine.net.play.clientbound.KickPacket;
@@ -70,19 +69,6 @@ public class Player extends Entity implements IPlayer, CommandSender {
             return;
         }
         loadedChunks = Collections.synchronizedList(new ArrayList<Long>());
-        try {
-            this.exp = (float) playerFile.map.get("exp");
-            this.levels = (int) playerFile.map.get("levels");
-        } catch (Exception e) {
-            Logging.getLogger().warn("Could not load in values for player " + getName());
-        }
-        final Player player = this;
-        Marine.getScheduler().createSyncTask(new MarineRunnable(40l, 1) {
-            @Override
-            public void run() {
-                getClient().sendPacket(new ExperiencePacket(player));
-            }
-        });
     }
 
     public Player(AbstractPlayer player, Gamemode gm) {
@@ -343,10 +329,7 @@ public class Player extends Entity implements IPlayer, CommandSender {
     }
 
     private void cleanup() {
-        playerFile.set("exp", exp);
-        playerFile.set("levels", levels);
 
-        playerFile.saveFile();
     }
 
     public void disconnect() {
