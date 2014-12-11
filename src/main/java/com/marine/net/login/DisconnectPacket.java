@@ -27,7 +27,7 @@ public class DisconnectPacket extends Packet {
         ByteData data = new ByteData();
         data.writeUTF8(new ChatComponent(msg, true, true, false, false, ChatColor.randomColor()).toString());
 
-        stream.write(getID(), data.getBytes());
+        stream.write(getID(), data);
     }
 
     @Override

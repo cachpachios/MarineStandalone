@@ -15,7 +15,7 @@ public abstract class Packet {
 
             @Override
             public void writeToStream(PacketOutputStream stream) throws IOException {
-                stream.write(ID, data.getBytes());
+                stream.write(ID, data);
             }
 
             @Override

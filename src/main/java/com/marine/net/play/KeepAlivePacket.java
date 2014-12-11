@@ -30,7 +30,7 @@ public class KeepAlivePacket extends Packet {
 
         d.writeVarInt(aliveID);
 
-        stream.write(getID(), d.getBytes());
+        stream.write(getID(), d);
     }
 
     @Override

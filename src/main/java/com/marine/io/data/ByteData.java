@@ -19,17 +19,20 @@ public class ByteData implements Iterable<Byte> {
     }
 
     public ByteData(byte[] bytes) {
-        this.bytes = new ArrayList<Byte>();
-
-        for (byte b : bytes)
-            this.bytes.add(b);
+    	this();
+    	for(byte b : bytes)
+    		this.bytes.add(b);
     }
 
     public ByteData() {
-        this.bytes = new Vector<Byte>();
+        this.bytes = new ArrayList<Byte>();
     }
 
-    public void writeByte(byte... b) {
+    public ByteData(Byte[] b) {
+    	this.bytes = Arrays.asList(b);
+	}
+
+	public void writeByte(byte... b) {
         for (byte by : b)
             bytes.add(by);
     }
@@ -260,10 +263,10 @@ public class ByteData implements Iterable<Byte> {
     }
 
     public void write(int pos, byte... v) {
-        ArrayList<Byte> bl = new ArrayList<Byte>();
-        for (byte b : v)
-            bl.add(b);
-        bytes.addAll(pos, bl);
+    	int i = -1;
+        for (byte b : v) {
+        	bytes.add(pos + ++i,b);
+        }
     }
 
     public void writeBoolean(boolean v) {

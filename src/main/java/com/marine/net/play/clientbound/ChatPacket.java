@@ -54,7 +54,7 @@ public class ChatPacket extends Packet {
         
         data.writeByte((byte) position);
         
-        stream.write(getID(), data.getBytes());
+        stream.write(getID(), data);
     }
 
     @Override

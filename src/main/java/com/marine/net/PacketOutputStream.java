@@ -15,8 +15,16 @@ public class PacketOutputStream { // Here we enable encryption and compression i
         this.c = c;
         this.stream = stream;
     }
+    
+    public OutputStream getStream() {
+    	return stream;
+    }
 
     public void write(int id, byte[] b) throws IOException {
+        write(id, new ByteData(b));
+    }
+    
+    public void write(int id, Byte[] b) throws IOException {
         write(id, new ByteData(b));
     }
 

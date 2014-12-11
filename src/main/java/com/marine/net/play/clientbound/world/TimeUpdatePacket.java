@@ -34,7 +34,7 @@ public class TimeUpdatePacket extends Packet {
         d.writeLong(worldAge);
         d.writeLong(worldTime);
 
-        stream.write(getID(), d.getBytes());
+        stream.write(getID(), d);
     }
 
     @Override

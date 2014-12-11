@@ -224,6 +224,6 @@ public class PlayerManager {
     }
 
     public boolean hasAnyPlayers() {
-        return !uids.isEmpty();
+        return uids.size() > 0;
     }
 }

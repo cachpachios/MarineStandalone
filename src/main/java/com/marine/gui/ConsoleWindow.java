@@ -28,7 +28,7 @@ public class ConsoleWindow extends OutputStream {
 
     public ConsoleWindow(int maxLines) {
         this.maxLines = maxLines;
-        console = new ArrayList<>();
+        console = new ArrayList<String>();
         this.showHTML = false;
         text = new JTextPane();
         input = new JTextPane();
@@ -83,7 +83,7 @@ public class ConsoleWindow extends OutputStream {
     }
 
     public void write(String s) {
-        console.add(format(s.replace("<", "&lt;").replace(">", "&gt;")));
+        console.add(format(s));
         update();
 
     }
@@ -103,17 +103,16 @@ public class ConsoleWindow extends OutputStream {
         return string + "</font>";
     }
 
-    public void update() { // TODO remove old lines.
-        while(console.size() > maxLines)
+    public void update() { synchronized(console) {
+    	while(console.size() > maxLines)
         	console.remove(0);
-        StringBuilder sB = new StringBuilder();
+        String sB = "";
         for (String s : console) {
-            sB.append(s);
-            sB.append("<br>");
+            sB += s;
+            sB += "<br>";
         }
-
-        text.setText(sB.toString());
-    }
+        text.setText(sB);
+    }}
 
     public boolean isClosed() {
         return !jFrame.isVisible();

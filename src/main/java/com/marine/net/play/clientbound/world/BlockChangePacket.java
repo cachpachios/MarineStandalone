@@ -40,7 +40,7 @@ public class BlockChangePacket extends Packet {
         data.writePosition(pos);
         data.writeVarInt(newBlock);
 
-        stream.write(getID(), data.getBytes());
+        stream.write(getID(), data);
 
     }
 

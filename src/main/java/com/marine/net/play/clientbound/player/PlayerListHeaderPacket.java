@@ -38,7 +38,7 @@ public class PlayerListHeaderPacket extends Packet {
         ByteData data = new ByteData();
         data.writeUTF8(header);
         data.writeUTF8(footer);
-        stream.write(getID(), data.getBytes());
+        stream.write(getID(), data);
     }
 
     @Override

@@ -74,7 +74,7 @@ public class ListPacket extends Packet {
 
         ByteData data = new ByteData();
         data.writeUTF8(encode(event.getResponse()));
-        stream.write(getID(), data.getBytes());
+        stream.write(getID(), data);
     }
 
     @Override

@@ -32,7 +32,7 @@ public class ExperiencePacket extends Packet {
         data.writeFloat(player.getExp());
         data.writeVarInt(player.getLevels());
         data.writeVarInt((int) (player.getLevels() * 100 + (player.getExp() * 10)));
-        stream.write(getID(), data.getBytes());
+        stream.write(getID(), data);
     }
 
     @Override

@@ -10,7 +10,6 @@ import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class TimeoutManager extends Thread {
-    private static final long sleepTime = 1500;
     private final PlayerManager players;
     private final Random rand;
     private Map<Player, Integer> lastRecive; // Contains last recived in seconds
@@ -36,32 +35,19 @@ public class TimeoutManager extends Thread {
     }
 
     private void update(Player p) {
-        synchronized (lastSent) {
             if (lastSent.containsKey(p))
                 lastSent.remove(p);
 
             int id = rand.nextInt();
-            if (id < 0) // IF id is negative
-                id *= -1; // make it possetive
-            if (id == 0) // if its zero
-                id++; // Add one
-
             p.getClient().sendPacket(new KeepAlivePacket(id));
 
             lastSent.put(p, id);
-        }
     }
 
 
     public void cleanUp(Player p) {
-        synchronized (lastRecive) {
-            synchronized (lastSent) {
-                if (lastRecive.containsKey(p))
-                    lastRecive.remove(p);
-                if (lastSent.containsKey(p))
-                    lastSent.remove(p);
-            }
-        }
+    		lastRecive.remove(p);
+            lastSent.remove(p);
     }
 
     private void disconnect(Player p) {
@@ -71,53 +57,22 @@ public class TimeoutManager extends Thread {
 
     @Override
     public void run() { // Will update each second :D
-        long lastTime = getMiliTime();
-        long time;
         while (true) {
-            if (!players.hasAnyPlayers())
-                try {
-                    TimeoutManager.sleep(sleepTime);
-                } catch (InterruptedException e1) {
-                }
-            time = getMiliTime();
-
-            if (time - lastTime >= 1000) {
-                synchronized (lastRecive) {
-                    synchronized (lastSent) {
-                        for (Player p : lastRecive.keySet()) {
-                            int t = lastRecive.get(p);
-
-                            lastRecive.remove(p);
-                            lastRecive.put(p, t + 1);
-
-                            if (t >= 10)
-                                disconnect(p);
-                        }
-
-                        for (Player p : players.getPlayers())
-                            if (!lastSent.containsKey(p)) update(p); // Send some packages
-                    }
-                }
-                lastTime = time;
-            }
-
+        	int time = (int) getMiliTime();
+            for (Player p : lastRecive.keySet())
+             		if (lastRecive.get(p)-time >= 10)
+               			disconnect(p);
             try {
-                TimeoutManager.sleep(1000 - (time - lastTime));
-            } catch (InterruptedException e) {
-            }
+                TimeoutManager.sleep(1000);
+            } catch (InterruptedException e) {}
         }
     }
 
     public void keepAlive(Player p, int ID) {
-        synchronized (lastSent) {
-            synchronized (lastRecive) {
                 lastSent.remove(p);
                 lastRecive.remove(p);
-                lastRecive.put(p, 0);
-
-            }
-        }
+                lastRecive.put(p, (int) getMiliTime());
+                update(p);
     }
-
 
 }

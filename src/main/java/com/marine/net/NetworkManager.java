@@ -87,9 +87,6 @@ public class NetworkManager {
     }
 
     public boolean processAll() { synchronized(clientList) {
-        if (clientList.isEmpty())
-            return false;
-
         boolean didProccessSomething = false;
         for (Client c : clientList) {
             Client.ConnectionStatus status = c.process();
@@ -107,8 +104,6 @@ public class NetworkManager {
             }
             if (status == Client.ConnectionStatus.PROCESSED)
                 didProccessSomething = true;
-
-
         }
         for (Client c : cleanUpList)
             terminate(c);
@@ -117,7 +112,7 @@ public class NetworkManager {
     }}
 
     public boolean hasClientsConnected() {
-        return !clientList.isEmpty();
+        return clientList.size() > 0;
     }
 
     public void tryConnections() {
@@ -145,11 +140,16 @@ public class NetworkManager {
 
         public void run() {
             while (true)
-                if (!host.processAll())
+            if(!host.processAll())
+            	if(host.hasClientsConnected())
                     try {
-                        ClientProcessor.sleep(0, 1000);
+                        ClientProcessor.sleep(50);
                     } catch (InterruptedException e) {
-                    }
+                }
+				else
+					try {
+						ClientProcessor.sleep(0,500);
+					} catch (InterruptedException e) {}
         }
     }
 } 

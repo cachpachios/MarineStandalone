@@ -1,12 +1,14 @@
 package com.marine.net;
 
-import com.marine.io.data.ByteData;
-import com.marine.io.data.ByteEncoder;
-
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.List;
+
+import com.marine.io.data.ByteData;
+import com.marine.io.data.ByteEncoder;
 
 public class Client {
 
@@ -14,6 +16,8 @@ public class Client {
     private final Socket connection;
     private final PacketOutputStream output;
 
+    private InputStream input;
+    
     private States state;
     private int compressionThreshold = -1;
 
@@ -25,13 +29,12 @@ public class Client {
         this.state = States.HANDSHAKE;
         this.networkManager = network;
         this.connection = s;
+        this.input = s.getInputStream();
         output = new PacketOutputStream(this, s.getOutputStream());
         this.uid = -1;
     }
 
     public void sendPacket(Packet packet) { //TODO: PacketBuffer
-    	System.out.println("Packet ID: " + packet.getID() + " was sent.");
-
         try {
             packet.writeToStream(output);
         } catch (IOException e) {
@@ -92,14 +95,9 @@ public class Client {
 
     public ConnectionStatus process() { // Returns true if connection is closed.
 
-        // Read from client:
-        if (getConnection().isClosed()) {
-            return ConnectionStatus.CONNECTION_PROBLEMS;
-        }
-
         int a = 0;
         try {
-            a = getConnection().getInputStream().available();
+            a = input.available();
         } catch (IOException e) {
             return ConnectionStatus.CONNECTION_PROBLEMS;
         }
@@ -111,14 +109,14 @@ public class Client {
         byte[] allData = new byte[a];
 
         try {
-            getConnection().getInputStream().read(allData);
+        	input.read(allData);
         } catch (IOException e) {
             return ConnectionStatus.CONNECTION_PROBLEMS;
         }
 
         ByteData data = new ByteData(allData);
 
-        ArrayList<ByteData> packages = new ArrayList<ByteData>();
+        List<ByteData> packages = new ArrayList<ByteData>();
 
 
         while (data.remainingBytes() > 0) {
@@ -134,9 +132,7 @@ public class Client {
         }
 
         for (ByteData p : packages) {
-        	int id = p.readVarInt();							// DEBUG TEMPORARY
-        	System.out.println("Packet intercepted: " + id);	// DEBUG TEMPORARY
-            getNetwork().packetHandler.intercept(id, p, this);
+            getNetwork().packetHandler.intercept(p.readVarInt(), p, this);
         }
 
         return ConnectionStatus.PROCESSED;

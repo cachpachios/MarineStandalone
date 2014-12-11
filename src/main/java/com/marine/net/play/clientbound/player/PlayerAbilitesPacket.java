@@ -30,7 +30,7 @@ public class PlayerAbilitesPacket extends Packet {
         d.writeFloat(abilites.getFlySpeed());
         d.writeFloat(abilites.getWalkSpeed());
 
-        stream.write(getID(), d.getBytes());
+        stream.write(getID(), d);
 
 
     }

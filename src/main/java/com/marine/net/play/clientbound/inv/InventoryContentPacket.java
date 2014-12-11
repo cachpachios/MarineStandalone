@@ -38,7 +38,7 @@ public class InventoryContentPacket extends Packet {
             else
                 d.writeByte(slot.getBytes());
 
-        stream.write(getID(), d.getBytes());
+        stream.write(getID(), d);
     }
 
     @Override

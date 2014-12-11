@@ -73,7 +73,7 @@ public class PlayerListItemPacket extends Packet {
             default:
                 return;
         }
-        stream.write(getID(), data.getBytes());
+        stream.write(getID(), data);
     }
 
     @Override

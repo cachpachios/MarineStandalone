@@ -27,7 +27,7 @@ public class SpawnPointPacket extends Packet { // Only used to make the client k
         d.writePosition(spawnPoint);
         d.writePacketPrefix();
 
-        stream.write(getID(), d.getBytes());
+        stream.write(getID(), d);
     }
 
     @Override

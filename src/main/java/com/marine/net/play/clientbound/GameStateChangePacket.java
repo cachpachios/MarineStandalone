@@ -33,7 +33,7 @@ public class GameStateChangePacket extends Packet {
         data.writeByte((byte) reason.ordinal());
         if (value > -1f)
             data.writeFloat(value);
-        stream.write(getID(), data.getBytes());
+        stream.write(getID(), data);
     }
 
     @Override

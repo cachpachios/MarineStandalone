@@ -30,7 +30,7 @@ public class LoginSucessPacket extends Packet {
         d.writeUTF8(p.getName());
 
 
-        stream.write(getID(), d.getBytes());
+        stream.write(getID(), d);
     }
 
     @Override

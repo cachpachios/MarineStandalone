@@ -33,7 +33,7 @@ public class InventoryOpenPacket extends Packet {
         data.writeUTF8(inventory.getType());
         data.writeUTF8(inventory.getTitle().toString());
         data.writeByte(inventory.getNumberOfSlots());
-        stream.write(getID(), data.getBytes());
+        stream.write(getID(), data);
     }
 
     @Override
