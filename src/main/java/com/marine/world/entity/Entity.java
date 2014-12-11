@@ -16,6 +16,10 @@ public abstract class Entity {
     private int ticksLived;
 
     public Entity(final EntityType type, final int ID, final Location pos) {
+        this(type, ID, pos.getWorld(), pos);
+    }
+
+    public Entity(final EntityType type, final int ID, final World world, final Location pos) {
         this.entityID = ID;
         this.world = pos.getWorld();
         this.position = pos;

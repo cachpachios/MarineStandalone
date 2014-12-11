@@ -72,11 +72,9 @@ public class ListPacket extends Packet {
 
         Marine.getServer().callEvent(event);
 
-        if (!event.isCancelled() /* This allows us to block listing for certain IPs and such */) {
             ByteData data = new ByteData();
             data.writeUTF8(encode(event.getResponse()));
             stream.write(getID(), data.getBytes());
-        }
     }
 
     @Override

@@ -184,6 +184,21 @@ public class Location extends Vector3d implements JSONAware, Cloneable { // Used
         return o;
     }
 
+    public JSONObject toSimpleJSONObject() {
+        JSONObject o = new JSONObject();
+        try {
+            o.put("x", getX());
+            o.put("y", getY());
+            o.put("z", getZ());
+            o.put("yaw", getYaw());
+            o.put("pitch", getPitch());
+            o.put("world", getWorld().getName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return o;
+    }
+
     @Override
     public String toString() {
         return String.format("\"location\": {\"world\": \"%s\", \"x\": %f, \"y\": %f, \"z\": %f}", getWorld().getName(), getX(), getY(), getZ());
