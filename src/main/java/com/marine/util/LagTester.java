@@ -16,7 +16,7 @@ public class LagTester extends MarineRunnable {
     public static long LT = 0l;
 
     public LagTester() {
-        super(1l);
+        super(1l, -1);
     }
 
     public static double getTPS() {

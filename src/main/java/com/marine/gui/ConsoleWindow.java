@@ -1,28 +1,19 @@
 package com.marine.gui;
 
-import java.awt.Color;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import com.marine.Logging;
+import com.marine.ServerProperties;
+import com.marine.game.chat.ChatColor;
+import com.marine.server.Marine;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-import javax.swing.JTextPane;
-
-import com.marine.Logging;
-import com.marine.ServerProperties;
-import com.marine.game.chat.ChatColor;
-import com.marine.server.Marine;
 
 public class ConsoleWindow extends OutputStream {
     private final int maxLines;
@@ -37,7 +28,7 @@ public class ConsoleWindow extends OutputStream {
 
     public ConsoleWindow(int maxLines) {
         this.maxLines = maxLines;
-        console = Collections.synchronizedList(new ArrayList<>());
+        console = new ArrayList<>();
         this.showHTML = false;
         text = new JTextPane();
         input = new JTextPane();

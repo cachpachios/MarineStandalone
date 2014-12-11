@@ -1,10 +1,12 @@
 package com.marine.game.command;
 
-import java.util.Iterator;
-
 import com.marine.player.Player;
 import com.marine.server.Marine;
 import com.marine.world.entity.Entity;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Created 2014-12-01 for MarineStandalone
@@ -56,7 +58,7 @@ public abstract class Command {
     }
 
     public String getRandomPlayer() {
-        List<Player> players = Marine.getPlayers();
+        List<Player> players = new ArrayList<>(Marine.getPlayers());
         return players.get((int)(Math.random() * players.size())).getName();
     }
 
