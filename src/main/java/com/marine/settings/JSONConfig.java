@@ -1,5 +1,6 @@
 package com.marine.settings;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -68,7 +69,9 @@ public class JSONConfig {
 
     public void setIfNull(String s, Object o) {
         if (map.isNull(s))
-            map.put(s, o);
+			try {
+				map.put(s, o);
+			} catch (JSONException e) {}
     }
 
     public void set(String s, Object o) {

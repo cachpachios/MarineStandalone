@@ -2,7 +2,9 @@ package com.marine.settings;
 
 import com.marine.StandaloneServer;
 import com.marine.util.UUIDHandler;
+
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -29,7 +31,8 @@ public class JSONFileHandler {
         @Override
         public Map<String, Object> defaultValues() {
             Map<String, Object> defaultUUIDS = new HashMap<>();
-            defaultUUIDS.put("uuid", new JSONArray(new String[] { UUIDHandler.getUUID("notch").toString() }));
+            try {
+				defaultUUIDS.put("uuid", new JSONArray(new String[] { UUIDHandler.getUUID("notch").toString() }));} catch (JSONException e) {}
             return defaultUUIDS;
         }
 
