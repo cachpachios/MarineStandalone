@@ -85,7 +85,9 @@ public class Player extends Entity implements IPlayer, CommandSender {
         try {
             this.playerFile = new PlayerFile(this);
         } catch (Exception e) {
-            Logging.getLogger().error("Could not load/create player data file for: " + getName());
+            Logging.getLogger().error(
+                    "Could not load/create player data file for: "
+                            + getName());
             return;
         }
         this.loadedChunks = Collections.synchronizedList(new ArrayList<Long>());
@@ -270,7 +272,7 @@ public class Player extends Entity implements IPlayer, CommandSender {
     }
 
     public byte nextWindowID() {
-        return (byte) nextWindowID++;
+        return nextWindowID++;
     }
 
     @Override
