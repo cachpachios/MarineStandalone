@@ -32,7 +32,10 @@ public class JSONFileHandler {
         public Map<String, Object> defaultValues() {
             Map<String, Object> defaultUUIDS = new HashMap<>();
             try {
-				defaultUUIDS.put("uuid", new JSONArray(new String[] { UUIDHandler.getUUID("notch").toString() }));} catch (JSONException e) {}
+				defaultUUIDS.put("uuid", new JSONArray(new String[] { UUIDHandler.getUUID("notch").toString() }));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             return defaultUUIDS;
         }
 
