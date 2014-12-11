@@ -16,32 +16,68 @@ import java.util.List;
  */
 public abstract class Command {
 
+    /**
+     * The actual command
+     */
     private final String command;
+
+    /**
+     * Command aliases
+     */
     private final String[] aliases;
+
+    /**
+     * Command description
+     */
     private final String description;
 
+    /**
+     * Constructor
+     * @param command Command
+     * @param aliases Aliases
+     * @param description Description
+     */
     public Command(String command, String[] aliases, String description) {
         this.command = command.toLowerCase();
-        this.aliases = aliases;
+        this.aliases = aliases == null ? new String[] {} : aliases;
         this.description = description;
     }
 
     @Override
-    public String toString() {
+    final public String toString() {
         return command;
     }
 
+    /**
+     * Get the command aliases
+     * @return Array containing aliases
+     */
     public String[] getAliases() {
         return aliases;
     }
 
+    /**
+     * Get the command description
+     * @return command description
+     */
     public String getDescription() {
         return description;
     }
 
+    /**
+     * Execute the command
+     * @param sender CommandSender
+     * @param arguments Command arguments
+     */
     public abstract void execute(CommandSender sender, String[] arguments);
 
-    public String[] replaceAll(String[] args, CommandSender sender) {
+    /**
+     * Replace @p, @r, @a and @e
+     * @param args String[] arguments to be checked
+     * @param sender CommandSender
+     * @return replaced strings
+     */
+    final public String[] replaceAll(String[] args, CommandSender sender) {
         String[] returner = new String[args.length];
         // Retrieve the objects
         Player closestPlayer = getClosestPlayer(sender), randomPlayer = getRandomPlayer();
@@ -62,16 +98,29 @@ public abstract class Command {
         return returner;
     }
 
+    /**
+     * Get the closets entity
+     * @param sender CommandSender
+     * @return Closets Entity
+     */
     public Entity getClosestEntity(CommandSender sender) {
         if (sender instanceof Player) return (Entity) sender;
         return null;
     }
 
+    /**
+     * Get a random Player
+     * @return Random player
+     */
     public Player getRandomPlayer() {
         List<Player> players = new ArrayList<>(Marine.getPlayers());
         return players.get((int) (Math.random() * players.size()));
     }
 
+    /**
+     * Get all players as a string
+     * @return string containing all player names separated by "," and "and"
+     */
     public String getAllPlayers() {
         StringBuilder s = new StringBuilder();
         Iterator<Player> i = Marine.getPlayers().iterator();
@@ -85,6 +134,11 @@ public abstract class Command {
         return s.toString().substring(0, s.toString().length() - 2);
     }
 
+    /**
+     * Get the closets player
+     * @param sender CommandSender
+     * @return Closets player
+     */
     public Player getClosestPlayer(CommandSender sender) {
         if (sender instanceof Player) return (Player) sender;
         Player closets = null;
