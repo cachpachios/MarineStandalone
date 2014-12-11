@@ -53,6 +53,12 @@ public class PluginLoader {
         }
     }
 
+    public void disableAllPlugins() {
+        for(Plugin plugin : manager.getPlugins()) {
+            disablePlugin(plugin);
+        }
+    }
+
     public Plugin loadPlugin(final File file) throws PluginHandlerException {
         if (!file.exists())
             throw new PluginHandlerException(this, "Could not load plugin -> File cannot be null", new FileNotFoundException(file.getPath() + " does not exist"));

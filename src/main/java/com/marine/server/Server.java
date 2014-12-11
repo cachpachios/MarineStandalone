@@ -9,8 +9,8 @@ import com.marine.events.MarineEvent;
 import com.marine.player.Player;
 import com.marine.world.World;
 
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.Executor;
 
@@ -47,7 +47,7 @@ public class Server implements MarineServer {
     }
 
     @Override
-    public Set<Player> getPlayers() {
+    public Collection<Player> getPlayers() {
         return server.getPlayerManager().getPlayers();
     }
 

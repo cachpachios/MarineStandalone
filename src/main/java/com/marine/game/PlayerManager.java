@@ -142,8 +142,8 @@ public class PlayerManager {
         return loginManager;
     }
 
-    public Set<Player> getPlayers() {
-        return new HashSet<>(uids.values());
+    public Collection<Player> getPlayers() {
+        return uids.values();
     }
 
     protected Player passFromLogin(IPlayer player) {
@@ -171,7 +171,7 @@ public class PlayerManager {
         timeout.cleanUp(p);
         //TODO: send player remove packet to every other client
         server.getNetwork().cleanUp(p.getClient());
-        forceGC(p);
+        // forceGC(p);
     }
 
     public void disconnect(Player p, String msg) {

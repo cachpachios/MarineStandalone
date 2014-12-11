@@ -8,7 +8,9 @@ import com.marine.game.chat.ChatColor;
 import com.marine.game.commands.*;
 import com.marine.game.scheduler.Scheduler;
 import com.marine.net.NetworkManager;
+import com.marine.net.play.clientbound.KickPacket;
 import com.marine.player.Gamemode;
+import com.marine.player.Player;
 import com.marine.plugins.PluginLoader;
 import com.marine.plugins.PluginManager;
 import com.marine.server.Marine;
@@ -17,12 +19,11 @@ import com.marine.server.Server;
 import com.marine.settings.JSONFileHandler;
 import com.marine.settings.ServerSettings;
 import com.marine.world.Difficulty;
+import org.json.JSONException;
 
 import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import org.json.JSONException;
 
 public class StandaloneServer implements Listener {
 
@@ -195,9 +196,15 @@ public class StandaloneServer implements Listener {
     }
 
     public void stop() {
+        for (Player player : players.getPlayers()) {
+            player.getClient().sendPacket(new KickPacket(ChatColor.red + ChatColor.bold + "Server stopped"));
+        }
+        // Disable all plugins
+        pluginLoader.disableAllPlugins();
+        // Should not run, smart stuff
         shouldRun = false;
+        // Save all json configs
         jsonHandler.saveAll();
-
         // When finished
         System.exit(0);
     }

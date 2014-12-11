@@ -6,8 +6,8 @@ import com.marine.events.MarineEvent;
 import com.marine.player.Player;
 import com.marine.world.World;
 
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -24,7 +24,7 @@ public interface MarineServer {
      *
      * @return A list containing all players
      */
-    public Set<Player> getPlayers();
+    public Collection<Player> getPlayers();
 
     /**
      * Get the current player count
