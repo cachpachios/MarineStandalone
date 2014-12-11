@@ -1,4 +1,4 @@
-package com.marine;
+package com.marine.events;
 
 import com.marine.events.MarineEvent;
 import com.marine.player.Player;

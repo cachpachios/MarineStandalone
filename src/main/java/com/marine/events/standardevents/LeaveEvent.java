@@ -1,6 +1,6 @@
 package com.marine.events.standardevents;
 
-import com.marine.PlayerEvent;
+import com.marine.events.PlayerEvent;
 import com.marine.player.Player;
 
 /**
