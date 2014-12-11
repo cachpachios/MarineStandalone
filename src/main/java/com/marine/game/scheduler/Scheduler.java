@@ -33,14 +33,14 @@ public class Scheduler extends Thread {
     }
 
     private void tickAsync() {
-        for(MarineRunnable runnable : asyncRunnables.values()) {
-            runnable.tick();
+        for(long n : asyncRunnables.keySet()) {
+            asyncRunnables.get(n).tick(this, n);
         }
     }
 
     public void tickSync() {
-        for(MarineRunnable runnable : syncRunnables.values()) {
-            runnable.tick();
+        for(long n : syncRunnables.keySet()) {
+            syncRunnables.get(n).tick(this, n);
         }
     }
 
