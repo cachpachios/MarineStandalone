@@ -63,7 +63,7 @@ public class JSONConfig {
     }
 
     public Map<String, Object> defaultValues() {
-        return new HashMap<String, Object>();
+        return new HashMap<>();
     }
 
     public void setIfNull(String s, Object o) {

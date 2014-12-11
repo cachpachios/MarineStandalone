@@ -6,6 +6,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created 2014-12-03 for MarineStandalone
@@ -13,6 +15,25 @@ import java.io.File;
  * @author Citymonstret
  */
 public class JSONFileHandler {
+
+    private class StorageConfig extends JSONConfig {
+
+        public StorageConfig(File file) {
+            super(file);
+        }
+
+        public StorageConfig(File parent, String file) {
+            super(parent, file);
+        }
+
+        @Override
+        public Map<String, Object> defaultValues() {
+            Map<String, Object> defaultUUIDS = new HashMap<>();
+            defaultUUIDS.put("uuid", new JSONArray(new String[] { UUIDHandler.getUUID("notch").toString() }));
+            return defaultUUIDS;
+        }
+
+    }
 
     private final StandaloneServer server;
     private final JSONConfig administrators, banned, whitelist;
@@ -22,42 +43,9 @@ public class JSONFileHandler {
         this.server = server;
         this.settingsPath = settingsPath;
         this.storagePath = storagePath;
-        this.administrators =
-                new JSONConfig(storagePath, "administrators");
-        this.banned =
-                new JSONConfig(storagePath, "banned");
-        this.whitelist =
-                new JSONConfig(storagePath, "whitelist");
-    }
-
-    public void defaultValues() throws Throwable {
-        JSONObject object;
-        JSONArray defaultValues = new JSONArray();
-        defaultValues.put(UUIDHandler.getUUID("notch").toString());
-        // Administrators
-        {
-            object = getAdministratorJSONObject();
-            if (object.isNull("administrators")) {
-                object.put("administrators", defaultValues);
-            }
-        }
-        // Banned
-        {
-            object = getBannedJSONObject();
-            if (object.isNull("banned-players")) {
-                object.put("banned-players", defaultValues);
-            }
-            if (object.isNull("banned-ips")) {
-                object.put("banned-ips", new JSONArray(new String[]{"127.0.0.1"}));
-            }
-        }
-        // Whitelist
-        {
-            object = getWhitelistJSONObject();
-            if (object.isNull("whitelisted")) {
-                object.put("whitelisted", defaultValues);
-            }
-        }
+        this.administrators = new StorageConfig(storagePath, "administrators");
+        this.banned = new StorageConfig(storagePath, "banned");
+        this.whitelist = new StorageConfig(storagePath, "whitelist");
     }
 
     public void saveAll() {
