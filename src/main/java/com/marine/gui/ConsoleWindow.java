@@ -122,17 +122,10 @@ public class ConsoleWindow extends OutputStream {
         return string + "</font>";
     }
 
-<<<<<<< HEAD
     public void update() { synchronized(console) {
     	while(console.size() > maxLines)
         	console.remove(0);
         String sB = "";
-=======
-    public void update() { // TODO remove old lines.
-        while (console.size() > maxLines)
-            console.remove(0);
-        StringBuilder sB = new StringBuilder();
->>>>>>> 88e6b8e66ccbea773f6cf80885da565bfb8aa53a
         for (String s : console) {
             sB += s;
             sB += "<br>";

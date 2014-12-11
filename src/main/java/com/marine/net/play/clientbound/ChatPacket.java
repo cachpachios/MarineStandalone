@@ -71,13 +71,8 @@ public class ChatPacket extends Packet {
             data.writeUTF8(message.substring(0, 32766));
 
         data.writeByte((byte) position);
-<<<<<<< HEAD
         
         stream.write(getID(), data);
-=======
-
-        stream.write(getID(), data.getBytes());
->>>>>>> 88e6b8e66ccbea773f6cf80885da565bfb8aa53a
     }
 
     @Override
