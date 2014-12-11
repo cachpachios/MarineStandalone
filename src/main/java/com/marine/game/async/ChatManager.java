@@ -8,30 +8,20 @@ import com.marine.server.Marine;
 
 public class ChatManager {
 
-	private final PlayerManager manager;
-	
-	public ChatManager(PlayerManager players) {
-		this.manager = players;
-	}
-	
     public static String CHAT_FORMAT = "<%plr> %msg",
             JOIN_MESSAGE = "%plr joined the game",
             LEAVE_MESSAGE = "%plr left the game",
             WELCOME_MESSAGE = "Welcome online §l%plr";
+    private final PlayerManager manager;
 
-    public void sendJoinMessage(Player player) {
-        Marine.broadcastMessage(translate(JOIN_MESSAGE, player));
-        player.sendAboveActionbarMessage(translate(WELCOME_MESSAGE, player)); // TODO Custom Message, event and toggleable
-    }
-
-    public void sendLeaveMessage(Player player) {
-        Marine.broadcastMessage(translate(LEAVE_MESSAGE, player));
+    public ChatManager(PlayerManager players) {
+        this.manager = players;
     }
 
     public static String format(String s, Player p) {
-    	return translate(CHAT_FORMAT, new Object[] {p,s});
+        return translate(CHAT_FORMAT, new Object[]{p, s});
     }
-    
+
     private static String translate(String s, Object... strs) {
         for (Object object : strs) {
             if (object instanceof Player) {
@@ -43,10 +33,19 @@ public class ChatManager {
         return s;
     }
 
-    public void brodcastMessage(String msg) {
-    	manager.brodcastPacket(new ChatPacket(msg));
+    public void sendJoinMessage(Player player) {
+        Marine.broadcastMessage(translate(JOIN_MESSAGE, player));
+        player.sendAboveActionbarMessage(translate(WELCOME_MESSAGE, player)); // TODO Custom Message, event and toggleable
     }
-    
+
+    public void sendLeaveMessage(Player player) {
+        Marine.broadcastMessage(translate(LEAVE_MESSAGE, player));
+    }
+
+    public void brodcastMessage(String msg) {
+        manager.brodcastPacket(new ChatPacket(msg));
+    }
+
     public void sendChatMessage(Player player, String message) {
         ChatEvent event = new ChatEvent(player, message);
         Marine.getServer().callEvent(event);

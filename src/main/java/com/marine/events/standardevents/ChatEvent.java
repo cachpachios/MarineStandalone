@@ -1,7 +1,7 @@
 package com.marine.events.standardevents;
 
-import com.marine.events.PlayerEvent;
 import com.marine.events.Cancellable;
+import com.marine.events.PlayerEvent;
 import com.marine.player.Player;
 
 /**

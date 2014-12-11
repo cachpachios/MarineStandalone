@@ -36,11 +36,12 @@ public class ListResponse {
 
     /**
      * Create a new list response
-     * @param motd Message of the day
+     *
+     * @param motd           Message of the day
      * @param currentPlayers Current player count
-     * @param maxPlayers Max player count
-     * @param samplePlayers Sample player list
-     * @param favicon Server icon
+     * @param maxPlayers     Max player count
+     * @param samplePlayers  Sample player list
+     * @param favicon        Server icon
      */
     public ListResponse(String motd, int currentPlayers, int maxPlayers, JSONArray samplePlayers, String favicon) {
         this.MOTD = motd;

@@ -1,12 +1,12 @@
 package com.marine.net;
 
+import com.marine.io.data.ByteData;
+import com.marine.io.data.ByteEncoder;
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
-
-import com.marine.io.data.ByteData;
-import com.marine.io.data.ByteEncoder;
 
 public class Client {
     private final NetworkManager networkManager;
@@ -26,8 +26,8 @@ public class Client {
     }
 
     public void sendPacket(Packet packet) { //TODO: PacketBuffer
-    	if(packet==null)
-    		return;
+        if (packet == null)
+            return;
         try {
             packet.writeToStream(output);
         } catch (IOException e) {
@@ -68,15 +68,15 @@ public class Client {
 
     public void terminate() {
         try {
-        	this.connection.getOutputStream().flush();
-        	this.connection.getOutputStream().close();
-        	this.connection.getInputStream().close();
+            this.connection.getOutputStream().flush();
+            this.connection.getOutputStream().close();
+            this.connection.getInputStream().close();
             this.connection.close();
         } catch (IOException e) {
         }
     }
 
-    
+
     public boolean isActive() {
         try { // Write a 0 bit to check if available
             getConnection().getOutputStream().write(ByteEncoder.writeBoolean(false));
@@ -85,7 +85,7 @@ public class Client {
         }
         return true;
     }
-    
+
     public ConnectionStatus process() { // Returns true if connection is closed.
 
         // Read from client:
@@ -102,7 +102,7 @@ public class Client {
 
 
         if (a == 0) return ConnectionStatus.EMPTY;
-        
+
 
         byte[] allData = new byte[a];
 

@@ -31,14 +31,14 @@ public class PluginLoader {
     }
 
     public void loadAllPlugins(File folder) {
-        if(!folder.exists() || !folder.isDirectory()) {
+        if (!folder.exists() || !folder.isDirectory()) {
             throw new IllegalArgumentException("You have to provide a valid plugin folder");
         }
         File[] files = folder.listFiles(new JarFilter());
-        for(File file : files) {
+        for (File file : files) {
             try {
                 loadPlugin(file);
-            } catch(Throwable e) {
+            } catch (Throwable e) {
                 Logging.getLogger().log("Could not load in plugin: " + file.getName());
                 e.printStackTrace();
             }
@@ -46,18 +46,18 @@ public class PluginLoader {
     }
 
     public void enableAllPlugins() {
-        for(Plugin plugin : manager.getPlugins()) {
+        for (Plugin plugin : manager.getPlugins()) {
             enablePlugin(plugin);
         }
     }
 
     public Plugin loadPlugin(final File file) throws Throwable {
-        if(!file.exists())
+        if (!file.exists())
             throw new FileNotFoundException("Could not load plugin -> File cannot be null");
         final PluginFile desc = getPluginFile(file);
         final File parent = file.getParentFile(), data = new File(parent, desc.name);
-        if(!data.exists()) {
-            if(!data.mkdir()) {
+        if (!data.exists()) {
+            if (!data.mkdir()) {
                 Logging.getLogger().warn("Could not create data folder for " + desc.name);
             }
         }
@@ -69,16 +69,16 @@ public class PluginLoader {
     }
 
     protected Class<?> getClassByName(final String name) {
-        if(classes.containsKey(name))
+        if (classes.containsKey(name))
             return classes.get(name);
         Class clazz;
         PluginClassLoader loader;
-        for(String current : loaders.keySet()) {
+        for (String current : loaders.keySet()) {
             loader = loaders.get(current);
             try {
-                if((clazz = loader.findClass(name, false)) != null)
+                if ((clazz = loader.findClass(name, false)) != null)
                     return clazz;
-            } catch(Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -86,31 +86,31 @@ public class PluginLoader {
     }
 
     protected void setClass(final String name, final Class clazz) {
-        if(!classes.containsKey(name)) {
+        if (!classes.containsKey(name)) {
             classes.put(name, clazz);
         }
     }
 
     protected void removeClass(String name) {
-        if(classes.containsKey(name))
+        if (classes.containsKey(name))
             classes.remove(name);
     }
 
     public void enablePlugin(final Plugin plugin) {
-        if(!plugin.isEnabled()) {
+        if (!plugin.isEnabled()) {
             String name = plugin.getName();
-            if(!loaders.containsKey(name))
+            if (!loaders.containsKey(name))
                 loaders.put(name, plugin.getClassLoader());
             manager.enablePlugin(plugin);
         }
     }
 
     public void disablePlugin(final Plugin plugin) {
-        if(plugin.isEnabled()) {
+        if (plugin.isEnabled()) {
             manager.disablePlugin(plugin);
             loaders.remove(plugin.getName());
             PluginClassLoader loader = plugin.getClassLoader();
-            for(String name : loader.getClasses())
+            for (String name : loader.getClasses())
                 removeClass(name);
         }
     }
@@ -118,13 +118,13 @@ public class PluginLoader {
     private PluginFile getPluginFile(File file) throws Throwable {
         JarFile jar = new JarFile(file);
         JarEntry desc = jar.getJarEntry("desc.json");
-        if(desc == null)
+        if (desc == null)
             throw new RuntimeException("Could not find desc.json in file: " + file.getName());
         InputStream stream = jar.getInputStream(desc);
         PluginFile f = new PluginFile(stream);
         try {
             jar.close();
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return f;

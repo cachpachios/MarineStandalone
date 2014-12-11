@@ -64,15 +64,15 @@ public class ListPacket extends Packet {
             player.put("name", p.getName());
             samples.add(player);
         }
-        
+
         samples.add(player);
-        
+
         ListResponse response = new ListResponse(Marine.getMOTD(), Marine.getPlayers().size(), Marine.getMaxPlayers(), samples, getImage());
         ListEvent event = new ListEvent(response);
 
         Marine.getServer().callEvent(event);
 
-        if(!event.isCancelled() /* This allows us to block listing for certain IPs and such */) {
+        if (!event.isCancelled() /* This allows us to block listing for certain IPs and such */) {
             ByteData data = new ByteData();
             data.writeUTF8(encode(event.getResponse()));
             stream.write(getID(), data.getBytes());

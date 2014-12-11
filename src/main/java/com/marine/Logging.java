@@ -51,7 +51,7 @@ public class Logging extends PrintStream {
         log(message.getMessage());
     }
 
-    public void logf(String s, Object ... os) {
+    public void logf(String s, Object... os) {
         this.log(StringUtils.format(s, os));
     }
 

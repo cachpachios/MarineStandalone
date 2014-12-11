@@ -1,9 +1,8 @@
 package com.marine.world;
 
+import com.marine.util.IDObject;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import com.marine.util.IDObject;
 
 public enum BlockID implements IDObject {
     AIR(0, "air"),
@@ -318,9 +317,9 @@ public enum BlockID implements IDObject {
     }
 
     public int getPacketID() {
-    	if(getMetaBlock() == -1)
-    		return getID() << 4 | 0;
-    	else
+        if (getMetaBlock() == -1)
+            return getID() << 4 | 0;
+        else
             return getID() << 4 | getMetaBlock();
     }
 

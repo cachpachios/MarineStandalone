@@ -22,9 +22,9 @@ public class ByteCompressor {
         }
         return compressedData;
     }
-    
+
     public static byte[] decode(byte[] data) {
-    	inflater.setInput(data);
+        inflater.setInput(data);
         byte[] decompressedData = new byte[data.length];
         deflater.deflate(decompressedData);
         deflater.reset();

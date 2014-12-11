@@ -35,6 +35,7 @@ public class LeaveEvent extends PlayerEvent {
         KICKED("%plr got kicked"), NORMAL("%plr left the game"), TIMEOUT("%plr timed out");
 
         private final String message;
+
         QuitReason(final String message) {
             this.message = message;
         }

@@ -21,7 +21,7 @@ public class ConsoleWindow extends OutputStream {
     private JFrame jFrame;
     private JTextPane text;
     @SuppressWarnings("unused")
-	private JTextPane input;
+    private JTextPane input;
     private List<String> console;
     private String s;
     private java.util.List<Character> validChars;

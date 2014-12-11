@@ -17,9 +17,9 @@ public class TimeUpdatePacket extends Packet {
         this.worldTime = worldTime;
         this.worldAge = worldAge;
     }
-    
+
     public TimeUpdatePacket(World w) {
-    	this(w.getTime(),w.getWorldAge());
+        this(w.getTime(), w.getWorldAge());
     }
 
     @Override

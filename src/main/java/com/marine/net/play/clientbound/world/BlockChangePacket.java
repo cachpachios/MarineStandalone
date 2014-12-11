@@ -11,46 +11,46 @@ import com.marine.world.BlockID;
 import java.io.IOException;
 
 public class BlockChangePacket extends Packet {
-	public Position pos;
-	public int newBlock;
-	
-	public BlockChangePacket(Block toBlock) {
-		this(toBlock.getBlockPos(), toBlock.getType().getPacketID());
-	}
+    public Position pos;
+    public int newBlock;
 
-	public BlockChangePacket(Position pos, int b) {
-		this.pos = pos;
-		this.newBlock = b;
-	}
+    public BlockChangePacket(Block toBlock) {
+        this(toBlock.getBlockPos(), toBlock.getType().getPacketID());
+    }
 
-	public BlockChangePacket(Position p, BlockID b) {
-		this(p,b.getID());
-	}
+    public BlockChangePacket(Position pos, int b) {
+        this.pos = pos;
+        this.newBlock = b;
+    }
 
-	@Override
-	public int getID() {
-		return 0x23;
-	}
+    public BlockChangePacket(Position p, BlockID b) {
+        this(p, b.getID());
+    }
 
-	@Override
-	public void writeToStream(PacketOutputStream stream) throws IOException {
-		
-		ByteData data = new ByteData();
+    @Override
+    public int getID() {
+        return 0x23;
+    }
 
-		data.writePosition(pos);
-		data.writeVarInt(newBlock);
-		
-		stream.write(getID(), data.getBytes());
-		
-	}
+    @Override
+    public void writeToStream(PacketOutputStream stream) throws IOException {
 
-	@Override
-	public void readFromBytes(ByteData input) {
-		// Serversent packet :)
-	}
+        ByteData data = new ByteData();
 
-	@Override
-	public States getPacketState() {
-		return States.INGAME;
-	}
+        data.writePosition(pos);
+        data.writeVarInt(newBlock);
+
+        stream.write(getID(), data.getBytes());
+
+    }
+
+    @Override
+    public void readFromBytes(ByteData input) {
+        // Serversent packet :)
+    }
+
+    @Override
+    public States getPacketState() {
+        return States.INGAME;
+    }
 }

@@ -9,9 +9,13 @@ public class ChunkPos implements Comparable<ChunkPos> {
     }
 
     public ChunkPos(long encoded) {
-    	this((int)(encoded >> 32), (int) encoded);
+        this((int) (encoded >> 32), (int) encoded);
     }
-    
+
+    public static long Encode(int x, int y) {
+        return (long) x << 32 | y & 0xFFFFFFFFL;
+    }
+
     public int getX() {
         return x;
     }
@@ -21,15 +25,9 @@ public class ChunkPos implements Comparable<ChunkPos> {
     }
 
     public long encode() {
-    	return (long)x << 32 | y & 0xFFFFFFFFL;
+        return (long) x << 32 | y & 0xFFFFFFFFL;
     }
-    public static long Encode(int x, int y) {
-    	return (long)x << 32 | y & 0xFFFFFFFFL;
-    }
-    
-    
-    
-    
+
     @Override
     public int compareTo(ChunkPos v) {
         if (x == v.x && y == v.y)

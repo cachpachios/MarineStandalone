@@ -1,47 +1,48 @@
 package com.marine.net.play.serverbound.player;
 
-import java.io.IOException;
-
 import com.marine.io.data.ByteData;
 import com.marine.net.Packet;
 import com.marine.net.PacketOutputStream;
 import com.marine.net.States;
 
-public class PlayerLookPacket extends Packet{
+import java.io.IOException;
 
-	private float yaw,pitch;
-	private boolean onGround;
-	
-	public float getYaw() {
-		return yaw;
-	}
+public class PlayerLookPacket extends Packet {
 
-	public float getPitch() {
-		return pitch;
-	}
+    private float yaw, pitch;
+    private boolean onGround;
 
-	public boolean getOnGround() {
-		return onGround;
-	}
-	
-	@Override
-	public int getID() {
-		return 0x05;
-	}
+    public float getYaw() {
+        return yaw;
+    }
 
-	@Override
-	public void writeToStream(PacketOutputStream stream) throws IOException {}
+    public float getPitch() {
+        return pitch;
+    }
 
-	@Override
-	public void readFromBytes(ByteData input) {
-		yaw = input.readFloat();
-		pitch = input.readFloat();
-		onGround = input.readBoolean();
-	}
+    public boolean getOnGround() {
+        return onGround;
+    }
 
-	@Override
-	public States getPacketState() {
-		return States.INGAME;
-	}
-	
+    @Override
+    public int getID() {
+        return 0x05;
+    }
+
+    @Override
+    public void writeToStream(PacketOutputStream stream) throws IOException {
+    }
+
+    @Override
+    public void readFromBytes(ByteData input) {
+        yaw = input.readFloat();
+        pitch = input.readFloat();
+        onGround = input.readBoolean();
+    }
+
+    @Override
+    public States getPacketState() {
+        return States.INGAME;
+    }
+
 }

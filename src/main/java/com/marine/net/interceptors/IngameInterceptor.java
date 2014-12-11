@@ -47,10 +47,9 @@ public class IngameInterceptor implements PacketInterceptor {
                     System.arraycopy(parts, 1, args, 0, parts.length - 1);
                 }
                 players.getPlayerByClient(c).executeCommand(parts[0], args);
-            }
-            else {
-            	players.getChat().brodcastMessage(ChatManager.format(p.getMessage(), players.getPlayerByClient(c)));
-            	
+            } else {
+                players.getChat().brodcastMessage(ChatManager.format(p.getMessage(), players.getPlayerByClient(c)));
+
             }
         } else if (id == 0x06) {
             ServerboundPlayerLookPositionPacket packet = new ServerboundPlayerLookPositionPacket();

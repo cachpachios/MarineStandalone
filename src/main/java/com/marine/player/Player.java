@@ -47,7 +47,7 @@ public class Player extends Entity implements IPlayer, CommandSender {
     private PlayerAbilites abilites;
     private String displayName;
     private PlayerFile playerFile;
-    
+
     private List<Long> loadedChunks;
 
     public Player(PlayerManager manager, Client connection, PlayerID id, PlayerInventory inventory, int entityID, World world, Location pos, PlayerAbilites abilites, Gamemode gamemode) {
@@ -298,30 +298,30 @@ public class Player extends Entity implements IPlayer, CommandSender {
     public void sendLook() {
         this.getClient().sendPacket(new PlayerLookPacket(getPosition()));
     }
-   
+
     public void sendPosition() {
-    	sendPostionAndLook();
+        sendPostionAndLook();
     }
-    
-    
+
+
     public void sendMapData(List<Chunk> chunks) {
         this.getClient().sendPacket(new MapChunkPacket(this.getWorld(), chunks));
-        for(Chunk c : chunks)
-        	if(!loadedChunks.contains(c.getPos().encode()))
-        		this.loadedChunks.add(c.getPos().encode());
+        for (Chunk c : chunks)
+            if (!loadedChunks.contains(c.getPos().encode()))
+                this.loadedChunks.add(c.getPos().encode());
     }
 
     public void sendMapData(Chunk... chunks) {
         this.sendMapData(Arrays.asList(chunks));
     }
-    
+
     public void sendChunk(Chunk c) {
-    	
+
     }
 
-	public void sendTime() {
-		this.getClient().sendPacket(new TimeUpdatePacket(getWorld()));
-	}
+    public void sendTime() {
+        this.getClient().sendPacket(new TimeUpdatePacket(getWorld()));
+    }
 
     public void kick(String reason) {
         LeaveEvent event = new LeaveEvent(this, LeaveEvent.QuitReason.KICKED);
@@ -337,8 +337,8 @@ public class Player extends Entity implements IPlayer, CommandSender {
         // TODO: Save stuff :P
     }
 
-	public void disconnect() {
-		LeaveEvent event = new LeaveEvent(this, LeaveEvent.QuitReason.NORMAL);
+    public void disconnect() {
+        LeaveEvent event = new LeaveEvent(this, LeaveEvent.QuitReason.NORMAL);
         Marine.getServer().callEvent(event);
         Marine.broadcastMessage(event.getMessage().replace("%plr", getName()));
         cleanup();

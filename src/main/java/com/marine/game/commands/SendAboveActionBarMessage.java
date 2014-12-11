@@ -16,12 +16,12 @@ import java.util.Arrays;
 public class SendAboveActionBarMessage extends Command {
 
     public SendAboveActionBarMessage() {
-        super("sendaboveactionbarmessage", new String[] {}, "Send above action bar message");
+        super("sendaboveactionbarmessage", new String[]{}, "Send above action bar message");
     }
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        if(!(sender instanceof Player))
+        if (!(sender instanceof Player))
             return;
         Player player = (Player) sender;
         args = replaceAll(args, sender);

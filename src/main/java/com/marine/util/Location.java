@@ -17,13 +17,14 @@ public class Location extends Vector3d implements JSONAware, Cloneable { // Used
     private float yaw, pitch;
 
     private boolean onGround;
-    
+
     /**
      * Create a new world with default yaw and pitch (0, 0)
+     *
      * @param world World
-     * @param x X Coord
-     * @param y Y Coord
-     * @param z Z Coord
+     * @param x     X Coord
+     * @param y     Y Coord
+     * @param z     Z Coord
      */
     public Location(World world, double x, double y, double z) {
         this(world, x, y, z, 0f, 0f);
@@ -31,8 +32,9 @@ public class Location extends Vector3d implements JSONAware, Cloneable { // Used
 
     /**
      * Get a new location based on a world and a vector
+     *
      * @param world World
-     * @param v Vector3
+     * @param v     Vector3
      */
     @SuppressWarnings("rawtypes")
     public Location(World world, Vector3 v) {
@@ -41,6 +43,7 @@ public class Location extends Vector3d implements JSONAware, Cloneable { // Used
 
     /**
      * Create a new location from a json string
+     *
      * @param json JSON string
      */
     public Location(String json) {
@@ -56,18 +59,19 @@ public class Location extends Vector3d implements JSONAware, Cloneable { // Used
 
     /**
      * Create a new location
+     *
      * @param world World
-     * @param x X Coord
-     * @param y Y Coord
-     * @param z Z Coord
-     * @param yaw Yaw
+     * @param x     X Coord
+     * @param y     Y Coord
+     * @param z     Z Coord
+     * @param yaw   Yaw
      * @param pitch Pitch
      */
-    
+
     public Location(World w, double x, double y, double z, float yaw, float pitch) {
-    	this(w,x,y,z,yaw,pitch,false);
+        this(w, x, y, z, yaw, pitch, false);
     }
-    
+
     public Location(World world, double x, double y, double z, float yaw, float pitch, boolean onGround) {
         super(x, y, z);
         this.yaw = yaw;
@@ -78,8 +82,9 @@ public class Location extends Vector3d implements JSONAware, Cloneable { // Used
 
     /**
      * Create a new location
+     *
      * @param spawnLocation Spawn position
-     * @param w World
+     * @param w             World
      */
     public Location(Position spawnLocation, World w) {
         this(w, (double) spawnLocation.getX(), (double) spawnLocation.getY(), (double) spawnLocation.getZ());
@@ -87,6 +92,7 @@ public class Location extends Vector3d implements JSONAware, Cloneable { // Used
 
     /**
      * Get the world
+     *
      * @return world
      */
     public World getWorld() {
@@ -95,14 +101,20 @@ public class Location extends Vector3d implements JSONAware, Cloneable { // Used
 
     /**
      * Get the yaw
+     *
      * @return yaw
      */
     public float getYaw() {
         return this.yaw;
     }
 
+    public void setYaw(float v) {
+        this.yaw = v;
+    }
+
     /**
      * Get the relative position
+     *
      * @return Position at rounded values
      */
     public Position getRelativePosition() {
@@ -111,24 +123,20 @@ public class Location extends Vector3d implements JSONAware, Cloneable { // Used
 
     /**
      * Get the pitch
+     *
      * @return pitch
      */
     public float getPitch() {
         return this.pitch;
     }
-    
+
     public void setPitch(float v) {
-    	this.pitch = v;
+        this.pitch = v;
     }
 
-    public void setYaw(float v) {
-    	this.yaw = v;
-    }
-    
-    
-    
     /**
      * Face the yaw towards the specified location
+     *
      * @param p Location too look towards
      * @return New Location (this)
      */
@@ -158,6 +166,7 @@ public class Location extends Vector3d implements JSONAware, Cloneable { // Used
      * Turn the location into a JSON Object
      * <br>
      * Contains: x, y, z, yaw, pitch & world
+     *
      * @return JSON Object
      */
     public org.json.JSONObject toJSONObject() {
@@ -242,11 +251,11 @@ public class Location extends Vector3d implements JSONAware, Cloneable { // Used
         }
     }
 
-	public boolean isOnGround() {
-		return onGround;
-	}
+    public boolean isOnGround() {
+        return onGround;
+    }
 
-	public void setOnGround(boolean v) {
-		onGround = v;
-	}
+    public void setOnGround(boolean v) {
+        onGround = v;
+    }
 }

@@ -1,10 +1,5 @@
 package com.marine.server;
 
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-import java.util.concurrent.Executor;
-
 import com.google.common.eventbus.AsyncEventBus;
 import com.google.common.eventbus.EventBus;
 import com.marine.StandaloneServer;
@@ -13,6 +8,11 @@ import com.marine.events.Listener;
 import com.marine.events.MarineEvent;
 import com.marine.player.Player;
 import com.marine.world.World;
+
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.Executor;
 
 /**
  * Created 2014-12-02 for MarineStandalone

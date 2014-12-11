@@ -58,21 +58,6 @@ public enum ChatColor {
             underline = COLOR_CHARACTER + "n",
             italic = COLOR_CHARACTER + "o",
             reset = COLOR_CHARACTER + "r";
-
-    /**
-     * Get a list of the string contants (not the enums)
-     * @return String constants
-     */
-    public static String[] constants() {
-        return new String[] {
-                black, dark_blue, dark_green, dark_aqua,
-                dark_red, dark_purple, gold, gray, dark_gray,
-                blue, green, aqua, red, light_purple, yellow,
-                white, obfuscated, bold, strikethrough, underline,
-                italic, reset
-        };
-    }
-
     private final String packetData;
     private final char id; // Old System one char ID
     private final Color color;
@@ -80,7 +65,6 @@ public enum ChatColor {
     private final boolean isFormat;
     private final String hexa;
     private final String rawID;
-
     private ChatColor(String rawData, String id, boolean isColor, String hexa, Color color) {
         this.packetData = rawData;
         this.id = id.charAt(0);
@@ -99,6 +83,21 @@ public enum ChatColor {
         this.isFormat = !isColor && !id.equals("r");
         this.hexa = "";
         this.rawID = id;
+    }
+
+    /**
+     * Get a list of the string contants (not the enums)
+     *
+     * @return String constants
+     */
+    public static String[] constants() {
+        return new String[]{
+                black, dark_blue, dark_green, dark_aqua,
+                dark_red, dark_purple, gold, gray, dark_gray,
+                blue, green, aqua, red, light_purple, yellow,
+                white, obfuscated, bold, strikethrough, underline,
+                italic, reset
+        };
     }
 
     public static ChatColor getColor(char c) {

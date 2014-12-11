@@ -59,14 +59,14 @@ public abstract class Command {
 
     public String getRandomPlayer() {
         List<Player> players = new ArrayList<>(Marine.getPlayers());
-        return players.get((int)(Math.random() * players.size())).getName();
+        return players.get((int) (Math.random() * players.size())).getName();
     }
 
     public String getAllPlayers() {
         StringBuilder s = new StringBuilder();
         Iterator<Player> i = Marine.getPlayers().iterator();
-        while(i.hasNext()) {
-        	Player player = i.next();
+        while (i.hasNext()) {
+            Player player = i.next();
             if (!i.hasNext())
                 s.append(player.getName()).append(" and ");
             else

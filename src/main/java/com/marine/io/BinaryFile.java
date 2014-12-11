@@ -36,7 +36,7 @@ public class BinaryFile {
     public BinaryFile readBinary() throws IOException {
         if (!file.canRead()) throw new IOException("Can't read file: " + file.getName());
         if (!file.exists()) throw new FileNotFoundException("File not found: " + file.getName());
-        
+
         byte[] r = new byte[(int) file.length()];
         InputStream input = new BufferedInputStream(new FileInputStream(file));
         input.read(r);
@@ -47,7 +47,7 @@ public class BinaryFile {
     public BinaryFile readGZIPBinary() throws IOException {
         if (!file.canRead()) throw new IOException("Can't read file: " + file.getName());
         if (!file.exists()) throw new FileNotFoundException("File not found: " + file.getName());
-        
+
         byte[] r = new byte[(int) file.length()];
         InputStream input = decompressStream(new BufferedInputStream(new FileInputStream(file)));
         input.read(r);

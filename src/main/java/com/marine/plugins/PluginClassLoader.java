@@ -19,11 +19,11 @@ public class PluginClassLoader extends URLClassLoader {
     private final PluginLoader loader;
     private final PluginFile desc;
     private final File file, data;
-    public Plugin plugin, init;
     private final BiMap<String, Class> classes = HashBiMap.create();
+    public Plugin plugin, init;
 
     public PluginClassLoader(final PluginLoader loader, final PluginFile desc, final File file) throws MalformedURLException {
-        super(new URL[] { file.toURI().toURL() }, loader.getClass().getClassLoader());
+        super(new URL[]{file.toURI().toURL()}, loader.getClass().getClassLoader());
         this.loader = loader;
         this.desc = desc;
         this.file = file;
@@ -32,12 +32,12 @@ public class PluginClassLoader extends URLClassLoader {
         Class<? extends Plugin> plg;
         try {
             jar = Class.forName(desc.mainClass, true, this);
-        } catch(ClassNotFoundException e) {
+        } catch (ClassNotFoundException e) {
             throw new RuntimeException(desc.name + ": Could not find main class");
         }
         try {
             plg = jar.asSubclass(Plugin.class);
-        } catch(ClassCastException e) {
+        } catch (ClassCastException e) {
             throw new RuntimeException(desc.name + ": Plugin main class is not an instance of Plugin");
         }
         try {
@@ -54,15 +54,15 @@ public class PluginClassLoader extends URLClassLoader {
 
     protected Class<?> findClass(String name, boolean global) throws ClassNotFoundException {
         Class<?> clazz = null;
-        if(classes.containsKey(name)) {
+        if (classes.containsKey(name)) {
             clazz = classes.get(name);
         }
-        if(clazz == null) {
-            if(global)
+        if (clazz == null) {
+            if (global)
                 clazz = loader.getClassByName(name);
-            if(clazz == null) {
+            if (clazz == null) {
                 clazz = super.findClass(name);
-                if(clazz != null)
+                if (clazz != null)
                     loader.setClass(name, clazz);
             }
             classes.put(name, clazz);

@@ -14,8 +14,9 @@ public abstract class MarineRunnable {
 
     /**
      * Constructor
+     *
      * @param requiredTick ticks between each #run();
-     * @param runs number of times the runnable will run, set to -1 for inf.
+     * @param runs         number of times the runnable will run, set to -1 for inf.
      */
     public MarineRunnable(final long requiredTick, final long runs) {
         this.requiredTick = requiredTick;
@@ -26,6 +27,7 @@ public abstract class MarineRunnable {
 
     /**
      * Will cancel the task, and GC the object
+     *
      * @param scheduler Scheduler class
      */
     public void cancel(final Scheduler scheduler, final long n) {
@@ -40,8 +42,8 @@ public abstract class MarineRunnable {
 
     final public void tick(Scheduler scheduler, long n) {
         ++this.tick;
-        if(this.tick >= this.requiredTick) {
-            if((totalRuns == -1 || ran++ <= totalRuns)) {
+        if (this.tick >= this.requiredTick) {
+            if ((totalRuns == -1 || ran++ <= totalRuns)) {
                 this.run();
                 this.tick = 0;
             } else {

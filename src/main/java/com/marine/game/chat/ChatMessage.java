@@ -18,7 +18,7 @@ public class ChatMessage {
         JSONObject obj = new JSONObject();
 
 		/*int i = 0;
-		for(ChatComponent c : components) {
+        for(ChatComponent c : components) {
 			i++;	
 			obj.put(("Text" + i), c.JSON);
 		}*/

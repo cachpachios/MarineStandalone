@@ -48,6 +48,7 @@ public class Plugin {
 
     /**
      * Get the plugin class loader
+     *
      * @return Plugin class loader
      */
     final public PluginClassLoader getClassLoader() {
@@ -63,7 +64,7 @@ public class Plugin {
         try {
             this.enabled = true;
             this.onEnable();
-        } catch(Exception e) {
+        } catch (Exception e) {
             this.enabled = false;
             Logging.getLogger().error("Could not enable " + ChatColor.RED + getName() + ChatColor.WHITE + ", see stacktrace for more info");
             throw new PluginException(this, "Could not enable plugin", e);
@@ -83,15 +84,18 @@ public class Plugin {
     /**
      * Listen to enable
      */
-    public void onEnable() {}
+    public void onEnable() {
+    }
 
     /**
      * Listen to disable
      */
-    public void onDisable() {}
+    public void onDisable() {
+    }
 
     /**
      * Get the plugin name
+     *
      * @return Plugin name
      */
     final public String getName() {
@@ -100,6 +104,7 @@ public class Plugin {
 
     /**
      * Get the plugin version
+     *
      * @return Plugin version
      */
     public String getVersion() {
@@ -108,6 +113,7 @@ public class Plugin {
 
     /**
      * Get the plugin author
+     *
      * @return Plugin author
      */
     public String getAuthor() {
@@ -116,6 +122,7 @@ public class Plugin {
 
     /**
      * Check if the plugin is enabled
+     *
      * @return boolean (enabled)
      */
     public boolean isEnabled() {
@@ -124,6 +131,7 @@ public class Plugin {
 
     /**
      * Get the plugin uuid
+     *
      * @return UUID
      */
     final public UUID getUUID() {
@@ -132,6 +140,7 @@ public class Plugin {
 
     /**
      * Get the plugin data folder
+     *
      * @return Plugin data folder
      */
     public File getDataFolder() {
@@ -140,6 +149,7 @@ public class Plugin {
 
     /**
      * Get the plugin description file
+     *
      * @return Plugin Desc. file
      */
     public PluginFile getDesc() {
@@ -148,6 +158,7 @@ public class Plugin {
 
     /**
      * Get the plugin logger
+     *
      * @return plugin logger
      */
     public PluginLogger getLogger() {
@@ -156,9 +167,9 @@ public class Plugin {
 
     @Override
     public boolean equals(Object object) {
-        if(object == null || !(object instanceof Plugin))
+        if (object == null || !(object instanceof Plugin))
             return false;
-        if(object == this)
+        if (object == this)
             return true;
         Plugin plugin = (Plugin) object;
         return plugin.getUUID().equals(getUUID()) && getName().equals(plugin.getName());

@@ -44,6 +44,14 @@ public class Item {
         return lore;
     }
 
+    public void setLore(List<String> lore) {
+        if (lore == null) {
+            setLore();
+        } else {
+            this.lore = lore;
+        }
+    }
+
     public void setLore(String... lore) {
         this.lore = Arrays.asList(lore);
     }
@@ -82,14 +90,6 @@ public class Item {
             displayName = ChatColor.WHITE.toString();
         }
         this.displayName = displayName;
-    }
-
-    public void setLore(List<String> lore) {
-        if (lore == null) {
-            setLore();
-        } else {
-            this.lore = lore;
-        }
     }
 
     public boolean canTakeDamage() {

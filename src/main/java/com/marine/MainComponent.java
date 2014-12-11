@@ -12,13 +12,13 @@ public class MainComponent {
     private static double getJavaVersion() {
         try {
             return Double.parseDouble(System.getProperty("java.specification.version"));
-        } catch(Throwable e) {
+        } catch (Throwable e) {
             return -1;
         }
     }
 
     public static void main(String[] args) {
-    	if(getJavaVersion() < 1.7) {
+        if (getJavaVersion() < 1.7) {
             System.out.println("-- Could not start MarineStandalone: Requires java 1.7 or above --");
             System.exit(1);
         }
@@ -39,13 +39,13 @@ public class MainComponent {
         // Start settings
         int port = getInteger("port");
         int tickrate = getInteger("tickrate");
-        if(port != -1) {
+        if (port != -1) {
             port = Math.min(port, 65535);
             port = Math.max(port, 0);
         } else {
             port = 25565;
         }
-        if(tickrate != -1) {
+        if (tickrate != -1) {
             tickrate = Math.min(tickrate, 120);
             tickrate = Math.max(tickrate, 0);
         } else {

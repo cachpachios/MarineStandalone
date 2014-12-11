@@ -13,9 +13,10 @@ import java.util.Map;
  */
 public class Scheduler extends Thread {
 
-    private long id;
     private final BiMap<Long, MarineRunnable> asyncRunnables;
     private final BiMap<Long, MarineRunnable> syncRunnables;
+    private long id;
+    private int tick = 0;
 
     public Scheduler() {
         this.id = 0;
@@ -28,14 +29,14 @@ public class Scheduler extends Thread {
     }
 
     public boolean removeTask(final MarineRunnable runnable) {
-        for(Map.Entry<Long, MarineRunnable> sync : syncRunnables.entrySet()) {
-            if(sync.getValue().equals(runnable)) {
+        for (Map.Entry<Long, MarineRunnable> sync : syncRunnables.entrySet()) {
+            if (sync.getValue().equals(runnable)) {
                 removeTask(sync.getKey());
                 return true;
             }
         }
-        for(Map.Entry<Long, MarineRunnable> async : asyncRunnables.entrySet()) {
-            if(async.getValue().equals(runnable)) {
+        for (Map.Entry<Long, MarineRunnable> async : asyncRunnables.entrySet()) {
+            if (async.getValue().equals(runnable)) {
                 removeTask(async.getKey());
                 return true;
             }
@@ -44,21 +45,21 @@ public class Scheduler extends Thread {
     }
 
     public void removeTask(final long l) {
-        if(syncRunnables.containsKey(l)) {
+        if (syncRunnables.containsKey(l)) {
             syncRunnables.remove(l);
-        } else if(asyncRunnables.containsKey(l)) {
+        } else if (asyncRunnables.containsKey(l)) {
             asyncRunnables.remove(l);
         }
     }
 
     private void tickAsync() {
-        for(long n : asyncRunnables.keySet()) {
+        for (long n : asyncRunnables.keySet()) {
             asyncRunnables.get(n).tick(this, n);
         }
     }
 
     public void tickSync() {
-        for(long n : syncRunnables.keySet()) {
+        for (long n : syncRunnables.keySet()) {
             syncRunnables.get(n).tick(this, n);
         }
     }
@@ -75,8 +76,6 @@ public class Scheduler extends Thread {
         return id;
     }
 
-    private int tick = 0;
-
     @Override
     public void run() {
         tickAsync();
@@ -85,7 +84,7 @@ public class Scheduler extends Thread {
     public void forceGC(MarineRunnable runnable) {
         WeakReference ref = new WeakReference<>(runnable);
         runnable = null;
-        while(ref.get() != null) {
+        while (ref.get() != null) {
             System.gc();
         }
     }

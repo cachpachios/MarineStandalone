@@ -1,7 +1,5 @@
 package com.marine.net.play.clientbound.player;
 
-import java.io.IOException;
-
 import com.marine.io.data.ByteData;
 import com.marine.net.Packet;
 import com.marine.net.PacketOutputStream;
@@ -9,6 +7,8 @@ import com.marine.net.States;
 import com.marine.net.play.serverbound.player.ServerboundPlayerLookPositionPacket;
 import com.marine.util.Location;
 import com.marine.util.Position;
+
+import java.io.IOException;
 
 public class ClientboundPlayerLookPositionPacket extends Packet { //TODO Relative positions
 
@@ -19,6 +19,7 @@ public class ClientboundPlayerLookPositionPacket extends Packet { //TODO Relativ
         this.l = l;
         p = null;
     }
+
     public ClientboundPlayerLookPositionPacket(Position p) {
         this.l = null;
         this.p = p;
@@ -36,24 +37,23 @@ public class ClientboundPlayerLookPositionPacket extends Packet { //TODO Relativ
     @Override
     public void writeToStream(PacketOutputStream stream) throws IOException {
         ByteData d = new ByteData();
-        if(p == null) {
-        d.writeDouble(l.getX());
-        d.writeDouble(l.getY());
-        d.writeDouble(l.getZ());
+        if (p == null) {
+            d.writeDouble(l.getX());
+            d.writeDouble(l.getY());
+            d.writeDouble(l.getZ());
 
-        d.writeFloat(l.getYaw());
-        d.writeFloat(l.getPitch());
-        }
-        else{
+            d.writeFloat(l.getYaw());
+            d.writeFloat(l.getPitch());
+        } else {
             d.writeDouble(p.getX());
             d.writeDouble(p.getY());
             d.writeDouble(p.getZ());
 
             d.writeFloat(l.getYaw());
             d.writeFloat(l.getPitch());
-            }
+        }
 
-        d.writeByte((byte)0);
+        d.writeByte((byte) 0);
 
         stream.write(getID(), d);
     }

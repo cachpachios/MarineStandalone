@@ -10,13 +10,12 @@ import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class TimeoutManager extends Thread {
+    private static final long sleepTime = 1500;
     private final PlayerManager players;
     private final Random rand;
     private Map<Player, Integer> lastRecive; // Contains last recived in seconds
     private Map<Player, Integer> lastSent; // Contains last sent KeepAlivePacketID
 
-    private static final long sleepTime = 1500;
-    
     public TimeoutManager(PlayerManager manager) {
         rand = new Random();
         this.players = manager;
@@ -75,9 +74,12 @@ public class TimeoutManager extends Thread {
         long lastTime = getMiliTime();
         long time;
         while (true) {
-        	if(!players.hasAnyPlayers())
-				try { TimeoutManager.sleep(sleepTime); } catch (InterruptedException e1) {}
-        	time = getMiliTime();
+            if (!players.hasAnyPlayers())
+                try {
+                    TimeoutManager.sleep(sleepTime);
+                } catch (InterruptedException e1) {
+                }
+            time = getMiliTime();
 
             if (time - lastTime >= 1000) {
                 synchronized (lastRecive) {
@@ -109,10 +111,10 @@ public class TimeoutManager extends Thread {
     public void keepAlive(Player p, int ID) {
         synchronized (lastSent) {
             synchronized (lastRecive) {
-                 lastSent.remove(p);
-                 lastRecive.remove(p);
-                 lastRecive.put(p, 0);
-            
+                lastSent.remove(p);
+                lastRecive.remove(p);
+                lastRecive.put(p, 0);
+
             }
         }
     }

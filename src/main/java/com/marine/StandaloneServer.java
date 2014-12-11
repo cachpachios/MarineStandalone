@@ -79,7 +79,7 @@ public class StandaloneServer implements Listener {
         // Create a new plugin loader
         this.pluginLoader = new PluginLoader(new PluginManager());
     }
-    
+
     public Scheduler getScheduler() {
         return this.scheduler;
     }
@@ -87,8 +87,8 @@ public class StandaloneServer implements Listener {
     private void loadPlugins() {
         File pluginFolder = new File("./plugins");
         Logging.getLogger().log("Plugin Folder: " + pluginFolder.getPath());
-        if(!pluginFolder.exists()) {
-            if(!pluginFolder.mkdir()) {
+        if (!pluginFolder.exists()) {
+            if (!pluginFolder.mkdir()) {
                 Logging.getLogger().error("Could not create plugin folder");
                 return;
             }

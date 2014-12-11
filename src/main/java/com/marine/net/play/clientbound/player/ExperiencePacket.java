@@ -30,10 +30,10 @@ public class ExperiencePacket extends Packet {
     public void writeToStream(PacketOutputStream stream) throws IOException {
         ByteData data = new ByteData();
         float x = player.getExp();
-        if(x > 1)
-        	x = 1;
-        if(x < 0)
-        	x = 0;
+        if (x > 1)
+            x = 1;
+        if (x < 0)
+            x = 0;
         data.writeFloat(x);
         data.writeVarInt(player.getLevels());
         data.writeVarInt((int) (player.getLevels() * 100 + (player.getExp() * 10)));

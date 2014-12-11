@@ -15,15 +15,15 @@ public class NetworkManager {
     public ClientProcessor clientHandler;
     private Collection<Client> clientList;
     private List<Client> cleanUpList;
-    
+
     private ConnectionThread connector;
 
     public NetworkManager(StandaloneServer marineServer, int port, boolean hashing) {
         this.marineServer = marineServer;
-        if(hashing)
-        	clientList = Collections.synchronizedSet(new HashSet<Client>());
+        if (hashing)
+            clientList = Collections.synchronizedSet(new HashSet<Client>());
         else
-        	clientList = Collections.synchronizedList(new ArrayList<Client>());
+            clientList = Collections.synchronizedList(new ArrayList<Client>());
         cleanUpList = new ArrayList<>();
         try {
             server = new ServerSocket(port, 100); //Port and num "queued" connections
@@ -32,7 +32,7 @@ public class NetworkManager {
             System.exit(1);
         }
         Logging.getLogger().log("Binding to port: §c" + port);
-        if(port != 25565) {
+        if (port != 25565) {
             Logging.getLogger().warn(
                     "You are not running on the default port (§c25565§0)");
         }
@@ -53,7 +53,7 @@ public class NetworkManager {
     }
 
     public Collection<Client> getClients() {
-    	return clientList;
+        return clientList;
     }
 
 
@@ -80,60 +80,58 @@ public class NetworkManager {
     }
 
     private void terminate(Client client) {
-    	if (client.getState() != States.INGAME)
-    		Logging.getLogger().info("Client Ping Terminated At: " + client.getAdress().getHostAddress() +":"+ client.getConnection().getPort());
-    	clientList.remove(client);
+        if (client.getState() != States.INGAME)
+            Logging.getLogger().info("Client Ping Terminated At: " + client.getAdress().getHostAddress() + ":" + client.getConnection().getPort());
+        clientList.remove(client);
         client.terminate();
     }
 
     public boolean processAll() {
-            if (clientList.isEmpty())
-                return false;
+        if (clientList.isEmpty())
+            return false;
 
-            boolean didProccessSomething = false;
-            for (Client c : clientList) {
-                Client.ConnectionStatus status = c.process();
-                if (status == Client.ConnectionStatus.CONNECTION_PROBLEMS)
-                	if(c.getUserName() != null) {
-                		this.marineServer.getPlayerManager().disconnect(marineServer.getPlayerManager().getPlayerByClient(c),"Client Disconnected");
-                	}
-                	else
-                		cleanUp(c);
-                else
-                if(status == Client.ConnectionStatus.CLOSED) {
-                	if(c.getUserName() != null) {
-                		this.marineServer.getPlayerManager().disconnect(marineServer.getPlayerManager().getPlayerByClient(c),"Client Disconnected");
-                	}
-                	else
-                		cleanUp(c);
-                }
-                if (status == Client.ConnectionStatus.PROCESSED)
-                    didProccessSomething = true;
-
-
+        boolean didProccessSomething = false;
+        for (Client c : clientList) {
+            Client.ConnectionStatus status = c.process();
+            if (status == Client.ConnectionStatus.CONNECTION_PROBLEMS)
+                if (c.getUserName() != null) {
+                    this.marineServer.getPlayerManager().disconnect(marineServer.getPlayerManager().getPlayerByClient(c), "Client Disconnected");
+                } else
+                    cleanUp(c);
+            else if (status == Client.ConnectionStatus.CLOSED) {
+                if (c.getUserName() != null) {
+                    this.marineServer.getPlayerManager().disconnect(marineServer.getPlayerManager().getPlayerByClient(c), "Client Disconnected");
+                } else
+                    cleanUp(c);
             }
-                for (Client c : cleanUpList)
-                		terminate(c);
-                cleanUpList.clear();
-            return didProccessSomething;
+            if (status == Client.ConnectionStatus.PROCESSED)
+                didProccessSomething = true;
+
+
+        }
+        for (Client c : cleanUpList)
+            terminate(c);
+        cleanUpList.clear();
+        return didProccessSomething;
     }
 
     public boolean hasClientsConnected() {
-    		return !clientList.isEmpty();
+        return !clientList.isEmpty();
     }
 
     public void tryConnections() {
-    	if(hasClientsConnected())
-    	synchronized(clientList) {
-    	for(Client c: clientList) {
-    		if(!c.isActive())  {
-    			if(c.getUserName() != null)
-    				marineServer.getPlayerManager().disconnect(marineServer.getPlayerManager().getPlayerByClient(c),"Connection Quit");
-    			cleanUp(c);
-    		}
-    	}
-    }}
-    
+        if (hasClientsConnected())
+            synchronized (clientList) {
+                for (Client c : clientList) {
+                    if (!c.isActive()) {
+                        if (c.getUserName() != null)
+                            marineServer.getPlayerManager().disconnect(marineServer.getPlayerManager().getPlayerByClient(c), "Connection Quit");
+                        cleanUp(c);
+                    }
+                }
+            }
+    }
+
     // Client processing thread
 
     public class ClientProcessor extends Thread {

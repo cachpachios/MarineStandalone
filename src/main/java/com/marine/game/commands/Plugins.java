@@ -17,7 +17,7 @@ public class Plugins extends Command {
 
 
     public Plugins() {
-        super("plugins", new String[] { "pl", "addons", "scripts" }, "Show a list of the plugins running on this server");
+        super("plugins", new String[]{"pl", "addons", "scripts"}, "Show a list of the plugins running on this server");
     }
 
     @Override

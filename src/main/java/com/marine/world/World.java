@@ -15,7 +15,7 @@ public class World { // TODO Save and unload chunks...
     private final String name;
     private final UUID uuid;
     private final Dimension dimension;
-    
+
     //Data:
     private Map<Long, Chunk> loadedChunks;
     private Position spawnPoint;
@@ -37,7 +37,7 @@ public class World { // TODO Save and unload chunks...
     public World(final String name, WorldGenerator generator) { //TODO Make it able to load world
         this.time = 0;
         this.age = 0;
-        
+
         this.generator = generator;
         this.generator.setWorld(this);
 
@@ -48,7 +48,6 @@ public class World { // TODO Save and unload chunks...
 
         spawnPoint = new Position(0, 5, 0); //TODO make this get loaded from world or generate random based on worldgenerator
 
-        
 
         dimension = this.generator.getDimension();
     }
@@ -60,23 +59,23 @@ public class World { // TODO Save and unload chunks...
     public boolean isChunkLoaded(ChunkPos p) {
         return loadedChunks.containsKey(p.encode());
     }
-    
+
     public void generateChunk(int x, int z) {
-        loadedChunks.put(ChunkPos.Encode(x,z), generator.generateChunk(x, z));
+        loadedChunks.put(ChunkPos.Encode(x, z), generator.generateChunk(x, z));
     }
 
     public Chunk getChunk(int x, int z) { // Will generate/loadchunk if not loaded
-    	if(!isChunkLoaded(x,z))
-    		return generator.generateChunk(x, z); // TODO Load world
-    	else
-    		return loadedChunks.get(ChunkPos.Encode(x, z));
+        if (!isChunkLoaded(x, z))
+            return generator.generateChunk(x, z); // TODO Load world
+        else
+            return loadedChunks.get(ChunkPos.Encode(x, z));
     }
-    
+
     public Chunk getChunk(ChunkPos p) { // Will generate/loadchunk if not loaded
-    	if(!isChunkLoaded(p))
-    		return generator.generateChunk(p.getX(), p.getY()); // TODO Load world
-    	else
-    		return loadedChunks.get(p.encode());
+        if (!isChunkLoaded(p))
+            return generator.generateChunk(p.getX(), p.getY()); // TODO Load world
+        else
+            return loadedChunks.get(p.encode());
     }
 
     public List<Chunk> getChunks(int x, int z, int amtX, int amtY) {
@@ -113,9 +112,9 @@ public class World { // TODO Save and unload chunks...
             time = 0;
         age++;
     }
-    
+
     public int getTime() {
-    	return time;
+        return time;
     }
 
 
@@ -123,21 +122,19 @@ public class World { // TODO Save and unload chunks...
         return generator.getLevelType();
     }
 
-	public long getWorldAge() {
-		return age;
-	}
+    public long getWorldAge() {
+        return age;
+    }
 
-	public void setTypeAt(Position blockPos, BlockID target, boolean loadIfEmpty) {
-		ChunkPos p = blockPos.getChunkPos();
-		if(isChunkLoaded(p)) {
-			Position pos = blockPos.getChunkBlockPos();
-    		loadedChunks.get(p.encode()).setBlock(pos.getX(), pos.getY(), pos.getZ(), target);
-		}
-		else
-		if(loadIfEmpty) {
-			Position pos = blockPos.getChunkBlockPos();
-			getChunk(p).setBlock(pos.getX(), pos.getY(), pos.getZ(), target);
-		}
-	}
+    public void setTypeAt(Position blockPos, BlockID target, boolean loadIfEmpty) {
+        ChunkPos p = blockPos.getChunkPos();
+        if (isChunkLoaded(p)) {
+            Position pos = blockPos.getChunkBlockPos();
+            loadedChunks.get(p.encode()).setBlock(pos.getX(), pos.getY(), pos.getZ(), target);
+        } else if (loadIfEmpty) {
+            Position pos = blockPos.getChunkBlockPos();
+            getChunk(p).setBlock(pos.getX(), pos.getY(), pos.getZ(), target);
+        }
+    }
 
 }

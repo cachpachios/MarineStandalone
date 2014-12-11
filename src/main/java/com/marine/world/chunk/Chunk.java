@@ -5,8 +5,6 @@ import com.marine.world.BiomeID;
 import com.marine.world.BlockID;
 import com.marine.world.World;
 
-import java.util.Random;
-
 public final class Chunk {
     private final World w;
     private final ChunkPos pos;
@@ -27,10 +25,10 @@ public final class Chunk {
             if (id != BlockID.AIR)
                 sections[section] = new ChunkSection(section);
             else return;
-        if(section > 0)
-        	sections[section].setBlock(x, y / (section ), z, id);
-        if(section == 0)
-        	sections[section].setBlock(x, y, z, id);
+        if (section > 0)
+            sections[section].setBlock(x, y / (section), z, id);
+        if (section == 0)
+            sections[section].setBlock(x, y, z, id);
     }
 
     public short getBlock(int x, int y, int z) {
@@ -56,7 +54,7 @@ public final class Chunk {
             if (s != null)
                 d.writeData(s.getSkyLightData());
         }
-        
+
         if (biomes)
             d.writeData(getBiomeData());
 
@@ -81,9 +79,9 @@ public final class Chunk {
 
     public short getSectionBitMap() {
         short r = 0;
-        for(ChunkSection s : sections)
-        	if(s != null)
-        		r |= 1 << s.getID();
+        for (ChunkSection s : sections)
+            if (s != null)
+                r |= 1 << s.getID();
         return r;
     }
 

@@ -21,8 +21,8 @@ public class ServerSettings {
     public int tickrate = 20;
     public String host = "0.0.0.0";
     public String motd = "&cNo MOTD";
-    private Properties config;
     public boolean useHasing;
+    private Properties config;
 
     public ServerSettings() {
         try {
@@ -34,8 +34,9 @@ public class ServerSettings {
             }
             config.load(new FileInputStream(file));
             Map<String, String> options = new HashMap<String, String>() {
-				private static final long serialVersionUID = 0L;
-				{
+                private static final long serialVersionUID = 0L;
+
+                {
                     put("host", "127.0.0.1");
                     put("port", "25565");
                     put("motd", "&cTesting...");
@@ -75,12 +76,12 @@ public class ServerSettings {
     }
 
     public boolean getBoolean(String value) {
-    	if(value == "true")
-    		return true;
-    	else
-    		return false;
+        if (value == "true")
+            return true;
+        else
+            return false;
     }
-    
+
     public int getInt(String value) {
         try {
             return Integer.parseInt(value);
@@ -90,7 +91,7 @@ public class ServerSettings {
     }
 
     @SuppressWarnings("rawtypes")
-	public void verbose() {
+    public void verbose() {
         for (Map.Entry entry : config.entrySet()) {
             Logging.getLogger().log("Key: " + entry.getKey() + " | Value: " + entry.getValue());
         }
