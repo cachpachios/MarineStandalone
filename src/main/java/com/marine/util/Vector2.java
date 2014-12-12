@@ -26,8 +26,7 @@ package com.marine.util;
  */
 public abstract class Vector2<T extends Number> {
 
-    private T x;
-    private T y;
+    public T x, y;
 
     public Vector2(final T x, final T y) {
         this.x = x;

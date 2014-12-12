@@ -21,6 +21,7 @@ package com.marine.util;
 
 import com.marine.server.Marine;
 import com.marine.world.World;
+import com.marine.world.chunk.Chunk;
 import org.json.simple.JSONAware;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -30,7 +31,7 @@ import org.json.simple.JSONValue;
  *
  * @author Citymonstret
  */
-public class Location extends Vector3d implements JSONAware, Cloneable { // Used for absolute positioning (Entites etc)
+public class Location extends Vector3d implements JSONAware, Cloneable, Comparable<Location> { // Used for absolute positioning (Entites etc)
 
     private final World world;
     private float yaw, pitch;
@@ -79,7 +80,7 @@ public class Location extends Vector3d implements JSONAware, Cloneable { // Used
     /**
      * Create a new location
      *
-     * @param world World
+     * @param w World
      * @param x     X Coord
      * @param y     Y Coord
      * @param z     Z Coord
@@ -285,11 +286,66 @@ public class Location extends Vector3d implements JSONAware, Cloneable { // Used
         }
     }
 
+    /**
+     * Is this on ground?
+     *
+     * @return Is this on ground?
+     */
     public boolean isOnGround() {
         return onGround;
     }
 
+    /**
+     * Decide if this is on ground
+     * @param v On ground
+     */
     public void setOnGround(boolean v) {
         onGround = v;
+    }
+
+    /**
+     * Check if the location is in a cube
+     *
+     * @param min Min Loc
+     * @param max Max Loc
+     * @return boolean
+     */
+    public boolean isInAABB(Location min, Location max) {
+        return (x >= min.x && x <= max.x) && (y >= min.y && y <= max.y) && (z >= max.z && z <= max.z);
+    }
+
+    /**
+     * Check if the location is in the specified sphere
+     *
+     * @param origin Sphere origin
+     * @param radius Sphere radius
+     * @return boolean
+     */
+    public boolean isInSphere(Location origin, int radius) {
+        return (getEuclideanDistanceSquared(origin) < (radius * radius));
+    }
+
+    /**
+     * Get the chunk at this location
+     *
+     * @return chunk at the specified location
+     */
+    public Chunk getChunk() {
+        return world.getChunk(x.intValue() >> 4, z.intValue() >> 4);
+    }
+
+    @Override
+    public int compareTo(Location o) {
+        if (o == null)
+            throw new NullPointerException("Object specified was null");
+        double
+                x1 = getX(), x2 = o.getX(),
+                y1 = getY(), y2 = o.getY(),
+                z1 = getZ(), z2 = o.getZ();
+        if (x1 == x2 && y1 == y2 && z1 == z2)
+            return 0;
+        if (x1 < x2 && y1 < y2 && z1 < z2)
+            return -1;
+        return 1;
     }
 }

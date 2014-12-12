@@ -37,6 +37,10 @@ public class Vector3d extends Vector3<Double> {
         super(t, t, t);
     }
 
+    public double getLengthSquared() {
+        return (x * x + y * y + z * z);
+    }
+
     public double getLength() {
         return Math.sqrt(getX() * getX() + getY() * getY() + getZ() * getZ());
     }
@@ -47,29 +51,29 @@ public class Vector3d extends Vector3<Double> {
 
     @Override
     public void add(Vector3<Double> v2) {
-        setX(getX() + v2.getX());
-        setY(getY() + v2.getY());
-        setZ(getZ() + v2.getZ());
+        x += v2.x;
+        y += v2.y;
+        z += v2.z;
     }
 
     @Override
     public void subtract(Vector3<Double> v2) {
-        setX(getX() - v2.getX());
-        setY(getX() - v2.getY());
-        setZ(getZ() - v2.getZ());
+        x -= v2.x;
+        y -= v2.y;
+        z -= v2.y;
     }
 
     @Override
     public void multiply(int n) {
-        setX(getX() * n);
-        setY(getY() * n);
-        setZ(getZ() * n);
+        x *= n;
+        y *= n;
+        z *= n;
     }
 
     @Override
     public void divide(int n) {
-        setX(getX() / n);
-        setY(getY() / n);
-        setZ(getZ() / n);
+        x /= n;
+        y /= n;
+        z /= n;
     }
 }

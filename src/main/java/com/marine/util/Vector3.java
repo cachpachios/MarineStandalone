@@ -26,9 +26,7 @@ package com.marine.util;
  */
 public abstract class Vector3<T extends Number> {
 
-    private T x;
-    private T y;
-    private T z;
+    public T x, y, z;
 
     /**
      * Constructor
