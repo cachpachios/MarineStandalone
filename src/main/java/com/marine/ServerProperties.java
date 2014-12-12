@@ -40,7 +40,4 @@ public class ServerProperties {
         currentTick++;
     }
 
-    public static long getLifeTime() {
-        return currentTick;
-    }
 }

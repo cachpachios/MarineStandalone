@@ -78,7 +78,14 @@ public class MainComponent {
             //ServerSettings.getInstance().verbose();
             System.setErr(Logging.getLogger());
         }
-        StandaloneServer server = new StandaloneServer(settings); // Port and TickRate
+        StandaloneServer server = null;
+        try {
+            server = new StandaloneServer(settings); // Port and TickRate
+        } catch (Throwable e) {
+            Logging.getLogger().error("Could not start the server, errrors occured");
+            e.printStackTrace();
+            System.exit(1);
+        }
         // Check if the build is stable
         if (!ServerProperties.BUILD_STABLE)
             Logging.getLogger().warn("You are running an unstable build");

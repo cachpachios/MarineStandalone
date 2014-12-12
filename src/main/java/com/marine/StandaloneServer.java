@@ -38,27 +38,29 @@ import com.marine.server.Server;
 import com.marine.settings.JSONFileHandler;
 import com.marine.settings.ServerSettings;
 import com.marine.world.Difficulty;
-import org.json.JSONException;
 
 import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
+@SuppressWarnings("unused")
 public class StandaloneServer implements Listener {
 
+    // Final values
     public final int skipTime;
     private final int port;
-    // Managers
+    private final int targetTickRate;
+
+    // Managers and handlers
     private final PlayerManager players;
     private final WorldManager worlds;
     private final Server server;
     private final Scheduler scheduler;
     private final PluginLoader pluginLoader;
-    private final int targetTickRate; // For use in the loop should be same as (skipTime * 1000000000)
+    private final JSONFileHandler jsonHandler;
+    // Dynamic values
     public int ticks;
-    public int refreshesPerSecound;
     NetworkManager network;
-    private JSONFileHandler jsonHandler;
     // Settings:
     private String standard_motd = "MarineStandalone | Development";
     private int standard_maxplayers = 99;
@@ -67,25 +69,14 @@ public class StandaloneServer implements Listener {
     private boolean shouldRun;
     private String newMOTD = null;
 
-    public StandaloneServer(MainComponent.StartSettings settings) {
+    public StandaloneServer(final MainComponent.StartSettings settings) throws Throwable {
         this.port = settings.port;
         this.skipTime = 1000000000 / settings.tickrate; // nanotime
         this.targetTickRate = settings.tickrate;
         this.worlds = new WorldManager();
         this.players = new PlayerManager(this);
         this.server = new Server(this);
-        this.jsonHandler = null;
-        try {
-            this.jsonHandler = new JSONFileHandler(this, new File("./settings"), new File("./storage"));
-        } catch (JSONException e) {
-            Logging.instance().fatal("Json Handler Init failed");
-            System.exit(1);
-        }
-        /*try {
-            this.jsonHandler.defaultValues();
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }*/
+        this.jsonHandler = new JSONFileHandler(this, new File("./settings"), new File("./storage"));
         // Set the static standalone server
         Marine.setStandalone(this);
         // Server the server
@@ -101,10 +92,7 @@ public class StandaloneServer implements Listener {
                 scheduler.run();
             }
         }, 0l, (1000 / 20));
-
-        // TPS and stuff
-        // scheduler.createSyncTask(new LagTester());
-        // Create a new plugin loader
+        // Make the plugin loader
         this.pluginLoader = new PluginLoader(new PluginManager());
     }
 
@@ -113,7 +101,7 @@ public class StandaloneServer implements Listener {
     }
 
     private void loadPlugins() {
-        File pluginFolder = new File("./plugins");
+        final File pluginFolder = new File("./plugins");
         Logging.getLogger().log("Plugin Folder: " + pluginFolder.getPath());
         if (!pluginFolder.exists()) {
             if (!pluginFolder.mkdir()) {
@@ -139,7 +127,7 @@ public class StandaloneServer implements Listener {
     }
 
     public void start() {
-        shouldRun = true;
+        this.shouldRun = true;
         run();
     }
 
@@ -158,7 +146,7 @@ public class StandaloneServer implements Listener {
         this.network = new NetworkManager(this, port, ServerSettings.getInstance().useHasing);
         //TODO World loading
         // Open connection
-        network.openConnection();
+        this.network.openConnection();
         // Load in and enable plugins
         this.loadPlugins();
         // Timings for loop
@@ -191,23 +179,19 @@ public class StandaloneServer implements Listener {
             // Check for network connections
             network.tryConnections();
 
-            /*
-            This is no longer needed
-            if (Logging.getLogger().isDisplayed())
-                if (Logging.getLogger().hasBeenTerminated())
-                    System.exit(0);
-            */
-
             // Advance the tick clock.
             try {
-                players.tickAllPlayers();
-                worlds.tick();
+                this.players.tickAllPlayers();
+                this.worlds.tick();
+                this.scheduler.tickSync();
+                // Should really not be static
+                // TODO Fix this
                 ServerProperties.tick();
-                scheduler.tickSync();
             } catch (Throwable e) {
                 // Oh noes :(
                 e.printStackTrace();
             }
+
             // ++# instead of ups++, as we are not using it as reference when increasing the value
             // Not too big of a deal, but it's good practise.
             // http://stackoverflow.com/questions/4752761/the-difference-between-n-vs-n-in-java
@@ -248,7 +232,7 @@ public class StandaloneServer implements Listener {
         return newMOTD;
     }
 
-    public void setMOTD(String motd) {
+    public void setMOTD(final String motd) {
         this.standard_motd = motd;
     }
 
@@ -256,7 +240,7 @@ public class StandaloneServer implements Listener {
         return this.standard_maxplayers;
     }
 
-    public void setMaxPlayers(int maxplayers) {
+    public void setMaxPlayers(final int maxplayers) {
         this.standard_maxplayers = maxplayers;
     }
 
@@ -264,7 +248,7 @@ public class StandaloneServer implements Listener {
         return this.standard_difficulty;
     }
 
-    public void setDifficulty(Difficulty difficulty) {
+    public void setDifficulty(final Difficulty difficulty) {
         this.standard_difficulty = difficulty;
     }
 
@@ -272,7 +256,7 @@ public class StandaloneServer implements Listener {
         return this.standard_gamemode;
     }
 
-    public void setGameMode(Gamemode gm) {
+    public void setGameMode(final Gamemode gm) {
         this.standard_gamemode = gm;
     }
 

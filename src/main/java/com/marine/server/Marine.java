@@ -78,6 +78,9 @@ public class Marine {
     }
 
     public static void setServer(MarineServer marine) {
+        if (server != null) {
+            throw new RuntimeException("Cannot replace the MarineServer");
+        }
         server = marine;
     }
 
@@ -86,6 +89,9 @@ public class Marine {
     }
 
     public static void setStandalone(StandaloneServer s) {
+        if (standaloneServer != null) {
+            throw new RuntimeException("Cannot replace the StandaloneServer");
+        }
         standaloneServer = s;
     }
 

@@ -62,7 +62,8 @@ public class ConsoleWindow extends OutputStream {
         jFrame.setSize(600, 400);
         jFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         jFrame.setIconImage(new ImageIcon("./res/icon.png").getImage());
-
+        // This is the closing listener, unfortunately
+        // it seems to cause a lot of CPU cycles and stuff
         WindowListener exitListener = new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -72,27 +73,52 @@ public class ConsoleWindow extends OutputStream {
                 }
             }
         };
-
+        // The listener
         jFrame.addWindowListener(exitListener);
-
+        // The layout stuffz
         GridBagConstraints c = new GridBagConstraints();
-
         jFrame.setLayout(new GridBagLayout());
-
+        // Should we display the html outputted?
         if (!showHTML)
             text.setContentType("text/html");
+        // This ain't editable
         text.setEditable(false);
+        // Set background
         text.setBackground(Color.BLACK);
-
+        // Grid layout
         c.fill = GridBagConstraints.BOTH;
         c.gridx = 1;
         c.gridy = 1;
         c.weightx = 1.5D;
         c.weighty = 1;
-
         c.insets = new Insets(1, 1, 1, 1);
         jFrame.add(new JScrollPane(text), c);
-
+        // Set visible, yay
+        final JMenuBar menuBar = new JMenuBar();
+        final JMenu
+                actions = new JMenu("actions"),
+                tools = new JMenu("tools"),
+                help = new JMenu("help");
+        actions.setText("Actions");
+        tools.setText("Tools");
+        help.setText("Help");
+        final JMenuItem
+                authors = new JMenuItem("Authors"),
+                commands = new JMenuItem("Commands"),
+                restart = new JMenuItem("Restart"),
+                kick_all = new JMenuItem("Kick All");
+        authors.setEnabled(true);
+        commands.setEnabled(true);
+        restart.setEnabled(true);
+        kick_all.setEnabled(true);
+        help.add(authors);
+        help.add(commands);
+        actions.add(restart);
+        actions.add(kick_all);
+        menuBar.add(actions);
+        menuBar.add(tools);
+        menuBar.add(help);
+        jFrame.setJMenuBar(menuBar);
         jFrame.setVisible(true);
     }
 
@@ -104,7 +130,6 @@ public class ConsoleWindow extends OutputStream {
     public void write(String s) {
         console.add(format(s));
         update();
-
     }
 
     private String format(String string) {

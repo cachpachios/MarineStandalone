@@ -31,14 +31,14 @@ import java.util.GregorianCalendar;
 public class Logging extends PrintStream {
 
     private static Logging instance;
-    Calendar calendar = GregorianCalendar.getInstance();
+    private final Calendar calendar = GregorianCalendar.getInstance();
+    private final ConsoleWindow c;
     private boolean haveWindow;
-    private ConsoleWindow c;
 
-    public Logging(ConsoleWindow window) {
+    public Logging(final ConsoleWindow window) {
         super(window);
-        haveWindow = false;
-        c = window;
+        this.haveWindow = false;
+        this.c = window;
     }
 
     public static Logging getLogger() {
@@ -66,47 +66,47 @@ public class Logging extends PrintStream {
         return c.isClosed();
     }
 
-    public void log(PluginLogger.PluginMessage message) {
+    public void log(final PluginLogger.PluginMessage message) {
         log(message.getMessage());
     }
 
-    public void logf(String s, Object... os) {
+    public void logf(final String s, final Object... os) {
         this.log(StringUtils.format(s, os));
     }
 
-    public void log(String s) {
+    public void log(final String s) {
         c.write(format('3', s));
         System.out.println(format(s));
     }
 
-    public void info(String s) {
+    public void info(final String s) {
         c.write(format('9', "INFO", s));
         System.out.println(format("INFO", s));
     }
 
-    public void debug(String s) {
+    public void debug(final String s) {
         c.write(format('1', "DEBUG", s));
         System.out.println(format("DEBUG", s));
     }
 
-    public void fatal(String s) {
+    public void fatal(final String s) {
         c.write(format('c', "FATAL", s));
         System.out.println(format("FATAL", s));
     }
 
-    public void error(String s) {
+    public void error(final String s) {
         c.write(format('c', "ERROR", s));
         System.out.println(format("ERROR", s));
     }
 
-    public void warn(String s) {
+    public void warn(final String s) {
         c.write(format('c', "WARNING", s));
         System.out.println(format("WARNING", s));
     }
 
-    private String format(char color, String prefix, String msg) {
-        Date date = new Date();
-        calendar.setTime(date);
+    private String format(final char color, final String prefix, final String msg) {
+        final Date date = new Date();
+        this.calendar.setTime(date);
         return String.format("§%c[%d:%d:%d] [%s] §0%s",
                 color,
                 calendar.get(Calendar.HOUR_OF_DAY),
@@ -117,9 +117,9 @@ public class Logging extends PrintStream {
         );
     }
 
-    private String format(String prefix, String msg) {
-        Date date = new Date();
-        calendar.setTime(date);
+    private String format(final String prefix, final String msg) {
+        final Date date = new Date();
+        this.calendar.setTime(date);
         return String.format("[%d:%d:%s] [%s] %s",
                 calendar.get(Calendar.HOUR_OF_DAY),
                 calendar.get(Calendar.MINUTE),
@@ -129,9 +129,9 @@ public class Logging extends PrintStream {
         ).replaceAll("§([a-z0-9])", "");
     }
 
-    private String format(String msg) {
-        Date date = new Date();
-        calendar.setTime(date);
+    private String format(final String msg) {
+        final Date date = new Date();
+        this.calendar.setTime(date);
         return String.format("[%d:%d:%d] %s",
                 calendar.get(Calendar.HOUR_OF_DAY),
                 calendar.get(Calendar.MINUTE),
@@ -140,9 +140,9 @@ public class Logging extends PrintStream {
         ).replaceAll("§([a-z0-9])", "");
     }
 
-    private String format(char color, String msg) {
-        Date date = new Date();
-        calendar.setTime(date);
+    private String format(final char color, final String msg) {
+        final Date date = new Date();
+        this.calendar.setTime(date);
         return String.format("§%c§l[%d:%d:%d] §0%s",
                 color,
                 calendar.get(Calendar.HOUR_OF_DAY),
