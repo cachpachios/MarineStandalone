@@ -69,8 +69,6 @@ public class PlayerManager {
                 timeout.run();
             }
         }, 0, 1000);
-
-        //timeout.start();
     }
 
     public ChatManager getChat() {

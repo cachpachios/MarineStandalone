@@ -29,7 +29,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class TimeoutManager extends Thread {
+public class TimeoutManager {
     private final PlayerManager players;
     private final Map<Short, Integer> lastReceived; // Contains last recived in seconds
     private final Map<Short, Integer> lastSent; // Contains last sent KeepAlivePacketID
@@ -73,7 +73,6 @@ public class TimeoutManager extends Thread {
         cleanUp(p);
     }
 
-    @Override
     public void run() { // Will update each second :D
         // while (true) {
         int time = (int) getMiliTime();
