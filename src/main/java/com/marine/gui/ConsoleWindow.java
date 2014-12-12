@@ -21,17 +21,24 @@ package com.marine.gui;
 
 import com.marine.Logging;
 import com.marine.ServerProperties;
+import com.marine.game.CommandManager;
 import com.marine.game.chat.ChatColor;
+import com.marine.game.command.Command;
+import com.marine.player.Player;
 import com.marine.server.Marine;
+import com.marine.util.StringUtils;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ConsoleWindow extends OutputStream {
@@ -67,7 +74,7 @@ public class ConsoleWindow extends OutputStream {
         WindowListener exitListener = new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                int confirm = JOptionPane.showOptionDialog(null, "Are you sure you want to close the server?", "Exit Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+                int confirm = JOptionPane.showOptionDialog(jFrame, "Are you sure you want to close the server?", "Exit Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
                 if (confirm == 0) {
                     Marine.stop();
                 }
@@ -76,7 +83,7 @@ public class ConsoleWindow extends OutputStream {
         // The listener
         jFrame.addWindowListener(exitListener);
         // The layout stuffz
-        GridBagConstraints c = new GridBagConstraints();
+        final GridBagConstraints c = new GridBagConstraints();
         jFrame.setLayout(new GridBagLayout());
         // Should we display the html outputted?
         if (!showHTML)
@@ -104,9 +111,49 @@ public class ConsoleWindow extends OutputStream {
         help.setText("Help");
         final JMenuItem
                 authors = new JMenuItem("Authors"),
-                commands = new JMenuItem("Commands"),
+                commands = new JMenuItem(new AbstractAction("Commands") {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        JFrame commands = new JFrame("Commands");
+                        commands.setSize(600, 400);
+                        commands.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+                        String[] columns = new String[]{
+                                "Command",
+                                "Aliases",
+                                "Description",
+                        };
+                        List<Command> cmds = CommandManager.getInstance().getCommands();
+                        Object[][] objects = new Object[cmds.size()][];
+                        Command c;
+                        for (int x = 0; x < cmds.size(); x++) {
+                            c = cmds.get(x);
+                            objects[x] = new Object[]{
+                                    c.toString(),
+                                    StringUtils.join(Arrays.asList(c.getAliases()), ", "),
+                                    c.getDescription()
+                            };
+                        }
+                        DefaultTableModel model = new DefaultTableModel(objects, columns) {
+                            @Override
+                            public boolean isCellEditable(int r, int c) {
+                                return false;
+                            }
+                        };
+                        JTable table = new JTable(model);
+                        table.setFillsViewportHeight(true);
+                        commands.add(new JScrollPane(table));
+                        commands.setVisible(true);
+                    }
+                }),
                 restart = new JMenuItem("Restart"),
-                kick_all = new JMenuItem("Kick All");
+                kick_all = new JMenuItem(new AbstractAction("Kick All") {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        String s = JOptionPane.showInputDialog(jFrame, "Enter a kick message", "Kick Message", JOptionPane.QUESTION_MESSAGE);
+                        for (Player player : Marine.getPlayers())
+                            player.kick(ChatColor.transform('&', s));
+                    }
+                });
         authors.setEnabled(true);
         commands.setEnabled(true);
         restart.setEnabled(true);
