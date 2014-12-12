@@ -31,7 +31,6 @@ import com.marine.game.inventory.Inventory;
 import com.marine.game.inventory.PlayerInventory;
 import com.marine.net.Client;
 import com.marine.net.play.clientbound.ChatPacket;
-import com.marine.net.play.clientbound.KickPacket;
 import com.marine.net.play.clientbound.inv.InventoryContentPacket;
 import com.marine.net.play.clientbound.inv.InventoryOpenPacket;
 import com.marine.net.play.clientbound.player.ClientboundPlayerLookPositionPacket;
@@ -342,17 +341,32 @@ public class Player extends Entity implements IPlayer, CommandSender {
     }
 
     public void kick(String reason) {
-        LeaveEvent event = new LeaveEvent(this, LeaveEvent.QuitReason.KICKED);
-        Marine.getServer().callEvent(event);
-        Marine.broadcastMessage(event.getMessage().replace("%plr", getName()));
-        getClient().sendPacket(new KickPacket(
-                (reason.length() > 0) ? reason : "Kicked"
-        ));
-        cleanup();
+        // LeaveEvent event = new LeaveEvent(this, LeaveEvent.QuitReason.KICKED);
+        // Marine.getServer().callEvent(event);
+        // Marine.broadcastMessage(event.getMessage().replace("%plr", getName()));
+        // getClient().sendPacket(new KickPacket(
+        //        (reason.length() > 0) ? reason : "Kicked"
+        // ));
+        // cleanup();
+        Marine.getServer().getServer().getPlayerManager().disconnect(this, reason);
     }
 
     private void cleanup() {
         playerFile.saveFile();
+    }
+
+    public void disconnect(String reason) {
+        LeaveEvent event = new LeaveEvent(this, LeaveEvent.QuitReason.KICKED);
+        Marine.getServer().callEvent(event);
+        Marine.broadcastMessage(event.getMessage().replace("%plr", getName()).replace("%reason", reason));
+        cleanup();
+    }
+
+    public void timeoutDisconnect() {
+        LeaveEvent event = new LeaveEvent(this, LeaveEvent.QuitReason.TIMEOUT);
+        Marine.getServer().callEvent(event);
+        Marine.broadcastMessage(event.getMessage().replace("%plr", getName()));
+        cleanup();
     }
 
     public void disconnect() {

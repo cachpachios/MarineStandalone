@@ -51,7 +51,7 @@ public class LeaveEvent extends PlayerEvent {
     }
 
     public static enum QuitReason {
-        KICKED("%plr got kicked"), NORMAL("%plr left the game"), TIMEOUT("%plr timed out");
+        KICKED("%plr got kicked for: %reason"), NORMAL("%plr left the game"), TIMEOUT("%plr timed out");
 
         private final String message;
 

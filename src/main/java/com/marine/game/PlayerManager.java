@@ -197,11 +197,23 @@ public class PlayerManager {
         server.getNetwork().cleanUp(p.getClient());
     }
 
-    public void disconnect(Player p, String msg) {
+    public void disconnect(Player p, String reason) {
         if (p == null)
             return;
-        p.disconnect();
-        p.getClient().sendPacket(new KickPacket(msg));
+        p.disconnect(reason);
+        p.getClient().sendPacket(new KickPacket(
+                (reason.length() > 0) ? reason : "Kicked"
+        ));
+        cleanUp(p);
+    }
+
+    public void disconnect_timeout(Player p, String reason) {
+        if (p == null)
+            return;
+        p.timeoutDisconnect();
+        p.getClient().sendPacket(new KickPacket(
+                (reason.length() > 0) ? reason : "Timed out"
+        ));
         cleanUp(p);
     }
 
