@@ -68,7 +68,13 @@ public class CommandManager {
     }
 
     public Collection<Command> getCommands() {
-        return stringMap.values();
+        Collection<Command> commands = new ArrayList<>();
+        for (Command command : stringMap.values()) {
+            if (!commands.contains(command))
+                commands.add(command);
+        }
+        return commands;
+        // return stringMap.values();
     }
 
 }

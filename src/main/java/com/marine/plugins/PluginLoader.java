@@ -74,7 +74,11 @@ public class PluginLoader {
 
     public void disableAllPlugins() {
         for (Plugin plugin : manager.getPlugins()) {
-            disablePlugin(plugin);
+            try {
+                disablePlugin(plugin);
+            } catch (Exception e) {
+                new PluginHandlerException(this, "Could not properly disable " + plugin.getName(), e).printStackTrace();
+            }
         }
     }
 

@@ -28,6 +28,7 @@ import com.sun.istack.internal.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 /**
  * Created 2014-12-12 for MarineStandalone
@@ -90,6 +91,10 @@ public class PlayerList extends ArrayList<Short> implements Listener {
         return players;
     }
 
+    /**
+     * @deprecated
+     */
+    @Deprecated
     public boolean contains(@NotNull final UUID uuid) {
         return getPlayers().contains(Marine.getPlayer(uuid));
     }
@@ -107,10 +112,18 @@ public class PlayerList extends ArrayList<Short> implements Listener {
         else return super.contains(o);
     }
 
+    /**
+     * @deprecated
+     */
+    @Deprecated
     public void add(@NotNull final UUID uuid) {
         this.add(Marine.getPlayer(uuid));
     }
 
+    /**
+     * @deprecated
+     */
+    @Deprecated
     public void remove(@NotNull final UUID uuid) {
         this.add(Marine.getPlayer(uuid));
     }
@@ -131,7 +144,33 @@ public class PlayerList extends ArrayList<Short> implements Listener {
         return players;
     }
 
+    @Override
+    public <Short> Short[] toArray(Short[] r) {
+        return super.toArray((Short[]) new Object[size()]);
+    }
+
     public Player getPlayer(final int n) {
         return Marine.getPlayer(super.get(n));
     }
+
+    public void foreach(Consumer<Player> f) {
+        for (short s : this) {
+            f.accept(Marine.getPlayer(s));
+        }
+    }
+
+    @Override
+    public boolean addAll(Collection c) {
+        for (Object o : c) {
+            if (o instanceof Player)
+                this.add((Player) o);
+            else if (o instanceof Short)
+                super.add((short) o);
+            else if (o instanceof UUID)
+                this.add((UUID) o);
+        }
+        return true;
+    }
+
+
 }

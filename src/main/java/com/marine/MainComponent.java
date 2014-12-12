@@ -52,6 +52,7 @@ public class MainComponent {
         } catch (SecurityException e) { // If blocked print an error
             Logging.getLogger().error("Unable to retrieve computer arch! Perhaps blocked by the OS.");
         }
+        chargeUp();
         // Get the arguments
         arguments = Arrays.asList(args);
         // Init. ServerSettings
@@ -124,6 +125,19 @@ public class MainComponent {
             }
         }
         return -1;
+    }
+
+    private static void chargeUp() {
+        for (int x = 0; x < 10000; x++) {
+            Math.sqrt(222039929);
+            Math.sin(93);
+            Math.cos(93);
+            Math.tan(93);
+            Math.random();
+            Math.asin(93);
+            Math.acos(93);
+            Math.atan(93);
+        }
     }
 
     public static class StartSettings {
