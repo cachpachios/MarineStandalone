@@ -20,14 +20,10 @@
 package com.marine.settings;
 
 import com.marine.StandaloneServer;
-import com.marine.util.UUIDHandler;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created 2014-12-03 for MarineStandalone
@@ -84,7 +80,7 @@ public class JSONFileHandler {
             super(parent, file);
         }
 
-        @Override
+       /*@Override
         public Map<String, Object> defaultValues() {
             Map<String, Object> defaultUUIDS = new HashMap<>();
             try {
@@ -93,7 +89,7 @@ public class JSONFileHandler {
                 e.printStackTrace();
             }
             return defaultUUIDS;
-        }
+        }*/
 
     }
 }

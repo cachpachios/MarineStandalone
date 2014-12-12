@@ -37,7 +37,8 @@ public class LoginHandler {
     private Location spawnLocation;
 
     public LoginHandler(PlayerManager playerManager, World w, Position spawnLocation) {
-        this.spawnLocation = new Location(w, 0, 5, 0);
+        // this.spawnLocation = new Location(w, 0, 5, 0);
+        this.spawnLocation = w.getGenerator().getSafeSpawnPoint();
 
         this.playerManager = playerManager;
     }

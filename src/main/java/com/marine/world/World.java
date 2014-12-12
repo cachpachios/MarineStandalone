@@ -160,4 +160,7 @@ public class World { // TODO Save and unload chunks...
         return uid;
     }
 
+    public WorldGenerator getGenerator() {
+        return this.generator;
+    }
 }

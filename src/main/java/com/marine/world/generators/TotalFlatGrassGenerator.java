@@ -19,6 +19,7 @@
 
 package com.marine.world.generators;
 
+import com.marine.util.Location;
 import com.marine.world.BlockID;
 import com.marine.world.Dimension;
 import com.marine.world.chunk.Chunk;
@@ -28,6 +29,11 @@ public final class TotalFlatGrassGenerator extends WorldGenerator {
 
 
     public TotalFlatGrassGenerator() {
+    }
+
+    @Override
+    public Location getSafeSpawnPoint() {
+        return new Location(world, 8, 5, 8);
     }
 
     @Override

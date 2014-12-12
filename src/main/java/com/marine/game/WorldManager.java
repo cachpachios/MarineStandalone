@@ -20,7 +20,7 @@
 package com.marine.game;
 
 import com.marine.world.World;
-import com.marine.world.generators.TotalFlatGrassGenerator;
+import com.marine.world.generators.CityGenerator;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -50,7 +50,7 @@ public class WorldManager {
 
     public World getMainWorld() {
         if (mainWorld == -1) { // Temporary code when no world loader is implemented
-            World w = new World("world", new TotalFlatGrassGenerator());
+            World w = new World("world", new CityGenerator());
             w.generateChunk(0, 0);
             addWorld(w);
             mainWorld = w.getUID();

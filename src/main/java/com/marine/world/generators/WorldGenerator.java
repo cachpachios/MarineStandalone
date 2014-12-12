@@ -19,6 +19,7 @@
 
 package com.marine.world.generators;
 
+import com.marine.util.Location;
 import com.marine.world.Dimension;
 import com.marine.world.World;
 import com.marine.world.chunk.Chunk;
@@ -45,4 +46,7 @@ public abstract class WorldGenerator {
     public abstract Dimension getDimension(); //TODO Enum for dimensions
 
     public abstract Chunk generateChunk(int x, int y);
+
+    public abstract Location getSafeSpawnPoint();
+
 }
