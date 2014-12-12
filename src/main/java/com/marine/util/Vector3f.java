@@ -20,60 +20,41 @@
 package com.marine.util;
 
 /**
- * Created 2014-12-01 for MarineStandalone
+ * Created 2014-12-12 for MarineStandalone
  *
  * @author Citymonstret
  */
-public abstract class Vector3<T extends Number> {
+public class Vector3f extends Vector3<Float> {
 
-    private T x;
-    private T y;
-    private T z;
-
-    public Vector3(T x, T y, T z) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-    }
-
-    public abstract void add(Vector3<T> v2);
-
-    public abstract void subtract(Vector3<T> v2);
-
-    public abstract void multiply(int n);
-
-    public abstract void divide(int n);
-
-    public T getX() {
-        return this.x;
-    }
-
-    public void setX(T x) {
-        this.x = x;
-    }
-
-    public T getY() {
-        return this.y;
-    }
-
-    public void setY(T y) {
-        this.y = y;
-    }
-
-    public T getZ() {
-        return this.z;
-    }
-
-    public void setZ(T z) {
-        this.z = z;
+    public Vector3f(Float x, Float y, Float z) {
+        super(x, y, z);
     }
 
     @Override
-    public int hashCode() {
-        int hash = 37;
-        hash = 37 * 3 + getX().intValue();
-        hash = 37 * 3 + getY().intValue();
-        hash = 37 * 3 + getZ().intValue();
-        return hash;
+    public void add(Vector3<Float> v2) {
+        setX(getX() + v2.getX());
+        setY(getY() + v2.getY());
+        setZ(getZ() + v2.getZ());
+    }
+
+    @Override
+    public void subtract(Vector3<Float> v2) {
+        setX(getX() - v2.getX());
+        setY(getY() - v2.getY());
+        setZ(getZ() - v2.getZ());
+    }
+
+    @Override
+    public void multiply(int n) {
+        setX(getX() * n);
+        setY(getY() * n);
+        setZ(getZ() * n);
+    }
+
+    @Override
+    public void divide(int n) {
+        setX(getX() / n);
+        setY(getY() / n);
+        setZ(getZ() / n);
     }
 }
