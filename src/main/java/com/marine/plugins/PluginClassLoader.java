@@ -19,13 +19,12 @@
 
 package com.marine.plugins;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
-
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -38,7 +37,7 @@ public class PluginClassLoader extends URLClassLoader {
     private final PluginLoader loader;
     private final PluginFile desc;
     private final File file, data;
-    private final BiMap<String, Class> classes = HashBiMap.create();
+    private final Map<String, Class> classes;
     public Plugin plugin, init;
 
     public PluginClassLoader(final PluginLoader loader, final PluginFile desc, final File file) throws MalformedURLException, PluginHandlerException {
@@ -47,6 +46,7 @@ public class PluginClassLoader extends URLClassLoader {
         this.desc = desc;
         this.file = file;
         this.data = new File(file.getParent(), desc.name);
+        this.classes = new HashMap<>();
         Class jar;
         Class<? extends Plugin> plg;
         try {
