@@ -57,10 +57,10 @@ public class StandaloneServer implements Listener {
     private final Server server;
     private final Scheduler scheduler;
     private final PluginLoader pluginLoader;
-    private final JSONFileHandler jsonHandler;
     // Dynamic values
     public int ticks;
     NetworkManager network;
+    private JSONFileHandler jsonHandler;
     // Settings:
     private String standard_motd = "MarineStandalone | Development";
     private int standard_maxplayers = 99;
@@ -143,10 +143,12 @@ public class StandaloneServer implements Listener {
         Logging.getLogger().logf("Starting MarineStandalone Server - Protocol Version §c§o%d§0 (Minecraft §c§o%s§0)",
                 ServerProperties.PROTOCOL_VERSION, ServerProperties.MINECRAFT_NAME);
         // Start the networking stuffz
-        this.network = new NetworkManager(this, port, ServerSettings.getInstance().useHasing);
+        if (this.network == null) {
+            this.network = new NetworkManager(this, port, ServerSettings.getInstance().useHasing);
+            this.network.openConnection();
+        }
         //TODO World loading
         // Open connection
-        this.network.openConnection();
         // Load in and enable plugins
         this.loadPlugins();
         // Timings for loop
@@ -211,6 +213,24 @@ public class StandaloneServer implements Listener {
         jsonHandler.saveAll();
         // When finished
         System.exit(0);
+    }
+
+    public void restart() {
+        for (final Player player : players.getPlayers()) {
+            player.kick("Server Restarting");
+        }
+        pluginLoader.disableAllPlugins();
+        shouldRun = false;
+        jsonHandler.saveAll();
+        final StandaloneServer server = this;
+        new Timer("restarter").schedule(new TimerTask() {
+            @Override
+            public void run() {
+                jsonHandler = new JSONFileHandler(server, new File("./settings"), new File("./storage"));
+                server.shouldRun = true;
+                server.run();
+            }
+        }, 0l, 1500l);
     }
 
     public NetworkManager getNetwork() {

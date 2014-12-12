@@ -145,7 +145,12 @@ public class ConsoleWindow extends OutputStream {
                         commands.setVisible(true);
                     }
                 }),
-                restart = new JMenuItem("Restart"),
+                restart = new JMenuItem(new AbstractAction("Restart") {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        Marine.getServer().getServer().restart();
+                    }
+                }),
                 kick_all = new JMenuItem(new AbstractAction("Kick All") {
                     @Override
                     public void actionPerformed(ActionEvent e) {
