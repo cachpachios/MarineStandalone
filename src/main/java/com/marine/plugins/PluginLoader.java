@@ -22,13 +22,14 @@ package com.marine.plugins;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.marine.Logging;
+import com.marine.util.FileUtils;
 import sun.misc.JarFilter;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -92,6 +93,7 @@ public class PluginLoader {
                 Logging.getLogger().warn("Could not create data folder for " + desc.name);
             }
         }
+        copyConfigIfExists(file, data);
         PluginClassLoader loader;
         try {
             loader = new PluginClassLoader(this, desc, file);
@@ -148,6 +150,33 @@ public class PluginLoader {
             PluginClassLoader loader = plugin.getClassLoader();
             for (String name : loader.getClasses())
                 removeClass(name);
+        }
+    }
+
+    private void copyConfigIfExists(File file, File destination) throws PluginHandlerException {
+        JarFile jar;
+        try {
+            jar = new JarFile(file);
+        } catch (IOException ioe) {
+            throw new PluginHandlerException(this, "Could not load in " + file.getName(), ioe);
+        }
+        Enumeration<JarEntry> entries = jar.entries();
+        JarEntry entry;
+        List<JarEntry> entryList = new ArrayList<>();
+        while (entries.hasMoreElements()) {
+            entry = entries.nextElement();
+            if (!entry.getName().equalsIgnoreCase("desc.json") && (entry.getName().endsWith(".json") || entry.getName().endsWith(".properties") || entry.getName().endsWith(".sql") || entry.getName().endsWith(".db"))) {
+                entryList.add(entry);
+            }
+        }
+        InputStream stream;
+        for (JarEntry e : entryList) {
+            try {
+                FileUtils.copyFile(jar.getInputStream(e),
+                        new BufferedOutputStream(new FileOutputStream(new File(destination, e.getName()))), 1024 * 1024);
+            } catch (IOException exz) {
+                new PluginHandlerException(this, "Could not load in entry...", exz).printStackTrace();
+            }
         }
     }
 
