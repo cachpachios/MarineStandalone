@@ -33,10 +33,7 @@ import com.marine.player.Player;
 
 import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class PlayerManager {
@@ -65,7 +62,15 @@ public class PlayerManager {
         chat = new ChatManager(this);
         movement = new MovementManager(this);
 
-        timeout.start();
+        // Will run it at a FIXED rater, rather than dynamic rate
+        new Timer("timeoutmanager").scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                timeout.run();
+            }
+        }, 0, 1000);
+
+        //timeout.start();
     }
 
     public ChatManager getChat() {
@@ -241,7 +246,7 @@ public class PlayerManager {
     public void keepAlive(short uid, int ID) {
         if (uid == -1)
             return;
-        timeout.keepAlive(getPlayer(uid), ID);
+        timeout.keepAlive(getPlayer(uid));
     }
 
     // TODO: Make this work, its just freezes the server now

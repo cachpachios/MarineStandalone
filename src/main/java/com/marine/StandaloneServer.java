@@ -101,6 +101,7 @@ public class StandaloneServer implements Listener {
                 scheduler.run();
             }
         }, 0l, (1000 / 20));
+
         // TPS and stuff
         // scheduler.createSyncTask(new LagTester());
         // Create a new plugin loader
@@ -215,7 +216,7 @@ public class StandaloneServer implements Listener {
     }
 
     public void stop() {
-        for (Player player : players.getPlayers()) {
+        for (final Player player : players.getPlayers()) {
             player.getClient().sendPacket(new KickPacket(ChatColor.red + ChatColor.bold + "Server stopped"));
         }
         // Disable all plugins
