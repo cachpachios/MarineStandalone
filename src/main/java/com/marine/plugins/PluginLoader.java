@@ -94,6 +94,7 @@ public class PluginLoader {
             }
         }
         copyConfigIfExists(file, data);
+        Logging.getLogger().logf(file.getName() + " data folder copied, total size: %dkb", FileUtils.getSize(data) / 1024);
         PluginClassLoader loader;
         try {
             loader = new PluginClassLoader(this, desc, file);
@@ -165,12 +166,14 @@ public class PluginLoader {
         List<JarEntry> entryList = new ArrayList<>();
         while (entries.hasMoreElements()) {
             entry = entries.nextElement();
-            if (!entry.getName().equalsIgnoreCase("desc.json") && (entry.getName().endsWith(".json") || entry.getName().endsWith(".properties") || entry.getName().endsWith(".sql") || entry.getName().endsWith(".db"))) {
+            if (!entry.getName().equalsIgnoreCase("desc.json") && (entry.getName().endsWith(".json") ||
+                    entry.getName().endsWith(".properties") || entry.getName().endsWith(".sql") || entry.getName().endsWith(".db"))) {
                 entryList.add(entry);
             }
         }
-        InputStream stream;
         for (JarEntry e : entryList) {
+            if (new File(destination, e.getName()).exists())
+                continue;
             try {
                 FileUtils.copyFile(jar.getInputStream(e),
                         new BufferedOutputStream(new FileOutputStream(new File(destination, e.getName()))), 1024 * 1024);
