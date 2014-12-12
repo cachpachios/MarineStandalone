@@ -23,7 +23,6 @@ import com.google.common.eventbus.Subscribe;
 import com.marine.events.Listener;
 import com.marine.events.standardevents.LeaveEvent;
 import com.marine.server.Marine;
-import com.sun.istack.internal.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -95,11 +94,11 @@ public class PlayerList extends ArrayList<Short> implements Listener {
      * @deprecated
      */
     @Deprecated
-    public boolean contains(@NotNull final UUID uuid) {
+    public boolean contains(final UUID uuid) {
         return getPlayers().contains(Marine.getPlayer(uuid));
     }
 
-    public boolean contains(@NotNull final Player player) {
+    public boolean contains(final Player player) {
         return super.contains(player.getUID());
     }
 
@@ -116,7 +115,7 @@ public class PlayerList extends ArrayList<Short> implements Listener {
      * @deprecated
      */
     @Deprecated
-    public void add(@NotNull final UUID uuid) {
+    public void add(final UUID uuid) {
         this.add(Marine.getPlayer(uuid));
     }
 
@@ -124,15 +123,15 @@ public class PlayerList extends ArrayList<Short> implements Listener {
      * @deprecated
      */
     @Deprecated
-    public void remove(@NotNull final UUID uuid) {
+    public void remove(final UUID uuid) {
         this.add(Marine.getPlayer(uuid));
     }
 
-    public void add(@NotNull final Player player) {
+    public void add(final Player player) {
         super.add(player.getUID());
     }
 
-    public void remove(@NotNull final Player player) {
+    public void remove(final Player player) {
         super.remove(((Object) player.getUID()));
     }
 
