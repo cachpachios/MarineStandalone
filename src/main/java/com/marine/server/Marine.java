@@ -62,6 +62,9 @@ public class Marine {
      * @return
      */
     public static Player getPlayer(UUID uuid) {
+        for (Player player : getPlayers())
+            if (player.getUUID().equals(uuid))
+                return player;
         return null;
     }
 
@@ -110,7 +113,7 @@ public class Marine {
         Logging.getLogger().log(string);
     }
 
-    public Player getPlayer(short uid) {
+    public static Player getPlayer(short uid) {
         return getServer().getPlayer(uid);
     }
 
