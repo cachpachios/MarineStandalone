@@ -27,20 +27,21 @@ import java.lang.ref.Reference;
 import java.lang.ref.WeakReference;
 import java.util.Collections;
 import java.util.Map;
-import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class TimeoutManager extends Thread {
     private final PlayerManager players;
-    private final Random rand;
-    private Map<Short, Integer> lastRecive; // Contains last recived in seconds
+    private Map<Short, Integer> lastReceived; // Contains last recived in seconds
     private Map<Short, Integer> lastSent; // Contains last sent KeepAlivePacketID
 
     public TimeoutManager(PlayerManager manager) {
-        rand = new Random();
         this.players = manager;
-        this.lastRecive = Collections.synchronizedMap(new ConcurrentHashMap<Short, Integer>());
+        this.lastReceived = Collections.synchronizedMap(new ConcurrentHashMap<Short, Integer>());
         this.lastSent = Collections.synchronizedMap(new ConcurrentHashMap<Short, Integer>());
+    }
+
+    private int randomInt(int max) {
+        return (int) (Math.random() * max);
     }
 
     private long getMiliTime() {
@@ -48,14 +49,14 @@ public class TimeoutManager extends Thread {
     }
 
     public void addPlayerToManager(final Player p) {
-         lastRecive.put(p.getUID(), 0);
+        lastReceived.put(p.getUID(), 0);
     }
 
     private void update(final Player p) {
             if (lastSent.containsKey(p))
                 lastSent.remove(p);
-
-            int id = rand.nextInt();
+        // Don't use randoms, plz
+        int id = randomInt(32);
             p.getClient().sendPacket(new KeepAlivePacket(id));
 
             lastSent.put(p.getUID(), id);
@@ -63,7 +64,7 @@ public class TimeoutManager extends Thread {
 
 
     public void cleanUp(Player p) {
-    		lastRecive.remove(p.getUID());
+        lastReceived.remove(p.getUID());
             lastSent.remove(p.getUID());
     }
 
@@ -77,8 +78,8 @@ public class TimeoutManager extends Thread {
     public void run() { // Will update each second :D
         while (true) {
         	int time = (int) getMiliTime();
-            for (Short p : lastRecive.keySet())
-                if (lastRecive.get(p) - time >= 10) {
+            for (Short p : lastReceived.keySet())
+                if (lastReceived.get(p) - time >= 10) {
                     Player plr = players.getPlayer(p);
                     disconnect(plr);
                     Reference<Player> r = new WeakReference<Player>(plr);
@@ -94,8 +95,8 @@ public class TimeoutManager extends Thread {
 
     public void keepAlive(Player p, int ID) {
                 lastSent.remove(p.getUID());
-                lastRecive.remove(p.getUID());
-                lastRecive.put(p.getUID(), (int) getMiliTime());
+        lastReceived.remove(p.getUID());
+        lastReceived.put(p.getUID(), (int) getMiliTime());
                 update(p);
     }
 
