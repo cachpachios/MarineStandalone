@@ -71,9 +71,9 @@ public abstract class Vector3<T extends Number> {
     @Override
     public int hashCode() {
         int hash = 37;
-        hash = 37 * 3 + getX().intValue();
-        hash = 37 * 3 + getY().intValue();
-        hash = 37 * 3 + getZ().intValue();
+        hash = hash * 3 + getX().intValue();
+        hash = hash * 3 + getY().intValue();
+        hash = hash * 3 + getZ().intValue();
         return hash;
     }
 }
