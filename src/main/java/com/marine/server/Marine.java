@@ -91,7 +91,7 @@ public class Marine {
         standaloneServer.stop();
     }
 
-    public static void setStandalone(StandaloneServer s) {
+    public static void setStandalone(final StandaloneServer s) {
         if (standaloneServer != null) {
             throw new RuntimeException("Cannot replace the StandaloneServer");
         }

@@ -36,9 +36,9 @@ import java.util.function.Consumer;
  */
 public class PlayerList extends ArrayList<Short> implements Listener {
 
-    public PlayerList(Collection c, boolean registerAsListener, boolean removeOffline) {
+    public PlayerList(final Collection c, final boolean registerAsListener, final boolean removeOffline) {
         if (c != null && !c.isEmpty()) {
-            for (Object o : c) {
+            for (final Object o : c) {
                 if (o instanceof Player) {
                     if (removeOffline) {
                         if (Marine.getPlayers().contains(o))
@@ -47,7 +47,7 @@ public class PlayerList extends ArrayList<Short> implements Listener {
                         this.add(((Player) c));
                     }
                 } else if (o instanceof Short) {
-                    short s = (short) o;
+                    final short s = (short) o;
                     if (removeOffline) {
                         if (Marine.getPlayer(s) != null)
                             super.add(s);
@@ -58,7 +58,7 @@ public class PlayerList extends ArrayList<Short> implements Listener {
                     // Will ignore removeOffline, seeing as
                     // we don't have a kept storage of UUIDS
                     // locally. RAM must love us ;3
-                    Player player = Marine.getPlayer((UUID) o);
+                    final Player player = Marine.getPlayer((UUID) o);
                     if (player != null)
                         this.add(player);
                 }
@@ -68,7 +68,7 @@ public class PlayerList extends ArrayList<Short> implements Listener {
             Marine.getServer().registerListener(this);
     }
 
-    public PlayerList(boolean registerAsListener, boolean removeOffline) {
+    public PlayerList(final boolean registerAsListener, final boolean removeOffline) {
         this(null, registerAsListener, removeOffline);
     }
 
@@ -84,8 +84,8 @@ public class PlayerList extends ArrayList<Short> implements Listener {
     }
 
     public Collection<Player> getPlayers() {
-        Collection<Player> players = new ArrayList<>();
-        for (Object s : this)
+        final Collection<Player> players = new ArrayList<>();
+        for (final Object s : this)
             players.add(Marine.getPlayer((short) s));
         return players;
     }
@@ -103,7 +103,7 @@ public class PlayerList extends ArrayList<Short> implements Listener {
     }
 
     @Override
-    public boolean contains(Object o) {
+    public boolean contains(final Object o) {
         if (o instanceof Player)
             return this.contains((Player) o);
         if (o instanceof UUID)
@@ -137,14 +137,14 @@ public class PlayerList extends ArrayList<Short> implements Listener {
 
     @Override
     public Player[] toArray() {
-        Player[] players = new Player[size()];
+        final Player[] players = new Player[size()];
         for (int x = 0; x < players.length; x++)
             players[x] = Marine.getPlayer(get(x));
         return players;
     }
 
     @Override
-    public <Short> Short[] toArray(Short[] r) {
+    public <Short> Short[] toArray(final Short[] r) {
         return super.toArray((Short[]) new Object[size()]);
     }
 
@@ -152,15 +152,15 @@ public class PlayerList extends ArrayList<Short> implements Listener {
         return Marine.getPlayer(super.get(n));
     }
 
-    public void foreach(Consumer<Player> f) {
-        for (short s : this) {
+    public void foreach(final Consumer<Player> f) {
+        for (final short s : this) {
             f.accept(Marine.getPlayer(s));
         }
     }
 
     @Override
-    public boolean addAll(Collection c) {
-        for (Object o : c) {
+    public boolean addAll(final Collection c) {
+        for (final Object o : c) {
             if (o instanceof Player)
                 this.add((Player) o);
             else if (o instanceof Short)
