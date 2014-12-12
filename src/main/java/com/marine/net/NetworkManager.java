@@ -137,6 +137,7 @@ public class NetworkManager {
         private NetworkManager host;
 
         public ClientProcessor(NetworkManager manager) {
+        	super("ClientInterceptor");
             host = manager;
         }
 

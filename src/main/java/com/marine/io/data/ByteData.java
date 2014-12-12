@@ -152,14 +152,11 @@ public class ByteData implements Iterable<Byte> {
 
 
     public byte[] getBytes() {
-        byte[] a = new byte[bytes.size()];
-        int i = 0;
-        for (byte b : bytes) {
-            a[i] = b;
-            i++;
-        }
-
-        return a;
+    	int size = bytes.size();
+    	final byte[] out = new byte[size];
+    	for (int i = 0; i < size; i++) 
+    		out[i] = bytes.get(i).byteValue();
+    	return out;
     }
 
 
@@ -243,7 +240,8 @@ public class ByteData implements Iterable<Byte> {
 
     public void writeToStream(OutputStream stream) {
         try {
-            stream.write(getBytes());
+            for(byte b : bytes)
+            	stream.write(b);
         } catch (IOException e) {
         }
     }
