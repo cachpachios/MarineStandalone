@@ -19,12 +19,12 @@
 
 package com.marine.world.chunk;
 
-public class ChunkPos implements Comparable<ChunkPos> {
-    private final int x, y;
+import com.marine.util.Vector2i;
+
+public class ChunkPos extends Vector2i implements Comparable<ChunkPos> {
 
     public ChunkPos(int x, int y) {
-        this.x = x;
-        this.y = y;
+        super(x, y);
     }
 
     public ChunkPos(long encoded) {
@@ -35,23 +35,20 @@ public class ChunkPos implements Comparable<ChunkPos> {
         return (long) x << 32 | y & 0xFFFFFFFFL;
     }
 
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
     public long encode() {
-        return (long) x << 32 | y & 0xFFFFFFFFL;
+        return (long) getX() << 32 | getY() & 0xFFFFFFFFL;
     }
 
     @Override
     public int compareTo(ChunkPos v) {
-        if (x == v.x && y == v.y)
+        int
+                x = getX(),
+                y = getY(),
+                x2 = v.getX(),
+                y2 = v.getY();
+        if (x == x2 && y == y2)
             return 0;
-        if (x < v.x && y < v.y)
+        if (x < x2 && y < y2)
             return -1;
         else
             return 1;
