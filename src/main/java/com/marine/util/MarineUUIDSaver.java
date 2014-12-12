@@ -22,6 +22,7 @@ package com.marine.util;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.UUID;
@@ -40,6 +41,7 @@ public class MarineUUIDSaver implements UUIDSaver {
         final JSONTokener tokener = new JSONTokener(connection.getInputStream());
         final JSONObject root = new JSONObject(tokener);
         final String uuid = root.getJSONObject(name).getString("dashed");
+        ((HttpURLConnection) connection).disconnect();
         return UUID.fromString(uuid);
     }
 
@@ -49,6 +51,7 @@ public class MarineUUIDSaver implements UUIDSaver {
         connection.addRequestProperty("User-Agent", "Mozilla/4.0");
         final JSONTokener tokener = new JSONTokener(connection.getInputStream());
         final JSONObject root = new JSONObject(tokener);
+        ((HttpURLConnection) connection).disconnect();
         return root.getJSONObject(uuid.toString().replace("-", "")).getString("username");
     }
 

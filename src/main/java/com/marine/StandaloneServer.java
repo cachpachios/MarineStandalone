@@ -222,6 +222,7 @@ public class StandaloneServer implements Listener {
         pluginLoader.disableAllPlugins();
         shouldRun = false;
         jsonHandler.saveAll();
+        Logging.getLogger().clearLogger();
         final StandaloneServer server = this;
         new Timer("restarter").schedule(new TimerTask() {
             @Override

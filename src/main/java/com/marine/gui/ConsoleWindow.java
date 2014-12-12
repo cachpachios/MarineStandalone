@@ -184,6 +184,10 @@ public class ConsoleWindow extends OutputStream {
         update();
     }
 
+    public void clear() {
+        console.clear();
+    }
+
     private String format(String string) {
         string = string.replace("§0", "§f");
         string = "<font face='MarineStandalone'>" + string;

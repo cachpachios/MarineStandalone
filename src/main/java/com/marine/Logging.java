@@ -58,6 +58,10 @@ public class Logging extends PrintStream {
         haveWindow = true;
     }
 
+    public void clearLogger() {
+        c.clear();
+    }
+
     public boolean isDisplayed() {
         return haveWindow;
     }
