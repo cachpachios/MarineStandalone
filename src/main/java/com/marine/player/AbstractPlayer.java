@@ -38,12 +38,12 @@ public class AbstractPlayer implements IPlayer {
 
     private final PlayerID id;
     private final Client client;
-    private PlayerAbilites abilities;
+    private PlayerAbilities abilities;
     private Location location;
 
     private World w;
 
-    public AbstractPlayer(StandaloneServer server, World w, PlayerID id, Client c, PlayerAbilites abilites, Location spawnLocation) {
+    public AbstractPlayer(StandaloneServer server, World w, PlayerID id, Client c, PlayerAbilities abilites, Location spawnLocation) {
         this.s = server;
         this.w = w;
         this.client = c;
@@ -61,7 +61,7 @@ public class AbstractPlayer implements IPlayer {
         return id;
     }
 
-    public PlayerAbilites getAbilities() {
+    public PlayerAbilities getAbilities() {
         return abilities;
     }
 

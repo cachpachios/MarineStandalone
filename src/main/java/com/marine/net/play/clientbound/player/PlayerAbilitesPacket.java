@@ -23,15 +23,15 @@ import com.marine.io.data.ByteData;
 import com.marine.net.Packet;
 import com.marine.net.PacketOutputStream;
 import com.marine.net.States;
-import com.marine.player.PlayerAbilites;
+import com.marine.player.PlayerAbilities;
 
 import java.io.IOException;
 
 public class PlayerAbilitesPacket extends Packet {
 
-    final PlayerAbilites abilites;
+    final PlayerAbilities abilites;
 
-    public PlayerAbilitesPacket(PlayerAbilites abilites) {
+    public PlayerAbilitesPacket(PlayerAbilities abilites) {
         this.abilites = abilites;
     }
 

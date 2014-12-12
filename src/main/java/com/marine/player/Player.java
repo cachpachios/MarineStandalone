@@ -52,24 +52,39 @@ import java.util.*;
 
 public class Player extends Entity implements IPlayer, CommandSender {
 
+    // PlayerManager
     private final PlayerManager manager;
+    // Permissions
     private final List<String> permissions;
+    // Unique ID
     private final short uid;
+    // Levels
     public int levels = 0;
+    // Exp
     public float exp = 0f;
+    // Next Window ID
     private byte nextWindowID = 0; // Used for windows
+    // Player ID
     private PlayerID id;
+    // Private Inventory (should we reconstruct this or save it?)
     private PlayerInventory inventory;
+    // Gamemode
     private Gamemode gamemode;
+    // When gamemode should be updated
     private boolean gamemodeUpdate; //Keep tracks if gamemode have been change without the client getting the info
+    // Client (connection)
     private Client connection;
-    private PlayerAbilites abilites;
+    // Abilities
+    private PlayerAbilities abilites;
+    // Display Name
     private String displayName;
+    // Player File (storage)
     private PlayerFile playerFile;
+    // Loaded chunks...
     private List<Long> loadedChunks;
 
     public Player(final PlayerManager manager, final Client connection, final PlayerID id, final PlayerInventory inventory,
-                  final int entityID, final World world, final Location pos, final PlayerAbilites abilites, final Gamemode gamemode) {
+                  final int entityID, final World world, final Location pos, final PlayerAbilities abilites, final Gamemode gamemode) {
         super(EntityType.PLAYER, entityID, world, pos);
         this.inventory = inventory;
         this.manager = manager;
@@ -288,7 +303,7 @@ public class Player extends Entity implements IPlayer, CommandSender {
         return manager;
     }
 
-    public PlayerAbilites getAbilities() {
+    public PlayerAbilities getAbilities() {
         return abilites;
     }
 
