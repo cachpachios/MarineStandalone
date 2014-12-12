@@ -43,6 +43,8 @@ import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.json.JSONException;
+
 @SuppressWarnings("unused")
 public class StandaloneServer implements Listener {
 
@@ -140,9 +142,7 @@ public class StandaloneServer implements Listener {
     }
 
     private void run() {
-        Logging.getLogger().logf("Starting MarineStandalone Server - Protocol Version §c§o%d§0 (Minecraft §c§o%s§0)",
-                ServerProperties.PROTOCOL_VERSION, ServerProperties.MINECRAFT_NAME);
-        // Start the networking stuffz
+ // Start the networking stuffz
         if (this.network == null) {
             this.network = new NetworkManager(this, port, ServerSettings.getInstance().useHasing);
             this.network.openConnection();
@@ -216,6 +216,7 @@ public class StandaloneServer implements Listener {
     }
 
     public void restart() {
+    	Logging.getLogger().log("Server is restaring...");
         for (final Player player : players.getPlayers()) {
             player.kick("Server Restarting");
         }
@@ -223,11 +224,13 @@ public class StandaloneServer implements Listener {
         shouldRun = false;
         jsonHandler.saveAll();
         Logging.getLogger().clearLogger();
+        Logging.getLogger().logf("Starting MarineStandalone Server - Protocol Version §c§o%d§0 (Minecraft §c§o%s§0)",
+                ServerProperties.PROTOCOL_VERSION, ServerProperties.MINECRAFT_NAME);
         final StandaloneServer server = this;
         new Timer("restarter").schedule(new TimerTask() {
             @Override
             public void run() {
-                jsonHandler = new JSONFileHandler(server, new File("./settings"), new File("./storage"));
+                try {jsonHandler = new JSONFileHandler(server, new File("./settings"), new File("./storage"));} catch (JSONException e) {}
                 server.shouldRun = true;
                 server.run();
             }

@@ -78,6 +78,8 @@ public class MainComponent {
             //ServerSettings.getInstance().verbose();
             System.setErr(Logging.getLogger());
         }
+        Logging.getLogger().logf("Starting MarineStandalone Server - Protocol Version §c§o%d§0 (Minecraft §c§o%s§0)",
+                ServerProperties.PROTOCOL_VERSION, ServerProperties.MINECRAFT_NAME);
         StandaloneServer server = null;
         try {
             server = new StandaloneServer(settings); // Port and TickRate

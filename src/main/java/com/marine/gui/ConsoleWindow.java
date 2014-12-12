@@ -179,10 +179,10 @@ public class ConsoleWindow extends OutputStream {
         this.write(new String(s));
     }
 
-    public void write(String s) {
+    public void write(String s) { synchronized(console) {
         console.add(format(s));
         update();
-    }
+    }}
 
     public void clear() {
         console.clear();
