@@ -30,6 +30,7 @@ public class ConnectionThread extends Thread {
     //TODO: SOME KIND OF DDOS PROTECTION!
 
     public ConnectionThread(NetworkManager manager) {
+    	super("ServerConnector");
         network = manager;
     }
 
