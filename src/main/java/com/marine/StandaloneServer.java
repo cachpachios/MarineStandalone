@@ -68,6 +68,7 @@ public class StandaloneServer implements Listener {
     private Gamemode standard_gamemode = Gamemode.SURVIVAL;
     private boolean shouldRun;
     private String newMOTD = null;
+    private boolean initialized = false;
 
     public StandaloneServer(final MainComponent.StartSettings settings) throws Throwable {
         this.port = settings.port;
@@ -139,7 +140,7 @@ public class StandaloneServer implements Listener {
         return players;
     }
 
-    private void run() {
+    private void init() {
         Logging.getLogger().logf("Starting MarineStandalone Server - Protocol Version §c§o%d§0 (Minecraft §c§o%s§0)",
                 ServerProperties.PROTOCOL_VERSION, ServerProperties.MINECRAFT_NAME);
         // Start the networking stuffz
@@ -151,53 +152,24 @@ public class StandaloneServer implements Listener {
         // Open connection
         // Load in and enable plugins
         this.loadPlugins();
-        // Timings for loop
-        long startTime = System.nanoTime();
-        long lastTime = startTime;
-        long lastRunTime = startTime;
-        int ups = 0;
-        // Main loop
-        while (shouldRun) {
-            startTime = System.nanoTime(); // Nanotime
-            if ((startTime - lastRunTime) < skipTime) {
-                int sleepTime = (int) (skipTime - (startTime - lastRunTime));
-                if (sleepTime > 0)
-                    try {
-                        Thread.sleep(sleepTime / 1000000, sleepTime % 1000);
-                    } catch (InterruptedException ignored) { /* TODO Should this really be ignored? */ }
-                continue;
-            }
-            lastRunTime = startTime;
-            if (startTime - lastTime >= 1000000000) {
-                ticks = ups;
-                players.updateThemAll();
-                ups = 0;
-                lastTime = startTime;
-            }
+        initialized = true;
+    }
 
-            if (ups >= targetTickRate)
-                continue;
-
-            // Check for network connections
-            network.tryConnections();
-
-            // Advance the tick clock.
-            try {
-                this.players.tickAllPlayers();
-                this.worlds.tick();
-                this.scheduler.tickSync();
-                // Should really not be static
-                // TODO Fix this
-                ServerProperties.tick();
-            } catch (Throwable e) {
-                // Oh noes :(
-                e.printStackTrace();
-            }
-
-            // ++# instead of ups++, as we are not using it as reference when increasing the value
-            // Not too big of a deal, but it's good practise.
-            // http://stackoverflow.com/questions/4752761/the-difference-between-n-vs-n-in-java
-            ++ups;
+    public void run() {
+        if (!this.initialized)
+            init();
+        players.updateThemAll();
+        network.tryConnections();
+        try {
+            this.players.tickAllPlayers();
+            this.worlds.tick();
+            this.scheduler.tickSync();
+            // Should really not be static
+            // TODO Fix this
+            ServerProperties.tick();
+        } catch (Throwable e) {
+            // Oh noes :(
+            e.printStackTrace();
         }
     }
 
@@ -208,7 +180,7 @@ public class StandaloneServer implements Listener {
         // Disable all plugins
         pluginLoader.disableAllPlugins();
         // Should not run, smart stuff
-        shouldRun = false;
+        MainComponent.mainTimer.cancel();
         // Save all json configs
         jsonHandler.saveAll();
         // When finished

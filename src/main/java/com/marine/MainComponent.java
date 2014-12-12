@@ -23,10 +23,13 @@ import com.marine.settings.ServerSettings;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainComponent {
 
     public static List<String> arguments;
+    public static Timer mainTimer;
 
     private static double getJavaVersion() {
         try {
@@ -90,7 +93,18 @@ public class MainComponent {
         if (!ServerProperties.BUILD_STABLE)
             Logging.getLogger().warn("You are running an unstable build");
         // Start the server
-        server.start();
+        // server.start();
+        startTimer(server, tickrate);
+    }
+
+    private static void startTimer(final StandaloneServer server, final int tickrate) {
+        mainTimer = new Timer("mainTimer");
+        mainTimer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                server.run();
+            }
+        }, 0l, (1000 / tickrate));
     }
 
     private static int getInteger(String argument) {

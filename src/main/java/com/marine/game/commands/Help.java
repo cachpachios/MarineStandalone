@@ -24,7 +24,7 @@ import com.marine.game.chat.ChatColor;
 import com.marine.game.command.Command;
 import com.marine.game.command.CommandSender;
 
-import java.util.List;
+import java.util.Collection;
 
 /**
  * Created 2014-12-05 for MarineStandalone
@@ -39,7 +39,7 @@ public class Help extends Command {
 
     @Override
     public void execute(CommandSender sender, String[] arguments) {
-        List<Command> commands = CommandManager.getInstance().getCommands();
+        Collection<Command> commands = CommandManager.getInstance().getCommands();
         StringBuilder message = new StringBuilder();
         message.append(ChatColor.BLUE).append("§lCommands:");
         for (Command command : commands) {

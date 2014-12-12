@@ -19,13 +19,10 @@
 
 package com.marine.game;
 
-import com.google.common.collect.HashBiMap;
 import com.marine.game.command.Command;
+import com.marine.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created 2014-12-01 for MarineStandalone
@@ -36,12 +33,10 @@ public class CommandManager {
 
     private static CommandManager instance;
     // These are already async-optimized
-    private final Map<Command, List<String>> commandMap;
     private final Map<String, Command> stringMap;
 
     public CommandManager() {
-        commandMap = HashBiMap.create();
-        stringMap = HashBiMap.create();
+        stringMap = new HashMap<>();
     }
 
     public static CommandManager getInstance() {
@@ -51,27 +46,29 @@ public class CommandManager {
     }
 
     public Command getCommand(String cmd) {
-        if (stringMap.containsKey(cmd))
+        try {
             return stringMap.get(cmd);
-        return null;
+        } catch (NullPointerException e) {
+            return null;
+        }
     }
 
     public void registerCommand(Command command) throws RuntimeException {
-        synchronized (commandMap) {
-            synchronized (stringMap) {
-                if (stringMap.containsKey(command.toString())) {
-                    throw new RuntimeException(String.format("Command Name '%s' is already taken", command.toString()));
-                }
-                stringMap.put(command.toString(), command);
-                List<String> s = new ArrayList<>(Arrays.asList(command.getAliases()));
-                s.add(command.toString());
-                commandMap.put(command, s);
-            }
-        } // Synchornization end.
+        if (stringMap.containsKey(command.toString()))
+            throw new RuntimeException(StringUtils.format("Command Name '%s' is already taken", command));
+        List<String> ss = new ArrayList<>();
+        stringMap.put(command.toString(), command);
+        for (String s : command.getAliases()) {
+            if (stringMap.containsKey(s))
+                ss.add(s);
+            else
+                stringMap.put(s, command);
+        }
+        command.getAliases().removeAll(ss);
     }
 
-    public List<Command> getCommands() {
-        return new ArrayList<>(commandMap.keySet());
+    public Collection<Command> getCommands() {
+        return stringMap.values();
     }
 
 }

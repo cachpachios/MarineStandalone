@@ -25,6 +25,7 @@ import com.marine.util.Location;
 import com.marine.world.entity.Entity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -43,7 +44,7 @@ public abstract class Command {
     /**
      * Command aliases
      */
-    private final String[] aliases;
+    private final List<String> aliases;
 
     /**
      * Command description
@@ -59,7 +60,7 @@ public abstract class Command {
      */
     public Command(String command, String[] aliases, String description) {
         this.command = command.toLowerCase();
-        this.aliases = aliases == null ? new String[]{} : aliases;
+        this.aliases = new ArrayList<>(Arrays.asList(aliases == null ? new String[]{} : aliases));
         this.description = description;
     }
 
@@ -73,7 +74,7 @@ public abstract class Command {
      *
      * @return Array containing aliases
      */
-    public String[] getAliases() {
+    public List<String> getAliases() {
         return aliases;
     }
 

@@ -2,5 +2,19 @@
     "name": "TestPlugin",
     "author": "Citymonstret",
     "main": "test.plugin.PluginMain",
-    "version": "First"
+    "version": "First",
+    "potato": {
+        "x": [
+            0,
+            10,
+            120,
+            38
+        ],
+        "y": {
+            "entity": "bunny",
+            "fly": "cow",
+            "cat": false
+        },
+        "null": "not null..."
+    }
 }

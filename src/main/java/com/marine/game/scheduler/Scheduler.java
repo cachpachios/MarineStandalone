@@ -22,7 +22,6 @@ package com.marine.game.scheduler;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
-import java.lang.ref.WeakReference;
 import java.util.Map;
 
 /**
@@ -30,7 +29,7 @@ import java.util.Map;
  *
  * @author Citymonstret
  */
-public class Scheduler extends Thread {
+public class Scheduler {
 
     private final BiMap<Long, MarineRunnable> asyncRunnables;
     private final BiMap<Long, MarineRunnable> syncRunnables;
@@ -95,16 +94,15 @@ public class Scheduler extends Thread {
         return id;
     }
 
-    @Override
     public void run() {
         tickAsync();
     }
 
     public void forceGC(MarineRunnable runnable) {
-        WeakReference ref = new WeakReference<>(runnable);
-        runnable = null;
-        while (ref.get() != null) {
-            System.gc();
-        }
+        // WeakReference ref = new WeakReference<>(runnable);
+        // runnable = null;
+        // while (ref.get() != null) {
+        //     System.gc();
+        // }
     }
 }

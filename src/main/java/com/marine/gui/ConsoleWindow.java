@@ -57,7 +57,6 @@ public class ConsoleWindow extends OutputStream {
         console = new ArrayList<String>();
         this.showHTML = false;
         text = new JTextPane();
-        input = new JTextPane();
     }
 
     public void initWindow() {
@@ -122,7 +121,7 @@ public class ConsoleWindow extends OutputStream {
                                 "Aliases",
                                 "Description",
                         };
-                        List<Command> cmds = CommandManager.getInstance().getCommands();
+                        List<Command> cmds = new ArrayList<>(CommandManager.getInstance().getCommands());
                         Object[][] objects = new Object[cmds.size()][];
                         Command c;
                         for (int x = 0; x < cmds.size(); x++) {

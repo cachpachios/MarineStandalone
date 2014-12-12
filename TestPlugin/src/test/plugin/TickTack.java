@@ -11,13 +11,13 @@ import com.marine.plugins.Plugin;
 public class TickTack extends MarineRunnable {
 
     private final Plugin plugin;
+    long t = 1L;
 
     public TickTack(final Plugin plugin) {
-        super(20l, -1l);
+        super(20l, -1);
         this.plugin = plugin;
     }
 
-    long t = 1L;
     @Override
     public void run() {
         if(t++ % 2 == 0) {
