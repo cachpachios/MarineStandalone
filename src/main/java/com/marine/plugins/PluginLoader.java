@@ -45,6 +45,10 @@ public class PluginLoader {
     static {
         System.getSecurityManager().checkPermission(MarineSecurityManager.MARINE_PERMISSION);
     }
+
+    /* Instance */ {
+        System.getSecurityManager().checkPermission(MarineSecurityManager.MARINE_PERMISSION);
+    }
     // SECURITY CHECK END //////////////////////////////////////////////////////////////////////////////////////////////
 
     private final ConcurrentMap<String, PluginClassLoader> loaders;
