@@ -37,6 +37,13 @@ import java.util.function.Consumer;
  */
 public class PlayerList extends ArrayList<Short> implements Listener {
 
+    /**
+     * Constructor
+     *
+     * @param c                  Collection (Players/UUIDs/Shorts) to pre-init with
+     * @param registerAsListener Register this a listener (listen to logoutEvent)
+     * @param removeOffline      Remove offline players (init)
+     */
     public PlayerList(final Collection c, final boolean registerAsListener, final boolean removeOffline) {
         if (c != null && !c.isEmpty()) {
             for (final Object o : c) {
@@ -69,10 +76,20 @@ public class PlayerList extends ArrayList<Short> implements Listener {
             Marine.getServer().registerListener(this);
     }
 
-    public PlayerList(final boolean registerAsListener, final boolean removeOffline) {
-        this(null, registerAsListener, removeOffline);
+    /**
+     * Constructor (with no base collection)
+     *
+     * @param registerAsListener Register this a listener (listen to logoutEvent)
+     */
+    public PlayerList(final boolean registerAsListener) {
+        this(null, registerAsListener, false);
     }
 
+    /**
+     * Constructor
+     *
+     * Will not register listener, and will not pre-init
+     */
     public PlayerList() {
         this(null, false, false);
     }
@@ -84,6 +101,12 @@ public class PlayerList extends ArrayList<Short> implements Listener {
             this.remove(p);
     }
 
+    /**
+     * Get a collection containing all players
+     * (WARNING) CAN BE SLOW!
+     *
+     * @return Players
+     */
     public Collection<Player> getPlayers() {
         final Collection<Player> players = new ArrayList<>();
         for (final Object s : this)
@@ -99,6 +122,12 @@ public class PlayerList extends ArrayList<Short> implements Listener {
         return getPlayers().contains(Marine.getPlayer(uuid));
     }
 
+    /**
+     * Check if the list contains the player
+     *
+     * @param player Player
+     * @return true if the player is in the list
+     */
     public boolean contains(final Player player) {
         return super.contains(player.getUID());
     }
@@ -128,10 +157,20 @@ public class PlayerList extends ArrayList<Short> implements Listener {
         this.add(Marine.getPlayer(uuid));
     }
 
+    /**
+     * Add a player to the list
+     *
+     * @param player to add
+     */
     public void add(final Player player) {
         super.add(player.getUID());
     }
 
+    /**
+     * Remove a player from the list
+     *
+     * @param player
+     */
     public void remove(final Player player) {
         super.remove(((Object) player.getUID()));
     }
@@ -149,16 +188,33 @@ public class PlayerList extends ArrayList<Short> implements Listener {
         return super.toArray((Short[]) new Object[size()]);
     }
 
+    /**
+     * Get a player based on the index
+     *
+     * @param n Index
+     *
+     * @return Player from index
+     */
     public Player getPlayer(final int n) {
         return Marine.getPlayer(super.get(n));
     }
 
+    /**
+     * Perform an action for each player
+     *
+     * @param f action to perform
+     */
     public void foreach(final Consumer<Player> f) {
         for (final short s : this) {
             f.accept(Marine.getPlayer(s));
         }
     }
 
+    /**
+     * Get the player iterator
+     *
+     * @return player iterator
+     */
     public Iterator<Player> getIterator() {
         return getPlayers().iterator();
     }
@@ -175,6 +231,5 @@ public class PlayerList extends ArrayList<Short> implements Listener {
         }
         return true;
     }
-
 
 }

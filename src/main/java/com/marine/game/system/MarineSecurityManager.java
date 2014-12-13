@@ -17,47 +17,17 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package com.marine.net.login;
+package com.marine.game.system;
 
-import com.marine.game.chat.ChatColor;
-import com.marine.game.chat.builder.Chat;
-import com.marine.io.data.ByteData;
-import com.marine.net.Packet;
-import com.marine.net.PacketOutputStream;
-import com.marine.net.States;
+/**
+ * Created 2014-12-13 for MarineStandalone
+ *
+ * @author Citymonstret
+ */
+public class MarineSecurityManager extends SecurityManager {
 
-import java.io.IOException;
-
-public class DisconnectPacket extends Packet {
-
-    String msg;
-
-    public DisconnectPacket(String msg) {
-        this.msg = msg;
-    }
-
-    @Override
-    public int getID() {
-        return 0x00;
-    }
-
-    @Override
-    public void writeToStream(PacketOutputStream stream) throws IOException {
-        ByteData data = new ByteData();
-        data.writeUTF8(new Chat(msg).format(ChatColor.BOLD).color(ChatColor.WHITE).toString() /* new ChatComponent(msg, true, true, false, false, ChatColor */);
-
-        stream.write(getID(), data);
-    }
-
-    @Override
-    public void readFromBytes(ByteData input) {
-        // TODO Auto-generated method stub
+    private void checkRestricted(String text) {
 
     }
 
-    @Override
-    public States getPacketState() {
-        // TODO Auto-generated method stub
-        return null;
-    }
 }

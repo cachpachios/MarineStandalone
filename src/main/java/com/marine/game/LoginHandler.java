@@ -60,12 +60,24 @@ public class LoginHandler {
         if (playerManager.isPlayerOnline(uuid))
             return new LoginResponse("Failed to login player is already connected.");
 
-        //TODO: Check if player is banned in that case drop them.
+        // Check for bans
+        if (Marine.isBanned(uuid)) {
+            return new LoginResponse("Banned from the server");
+        }
+        // Check if the IP is banned
+        if (Marine.isBanned(c.getAdress())) {
+            return new LoginResponse("IP Banned from the server");
+        }
 
         IPlayer p = new AbstractPlayer(playerManager.getServer(), playerManager.getServer().getWorldManager().getMainWorld(), new PlayerID(name, uuid), c, new PlayerAbilities(false, true, false, 0.2f, 0.2f), spawnLocation);
 
-        // c.setUserName(name);
-        c.setUID(playerManager.getNextUID());
+        short uid = UIDGenerator.instance().getUID(name);
+        if (uid == Short.MIN_VALUE) {
+            new RuntimeException(
+                    String.format("UID Error: (%d) < (%d) for '%s'", uid, Short.MIN_VALUE, name)
+            ).printStackTrace();
+            return new LoginResponse("Failed to log you in. (UID < accepted)");
+        }
 
         return new LoginResponse(p);
     }
@@ -81,7 +93,6 @@ public class LoginHandler {
         Marine.getServer().callEvent(event);
         playerManager.joinGame(p);
         playerManager.getChat().sendJoinMessage(p, event.getJoinMessage());
-
 
         //p.getClient().sendPacket(new PlayerListHeaderPacket("&cWelcome to the server", "&6" + player.getName())); //TODO: Custom msg and event :D and togglable
 

@@ -43,7 +43,7 @@ public class PlayerManager {
     // private Map<UUID, Player> playerIDs;
     private final Map<Short, Player> uids;
     private final Map<String, Player> playerNames;
-    private short uid = Short.MIN_VALUE;
+
     private LoginHandler loginManager;
     private TimeoutManager timeout;
 
@@ -85,10 +85,6 @@ public class PlayerManager {
             p.update();
             p.sendTime();
         }
-    }
-
-    public short getNextUID() {
-        return ++uid;
     }
 
     public StandaloneServer getServer() {

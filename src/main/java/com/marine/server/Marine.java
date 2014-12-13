@@ -25,6 +25,7 @@ import com.marine.game.scheduler.Scheduler;
 import com.marine.player.Player;
 import com.marine.world.World;
 
+import java.net.InetAddress;
 import java.util.Collection;
 import java.util.UUID;
 
@@ -117,4 +118,11 @@ public class Marine {
         return getServer().getPlayer(uid);
     }
 
+    public static boolean isBanned(UUID uuid) {
+        return false;
+    }
+
+    public static boolean isBanned(InetAddress addres) {
+        return false;
+    }
 }
