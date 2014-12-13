@@ -94,7 +94,6 @@ public class PluginLoader {
             }
         }
         copyConfigIfExists(file, data);
-        Logging.getLogger().logf(file.getName() + " data folder copied, total size: %dkb", FileUtils.getSize(data) / 1024);
         PluginClassLoader loader;
         try {
             loader = new PluginClassLoader(this, desc, file);
@@ -104,6 +103,16 @@ public class PluginLoader {
         loaders.put(desc.name, loader);
         loader.create(loader.plugin);
         manager.addPlugin(loader.plugin);
+        if (new File(data, "lib").exists()) {
+            File[] files = new File(data, "lib").listFiles(new JarFilter());
+            for (File f : files) {
+                try {
+                    loader.loadJar(f);
+                } catch (Exception e) {
+                    new PluginHandlerException(this, "Could not load in lib " + f.getName(), e).printStackTrace();
+                }
+            }
+        }
         return loader.plugin;
     }
 
@@ -166,19 +175,37 @@ public class PluginLoader {
         List<JarEntry> entryList = new ArrayList<>();
         while (entries.hasMoreElements()) {
             entry = entries.nextElement();
-            if (!entry.getName().equalsIgnoreCase("desc.json") && (entry.getName().endsWith(".json") ||
+            if (!entry.getName().equalsIgnoreCase("desc.json") && (entry.getName().endsWith(".json") || entry.getName().endsWith(".jar") ||
                     entry.getName().endsWith(".properties") || entry.getName().endsWith(".sql") || entry.getName().endsWith(".db"))) {
                 entryList.add(entry);
             }
         }
         for (JarEntry e : entryList) {
-            if (new File(destination, e.getName()).exists())
-                continue;
-            try {
-                FileUtils.copyFile(jar.getInputStream(e),
-                        new BufferedOutputStream(new FileOutputStream(new File(destination, e.getName()))), 1024 * 1024);
-            } catch (IOException exz) {
-                new PluginHandlerException(this, "Could not load in entry...", exz).printStackTrace();
+            if (!e.getName().endsWith(".jar")) {
+                if (new File(destination, e.getName()).exists())
+                    continue;
+                try {
+                    FileUtils.copyFile(jar.getInputStream(e),
+                            new BufferedOutputStream(new FileOutputStream(new File(destination, e.getName()))), 1024 * 1024 * 5);
+                } catch (IOException exz) {
+                    new PluginHandlerException(this, "Could not load in entry...", exz).printStackTrace();
+                }
+            } else {
+                File lib = new File(destination, "lib");
+                if (!lib.exists()) {
+                    if (!lib.mkdir()) {
+                        Logging.getLogger().error("Could not create " + lib.getPath());
+                        continue;
+                    }
+                }
+                if (new File(lib, e.getName()).exists())
+                    continue;
+                try {
+                    FileUtils.copyFile(jar.getInputStream(e),
+                            new BufferedOutputStream(new FileOutputStream(new File(lib, e.getName()))), 1024 * 1024 * 5);
+                } catch (IOException exz) {
+                    new PluginHandlerException(this, "Could not copy jar file", exz).printStackTrace();
+                }
             }
         }
     }

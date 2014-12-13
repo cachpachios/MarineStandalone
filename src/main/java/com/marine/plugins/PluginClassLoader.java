@@ -66,6 +66,16 @@ public class PluginClassLoader extends URLClassLoader {
         }
     }
 
+    public void loadJar(File file) throws PluginHandlerException {
+        if (!file.getName().endsWith(".jar"))
+            throw new PluginHandlerException(this, file.getName() + " is not a jar file", new IllegalArgumentException(file.getName() + " is of wrong type"));
+        try {
+            super.addURL(file.toURI().toURL());
+        } catch (MalformedURLException e) {
+            throw new PluginHandlerException(this, "Could not load jar", e);
+        }
+    }
+
     @Override
     protected Class<?> findClass(String name) throws ClassNotFoundException {
         return this.findClass(name, true);
