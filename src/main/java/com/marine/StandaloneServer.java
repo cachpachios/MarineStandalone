@@ -142,8 +142,6 @@ public class StandaloneServer implements Listener {
     }
 
     private void init() {
-        Logging.getLogger().logf("Starting MarineStandalone Server - Protocol Version §c§o%d§0 (Minecraft §c§o%s§0)",
-                ServerProperties.PROTOCOL_VERSION, ServerProperties.MINECRAFT_NAME);
         // Start the networking stuffz
         if (this.network == null) {
             this.network = new NetworkManager(this, port, ServerSettings.getInstance().useHasing);
