@@ -76,6 +76,8 @@ public class Plugin {
 
     /**
      * Used to enable the plugin
+     *
+     * @throws com.marine.plugins.PluginException If the plugin is already enabled, or if couldn't be enabled
      */
     final public void enable() {
         if (this.enabled)
@@ -92,6 +94,8 @@ public class Plugin {
 
     /**
      * Used to disable the plugin
+     *
+     * @throws com.marine.plugins.PluginException if it isn't enabled
      */
     final public void disable() {
         if (!this.enabled)

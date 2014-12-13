@@ -64,7 +64,7 @@ public class Marine {
      * @param username Username
      * @return Player
      */
-    public static Player getPlayer(String username) {
+    public static Player getPlayer(final String username) {
         return null;
     }
 
@@ -74,8 +74,8 @@ public class Marine {
      * @param uuid player uuid
      * @return player or null
      */
-    public static Player getPlayer(UUID uuid) {
-        for (Player player : getPlayers())
+    public static Player getPlayer(final UUID uuid) {
+        for (final Player player : getPlayers())
             if (player.getUUID().equals(uuid))
                 return player;
         return null;
@@ -87,7 +87,7 @@ public class Marine {
      * @param name World Name
      * @return World or null
      */
-    public static World getWorld(String name) {
+    public static World getWorld(final String name) {
         return server.getWorld(name);
     }
 
@@ -109,7 +109,7 @@ public class Marine {
 
     // IGNORE
     @Protected
-    public static void setServer(MarineServer marine) {
+    public static void setServer(final MarineServer marine) {
         // Security Check Start
         System.getSecurityManager().checkPermission(MarineSecurityManager.MARINE_PERMISSION);
         // Security Check end
@@ -161,8 +161,8 @@ public class Marine {
      *
      * @param string message
      */
-    public static void broadcastMessage(String string) {
-        for (Player player : getPlayers()) {
+    public static void broadcastMessage(final String string) {
+        for (final Player player : getPlayers()) {
             player.sendMessage(string);
         }
         Logging.getLogger().log(string);
@@ -173,8 +173,8 @@ public class Marine {
      *
      * @param chat message
      */
-    public static void broadcastMessage(Chat chat) {
-        for (Player player : getPlayers()) {
+    public static void broadcastMessage(final Chat chat) {
+        for (final Player player : getPlayers()) {
             player.sendMessage(chat);
         }
         Logging.getLogger().log("Raw Chat Sent: " + chat.toString());
@@ -186,7 +186,7 @@ public class Marine {
      * @param uid Unique ID
      * @return Player or null
      */
-    public static Player getPlayer(short uid) {
+    public static Player getPlayer(final short uid) {
         return getServer().getPlayer(uid);
     }
 
