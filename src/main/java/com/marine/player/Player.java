@@ -278,7 +278,6 @@ public class Player extends Entity implements IPlayer, CommandSender {
 
     @Override
     public void sendMessage(ChatComponent message) {
-
     }
 
     public boolean isOnline() {

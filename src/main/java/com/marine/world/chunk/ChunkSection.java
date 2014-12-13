@@ -20,16 +20,24 @@
 package com.marine.world.chunk;
 
 import com.marine.io.data.ByteData;
+import com.marine.util.Position;
+import com.marine.world.Block;
 import com.marine.world.BlockID;
 
 public class ChunkSection {
+    public Chunk chunk;
     private int sectionID;
-
-    private char[] blockMap;
+    private Block[] blockMap;
 
     public ChunkSection(int y) {
         this.sectionID = y;
-        this.blockMap = new char[16 * 16 * 16];
+        this.blockMap = new Block[16 * 16 * 16];
+    }
+
+    public ChunkSection(int y, Chunk chunk) {
+        this.sectionID = y;
+        this.chunk = chunk;
+        this.blockMap = new Block[16 * 16 * 16];
     }
 
     public static int getIndex(int x, int y, int z) {
@@ -38,9 +46,9 @@ public class ChunkSection {
 
     public ByteData getBlockData() {
         ByteData data = new ByteData();
-        for (char id : blockMap) {
-            data.writeend((byte) (id & 0xff));
-            data.writeend((byte) (id >> 8));
+        for (Block id : blockMap) {
+            data.writeend((byte) (getID(id) & 0xff));
+            data.writeend((byte) (getID(id) >> 8));
         }
         return data;
     }
@@ -48,7 +56,7 @@ public class ChunkSection {
     public ByteData getSkyLightData() {
         ByteData data = new ByteData();
         boolean skip = false;
-        for (char id : blockMap) { //TODO LightMap
+        for (Block id : blockMap) { //TODO LightMap
             if (!skip) {
                 data.writeend((byte) -1);
                 skip = true;
@@ -61,7 +69,7 @@ public class ChunkSection {
     public ByteData getBlockLightData() {
         ByteData data = new ByteData();
         boolean skip = false;
-        for (char id : blockMap) { //TODO LightMap
+        for (Block id : blockMap) { //TODO LightMap
             if (!skip) {
                 data.writeend((byte) -1);
                 skip = true;
@@ -72,11 +80,16 @@ public class ChunkSection {
     }
 
     public void setBlock(int x, int y, int z, BlockID id) {
-        blockMap[getIndex(x, y, z)] = (char) (id.getID() << 4);
+        // blockMap[getIndex(x, y, z)] = (char) (id.getID() << 4);
+        setBlock(new Position(x, y, z), new Block(new Position(x, y, z), chunk, -1, id));
+    }
+
+    public void setBlock(Position pos, Block block) {
+        blockMap[getIndex(pos.getX(), pos.getY(), pos.getZ())] = block;
     }
 
     public char getBlockID(int x, int y, int z) {
-        return blockMap[getIndex(x, y, z)];
+        return getID(blockMap[getIndex(x, y, z)]);
     }
 
     public BlockID getBlock(int x, int y, int z) {
@@ -85,6 +98,11 @@ public class ChunkSection {
 
     public int getID() {
         return sectionID;
+    }
+
+    public char getID(Block block) {
+        if (block == null) return (char) 0;
+        return (char) (block.getType().getID() << 4);
     }
 
 }
