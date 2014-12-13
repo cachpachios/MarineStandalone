@@ -66,7 +66,7 @@ public class PluginClassLoader extends URLClassLoader {
         }
     }
 
-    public void loadJar(File file) throws PluginHandlerException {
+    public void loadJar(final File file) throws PluginHandlerException {
         if (!file.getName().endsWith(".jar"))
             throw new PluginHandlerException(this, file.getName() + " is not a jar file", new IllegalArgumentException(file.getName() + " is of wrong type"));
         try {
@@ -77,16 +77,15 @@ public class PluginClassLoader extends URLClassLoader {
     }
 
     @Override
-    protected Class<?> findClass(String name) throws ClassNotFoundException {
+    protected Class<?> findClass(final String name) throws ClassNotFoundException {
         return this.findClass(name, true);
     }
 
-    protected Class<?> findClass(String name, boolean global) throws ClassNotFoundException {
+    protected Class<?> findClass(final String name, final boolean global) throws ClassNotFoundException {
         Class<?> clazz = null;
         if (classes.containsKey(name)) {
             clazz = classes.get(name);
-        }
-        if (clazz == null) {
+        } else {
             if (global)
                 clazz = loader.getClassByName(name);
             if (clazz == null) {
@@ -103,7 +102,7 @@ public class PluginClassLoader extends URLClassLoader {
         return classes.keySet();
     }
 
-    synchronized void create(Plugin plugin) {
+    synchronized void create(final Plugin plugin) {
         if (this.init != null)
             throw new RuntimeException(plugin.getName() + " is already created");
         this.init = plugin;

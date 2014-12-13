@@ -19,8 +19,6 @@
 
 package com.marine.plugins;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
 import com.marine.Logging;
 import com.marine.util.FileUtils;
 import sun.misc.JarFilter;
@@ -30,6 +28,8 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -40,12 +40,14 @@ import java.util.jar.JarFile;
  */
 public class PluginLoader {
 
-    private final BiMap<String, PluginClassLoader> loaders = HashBiMap.create();
-    private final BiMap<String, Class> classes = HashBiMap.create();
+    private final ConcurrentMap<String, PluginClassLoader> loaders;
+    private final ConcurrentMap<String, Class> classes;
     private final PluginManager manager;
 
     public PluginLoader(PluginManager manager) {
         this.manager = manager;
+        this.loaders = new ConcurrentHashMap<>();
+        this.classes = new ConcurrentHashMap<>();
     }
 
     public PluginManager getManager() {
