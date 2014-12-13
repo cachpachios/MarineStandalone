@@ -20,6 +20,7 @@
 package com.marine.plugins;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -59,7 +60,16 @@ public class PluginManager {
         plugin.disable();
     }
 
-    public List<Plugin> getPlugins() {
+    public Collection<Plugin> getPlugins() {
         return this.plugins;
+    }
+
+    public Collection<Plugin> getEnabledPlugins() {
+        final Collection<Plugin> plugins = new ArrayList<>();
+        for (final Plugin plugin : this.plugins) {
+            if (plugin.isEnabled())
+                plugins.add(plugin);
+        }
+        return plugins;
     }
 }

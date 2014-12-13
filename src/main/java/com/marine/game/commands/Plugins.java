@@ -21,11 +21,8 @@ package com.marine.game.commands;
 
 import com.marine.game.command.Command;
 import com.marine.game.command.CommandSender;
-import com.marine.plugins.Plugin;
 import com.marine.server.Marine;
 import com.marine.util.StringUtils;
-
-import java.util.List;
 
 /**
  * Created 2014-12-10 for MarineStandalone
@@ -41,8 +38,6 @@ public class Plugins extends Command {
 
     @Override
     public void execute(CommandSender sender, String[] arguments) {
-        List<Plugin> plugins = Marine.getServer().getServer().getPluginLoader().getManager().getPlugins();
-        String str = StringUtils.join(plugins, ", ");
-        sender.sendMessage("Plugins: " + str);
+        sender.sendMessage("Plugins: " + StringUtils.join(Marine.getServer().getServer().getPluginLoader().getManager().getPlugins(), ", "));
     }
 }

@@ -70,7 +70,7 @@ public class PluginLoader {
     }
 
     public void enableAllPlugins() {
-        for (Plugin plugin : manager.getPlugins()) {
+        for (final Plugin plugin : manager.getPlugins()) {
             enablePlugin(plugin);
         }
     }
