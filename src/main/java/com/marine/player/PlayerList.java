@@ -132,7 +132,7 @@ public class PlayerList extends ArrayList<Short> implements Listener {
      * @param player Player
      * @return true if the player is in the list
      */
-    public synchronized boolean contains(final Player player) {
+    final public synchronized boolean contains(final Player player) {
         return super.contains(player.getUID());
     }
 
@@ -146,22 +146,22 @@ public class PlayerList extends ArrayList<Short> implements Listener {
     }
 
     @Override
-    public synchronized int size() {
+    final public synchronized int size() {
         return super.size();
     }
 
     @Override
-    public synchronized boolean add(final Short s) {
+    final public synchronized boolean add(final Short s) {
         return super.add(s);
     }
 
     @Override
-    public synchronized Short get(int n) {
+    final public synchronized Short get(int n) {
         return super.get(n);
     }
 
     @Override
-    public synchronized boolean remove(final Object s) {
+    final public synchronized boolean remove(final Object s) {
         return super.remove(s);
     }
 
@@ -186,7 +186,7 @@ public class PlayerList extends ArrayList<Short> implements Listener {
      *
      * @param player to add
      */
-    public synchronized void add(final Player player) {
+    final public synchronized void add(final Player player) {
         super.add(player.getUID());
     }
 
@@ -195,7 +195,7 @@ public class PlayerList extends ArrayList<Short> implements Listener {
      *
      * @param player
      */
-    public synchronized void remove(final Player player) {
+    final public synchronized void remove(final Player player) {
         super.remove(((Object) player.getUID()));
     }
 
@@ -230,7 +230,7 @@ public class PlayerList extends ArrayList<Short> implements Listener {
      *
      * @param f action to perform
      */
-    public synchronized void foreach(final Consumer<Player> f) {
+    final public synchronized void foreach(final Consumer<Player> f) {
         for (final short s : this) {
             f.accept(Marine.getPlayer(s));
         }
@@ -246,7 +246,8 @@ public class PlayerList extends ArrayList<Short> implements Listener {
     }
 
     @Override
-    public boolean addAll(final Collection c) {
+    final public boolean addAll(final Collection c) {
+        boolean all = true;
         for (final Object o : c) {
             if (o instanceof Player)
                 this.add((Player) o);
@@ -256,8 +257,10 @@ public class PlayerList extends ArrayList<Short> implements Listener {
                 }
             else if (o instanceof UUID)
                 this.add((UUID) o);
+            else
+                all = false;
         }
-        return true;
+        return all;
     }
 
 }
