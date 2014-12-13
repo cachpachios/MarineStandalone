@@ -19,6 +19,7 @@
 
 package com.marine.util;
 
+import com.marine.util.vectors.Vector3i;
 import com.marine.world.chunk.ChunkPos;
 import org.json.JSONObject;
 

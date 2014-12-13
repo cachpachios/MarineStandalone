@@ -32,10 +32,18 @@ import java.util.UUID;
 /**
  * Created 2014-12-02 for MarineStandalone
  *
+ * MarineServer interface
+ *
  * @author Citymonstret
+ * @author Fozie
  */
 public interface MarineServer {
 
+    /**
+     * Get the StandaloneServer instance
+     *
+     * @return instance
+     */
     public StandaloneServer getServer();
 
     /**
@@ -91,17 +99,46 @@ public interface MarineServer {
      */
     public Player getPlayer(String username);
 
+    /**
+     * Register an event listener
+     *
+     * @param listener event listener
+     */
     public void registerListener(Listener listener);
 
+    /**
+     * UnRegister an event listener
+     *
+     * @param listener event listener
+     */
     public void unregisterListener(Listener listener);
 
+    /**
+     * Call an event
+     *
+     * @param event to call
+     */
     public void callEvent(MarineEvent event);
 
+    /**
+     * Get the current MOTD
+     *
+     * @return current MOTD
+     */
     public String getMOTD();
 
+    /**
+     * Get the max player count
+     *
+     * @return max player count
+     */
     public int getMaxPlayers();
 
+    /**
+     * Set the amount of max players
+     *
+     * @param n max players
+     */
     public void setMaxPlayers(int n);
-
 
 }

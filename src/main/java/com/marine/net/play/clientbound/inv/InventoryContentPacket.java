@@ -26,7 +26,7 @@ import com.marine.io.data.ByteData;
 import com.marine.net.Packet;
 import com.marine.net.PacketOutputStream;
 import com.marine.net.States;
-import com.marine.util.PacketWrapper;
+import com.marine.util.wrapper.PacketWrapper;
 
 import java.io.IOException;
 

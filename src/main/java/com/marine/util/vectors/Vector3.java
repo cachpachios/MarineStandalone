@@ -17,25 +17,33 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package com.marine.util;
+package com.marine.util.vectors;
 
 /**
- * Created 2014-12-12 for MarineStandalone
+ * Created 2014-12-01 for MarineStandalone
  *
  * @author Citymonstret
  */
-public abstract class Vector2<T extends Number> {
+public abstract class Vector3<T extends Number> {
 
-    public T x, y;
+    public T x, y, z;
 
-    public Vector2(final T x, final T y) {
+    /**
+     * Constructor
+     *
+     * @param x X Value
+     * @param y Y Value
+     * @param z Z Value
+     */
+    public Vector3(T x, T y, T z) {
         this.x = x;
         this.y = y;
+        this.z = z;
     }
 
-    public abstract void add(Vector2<T> v2);
+    public abstract void add(Vector3<T> v2);
 
-    public abstract void subtract(Vector2<T> v2);
+    public abstract void subtract(Vector3<T> v2);
 
     public abstract void multiply(int n);
 
@@ -57,11 +65,20 @@ public abstract class Vector2<T extends Number> {
         this.y = y;
     }
 
+    public T getZ() {
+        return this.z;
+    }
+
+    public void setZ(T z) {
+        this.z = z;
+    }
+
     @Override
     public int hashCode() {
         int hash = 37;
         hash = hash * 3 + getX().intValue();
         hash = hash * 3 + getY().intValue();
+        hash = hash * 3 + getZ().intValue();
         return hash;
     }
 }

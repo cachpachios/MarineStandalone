@@ -17,13 +17,14 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package com.marine.util;
+package com.marine.util.mojang;
 
 import com.google.common.base.Charsets;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.marine.player.Player;
 import com.marine.server.Marine;
+import com.marine.util.wrapper.StringWrapper;
 
 import java.util.HashMap;
 import java.util.UUID;

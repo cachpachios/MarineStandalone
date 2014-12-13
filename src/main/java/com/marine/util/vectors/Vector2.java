@@ -17,40 +17,51 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package com.marine.util;
+package com.marine.util.vectors;
 
 /**
  * Created 2014-12-12 for MarineStandalone
  *
  * @author Citymonstret
  */
-public class Vector2i extends Vector2<Integer> {
+public abstract class Vector2<T extends Number> {
 
-    public Vector2i(Integer x, Integer y) {
-        super(x, y);
+    public T x, y;
+
+    public Vector2(final T x, final T y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public abstract void add(Vector2<T> v2);
+
+    public abstract void subtract(Vector2<T> v2);
+
+    public abstract void multiply(int n);
+
+    public abstract void divide(int n);
+
+    public T getX() {
+        return this.x;
+    }
+
+    public void setX(T x) {
+        this.x = x;
+    }
+
+    public T getY() {
+        return this.y;
+    }
+
+    public void setY(T y) {
+        this.y = y;
     }
 
     @Override
-    public void add(Vector2<Integer> v2) {
-        setX(getX() + v2.getX());
-        setY(getY() + v2.getY());
-    }
-
-    @Override
-    public void subtract(Vector2<Integer> v2) {
-        setX(getX() - v2.getX());
-        setY(getY() - v2.getY());
-    }
-
-    @Override
-    public void multiply(int n) {
-        setX(getX() * n);
-        setY(getY() * n);
-    }
-
-    @Override
-    public void divide(int n) {
-        setX(getX() / n);
-        setY(getY() / n);
+    public int hashCode() {
+        int hash = 37;
+        hash = hash * 3 + getX().intValue();
+        hash = hash * 3 + getY().intValue();
+        return hash;
     }
 }

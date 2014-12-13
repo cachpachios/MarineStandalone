@@ -21,6 +21,7 @@ package com.marine;
 
 import com.marine.game.system.MarineSecurityManager;
 import com.marine.settings.ServerSettings;
+import com.marine.util.Protected;
 
 import java.io.File;
 import java.util.Arrays;
@@ -28,6 +29,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+@Protected
 public class MainComponent {
 
     public static List<String> arguments;

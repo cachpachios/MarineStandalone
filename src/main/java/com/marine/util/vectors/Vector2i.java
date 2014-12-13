@@ -17,24 +17,40 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package com.marine.game.item;
+package com.marine.util.vectors;
 
-import com.marine.io.data.ByteData;
-import com.marine.util.wrapper.PacketWrapper;
+/**
+ * Created 2014-12-12 for MarineStandalone
+ *
+ * @author Citymonstret
+ */
+public class Vector2i extends Vector2<Integer> {
 
-public class ItemSlot extends PacketWrapper<Item> {
-
-    public ItemSlot(Item itemID) {
-        super(itemID);
+    public Vector2i(Integer x, Integer y) {
+        super(x, y);
     }
 
     @Override
-    public ByteData toByteData() {
-        return null;
+    public void add(Vector2<Integer> v2) {
+        setX(getX() + v2.getX());
+        setY(getY() + v2.getY());
     }
 
     @Override
-    public Item readFromData(ByteData d) {
-        return null;
+    public void subtract(Vector2<Integer> v2) {
+        setX(getX() - v2.getX());
+        setY(getY() - v2.getY());
+    }
+
+    @Override
+    public void multiply(int n) {
+        setX(getX() * n);
+        setY(getY() * n);
+    }
+
+    @Override
+    public void divide(int n) {
+        setX(getX() / n);
+        setY(getY() / n);
     }
 }

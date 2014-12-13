@@ -17,39 +17,28 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package com.marine.util;
+package com.marine.util.vectors;
 
-public class Vector3i extends Vector3<Integer> {
+/**
+ * Created 2014-12-12 for MarineStandalone
+ *
+ * @author Citymonstret
+ */
+public class Vector3f extends Vector3<Float> {
 
-    public Vector3i() {
-        super(0, 0, 0);
-    }
-
-    public Vector3i(int t) {
-        super(t, t, t);
-    }
-
-    public Vector3i(int x, int y, int z) {
+    public Vector3f(Float x, Float y, Float z) {
         super(x, y, z);
     }
 
-    public double getLength() {
-        return Math.sqrt(getX() * getX() + getY() * getY() + getZ() * getZ());
-    }
-
-    public Vector3d toDoubleVector() {
-        return new Vector3d(getX(), getY(), getZ());
-    }
-
     @Override
-    public void add(Vector3<Integer> v2) {
+    public void add(Vector3<Float> v2) {
         setX(getX() + v2.getX());
         setY(getY() + v2.getY());
         setZ(getZ() + v2.getZ());
     }
 
     @Override
-    public void subtract(Vector3<Integer> v2) {
+    public void subtract(Vector3<Float> v2) {
         setX(getX() - v2.getX());
         setY(getY() - v2.getY());
         setZ(getZ() - v2.getZ());
@@ -68,5 +57,4 @@ public class Vector3i extends Vector3<Integer> {
         setY(getY() / n);
         setZ(getZ() / n);
     }
-
 }

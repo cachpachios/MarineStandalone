@@ -17,54 +17,56 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package com.marine.util;
-
-import com.marine.game.scheduler.MarineRunnable;
+package com.marine.util.wrapper;
 
 /**
- * Created 2014-12-10 for MarineStandalone
- *
- * @author Citymonstret
+ * @author Empire92
  */
-public class LagTester extends MarineRunnable {
+public class StringWrapper {
 
-    public final static long[] T = new long[600];
+    public final String value;
 
-    public static int TC = 0;
-
-    public static long LT = 0l;
-
-    public LagTester() {
-        super(1l, -1);
+    /**
+     * Constructor
+     *
+     * @param value to wrap
+     */
+    public StringWrapper(final String value) {
+        this.value = value;
     }
 
-    public static double getTPS() {
-        double tps = Math.round(getTPS(100));
-        return tps > 20.0D ? 20.D : tps;
-    }
-
-    public static double getTPS(final int ticks) {
-        if (TC < ticks)
-            return 20.0D;
-        final int t = (TC - ticks) % T.length;
-        final long e = System.currentTimeMillis() - T[t];
-        return ticks / (e / 1000.0D);
-    }
-
-    public static long getElapsed(final int tI) {
-        return System.currentTimeMillis() - (T[tI & T.length]);
-    }
-
-    public static double getPercentage() {
-        return Math.round((1.0D - (getTPS() / 20.0D)) * 100.0D);
-    }
-
-    public static double getFullPercentage() {
-        return getTPS() * 5;
-    }
-
+    /**
+     * Check if a wrapped string equals another one
+     *
+     * @param obj to compare
+     * @return true if obj equals the stored value
+     */
     @Override
-    public void run() {
-        T[TC++ % T.length] = System.currentTimeMillis();
+    public boolean equals(final Object obj) {
+        return (this == obj) &&
+                (obj != null) &&
+                (getClass() == obj.getClass()) &&
+                (obj instanceof StringWrapper) &&
+                ((StringWrapper) obj).value.toLowerCase().equals(this.value.toLowerCase());
+    }
+
+    /**
+     * Get the string value
+     *
+     * @return string value
+     */
+    @Override
+    public String toString() {
+        return this.value;
+    }
+
+    /**
+     * Get the hash value
+     *
+     * @return has value
+     */
+    @Override
+    public int hashCode() {
+        return this.value.toLowerCase().hashCode();
     }
 }

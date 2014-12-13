@@ -19,43 +19,26 @@
 
 package com.marine.util;
 
-import com.marine.io.data.ByteData;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * Created for MojangStandalone
+ * Created 2014-12-13 for MarineStandalone
  *
- * @param <T>
- * @author Fozie
+ * @author Citymonstret
  */
-public abstract class PacketWrapper<T> {
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.METHOD, ElementType.CONSTRUCTOR, ElementType.TYPE})
+public @interface Protected {
+    /*
+        This doesn't do anything as of now, but I plan to make it
+        able to automatically block plugin-based requests
 
-    private T obj;
-
-    public PacketWrapper(T v) {
-        this.obj = v;
-    }
-
-    public abstract T readFromData(ByteData d);
-
-    public T readFromBytes(byte[] b) {
-        return readFromData(new ByteData(b));
-    }
-
-    public abstract ByteData toByteData();
-
-    public byte[] getBytes() {
-        return toByteData().getBytes();
-    }
-
-    public T getData() {
-        return obj;
-    }
-
-    public void setData(T data) {
-        obj = data;
-    }
-
-    public T get() {
-        return obj;
-    }
+        (Using)
+        // Security Check Start
+        System.getSecurityManager().checkPermission(MarineSecurityManager.MARINE_PERMISSION);
+        // Security Check end
+     */
 }

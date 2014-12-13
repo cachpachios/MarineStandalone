@@ -19,7 +19,7 @@
 
 package com.marine.world.chunk;
 
-import com.marine.util.Vector2i;
+import com.marine.util.vectors.Vector2i;
 
 public class ChunkPos extends Vector2i implements Comparable<ChunkPos> {
 

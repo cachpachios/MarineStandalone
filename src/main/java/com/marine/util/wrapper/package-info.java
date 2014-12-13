@@ -17,24 +17,12 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package com.marine.game.item;
-
-import com.marine.io.data.ByteData;
-import com.marine.util.wrapper.PacketWrapper;
-
-public class ItemSlot extends PacketWrapper<Item> {
-
-    public ItemSlot(Item itemID) {
-        super(itemID);
-    }
-
-    @Override
-    public ByteData toByteData() {
-        return null;
-    }
-
-    @Override
-    public Item readFromData(ByteData d) {
-        return null;
-    }
-}
+/**
+ * These are wrapper classes
+ * (classes that holds other objects,
+ * to give them more functionality)
+ *
+ * @author Empire92
+ * @author Fozie
+ */
+package com.marine.util.wrapper;

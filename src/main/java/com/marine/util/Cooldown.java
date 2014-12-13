@@ -28,9 +28,10 @@ package com.marine.util;
  * player is absent when the runnable executes. This
  * also allows for more specific time indications.
  * <p/>
- * Example:
  *
  * @author Citymonstret
+ *
+ * Example:
  * @code {msg("You have {0} seconds left", cd.getSecondsLeft())}
  */
 public class Cooldown {

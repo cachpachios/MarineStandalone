@@ -28,7 +28,7 @@ import com.marine.player.*;
 import com.marine.server.Marine;
 import com.marine.util.Location;
 import com.marine.util.Position;
-import com.marine.util.UUIDHandler;
+import com.marine.util.mojang.UUIDHandler;
 import com.marine.world.World;
 
 import java.util.UUID;

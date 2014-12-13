@@ -17,29 +17,15 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package com.marine.util;
-
-import java.util.UUID;
-
 /**
+ * These are setting classes, that
+ * can be used to provide you with
+ * a nice, and easy to use - configuration
+ * file.
+ *
+ * The main extension/language that we're
+ * using is JSON.
+ *
  * @author Citymonstret
  */
-public interface UUIDSaver {
-    /**
-     * Fetch uuid from mojang servers
-     *
-     * @param name Username
-     * @return uuid
-     * @throws Exception
-     */
-    public UUID mojangUUID(final String name) throws Exception;
-
-    /**
-     * Fetch username from mojang servers
-     *
-     * @param uuid UUID
-     * @return username
-     * @throws Exception
-     */
-    public String mojangName(final UUID uuid) throws Exception;
-}
+package com.marine.settings;

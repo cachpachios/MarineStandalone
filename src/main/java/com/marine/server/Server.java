@@ -25,6 +25,7 @@ import com.marine.StandaloneServer;
 import com.marine.events.AsyncEvent;
 import com.marine.events.Listener;
 import com.marine.events.MarineEvent;
+import com.marine.game.system.MarineSecurityManager;
 import com.marine.player.Player;
 import com.marine.world.World;
 
@@ -36,7 +37,10 @@ import java.util.concurrent.Executor;
 /**
  * Created 2014-12-02 for MarineStandalone
  *
+ * Server implementation
+ *
  * @author Citymonstret
+ * @author Fozie
  */
 public class Server implements MarineServer {
 
@@ -45,6 +49,9 @@ public class Server implements MarineServer {
     private final AsyncEventBus asyncEventBus;
 
     public Server(StandaloneServer server) {
+        // Security Check Start
+        System.getSecurityManager().checkPermission(MarineSecurityManager.MARINE_PERMISSION);
+        // Security Check end
         this.server = server;
         this.eventBus = new EventBus();
         this.asyncEventBus = new AsyncEventBus(new Executor() {

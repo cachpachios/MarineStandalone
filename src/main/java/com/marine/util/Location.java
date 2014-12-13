@@ -20,6 +20,8 @@
 package com.marine.util;
 
 import com.marine.server.Marine;
+import com.marine.util.vectors.Vector3;
+import com.marine.util.vectors.Vector3d;
 import com.marine.world.World;
 import com.marine.world.chunk.Chunk;
 import org.json.simple.JSONAware;

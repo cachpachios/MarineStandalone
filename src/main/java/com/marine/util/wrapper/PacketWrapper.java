@@ -17,24 +17,45 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package com.marine.game.item;
+package com.marine.util.wrapper;
 
 import com.marine.io.data.ByteData;
-import com.marine.util.wrapper.PacketWrapper;
 
-public class ItemSlot extends PacketWrapper<Item> {
+/**
+ * Created for MojangStandalone
+ *
+ * @param <T>
+ * @author Fozie
+ */
+public abstract class PacketWrapper<T> {
 
-    public ItemSlot(Item itemID) {
-        super(itemID);
+    private T obj;
+
+    public PacketWrapper(T v) {
+        this.obj = v;
     }
 
-    @Override
-    public ByteData toByteData() {
-        return null;
+    public abstract T readFromData(ByteData d);
+
+    public T readFromBytes(byte[] b) {
+        return readFromData(new ByteData(b));
     }
 
-    @Override
-    public Item readFromData(ByteData d) {
-        return null;
+    public abstract ByteData toByteData();
+
+    public byte[] getBytes() {
+        return toByteData().getBytes();
+    }
+
+    public T getData() {
+        return obj;
+    }
+
+    public void setData(T data) {
+        obj = data;
+    }
+
+    public T get() {
+        return obj;
     }
 }
