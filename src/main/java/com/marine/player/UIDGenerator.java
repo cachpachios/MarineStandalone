@@ -19,7 +19,7 @@ public class UIDGenerator {
 		
 		short uid = ++nextUnassigned;
 		try {
-			while(UIDMap.containsKey(uid)) // Too make sure u get a unused uid
+			while(UIDMap.containsValue(uid)) // Too make sure u get a unused uid
 				uid = ++nextUnassigned;
 		} catch(Exception e) {
 			return Short.MIN_VALUE; // Error code
