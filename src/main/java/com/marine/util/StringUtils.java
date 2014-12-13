@@ -21,6 +21,7 @@ package com.marine.util;
 
 import com.marine.player.Player;
 
+import java.util.Arrays;
 import java.util.Collection;
 
 /**
@@ -46,6 +47,10 @@ public class StringUtils {
         }
         String r = builder.toString();
         return r.substring(0, r.length() - s.length());
+    }
+
+    public static String join(Object[] e, String s) {
+        return join(Arrays.asList(e), s);
     }
 
     public static String format(String s, Object... os) {

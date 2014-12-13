@@ -375,10 +375,14 @@ public class Player extends Entity implements IPlayer, CommandSender {
     }
 
     public void disconnect(String reason) {
-        LeaveEvent event = new LeaveEvent(this, LeaveEvent.QuitReason.KICKED);
-        Marine.getServer().callEvent(event);
-        Marine.broadcastMessage(event.getMessage().replace("%plr", getName()).replace("%reason", reason));
-        cleanup();
+        if (reason.equals("Connection Quit")) {
+            disconnect();
+        } else {
+            LeaveEvent event = new LeaveEvent(this, LeaveEvent.QuitReason.KICKED);
+            Marine.getServer().callEvent(event);
+            Marine.broadcastMessage(event.getMessage().replace("%plr", getName()).replace("%reason", reason));
+            cleanup();
+        }
     }
 
     public void timeoutDisconnect() {

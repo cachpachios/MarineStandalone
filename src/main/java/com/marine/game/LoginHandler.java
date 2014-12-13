@@ -19,10 +19,13 @@
 
 package com.marine.game;
 
+import com.marine.events.standardevents.JoinEvent;
+import com.marine.game.async.ChatManager;
 import com.marine.net.Client;
 import com.marine.net.States;
 import com.marine.net.login.LoginSucessPacket;
 import com.marine.player.*;
+import com.marine.server.Marine;
 import com.marine.util.Location;
 import com.marine.util.Position;
 import com.marine.util.UUIDHandler;
@@ -74,9 +77,12 @@ public class LoginHandler {
 
         p.getClient().setState(States.INGAME);
 
+        JoinEvent event = new JoinEvent(p, ChatManager.JOIN_MESSAGE);
+        Marine.getServer().callEvent(event);
         playerManager.joinGame(p);
+        playerManager.getChat().sendJoinMessage(p, event.getJoinMessage());
 
-        playerManager.getChat().sendJoinMessage(p);
+
         //p.getClient().sendPacket(new PlayerListHeaderPacket("&cWelcome to the server", "&6" + player.getName())); //TODO: Custom msg and event :D and togglable
 
         TablistManager.getInstance().setHeaderAndFooter("&cWelcome to the server", "&6" + player.getName(), p);

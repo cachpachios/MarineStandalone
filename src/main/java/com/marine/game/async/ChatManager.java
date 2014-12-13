@@ -52,7 +52,7 @@ public class ChatManager {
         return s;
     }
 
-    public void sendJoinMessage(Player player) {
+    public void sendJoinMessage(Player player, String message) {
 //        Chat chat = new Chat("WARNING ")
 //                .color(ChatColor.RED)
 //                .format(ChatColor.BOLD)
@@ -63,7 +63,7 @@ public class ChatManager {
 //                .event(new Event("hoverEvent", "show_text", "§cA Serious warning"));
 //        player.sendMessage(chat);
 
-        Marine.broadcastMessage(translate(JOIN_MESSAGE, player));
+        Marine.broadcastMessage(translate(message, player));
         player.sendAboveActionbarMessage(translate(WELCOME_MESSAGE, player)); // TODO Custom Message, event and toggleable
     }
 

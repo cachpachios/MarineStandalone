@@ -26,7 +26,6 @@ import com.marine.game.command.CommandSender;
 import com.marine.game.inventory.CraftingInventory;
 import com.marine.game.inventory.PlayerInventory;
 import com.marine.net.play.clientbound.GameStateChangePacket;
-import com.marine.net.play.clientbound.KickPacket;
 import com.marine.player.Player;
 import com.marine.util.StringUtils;
 
@@ -67,7 +66,14 @@ public class Test extends Command {
                 player.openInventory(new PlayerInventory(player.nextWindowID()));
                 break;
             case "kick":
-                player.getClient().sendPacket(new KickPacket(ChatColor.randomColor() + "Kick Worked! xD"));
+                // player.getClient().sendPacket(new KickPacket(ChatColor.randomColor() + "Kick Worked! xD"));
+                if (arguments.length > 1) {
+                    String[] newArray = new String[arguments.length - 1];
+                    System.arraycopy(arguments, 1, newArray, 0, newArray.length);
+                    player.kick(ChatColor.transform('&', StringUtils.join(newArray, " ")));
+                } else {
+                    player.kick(ChatColor.randomColor() + "Kicked");
+                }
                 break;
             case "credits":
                 player.getClient().sendPacket(new GameStateChangePacket(GameStateChangePacket.Reason.DEMO_MESSAGES, 0f));

@@ -61,10 +61,18 @@ public class ChatPacket extends Packet {
 
     @SuppressWarnings("unchecked")
     public ChatPacket(final String message, final int position) {
+        if (message.startsWith("{\"")) {
+            this.message = message;
+        } else {
+            this.object = new JSONObject();
+            if (message.length() == 0)
+                this.message = "";
+            else {
+                object.put("text", message);
+                this.message = object.toJSONString();
+            }
+        }
         this.position = position;
-        this.object = new JSONObject();
-        object.put("text", message);
-        this.message = object.toJSONString();
     }
 
     @Override
@@ -74,6 +82,9 @@ public class ChatPacket extends Packet {
 
     @Override
     public void writeToStream(PacketOutputStream stream) throws IOException {
+        if (message == null || message.length() == 0)
+            return;
+
         ByteData data = new ByteData();
 
         if (message.length() < 32767)
