@@ -97,8 +97,10 @@ public class PlayerList extends ArrayList<Short> implements Listener {
     @Subscribe
     public void onLeave(final LeaveEvent event) {
         final Player p = event.getPlayer();
-        if (this.contains(p))
-            this.remove(p);
+        synchronized (this) {
+            if (this.contains(p))
+                this.remove(p);
+        }
     }
 
     /**
@@ -109,8 +111,10 @@ public class PlayerList extends ArrayList<Short> implements Listener {
      */
     public Collection<Player> getPlayers() {
         final Collection<Player> players = new ArrayList<>();
-        for (final Object s : this)
-            players.add(Marine.getPlayer((short) s));
+        synchronized (this) {
+            for (final Object s : this)
+                players.add(Marine.getPlayer((short) s));
+        }
         return players;
     }
 
@@ -118,7 +122,7 @@ public class PlayerList extends ArrayList<Short> implements Listener {
      * @deprecated
      */
     @Deprecated
-    public boolean contains(final UUID uuid) {
+    public synchronized boolean contains(final UUID uuid) {
         return getPlayers().contains(Marine.getPlayer(uuid));
     }
 
@@ -128,12 +132,12 @@ public class PlayerList extends ArrayList<Short> implements Listener {
      * @param player Player
      * @return true if the player is in the list
      */
-    public boolean contains(final Player player) {
+    public synchronized boolean contains(final Player player) {
         return super.contains(player.getUID());
     }
 
     @Override
-    public boolean contains(final Object o) {
+    public synchronized boolean contains(final Object o) {
         if (o instanceof Player)
             return this.contains((Player) o);
         if (o instanceof UUID)
@@ -141,11 +145,31 @@ public class PlayerList extends ArrayList<Short> implements Listener {
         else return super.contains(o);
     }
 
+    @Override
+    public synchronized int size() {
+        return super.size();
+    }
+
+    @Override
+    public synchronized boolean add(final Short s) {
+        return super.add(s);
+    }
+
+    @Override
+    public synchronized Short get(int n) {
+        return super.get(n);
+    }
+
+    @Override
+    public synchronized boolean remove(final Object s) {
+        return super.remove(s);
+    }
+
     /**
      * @deprecated
      */
     @Deprecated
-    public void add(final UUID uuid) {
+    public synchronized void add(final UUID uuid) {
         this.add(Marine.getPlayer(uuid));
     }
 
@@ -153,7 +177,7 @@ public class PlayerList extends ArrayList<Short> implements Listener {
      * @deprecated
      */
     @Deprecated
-    public void remove(final UUID uuid) {
+    public synchronized void remove(final UUID uuid) {
         this.add(Marine.getPlayer(uuid));
     }
 
@@ -162,7 +186,7 @@ public class PlayerList extends ArrayList<Short> implements Listener {
      *
      * @param player to add
      */
-    public void add(final Player player) {
+    public synchronized void add(final Player player) {
         super.add(player.getUID());
     }
 
@@ -171,20 +195,22 @@ public class PlayerList extends ArrayList<Short> implements Listener {
      *
      * @param player
      */
-    public void remove(final Player player) {
+    public synchronized void remove(final Player player) {
         super.remove(((Object) player.getUID()));
     }
 
     @Override
     public Player[] toArray() {
         final Player[] players = new Player[size()];
-        for (int x = 0; x < players.length; x++)
-            players[x] = Marine.getPlayer(get(x));
+        synchronized (this) {
+            for (int x = 0; x < players.length; x++)
+                players[x] = Marine.getPlayer(get(x));
+        }
         return players;
     }
 
     @Override
-    public <Short> Short[] toArray(final Short[] r) {
+    public synchronized <Short> Short[] toArray(final Short[] r) {
         return super.toArray((Short[]) new Object[size()]);
     }
 
@@ -195,7 +221,7 @@ public class PlayerList extends ArrayList<Short> implements Listener {
      *
      * @return Player from index
      */
-    public Player getPlayer(final int n) {
+    public synchronized Player getPlayer(final int n) {
         return Marine.getPlayer(super.get(n));
     }
 
@@ -204,7 +230,7 @@ public class PlayerList extends ArrayList<Short> implements Listener {
      *
      * @param f action to perform
      */
-    public void foreach(final Consumer<Player> f) {
+    public synchronized void foreach(final Consumer<Player> f) {
         for (final short s : this) {
             f.accept(Marine.getPlayer(s));
         }
@@ -225,7 +251,9 @@ public class PlayerList extends ArrayList<Short> implements Listener {
             if (o instanceof Player)
                 this.add((Player) o);
             else if (o instanceof Short)
-                super.add((short) o);
+                synchronized (this) {
+                    super.add((short) o);
+                }
             else if (o instanceof UUID)
                 this.add((UUID) o);
         }
