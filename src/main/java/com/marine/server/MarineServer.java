@@ -66,7 +66,7 @@ public interface MarineServer {
      * @param uid uid
      * @return Null if not found, else the player
      */
-    public Player getPlayer(short uid);
+    public Player getPlayer(final short uid);
 
     /**
      * Get a world based on its name
@@ -74,12 +74,12 @@ public interface MarineServer {
      * @param name World Name
      * @return World if found, else null
      */
-    public World getWorld(String name);
+    public World getWorld(final String name);
 
     /**
      * Get all worlds
      *
-     * @return A list containg all worlds
+     * @return A list containing all worlds
      */
     public List<World> getWorlds();
 
@@ -89,7 +89,7 @@ public interface MarineServer {
      * @param uuid UUID
      * @return Player
      */
-    public Player getPlayer(UUID uuid);
+    public Player getPlayer(final UUID uuid);
 
     /**
      * Get a player based on its username
@@ -97,28 +97,28 @@ public interface MarineServer {
      * @param username Username
      * @return Player
      */
-    public Player getPlayer(String username);
+    public Player getPlayer(final String username);
 
     /**
      * Register an event listener
      *
      * @param listener event listener
      */
-    public void registerListener(Listener listener);
+    public void registerListener(final Listener listener);
 
     /**
      * UnRegister an event listener
      *
      * @param listener event listener
      */
-    public void unregisterListener(Listener listener);
+    public void unregisterListener(final Listener listener);
 
     /**
      * Call an event
      *
      * @param event to call
      */
-    public void callEvent(MarineEvent event);
+    public void callEvent(final MarineEvent event);
 
     /**
      * Get the current MOTD
@@ -139,6 +139,6 @@ public interface MarineServer {
      *
      * @param n max players
      */
-    public void setMaxPlayers(int n);
+    public void setMaxPlayers(final int n);
 
 }

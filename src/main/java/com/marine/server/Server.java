@@ -48,7 +48,7 @@ public class Server implements MarineServer {
     private final StandaloneServer server;
     private final AsyncEventBus asyncEventBus;
 
-    public Server(StandaloneServer server) {
+    public Server(final StandaloneServer server) {
         // Security Check Start
         System.getSecurityManager().checkPermission(MarineSecurityManager.MARINE_PERMISSION);
         // Security Check end
@@ -56,83 +56,83 @@ public class Server implements MarineServer {
         this.eventBus = new EventBus();
         this.asyncEventBus = new AsyncEventBus(new Executor() {
             @Override
-            public void execute(Runnable command) {
+            public void execute(final Runnable command) {
                 command.run();
             }
         });
     }
 
     @Override
-    public Player getPlayer(short uid) {
-        return getServer().getPlayerManager().getPlayer(uid);
+    final public Player getPlayer(final short uid) {
+        return this.getServer().getPlayerManager().getPlayer(uid);
     }
 
     @Override
-    public StandaloneServer getServer() {
-        return server;
+    final public StandaloneServer getServer() {
+        return this.server;
     }
 
     @Override
-    public Collection<Player> getPlayers() {
-        return server.getPlayerManager().getPlayers();
+    final public Collection<Player> getPlayers() {
+        return this.server.getPlayerManager().getPlayers();
     }
 
     @Override
-    public int getPlayerCount() {
+    final public int getPlayerCount() {
         return this.getPlayers().size();
     }
 
     @Override
-    public World getWorld(String name) {
+    final public World getWorld(final String name) {
         return null;
     }
 
     @Override
-    public List<World> getWorlds() {
-        return server.getWorldManager().getWorlds();
+    final public List<World> getWorlds() {
+        return this.server.getWorldManager().getWorlds();
     }
 
     @Override
-    public Player getPlayer(UUID uuid) {
-        return null;
+    final public Player getPlayer(final UUID uuid) {
+        return this.server.getPlayerManager().getPlayer(uuid);
     }
 
     @Override
-    public Player getPlayer(String username) {
-        return null;
+    final public Player getPlayer(final String username) {
+        return this.server.getPlayerManager().getPlayer(username);
     }
 
     @Override
-    public void registerListener(Listener listener) {
-        eventBus.register(listener);
+    final public void registerListener(final Listener listener) {
+        this.eventBus.register(listener);
     }
 
     @Override
-    public void unregisterListener(Listener listener) {
-        eventBus.unregister(listener);
+    final public void unregisterListener(final Listener listener) {
+        this.eventBus.unregister(listener);
     }
 
     @Override
-    public void callEvent(MarineEvent event) {
+    final public void callEvent(final MarineEvent event) {
         if (event instanceof AsyncEvent) {
-            asyncEventBus.post(event);
+            this.asyncEventBus.post(event);
         } else {
-            eventBus.post(event);
+            this.eventBus.post(event);
         }
     }
 
     @Override
-    public String getMOTD() {
-        return server.getMOTD();
+    final public String getMOTD() {
+        return this.server.getMOTD();
     }
 
     @Override
-    public int getMaxPlayers() {
-        return server.getMaxPlayers();
+    final public int getMaxPlayers() {
+        return this.server.getMaxPlayers();
     }
 
     @Override
-    public void setMaxPlayers(int n) {
-        server.setMaxPlayers(n);
+    final public void setMaxPlayers(final int n) {
+        this.server.setMaxPlayers(n);
     }
 }
