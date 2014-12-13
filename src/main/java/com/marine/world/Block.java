@@ -59,16 +59,12 @@ public class Block { // Help class for easier reading not used to save/set data
         return blockPos;
     }
 
-    public void setChunk(Chunk chunk) {
-        this.chunk = chunk;
-    }
-
-    public void setChunk(Chunk chunk) {
-        this.chunk = chunk;
-    }
-
     public Chunk getChunk() {
         return chunk;
+    }
+
+    public void setChunk(Chunk chunk) {
+        this.chunk = chunk;
     }
 
     public int getLighting() {
