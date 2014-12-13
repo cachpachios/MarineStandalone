@@ -19,6 +19,7 @@
 
 package com.marine.world;
 
+import com.marine.util.Location;
 import com.marine.util.Position;
 import com.marine.world.chunk.Chunk;
 
@@ -36,12 +37,34 @@ public class Block { // Help class for easier reading not used to save/set data
         this.type = type;
     }
 
+    public Block(Position pos, BlockID type) {
+        this.blockPos = pos;
+        // this.chunk = location.getWorld().getChunk(location.getX().intValue() >> 4, location.getZ().intValue() >> 4);
+        this.type = type;
+        this.lighting = -1;
+    }
+
+    public Block(Location location, BlockID type) {
+        this.blockPos = location.getRelativePosition();
+        this.chunk = location.getWorld().getChunk(location.getX().intValue() >> 4, location.getZ().intValue() >> 4);
+        this.type = type;
+        this.lighting = -1;
+    }
+
     public static Block getAirBlock(Position pos, Chunk chunk) {
         return new Block(pos, chunk, 0, BlockID.AIR);
     }
 
     public Position getBlockPos() {
         return blockPos;
+    }
+
+    public void setChunk(Chunk chunk) {
+        this.chunk = chunk;
+    }
+
+    public void setChunk(Chunk chunk) {
+        this.chunk = chunk;
     }
 
     public Chunk getChunk() {

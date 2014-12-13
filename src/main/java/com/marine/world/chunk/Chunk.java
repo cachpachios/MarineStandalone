@@ -57,6 +57,7 @@ public final class Chunk {
         block.getBlockPos().setX(x);
         block.getBlockPos().setY(y);
         block.getBlockPos().setZ(z);
+        block.setChunk(this);
         int section = y >> 4;
         if (sections[section] == null)
             if (block.getType() != BlockID.AIR)
