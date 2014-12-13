@@ -44,16 +44,32 @@ public class PluginLoader {
     private final ConcurrentMap<String, Class> classes;
     private final PluginManager manager;
 
+    /**
+     * Constructor
+     *
+     * @param manager Related PluginManager
+     */
     public PluginLoader(PluginManager manager) {
         this.manager = manager;
         this.loaders = new ConcurrentHashMap<>();
         this.classes = new ConcurrentHashMap<>();
     }
 
+    /**
+     * Get the related plugin manager
+     *
+     * @return Plugin Manager specified in the constructor
+     */
     public PluginManager getManager() {
         return this.manager;
     }
 
+    /**
+     * Load all plugins
+     *
+     * @param folder Folder to load from
+     * @throws PluginHandlerException if the folder doesn't exist
+     */
     public void loadAllPlugins(File folder) throws PluginHandlerException {
         if (!folder.exists() || !folder.isDirectory()) {
             throw new PluginHandlerException(this, "Invalid plugin folder (doesn't exist)");
@@ -69,12 +85,18 @@ public class PluginLoader {
         }
     }
 
+    /**
+     * Enable all plugins
+     */
     public void enableAllPlugins() {
         for (final Plugin plugin : manager.getPlugins()) {
             enablePlugin(plugin);
         }
     }
 
+    /**
+     * Disable all plugins
+     */
     public void disableAllPlugins() {
         for (Plugin plugin : manager.getPlugins()) {
             try {
@@ -85,6 +107,14 @@ public class PluginLoader {
         }
     }
 
+    /**
+     * Load a specific plugin
+     *
+     * @param file Jar File
+     * @return Plugin Loaded
+     * @throws PluginHandlerException If the file doesn't exists
+     * @throws PluginHandlerException If the PluginClassLoader is unable to be loaded
+     */
     public Plugin loadPlugin(final File file) throws PluginHandlerException {
         if (!file.exists())
             throw new PluginHandlerException(this, "Could not load plugin -> File cannot be null", new FileNotFoundException(file.getPath() + " does not exist"));
@@ -118,6 +148,12 @@ public class PluginLoader {
         return loader.plugin;
     }
 
+    /**
+     * Get a class based on it's name
+     *
+     * @param name Of the class
+     * @return Class if found, else null
+     */
     protected Class<?> getClassByName(final String name) {
         if (classes.containsKey(name))
             return classes.get(name);
@@ -135,17 +171,33 @@ public class PluginLoader {
         return null;
     }
 
+    /**
+     * Set a class (name) to a class (object)
+     *
+     * @param name Class Name
+     * @param clazz Class Object
+     */
     protected void setClass(final String name, final Class clazz) {
         if (!classes.containsKey(name)) {
             classes.put(name, clazz);
         }
     }
 
-    protected void removeClass(String name) {
+    /**
+     * Remove a class based on its name
+     *
+     * @param name Class Name
+     */
+    protected void removeClass(final String name) {
         if (classes.containsKey(name))
             classes.remove(name);
     }
 
+    /**
+     * Enable a plugin
+     *
+     * @param plugin Plugin to enable
+     */
     public void enablePlugin(final Plugin plugin) {
         if (!plugin.isEnabled()) {
             String name = plugin.getName();
@@ -155,16 +207,30 @@ public class PluginLoader {
         }
     }
 
+    /**
+     * Disable a plugin
+     *
+     * @param plugin Plugin to disable
+     */
     public void disablePlugin(final Plugin plugin) {
         if (plugin.isEnabled()) {
             manager.disablePlugin(plugin);
             loaders.remove(plugin.getName());
             PluginClassLoader loader = plugin.getClassLoader();
-            for (String name : loader.getClasses())
+            for (final String name : loader.getClasses())
                 removeClass(name);
         }
     }
 
+    /**
+     * Copy the config and lib files from the plugin jar
+     * to a specified data folder
+     *
+     * @param file Jar File
+     * @param destination Destination Folder
+     *
+     * @throws PluginHandlerException If jar file cannot be loaded
+     */
     private void copyConfigIfExists(File file, File destination) throws PluginHandlerException {
         JarFile jar;
         try {
@@ -212,6 +278,17 @@ public class PluginLoader {
         }
     }
 
+    /**
+     * Get a plugin description file from a jar file
+     *
+     * @param file Jar File
+     * @return Plugin Description file, or null (if it cannot be found)
+     *
+     * @throws PluginHandlerException If the file is unable to be loaded
+     * @throws PluginHandlerException If the file doesn't exist
+     * @throws PluginHandlerException If the stream is unable to be loaded
+     * @throws PluginHandlerException If a file cannot be loaded from the stream
+     */
     private PluginFile getPluginFile(File file) throws PluginHandlerException {
         JarFile jar;
         try {

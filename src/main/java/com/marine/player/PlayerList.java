@@ -26,6 +26,7 @@ import com.marine.server.Marine;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -156,6 +157,10 @@ public class PlayerList extends ArrayList<Short> implements Listener {
         for (final short s : this) {
             f.accept(Marine.getPlayer(s));
         }
+    }
+
+    public Iterator<Player> getIterator() {
+        return getPlayers().iterator();
     }
 
     @Override

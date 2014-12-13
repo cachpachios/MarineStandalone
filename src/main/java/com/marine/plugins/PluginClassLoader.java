@@ -40,6 +40,16 @@ public class PluginClassLoader extends URLClassLoader {
     private final Map<String, Class> classes;
     public Plugin plugin, init;
 
+    /**
+     * Constructor
+     *
+     * @param loader PluginLoader Instance
+     * @param desc   PluginFile For the plugin
+     * @param file   Plugin Jar
+     * @throws MalformedURLException  If the jar location is invalid
+     * @throws PluginHandlerException If the Main class is not in the specified location
+     * @throws PluginHandlerException If the Main class is not an instanceof the Plugin class
+     */
     public PluginClassLoader(final PluginLoader loader, final PluginFile desc, final File file) throws MalformedURLException, PluginHandlerException {
         super(new URL[]{file.toURI().toURL()}, loader.getClass().getClassLoader());
         this.loader = loader;
@@ -66,6 +76,13 @@ public class PluginClassLoader extends URLClassLoader {
         }
     }
 
+    /**
+     * Load a jar file into [this] instance
+     *
+     * @param file Jar file
+     * @throws PluginHandlerException If the file is not a jar file
+     * @throws PluginHandlerException If the file cannot be loaded
+     */
     public void loadJar(final File file) throws PluginHandlerException {
         if (!file.getName().endsWith(".jar"))
             throw new PluginHandlerException(this, file.getName() + " is not a jar file", new IllegalArgumentException(file.getName() + " is of wrong type"));
