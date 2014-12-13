@@ -36,6 +36,7 @@ public class Chat {
     public List<Part> with = new ArrayList<>();
     private String text;
     private ChatColor color = ChatColor.WHITE;
+    private List<ChatColor> formats = new ArrayList<>();
 
     public Chat(String text) {
         this.text = text;
@@ -56,9 +57,19 @@ public class Chat {
         return this;
     }
 
+    public Chat format(ChatColor color) {
+        if (!color.isFormat())
+            throw new RuntimeException(color.getDataString() + " is not a color");
+        if (formats.contains(color))
+            formats.remove(color);
+        else
+            formats.add(color);
+        return this;
+    }
+
     @Override
     public String toString() {
-        String format = "{\"text\":\"%s\",\"color\":\"%s\"%s%s}";
+        String format = "{\"text\":\"%s\",\"color\":\"%s\"%s%s%s}";
         format = format.replaceFirst("%s", text);
         format = format.replaceFirst("%s", color.getDataString());
         StringBuilder w = new StringBuilder("");
@@ -79,6 +90,15 @@ public class Chat {
         } else {
             for (Event event : events) {
                 w.append(",").append(event);
+            }
+            format = format.replaceFirst("%s", w.toString());
+        }
+        w = new StringBuilder();
+        if (formats.isEmpty()) {
+            format = format.replaceFirst("%s", "");
+        } else {
+            for (ChatColor f : formats) {
+                w.append(",\"").append(f.getDataString()).append("\":\"true\"");
             }
             format = format.replaceFirst("%s", w.toString());
         }

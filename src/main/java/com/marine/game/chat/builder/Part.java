@@ -33,7 +33,8 @@ public class Part {
 
     private String s;
     private ChatColor c;
-    private List<Event> events = new ArrayList<Event>();
+    private List<Event> events = new ArrayList<>();
+    private List<ChatColor> formats = new ArrayList<>();
 
     public Part(String s, ChatColor c) {
         this.s = s;
@@ -45,6 +46,16 @@ public class Part {
         return this;
     }
 
+    public Part format(ChatColor color) {
+        if (!color.isFormat())
+            throw new RuntimeException(color.getDataString() + " is not a format");
+        if (formats.contains(color))
+            formats.remove(color);
+        else
+            formats.add(color);
+        return this;
+    }
+
     private String eFormat() {
         StringBuilder b = new StringBuilder();
         for (Event e : events)
@@ -52,8 +63,20 @@ public class Part {
         return b.toString();
     }
 
+    private String fFormat() {
+        StringBuilder b = new StringBuilder();
+        for (ChatColor c : formats) {
+            b.append(",\"").append(c.getDataString()).append("\":\"true\"");
+        }
+        for (ChatColor c : ChatColor.getFormats()) {
+            if (formats.contains(c)) continue;
+            b.append(",\"").append(c.getDataString()).append("\":\"false\"");
+        }
+        return b.toString();
+    }
+
     @Override
     public String toString() {
-        return String.format("{\"text\":\"%s\",\"color\":\"%s\"%s}", s, c.getDataString(), events.isEmpty() ? "" : eFormat());
+        return String.format("{\"text\":\"%s\",\"color\":\"%s\"%s%s}", s, c.getDataString(), events.isEmpty() ? "" : eFormat(), fFormat());
     }
 }

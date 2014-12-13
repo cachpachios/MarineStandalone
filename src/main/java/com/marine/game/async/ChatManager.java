@@ -38,7 +38,7 @@ public class ChatManager {
     }
 
     public static String format(String s, Player p) {
-        return translate(CHAT_FORMAT, new Object[]{p, s});
+        return translate(CHAT_FORMAT, p, s);
     }
 
     private static String translate(String s, Object... strs) {
@@ -53,6 +53,16 @@ public class ChatManager {
     }
 
     public void sendJoinMessage(Player player) {
+//        Chat chat = new Chat("WARNING ")
+//                .color(ChatColor.RED)
+//                .format(ChatColor.BOLD)
+//                .with(
+//                        new Part("You are a cow", ChatColor.WHITE)
+//                                .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, "§cHello World!\n§m---------\n§lLOLOLOL"))
+//                )
+//                .event(new Event("hoverEvent", "show_text", "§cA Serious warning"));
+//        player.sendMessage(chat);
+
         Marine.broadcastMessage(translate(JOIN_MESSAGE, player));
         player.sendAboveActionbarMessage(translate(WELCOME_MESSAGE, player)); // TODO Custom Message, event and toggleable
     }
