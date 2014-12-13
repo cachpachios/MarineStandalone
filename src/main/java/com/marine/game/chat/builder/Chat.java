@@ -41,12 +41,6 @@ public class Chat {
         this.text = text;
     }
 
-    public static void main(String[] args) {
-        Chat chat = new Chat("Dogs").color(ChatColor.GREEN).with(new Part("Cows", ChatColor.YELLOW).event(new Event("hoverEvent", "show_text", ":DD")))
-                .with(new Part("Cats", ChatColor.BLACK)).event(new Event("hoverEvent", "show_text", "hello world"));
-        System.out.println(chat.toString());
-    }
-
     public Chat color(ChatColor color) {
         this.color = color;
         return this;
@@ -64,17 +58,19 @@ public class Chat {
 
     @Override
     public String toString() {
-        String format = "{\"text\":\"%s\",\"color\":\"%s\",\"extra\":[%s]%s}";
+        String format = "{\"text\":\"%s\",\"color\":\"%s\"%s%s}";
         format = format.replaceFirst("%s", text);
         format = format.replaceFirst("%s", color.getDataString());
         StringBuilder w = new StringBuilder("");
         if (with != null && !with.isEmpty()) {
             Iterator<Part> iterator = with.iterator();
+            w.append(",\"extra\": [");
             while (iterator.hasNext()) {
                 w.append(iterator.next());
                 if (iterator.hasNext())
                     w.append(",");
             }
+            w.append("]");
         }
         format = format.replaceFirst("%s", w.toString());
         w = new StringBuilder();

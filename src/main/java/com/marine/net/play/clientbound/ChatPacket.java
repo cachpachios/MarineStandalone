@@ -20,6 +20,7 @@
 package com.marine.net.play.clientbound;
 
 import com.marine.game.chat.ChatMessage;
+import com.marine.game.chat.builder.Chat;
 import com.marine.io.data.ByteData;
 import com.marine.net.Packet;
 import com.marine.net.PacketOutputStream;
@@ -41,6 +42,16 @@ public class ChatPacket extends Packet {
 
     public ChatPacket(final String message) {
         this(message, 0);
+    }
+
+    public ChatPacket(final Chat chat) {
+        this.message = chat.toString();
+        this.position = 0;
+    }
+
+    public ChatPacket(final Chat chat, final int position) {
+        this.message = chat.toString();
+        this.position = position;
     }
 
     public ChatPacket(final ChatMessage message) {

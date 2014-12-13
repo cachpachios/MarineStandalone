@@ -25,6 +25,7 @@ import com.marine.game.CommandManager;
 import com.marine.game.PlayerManager;
 import com.marine.game.chat.ChatComponent;
 import com.marine.game.chat.ChatMessage;
+import com.marine.game.chat.builder.Chat;
 import com.marine.game.command.Command;
 import com.marine.game.command.CommandSender;
 import com.marine.game.inventory.Inventory;
@@ -278,6 +279,10 @@ public class Player extends Entity implements IPlayer, CommandSender {
 
     @Override
     public void sendMessage(ChatComponent message) {
+    }
+
+    public void sendMessage(Chat chat) {
+        getClient().sendPacket(new ChatPacket(chat));
     }
 
     public boolean isOnline() {
