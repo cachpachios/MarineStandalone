@@ -64,7 +64,7 @@ public class Chat {
         StringBuilder w = new StringBuilder("");
         if (with != null && !with.isEmpty()) {
             Iterator<Part> iterator = with.iterator();
-            w.append(",\"extra\": [");
+            w.append(",\"extra\":[");
             while (iterator.hasNext()) {
                 w.append(iterator.next());
                 if (iterator.hasNext())
