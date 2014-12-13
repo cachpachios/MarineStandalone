@@ -19,6 +19,7 @@
 
 package com.marine;
 
+import com.marine.game.system.MarineSecurityManager;
 import com.marine.settings.ServerSettings;
 
 import java.util.Arrays;
@@ -31,7 +32,22 @@ public class MainComponent {
     public static List<String> arguments;
     public static Timer mainTimer;
 
-    private static double getJavaVersion() {
+    // SECURITY CHECK START ////////////////////////////////////////////////////////////////////////////////////////////
+
+    static {
+        if (System.getSecurityManager() == null) {
+            System.setSecurityManager(new MarineSecurityManager(System.getSecurityManager()));
+        }
+        System.getSecurityManager().checkPermission(MarineSecurityManager.MARINE_PERMISSION);
+    }
+
+    public MainComponent() {
+        System.getSecurityManager().checkPermission(MarineSecurityManager.MARINE_PERMISSION);
+    }
+
+    // SECURITY CHECK END //////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static double getJavaVersion() {
         try {
             return Double.parseDouble(System.getProperty("java.specification.version"));
         } catch (Throwable e) {
@@ -52,6 +68,12 @@ public class MainComponent {
         } catch (SecurityException e) { // If blocked print an error
             Logging.getLogger().error("Unable to retrieve computer arch! Perhaps blocked by the OS.");
         }
+        // Make sure that plugins can't
+        // close down the jvm
+        // or replace the security
+        // manager with a custom one
+        System.setSecurityManager(new MarineSecurityManager(System.getSecurityManager()));
+        // Make math fast :D
         chargeUp();
         // Get the arguments
         arguments = Arrays.asList(args);
