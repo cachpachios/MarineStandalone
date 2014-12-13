@@ -20,7 +20,9 @@
 package com.marine.world.chunk;
 
 import com.marine.io.data.ByteData;
+import com.marine.util.Position;
 import com.marine.world.BiomeID;
+import com.marine.world.Block;
 import com.marine.world.BlockID;
 import com.marine.world.World;
 import com.marine.world.entity.Entity;
@@ -51,6 +53,19 @@ public final class Chunk {
         entities.add(e);
     }
 
+    public void setBlock(int x, int y, int z, Block block) {
+        block.getBlockPos().setX(x);
+        block.getBlockPos().setY(y);
+        block.getBlockPos().setZ(z);
+        int section = y >> 4;
+        if (sections[section] == null)
+            if (block.getType() != BlockID.AIR)
+                sections[section] = new ChunkSection(section);
+            else return;
+        if (section > 0)
+            sections[section].setBlock(block);
+    }
+
     public void setBlock(int x, int y, int z, BlockID id) {
         int section = y >> 4;
         if (sections[section] == null)
@@ -61,6 +76,13 @@ public final class Chunk {
             sections[section].setBlock(x, y / (section), z, id);
         if (section == 0)
             sections[section].setBlock(x, y, z, id);
+    }
+
+    public Block getBlock(Position pos) {
+        int section = pos.getY() >> 4;
+        if (sections[section] == null)
+            return null;
+        return sections[section].getBlock(new Position(pos.getX(), section == 0 ? pos.getY() : pos.getY() / section, pos.getZ()));
     }
 
     public short getBlock(int x, int y, int z) {

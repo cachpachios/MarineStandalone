@@ -88,12 +88,20 @@ public class ChunkSection {
         blockMap[getIndex(pos.getX(), pos.getY(), pos.getZ())] = block;
     }
 
+    public void setBlock(Block block) {
+        setBlock(block.getBlockPos(), block);
+    }
+
     public char getBlockID(int x, int y, int z) {
         return getID(blockMap[getIndex(x, y, z)]);
     }
 
     public BlockID getBlock(int x, int y, int z) {
         return BlockID.BEDROCK;
+    }
+
+    public Block getBlock(Position pos) {
+        return blockMap[getIndex(pos.getX(), pos.getY(), pos.getZ())];
     }
 
     public int getID() {
