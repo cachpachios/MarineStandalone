@@ -38,24 +38,51 @@ public class StringUtils {
      * @param s Separator String
      * @return E.cont#toString separated by s
      */
-    public static String join(Collection e, String s) {
+    public static String join(final Collection e, final String s) {
         if (e == null || e.size() == 0)
             return "";
-        StringBuilder builder = new StringBuilder();
-        for (Object o : e) {
+        final StringBuilder builder = new StringBuilder();
+        for (final Object o : e) {
             builder.append(o).append(s);
         }
-        String r = builder.toString();
+        final String r = builder.toString();
         return r.substring(0, r.length() - s.length());
     }
 
-    public static String join(Object[] e, String s) {
+    /**
+     * Join an object array
+     *
+     * @param e Object array
+     * @param s String separator
+     * @return string
+     * @see #join(java.util.Collection, String)
+     */
+    public static String join(final Object[] e, final String s) {
         return join(Arrays.asList(e), s);
     }
 
-    public static String format(String s, Object... os) {
+    /**
+     * Format a string
+     * <br>
+     *
+     * Currently replaces:
+     * <ul>
+     *     <li>Player - %plr</li>
+     *     <li>String - %s</li>
+     *     <li>Integer, Long - %d</li>
+     *     <li>Boolean - %b</li>
+     *     <li>Location - %loc</li>
+     *     <li>Position: %pos</li>
+     * </ul>
+     *
+     * @param s String containing placeholders
+     * @param os Objects to replace with
+     *
+     * @return replaced string
+     */
+    public static String format(String s, final Object... os) {
         String r;
-        for (Object o : os) {
+        for (final Object o : os) {
             try {
                 if (o instanceof String)
                     r = "s";

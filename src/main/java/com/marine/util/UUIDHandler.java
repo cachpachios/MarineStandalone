@@ -33,7 +33,6 @@ import java.util.UUID;
  *
  * @author Citymonstret
  */
-
 @SuppressWarnings({"unused", "javadoc"})
 public class UUIDHandler {
 

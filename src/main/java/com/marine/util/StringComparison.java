@@ -25,6 +25,8 @@ import java.util.Collections;
 /**
  * String comparison library
  *
+ * Originally created by me, for PlotSquared
+ *
  * @author Citymonstret
  */
 @SuppressWarnings("unused")

@@ -30,7 +30,14 @@ import java.io.OutputStream;
  */
 public class FileUtils {
 
-    public static void copyFile(InputStream in, OutputStream out, int size) {
+    /**
+     * Copy a file from one location to another
+     *
+     * @param in   Ingoing File
+     * @param out  Outgoing File
+     * @param size Byte Buffer Size (in bytes)
+     */
+    public static void copyFile(final InputStream in, final OutputStream out, final int size) {
         try {
             byte[] buffer = new byte[size];
             int length;
@@ -49,6 +56,12 @@ public class FileUtils {
         }
     }
 
+    /**
+     * Get the size of a file
+     *
+     * @param file File
+     * @return Size of file
+     */
     public static long getSize(final File file) {
         long size = 0;
         if (file.isDirectory()) {

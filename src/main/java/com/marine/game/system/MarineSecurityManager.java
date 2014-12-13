@@ -33,14 +33,31 @@ import java.security.Permission;
  */
 public class MarineSecurityManager extends SecurityManager {
 
+    /**
+     * The marine permission
+     * <p/>
+     * Used to indicate internal classes that shouldn't be
+     * used by plugins - or alike
+     */
     public static Permission MARINE_PERMISSION = new RuntimePermission("marineInternal");
 
     private final SecurityManager defaultSecurityManager;
 
+    /**
+     * Constructor
+     *
+     * @param defaultSecurityManager Default security manager (can be null)
+     */
     public MarineSecurityManager(final SecurityManager defaultSecurityManager) {
         this.defaultSecurityManager = defaultSecurityManager;
     }
 
+    /**
+     * Get the status (i.e, throws exception if illegal access)
+     *
+     * @param msg Message to send
+     * @param allowOther Allow loaders other than the plugin one
+     */
     private void status(final String msg, boolean allowOther) {
         final Class[] context = getClassContext();
         ClassLoader loader;
@@ -103,6 +120,11 @@ public class MarineSecurityManager extends SecurityManager {
         status("Thread Access", true);
     }
 
+    /**
+     * An internal permission check
+     *
+     * @param permission Permission to check for
+     */
     protected void checkInternal(Permission permission) {
         switch (permission.getName()) {
             case "marineInternal":
@@ -137,10 +159,24 @@ public class MarineSecurityManager extends SecurityManager {
         }
     }
 
+    /**
+     * SecurityException - Used to indicate illegal plugin activity
+     *
+     * A part of the MarineStandalone Security Suite
+     *
+     * @author Citymonstret
+     */
     public static class PluginSecurityException extends AccessControlException {
 
+        /**
+         * Constructor
+         *
+         * @param plugin Plugin that breached the security
+         * @param message Message (Description)
+         */
         public PluginSecurityException(final Plugin plugin, final String message) {
             super("Plugin Security Breach: " + plugin.getName() + " did an illegal action: " + message);
         }
+
     }
 }

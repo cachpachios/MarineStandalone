@@ -21,6 +21,12 @@ package com.marine.util;
 
 import com.marine.io.data.ByteData;
 
+/**
+ * Created for MojangStandalone
+ *
+ * @param <T>
+ * @author Fozie
+ */
 public abstract class PacketWrapper<T> {
 
     private T obj;

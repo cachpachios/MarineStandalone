@@ -20,12 +20,6 @@
 package com.marine.util;
 
 /**
- * Created 2014-12-02 for MarineStandalone
- *
- * @author Citymonstret
- */
-
-/**
  * @author Empire92
  */
 public class StringWrapper {

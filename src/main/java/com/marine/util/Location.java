@@ -30,6 +30,7 @@ import org.json.simple.JSONValue;
  * Created 2014-12-01 for MarineStandalone
  *
  * @author Citymonstret
+ * @author Fozie
  */
 public class Location extends Vector3d implements JSONAware, Cloneable, Comparable<Location> { // Used for absolute positioning (Entites etc)
 
