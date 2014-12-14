@@ -200,7 +200,7 @@ public class StandaloneServer implements CommandProvider {
     }
 
     public void restart() {
-    	Logging.getLogger().log("Server is restaring...");
+        Logging.getLogger().log("Server is restarting...");
         for (final Player player : players.getPlayers()) {
             player.kick("Server Restarting");
         }
