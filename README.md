@@ -30,8 +30,13 @@ Features (so far):
 
 How to contribute
 -
-  Do a pull request or add us on skype: casparnoree (@Fozie) & alexandersoderberg (@sauilitired) to discuss if you want to be part of the "team"
-  It's important that you document all your work, using this layout: http://paste.intellectualsites.com/view/pzZrTO60SPkSbth7TZT5026pDgO49zozX
+  For minor changes or one time contribution you may just fork this project and do a pull request.
+  Otherwise if you want to become really involved in the project you may add @Fozie and @Sauilitierd on skype to become part of the 'team'.
+  
+  Fozie's Skype: casparnoree
+  Sauilitierd's Skype: alexandersoderberg
+  
+  If you contribute it's important that you document all your work, using this layout: http://paste.intellectualsites.com/view/pzZrTO60SPkSbth7TZT5026pDgO49zozX
 
 License
 -
