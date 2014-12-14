@@ -25,5 +25,6 @@
  * Example: UUIDs, Service Status
  *
  * @author Citymonstret
+ * @author Fozie
  */
 package com.marine.util.mojang;

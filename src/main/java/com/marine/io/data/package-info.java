@@ -17,45 +17,9 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package com.marine.util.wrapper;
-
-import com.marine.io.data.ByteData;
-
 /**
- * Packet Wrapper used to wrap object when sent in packets
+ * Data handlers, types
  *
- * @param <T>
  * @author Fozie
  */
-public abstract class PacketWrapper<T> {
-
-    private T obj;
-
-    public PacketWrapper(T v) {
-        this.obj = v;
-    }
-
-    public abstract T readFromData(ByteData d);
-
-    public T readFromBytes(byte[] b) {
-        return readFromData(new ByteData(b));
-    }
-
-    public abstract ByteData toByteData();
-
-    public byte[] getBytes() {
-        return toByteData().getBytes();
-    }
-
-    public T getData() {
-        return obj;
-    }
-
-    public void setData(T data) {
-        obj = data;
-    }
-
-    public T get() {
-        return obj;
-    }
-}
+package com.marine.io.data;
