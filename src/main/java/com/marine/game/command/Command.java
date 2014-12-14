@@ -24,10 +24,7 @@ import com.marine.server.Marine;
 import com.marine.util.Location;
 import com.marine.world.entity.Entity;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created 2014-12-01 for MarineStandalone
@@ -121,6 +118,28 @@ public abstract class Command {
                     .replace("@a", aPlr);
         }
         return returner;
+    }
+
+    /**
+     * Get a player based on the argument (@a, @r, @p)
+     *
+     * @param sender Sender of the command
+     * @param s      Argument
+     * @return Null if none found, else a collection
+     */
+    public Collection<Player> getPlayers(CommandSender sender, String s) {
+        if (s.equals("@a")) {
+            return Marine.getPlayers();
+        }
+        if (s.equals("@p")) {
+            if (sender instanceof Player)
+                return Arrays.asList((Player) sender);
+            return null;
+        }
+        if (s.equals("@r")) {
+            return Arrays.asList(getRandomPlayer());
+        }
+        return null;
     }
 
     /**

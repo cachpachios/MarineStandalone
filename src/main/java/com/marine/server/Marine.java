@@ -169,6 +169,18 @@ public class Marine {
     }
 
     /**
+     * Send raw JSON
+     *
+     * @param string json
+     */
+    public static void broadcastMessageRaw(final String string) {
+        for (final Player player : getPlayers()) {
+            player.sendMessageRaw(string);
+        }
+        Logging.getLogger().log("Raw JSON Sent: " + string);
+    }
+
+    /**
      * Broadcast a message to all players
      *
      * @param chat message

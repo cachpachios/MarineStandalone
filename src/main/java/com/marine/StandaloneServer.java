@@ -23,6 +23,10 @@ import com.marine.game.CommandManager;
 import com.marine.game.PlayerManager;
 import com.marine.game.WorldManager;
 import com.marine.game.chat.ChatColor;
+import com.marine.game.chat.ChatComponent;
+import com.marine.game.chat.ChatMessage;
+import com.marine.game.command.Command;
+import com.marine.game.command.CommandSender;
 import com.marine.game.commands.*;
 import com.marine.game.scheduler.Scheduler;
 import com.marine.net.NetworkManager;
@@ -36,6 +40,7 @@ import com.marine.server.MarineServer;
 import com.marine.server.Server;
 import com.marine.settings.JSONFileHandler;
 import com.marine.settings.ServerSettings;
+import com.marine.util.Location;
 import com.marine.world.Difficulty;
 import org.json.JSONException;
 
@@ -72,6 +77,7 @@ public class StandaloneServer {
     private boolean shouldRun;
     private String newMOTD = null;
     private boolean initialized = false;
+    private CommandSender console;
 
     public StandaloneServer(final MainComponent.StartSettings settings) throws Throwable {
         this.port = settings.port;
@@ -123,6 +129,7 @@ public class StandaloneServer {
         CommandManager.getInstance().registerCommand(new Plugins());
         CommandManager.getInstance().registerCommand(new SendAboveActionBarMessage());
         CommandManager.getInstance().registerCommand(new Teleport());
+        CommandManager.getInstance().registerCommand(new Tellraw());
     }
 
     public void start() {
@@ -254,5 +261,60 @@ public class StandaloneServer {
 
     public PluginLoader getPluginLoader() {
         return this.pluginLoader;
+    }
+
+    public CommandSender getConsole() {
+        if (this.console == null) {
+            this.console = new CommandSender() {
+
+                private Location location = new Location(Marine.getServer().getWorlds().get(0), 0, 0, 0);
+
+                @Override
+                public void executeCommand(String command) {
+                    this.executeCommand(command, new String[]{});
+                }
+
+                @Override
+                public void executeCommand(String command, String[] arguments) {
+                    Command c = CommandManager.getInstance().getCommand(command.toLowerCase().substring(1));
+                    if (c == null) {
+                        sendMessage("There is no such command");
+                    } else {
+                        this.executeCommand(c, arguments);
+                    }
+                }
+
+                @Override
+                public void executeCommand(Command command, String[] arguments) {
+                    command.execute(this, arguments);
+                }
+
+                @Override
+                public Location getLocation() {
+                    return location;
+                }
+
+                @Override
+                public boolean hasPermission(String permission) {
+                    return true;
+                }
+
+                @Override
+                public void sendMessage(String message) {
+                    Logging.getLogger().log(message);
+                }
+
+                @Override
+                public void sendMessage(ChatMessage message) {
+                    Logging.getLogger().log(message.toString());
+                }
+
+                @Override
+                public void sendMessage(ChatComponent message) {
+                    // do nothing...
+                }
+            };
+        }
+        return this.console;
     }
 }

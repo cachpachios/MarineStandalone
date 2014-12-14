@@ -398,4 +398,8 @@ public class Player extends Entity implements IPlayer, CommandSender {
         Marine.broadcastMessage(event.getMessage().replace("%plr", getName()));
         cleanup();
     }
+
+    public void sendMessageRaw(String string) {
+        getClient().sendPacket(new ChatPacket(string, false));
+    }
 }
