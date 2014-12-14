@@ -2,10 +2,9 @@ package com.marine.world.chunk;
 
 import java.util.Arrays;
 
-import com.marine.io.data.ByteData;
-import com.marine.util.Hacky;
 import com.marine.util.Position;
-import com.marine.util.Unsafe;
+import com.marine.util.annotations.Hacky;
+import com.marine.util.annotations.Unsafe;
 import com.marine.world.BlockID;
 import com.marine.world.Identifiers;
 
@@ -34,17 +33,18 @@ public final class ChunkSection {
         this.lightMap = new byte[DATA_SIZE];
     }
 
-    public ByteData getBlockData() { //TODO: Optimize
-        ByteData data = new ByteData();
+    public byte[] getBlockData() { //TODO: Optimize
+        byte[] raw = new byte[DATA_SIZE*2];
+        int i = -1;
         for (char id : blockMap) {
-            data.writeend((byte) (id & 0xff));
-            data.writeend((byte) (id >> 8));
+            raw[++i] = ((byte) (id & 0xff));
+            raw[++i] = ((byte) (id >> 8));
         }
-    	return data;
+    	return raw;
     }
    
-    public ByteData getLightData() { //TODO: Optimize
-    	return new ByteData(lightMap);
+    public byte[] getLightData() { //TODO: Optimize
+    	return lightMap;
     }
 
     public void setType(int x, int y, int z, BlockID id) {

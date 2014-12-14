@@ -2,8 +2,8 @@ package com.marine.io.data;
 
 import java.util.UUID;
 
-import com.marine.util.Hacky;
-import com.marine.util.Unsafe;
+import com.marine.util.annotations.Hacky;
+import com.marine.util.annotations.Unsafe;
 
 /**
 * Can be used in some cases to save a bitmap or UUID as a single number

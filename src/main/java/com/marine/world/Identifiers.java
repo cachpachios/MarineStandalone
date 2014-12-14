@@ -23,8 +23,8 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.marine.util.Hacky;
-import com.marine.util.Unsafe;
+import com.marine.util.annotations.Hacky;
+import com.marine.util.annotations.Unsafe;
 /**
 * Static class to index map data values
 * Hacky and not recommended way, preformance is at the cost.
