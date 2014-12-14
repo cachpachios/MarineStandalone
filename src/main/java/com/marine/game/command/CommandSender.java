@@ -19,7 +19,7 @@
 
 package com.marine.game.command;
 
-import com.marine.game.chat.ChatReciver;
+import com.marine.game.chat.ChatReciever;
 import com.marine.util.Location;
 
 
@@ -28,7 +28,7 @@ import com.marine.util.Location;
  *
  * @author Citymonstret
  */
-public interface CommandSender extends ChatReciver {
+public interface CommandSender extends ChatReciever {
 
     /**
      * Execute a command without any arguments

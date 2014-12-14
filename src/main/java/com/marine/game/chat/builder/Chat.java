@@ -26,7 +26,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Created 2014-12-13 for MarineStandalone
+ * Chat Message
  *
  * @author Citymonstret
  */

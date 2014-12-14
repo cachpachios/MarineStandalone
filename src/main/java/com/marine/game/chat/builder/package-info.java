@@ -17,12 +17,9 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package com.marine.game.chat;
-
-public interface ChatReciver {
-    public void sendMessage(String message);
-
-    public void sendMessage(ChatMessage message);
-
-    public void sendMessage(ChatComponent message);
-}
+/**
+ * Builder for JSON Message
+ *
+ * @author Citymonstret
+ */
+package com.marine.game.chat.builder;

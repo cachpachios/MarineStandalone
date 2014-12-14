@@ -20,6 +20,7 @@
 package com.marine.gui;
 
 import com.marine.Logging;
+import com.marine.MainComponent;
 import com.marine.ServerProperties;
 import com.marine.game.CommandManager;
 import com.marine.game.chat.ChatColor;
@@ -188,18 +189,21 @@ public class ConsoleWindow extends OutputStream {
     }
 
     private String format(String string) {
-        string = string.replace("§0", "§f");
-        string = "<font face='MarineStandalone'>" + string;
-        for (ChatColor color : ChatColor.values()) {
-            if (color.isColor()) {
-                string = string.replace("§" + color.getOldSystemID(), "</b></u></i></s><font color='#" + color.getHexa() + "'>");
+        if (!MainComponent.arguments.contains("no-colors")) {
+            string = string.replace("§0", "§f");
+            string = "<font face='MarineStandalone'>" + string;
+            for (ChatColor color : ChatColor.values()) {
+                if (color.isColor()) {
+                    string = string.replace("§" + color.getOldSystemID(), "</b></u></i></s><font color='#" + color.getHexa() + "'>");
+                }
             }
+            string = string.replace("§l", "<b></u></i></s>");
+            string = string.replace("§o", "</b></u><i></s>");
+            string = string.replace("§n", "</b><u></i></s>");
+            string = string.replace("§s", "</b></u></i><s>");
+            return string + "</font>";
         }
-        string = string.replace("§l", "<b></u></i></s>");
-        string = string.replace("§o", "</b></u><i></s>");
-        string = string.replace("§n", "</b><u></i></s>");
-        string = string.replace("§s", "</b></u></i><s>");
-        return string + "</font>";
+        return "<font face='MarineStandalone' color='#FFFFFF'>" + string.replaceAll("§([a-z0-9])", "") + "</font>";
     }
 
     public void update() { synchronized(console) {

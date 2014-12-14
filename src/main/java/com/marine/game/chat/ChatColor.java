@@ -23,6 +23,11 @@ package com.marine.game.chat;
 import java.awt.*;
 import java.util.ArrayList;
 
+/**
+ * Chat colors used all over the application.
+ * <p/>
+ * Can be used to port from/to hexa as well
+ */
 public enum ChatColor {
     BLACK("black", "0", true, "000000", Color.BLACK),
     DARK_BLUE("dark_blue", "1", true, "0000AA", Color.BLUE),

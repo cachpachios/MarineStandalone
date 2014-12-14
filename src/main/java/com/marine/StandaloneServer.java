@@ -19,12 +19,6 @@
 
 package com.marine;
 
-import java.io.File;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import org.json.JSONException;
-
 import com.marine.game.CommandManager;
 import com.marine.game.PlayerManager;
 import com.marine.game.WorldManager;
@@ -34,15 +28,7 @@ import com.marine.game.chat.ChatMessage;
 import com.marine.game.command.Command;
 import com.marine.game.command.CommandProvider;
 import com.marine.game.command.CommandSender;
-import com.marine.game.commands.Help;
-import com.marine.game.commands.Info;
-import com.marine.game.commands.Plugins;
-import com.marine.game.commands.Say;
-import com.marine.game.commands.SendAboveActionBarMessage;
-import com.marine.game.commands.Stop;
-import com.marine.game.commands.Teleport;
-import com.marine.game.commands.Tellraw;
-import com.marine.game.commands.Test;
+import com.marine.game.commands.*;
 import com.marine.game.scheduler.Scheduler;
 import com.marine.net.NetworkManager;
 import com.marine.net.play.clientbound.KickPacket;
@@ -58,6 +44,11 @@ import com.marine.settings.ServerSettings;
 import com.marine.util.Location;
 import com.marine.world.Difficulty;
 import com.marine.world.Identifiers;
+import org.json.JSONException;
+
+import java.io.File;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * StandaloneServer - Housing of the main loop
@@ -190,15 +181,20 @@ public class StandaloneServer implements CommandProvider {
     }
 
     public void stop() {
+        Logging.getLogger().info("Shutting down...");
         for (final Player player : players.getPlayers()) {
             player.getClient().sendPacket(new KickPacket(ChatColor.red + ChatColor.bold + "Server stopped"));
         }
+        Logging.getLogger().info("Plugin Handler Shutting Down");
         // Disable all plugins
         pluginLoader.disableAllPlugins();
         // Should not run, smart stuff
         MainComponent.mainTimer.cancel();
         // Save all json configs
+        Logging.getLogger().info("Saving JSON Files");
         jsonHandler.saveAll();
+        // Logging stop
+        Logging.getLogger().saveLog();
         // When finished
         System.exit(0);
     }

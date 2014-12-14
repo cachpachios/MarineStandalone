@@ -23,13 +23,12 @@ import com.marine.game.PlayerManager;
 import com.marine.net.play.KeepAlivePacket;
 import com.marine.player.Player;
 
-import java.lang.ref.Reference;
-import java.lang.ref.WeakReference;
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class TimeoutManager {
+
     private final PlayerManager players;
     private final Map<Short, Integer> lastReceived; // Contains last recived in seconds
     private final Map<Short, Integer> lastSent; // Contains last sent KeepAlivePacketID
@@ -74,21 +73,12 @@ public class TimeoutManager {
     }
 
     public void run() { // Will update each second :D
-        // while (true) {
         int time = (int) getMiliTime();
         for (final Short p : lastReceived.keySet())
                 if (lastReceived.get(p) - time >= 10) {
                     Player plr = players.getPlayer(p);
                     disconnect(plr);
-                    final Reference<Player> r = new WeakReference<>(plr);
-                    plr = null;
-                    while (r.get() != null)
-                        System.gc();
                 }
-        // try {
-        //     TimeoutManager.sleep(1000);
-        // } catch (InterruptedException ignored) {}
-        // }
     }
 
     public void keepAlive(final Player p) {

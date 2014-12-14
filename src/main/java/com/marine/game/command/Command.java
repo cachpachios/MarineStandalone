@@ -227,6 +227,12 @@ public abstract class Command {
         this.provider = provider;
     }
 
+    /**
+     * Set the command name, should only
+     * be used in very special events
+     *
+     * @param name new name
+     */
     @Protected
     public void setName(String name) {
         this.command = name;
