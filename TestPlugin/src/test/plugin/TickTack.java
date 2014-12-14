@@ -1,7 +1,7 @@
 package test.plugin;
 
-import com.marine.game.scheduler.MarineRunnable;
-import com.marine.plugins.Plugin;
+import org.marinemc.game.scheduler.MarineRunnable;
+import org.marinemc.plugins.Plugin;
 
 /**
  * Created 2014-12-10 for MarineStandalone

@@ -1,15 +1,15 @@
 package test.plugin;
 
 import com.google.common.eventbus.Subscribe;
-import com.marine.MainComponent;
-import com.marine.events.Listener;
-import com.marine.events.standardevents.ListEvent;
-import com.marine.game.chat.ChatColor;
-import com.marine.game.command.Command;
-import com.marine.game.command.CommandSender;
-import com.marine.net.handshake.ListResponse;
-import com.marine.plugins.Plugin;
-import com.marine.server.Marine;
+import org.marinemc.MainComponent;
+import org.marinemc.events.Listener;
+import org.marinemc.events.standardevents.ListEvent;
+import org.marinemc.game.chat.ChatColor;
+import org.marinemc.game.command.Command;
+import org.marinemc.game.command.CommandSender;
+import org.marinemc.net.handshake.ListResponse;
+import org.marinemc.plugins.Plugin;
+import org.marinemc.server.Marine;
 
 /**
  * Created 2014-12-10 for MarineStandalone
