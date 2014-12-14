@@ -23,17 +23,18 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.UUID;
-import java.util.function.Consumer;
 
 import com.google.common.eventbus.Subscribe;
 import com.marine.events.Listener;
 import com.marine.events.standardevents.LeaveEvent;
 import com.marine.server.Marine;
+import com.marine.util.ArgumentOperation;
 
 /**
  * Created 2014-12-12 for MarineStandalone
  *
  * @author Citymonstret
+ * @author Fozie
  */
 public class PlayerList extends ArrayList<Short> implements Listener {
 	
@@ -200,7 +201,13 @@ public class PlayerList extends ArrayList<Short> implements Listener {
     final public synchronized void remove(final Player player) {
         super.remove(((Object) player.getUID()));
     }
-
+    
+    /**
+     * Overrides ArrayList toArray()
+     * Converts this list to an array of Playesr taken from PlayerManager
+     *
+     * @param Collection to add
+     */
     @Override
     public Player[] toArray() {
         final Player[] players = new Player[size()];
@@ -233,10 +240,9 @@ public class PlayerList extends ArrayList<Short> implements Listener {
      *
      * @param f action to perform
      */
-    final public synchronized void foreach(final Consumer<Player> f) {
-        for (final short s : this) {
+    final public synchronized void foreach(final ArgumentOperation<Player> f) {
+        for (final short s : this)
             f.accept(Marine.getPlayer(s));
-        }
     }
 
     /**
@@ -247,7 +253,12 @@ public class PlayerList extends ArrayList<Short> implements Listener {
     public Iterator<Player> getIterator() {
         return getPlayers().iterator();
     }
-
+    
+    /**
+     * Overrides from ArrayList
+     *
+     * @param Collection to add
+     */
     @SuppressWarnings("rawtypes")
 	@Override
     final public boolean addAll(final Collection c) {
