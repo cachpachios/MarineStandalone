@@ -72,7 +72,7 @@ public final class ChunkSection {
         return raw;
     }
 
-    public byte[] getLightData() { //TODO: Optimize
+    public final byte[] getLightData() {
         return lightMap;
     }
 

@@ -20,9 +20,9 @@
 package org.marinemc.world.chunk;
 
 import org.marinemc.io.data.ByteData;
-import org.marinemc.net.play.Serverside;
 import org.marinemc.player.Player;
 import org.marinemc.util.Position;
+import org.marinemc.util.annotations.Serverside;
 import org.marinemc.util.annotations.Unsafe;
 import org.marinemc.world.BiomeID;
 import org.marinemc.world.BlockID;

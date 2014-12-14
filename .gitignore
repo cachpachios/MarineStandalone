@@ -111,3 +111,5 @@ nbactions.xml
 nb-configuration.xml
 .project
 settings.properties
+*.log
+log/old.zip
