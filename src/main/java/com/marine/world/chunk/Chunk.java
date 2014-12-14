@@ -37,6 +37,7 @@ import com.marine.world.World;
 * @author Fozie
 */ 
 public class Chunk {
+	
     private final World w;
     private final ChunkPos pos;
 
@@ -199,6 +200,20 @@ public class Chunk {
 			//TODO Fix this stuff :P
 			
 		}
+	}
+	
+	public int getDataSize(boolean biomes, boolean skylight) {
+		int size = 0;
 		
+		for(ChunkSection s : sections)
+			if(s != null) {
+				size += ChunkSection.DATA_SIZE * 3;
+				if(skylight)
+					size += ChunkSection.DATA_SIZE;
+			}
+		
+		if(biomes) size += 256;
+		
+		return size;
 	}
 }
