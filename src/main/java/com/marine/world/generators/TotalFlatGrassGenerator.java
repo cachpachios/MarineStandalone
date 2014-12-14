@@ -41,11 +41,18 @@ public final class TotalFlatGrassGenerator extends WorldGenerator {
         Chunk r = new Chunk(world, new ChunkPos(x, y));
         for (int xx = 0; xx < 16; xx++)
             for (int zz = 0; zz < 16; zz++) {
-                r.setBlock(xx, 0, zz, BlockID.BEDROCK);
-                r.setBlock(xx, 1, zz, BlockID.DIRT);
-                r.setBlock(xx, 2, zz, BlockID.DIRT);
-                r.setBlock(xx, 3, zz, BlockID.DIRT);
-                r.setBlock(xx, 4, zz, BlockID.GRASS);
+                r.setPrivateType(xx, 0, zz, BlockID.BEDROCK);
+                r.setPrivateType(xx, 1, zz, BlockID.DIRT);
+                r.setPrivateType(xx, 2, zz, BlockID.DIRT);
+                r.setPrivateType(xx, 3, zz, BlockID.DIRT);
+                r.setPrivateType(xx, 4, zz, BlockID.GRASS);
+                
+                r.setPrivateLight(xx, 0, zz, (byte) -1);
+                r.setPrivateLight(xx, 1, zz, (byte) -1);
+                r.setPrivateLight(xx, 2, zz, (byte) -1);
+                r.setPrivateLight(xx, 3, zz, (byte) -1);
+                r.setPrivateLight(xx, 4, zz, (byte) -1);
+                
             }
         return r;
     }

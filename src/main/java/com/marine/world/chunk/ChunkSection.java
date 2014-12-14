@@ -20,7 +20,7 @@ public final class ChunkSection {
 
     private final ChunkPos chunkPos;
     
-    private final static int DATA_SIZE = 16*16*16;
+    final static int DATA_SIZE = 16*16*16;
     
     private char[] blockMap;
     private byte[] lightMap;
