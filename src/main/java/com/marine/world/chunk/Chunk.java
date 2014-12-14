@@ -26,7 +26,7 @@ import com.marine.io.data.ByteData;
 import com.marine.net.play.Serverside;
 import com.marine.player.Player;
 import com.marine.util.Position;
-import com.marine.util.Unsafe;
+import com.marine.util.annotations.Unsafe;
 import com.marine.world.BiomeID;
 import com.marine.world.BlockID;
 import com.marine.world.World;

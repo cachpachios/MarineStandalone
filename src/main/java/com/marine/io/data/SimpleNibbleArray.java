@@ -1,10 +1,9 @@
 package com.marine.io.data;
 
 import java.util.ArrayList;
-
 import java.util.List;
 
-import com.marine.util.Hacky;
+import com.marine.util.annotations.Hacky;
 
 
 /**

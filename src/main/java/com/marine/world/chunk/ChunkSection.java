@@ -2,10 +2,9 @@ package com.marine.world.chunk;
 
 import java.util.Arrays;
 
-import com.marine.io.data.ByteData;
-import com.marine.util.Hacky;
 import com.marine.util.Position;
-import com.marine.util.Unsafe;
+import com.marine.util.annotations.Hacky;
+import com.marine.util.annotations.Unsafe;
 import com.marine.world.BlockID;
 import com.marine.world.Identifiers;
 
