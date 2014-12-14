@@ -19,11 +19,11 @@
 
 package com.marine.player;
 
-import com.marine.settings.JSONConfig;
-
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.marine.settings.JSONConfig;
 
 /**
  * Created 2014-12-07 for MarineStandalone
@@ -32,7 +32,8 @@ import java.util.Map;
  */
 public class PlayerFile extends JSONConfig {
 
-    private final Player player;
+    @SuppressWarnings("unused")
+	private final Player player;
 
     public PlayerFile(Player player) throws Exception {
         super(new File("./players"), player.getUUID().toString());

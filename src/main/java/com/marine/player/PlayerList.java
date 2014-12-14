@@ -19,16 +19,16 @@
 
 package com.marine.player;
 
-import com.google.common.eventbus.Subscribe;
-import com.marine.events.Listener;
-import com.marine.events.standardevents.LeaveEvent;
-import com.marine.server.Marine;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.UUID;
 import java.util.function.Consumer;
+
+import com.google.common.eventbus.Subscribe;
+import com.marine.events.Listener;
+import com.marine.events.standardevents.LeaveEvent;
+import com.marine.server.Marine;
 
 /**
  * Created 2014-12-12 for MarineStandalone
@@ -36,15 +36,17 @@ import java.util.function.Consumer;
  * @author Citymonstret
  */
 public class PlayerList extends ArrayList<Short> implements Listener {
+	
+	private static final long serialVersionUID = -3119271835517339073L;
 
-    /**
+	/**
      * Constructor
      *
      * @param c                  Collection (Players/UUIDs/Shorts) to pre-init with
      * @param registerAsListener Register this a listener (listen to logoutEvent)
      * @param removeOffline      Remove offline players (init)
      */
-    public PlayerList(final Collection c, final boolean registerAsListener, final boolean removeOffline) {
+    public PlayerList(@SuppressWarnings("rawtypes") final Collection c, final boolean registerAsListener, final boolean removeOffline) {
         if (c != null && !c.isEmpty()) {
             for (final Object o : c) {
                 if (o instanceof Player) {
@@ -209,7 +211,8 @@ public class PlayerList extends ArrayList<Short> implements Listener {
         return players;
     }
 
-    @Override
+    @SuppressWarnings({ "unchecked", "hiding" })
+	@Override
     public synchronized <Short> Short[] toArray(final Short[] r) {
         return super.toArray((Short[]) new Object[size()]);
     }
@@ -245,7 +248,8 @@ public class PlayerList extends ArrayList<Short> implements Listener {
         return getPlayers().iterator();
     }
 
-    @Override
+    @SuppressWarnings("rawtypes")
+	@Override
     final public boolean addAll(final Collection c) {
         boolean all = true;
         for (final Object o : c) {
