@@ -1,163 +1,48 @@
 package com.marine.io.data;
 
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.ArrayList;
+
 import java.util.List;
-import java.util.ListIterator;
 
 import com.marine.util.Hacky;
 
+
+/**
+ * Hacky and memory wasting implementation of NibbleArray, sometimes preformance saving until toBytes() is called.
+ * Anyway not recommended at all!
+ *
+ * @author Fozie
+ */
 @Hacky
-public class SimpleNibbleArray implements NibbleArray {
+public class SimpleNibbleArray extends ArrayList<Byte> implements NibbleArray {
+	private static final long serialVersionUID = -5838149111965617886L;
 
-	@Override
-	public boolean add(Byte e) {
-		// TODO Auto-generated method stub
-		return false;
+	@Hacky
+	public SimpleNibbleArray() {
+		super();
 	}
 
-	@Override
-	public void add(int index, Byte element) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public boolean addAll(Collection<? extends Byte> c) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean addAll(int index, Collection<? extends Byte> c) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void clear() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public boolean contains(Object o) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean containsAll(Collection<?> c) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public Byte get(int index) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public int indexOf(Object o) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public boolean isEmpty() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public Iterator<Byte> iterator() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public int lastIndexOf(Object o) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public ListIterator<Byte> listIterator() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ListIterator<Byte> listIterator(int index) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean remove(Object o) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public Byte remove(int index) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean removeAll(Collection<?> c) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean retainAll(Collection<?> c) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public Byte set(int index, Byte element) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public int size() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public List<Byte> subList(int fromIndex, int toIndex) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Object[] toArray() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public <T> T[] toArray(T[] a) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	@Hacky
 	@Override
 	public byte[] toBytes() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Byte> r = new ArrayList<Byte>();
+		
+		Byte comp = null;
+		for(byte b : this)
+			if(comp==null) {
+				comp = (byte) ((b &0xF)<<4);
+			}
+			else {
+				comp = (byte) (comp | (b&0xF));
+				r.add(comp);
+				comp = null;
+			}
+		
+		return ByteData.unwrap((Byte[]) r.toArray());
 	}
 
 	@Override
-	public void contains(byte nibble) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	public boolean contains(byte nibble) {
+		return ((ArrayList<Byte>)(this)).contains(nibble);
+	}	
 }

@@ -5,8 +5,11 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
-
-//TODO WORK IN PROGRESS (im lazy...)
+/**
+ * Memory efficient nibble array allways recommended to use this in any case
+ *
+ * @author Fozie
+ */
 public class MemoryEfficientNibbleArray implements NibbleArray{ 
 	
 	private List<Byte> values;
@@ -150,8 +153,8 @@ public class MemoryEfficientNibbleArray implements NibbleArray{
 	}
 
 	@Override
-	public void contains(byte nibble) {
+	public boolean contains(byte nibble) {
 		// TODO Auto-generated method stub
-		
+		return false;
 	}
 }
