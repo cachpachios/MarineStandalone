@@ -1,4 +1,4 @@
-package com.marine.util;
+package com.marine.util.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

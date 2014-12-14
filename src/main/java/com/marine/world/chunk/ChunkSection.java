@@ -34,17 +34,18 @@ public final class ChunkSection {
         this.lightMap = new byte[DATA_SIZE];
     }
 
-    public ByteData getBlockData() { //TODO: Optimize
-        ByteData data = new ByteData();
+    public byte[] getBlockData() { //TODO: Optimize
+        byte[] raw = new byte[DATA_SIZE*2];
+        int i = -1;
         for (char id : blockMap) {
-            data.writeend((byte) (id & 0xff));
-            data.writeend((byte) (id >> 8));
+            raw[++i] = ((byte) (id & 0xff));
+            raw[++i] = ((byte) (id >> 8));
         }
-    	return data;
+    	return raw;
     }
    
-    public ByteData getLightData() { //TODO: Optimize
-    	return new ByteData(lightMap);
+    public byte[] getLightData() { //TODO: Optimize
+    	return lightMap;
     }
 
     public void setType(int x, int y, int z, BlockID id) {

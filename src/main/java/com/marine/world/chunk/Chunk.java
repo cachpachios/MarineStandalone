@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.marine.io.data.ByteData;
+import com.marine.net.play.Serverside;
 import com.marine.player.Player;
 import com.marine.util.Position;
 import com.marine.util.Unsafe;
@@ -111,11 +112,11 @@ public class Chunk {
 
         for (ChunkSection s : sections) {
             if (s != null)
-                d.writeData(s.getBlockData());
+                d.writeArray(ByteData.wrap(s.getBlockData()));
         }
         for (ChunkSection s : sections) {
             if (s != null)
-                d.writeData(s.getLightData());
+                d.writeArray(ByteData.wrap(s.getLightData()));
         }
 
         if (biomes)
@@ -157,10 +158,12 @@ public class Chunk {
     	updateBlockChange(new Position(x*pos.getX(),y,z*pos.getY()), type);
 	}
 	
+	@Serverside
 	public void setPrivateType(int x, int y, int z, BlockID type) {
     	setType(x, y, z,type);
 	}
 	
+	@Serverside
 	public void setPrivateLight(int x, int y, int z, byte light) {
     	setLight(x, y, z, light);
 	}
@@ -174,6 +177,7 @@ public class Chunk {
         
         return sections[s].getType(x/16, y/16, z/16);
 	}
+	
 	@Unsafe
 	public final ChunkSection getSection(int y) {
         return sections[y >> 4];
