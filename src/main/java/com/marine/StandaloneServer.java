@@ -26,6 +26,7 @@ import com.marine.game.chat.ChatColor;
 import com.marine.game.chat.ChatComponent;
 import com.marine.game.chat.ChatMessage;
 import com.marine.game.command.Command;
+import com.marine.game.command.CommandProvider;
 import com.marine.game.command.CommandSender;
 import com.marine.game.commands.*;
 import com.marine.game.scheduler.Scheduler;
@@ -52,7 +53,7 @@ import java.util.TimerTask;
  * StandaloneServer - Housing of the main loop
  */
 @SuppressWarnings("unused")
-public class StandaloneServer {
+public class StandaloneServer implements CommandProvider {
 
     // Final values
     public final int skipTime;
@@ -121,15 +122,15 @@ public class StandaloneServer {
     }
 
     private void registerDefaultCommands() {
-        CommandManager.getInstance().registerCommand(new Info());
-        CommandManager.getInstance().registerCommand(new Help());
-        CommandManager.getInstance().registerCommand(new Test());
-        CommandManager.getInstance().registerCommand(new Say());
-        CommandManager.getInstance().registerCommand(new Stop());
-        CommandManager.getInstance().registerCommand(new Plugins());
-        CommandManager.getInstance().registerCommand(new SendAboveActionBarMessage());
-        CommandManager.getInstance().registerCommand(new Teleport());
-        CommandManager.getInstance().registerCommand(new Tellraw());
+        CommandManager.getInstance().registerCommand(this, new Info());
+        CommandManager.getInstance().registerCommand(this, new Help());
+        CommandManager.getInstance().registerCommand(this, new Test());
+        CommandManager.getInstance().registerCommand(this, new Say());
+        CommandManager.getInstance().registerCommand(this, new Stop());
+        CommandManager.getInstance().registerCommand(this, new Plugins());
+        CommandManager.getInstance().registerCommand(this, new SendAboveActionBarMessage());
+        CommandManager.getInstance().registerCommand(this, new Teleport());
+        CommandManager.getInstance().registerCommand(this, new Tellraw());
     }
 
     public void start() {
@@ -316,5 +317,15 @@ public class StandaloneServer {
             };
         }
         return this.console;
+    }
+
+    @Override
+    public String getProviderName() {
+        return "marine";
+    }
+
+    @Override
+    public byte getProviderPriority() {
+        return 0x02;
     }
 }

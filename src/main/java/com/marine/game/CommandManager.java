@@ -20,7 +20,7 @@
 package com.marine.game;
 
 import com.marine.game.command.Command;
-import com.marine.util.StringUtils;
+import com.marine.game.command.CommandProvider;
 
 import java.util.*;
 
@@ -53,18 +53,17 @@ public class CommandManager {
         }
     }
 
-    public void registerCommand(Command command) throws RuntimeException {
-        if (stringMap.containsKey(command.toString()))
-            throw new RuntimeException(StringUtils.format("Command Name '%s' is already taken", command));
-        List<String> ss = new ArrayList<>();
-        stringMap.put(command.toString(), command);
+    public void registerCommand(final CommandProvider provider, final Command command) {
+        final String name = stringMap.containsKey(command.toString()) ? provider.getProviderName() + ":" + command : command.toString();
+        final List<String> ss = new ArrayList<>();
+        stringMap.put(name, command);
+        command.setName(name);
         for (String s : command.getAliases()) {
-            if (stringMap.containsKey(s))
-                ss.add(s);
-            else
-                stringMap.put(s, command);
+            if (stringMap.containsKey(s)) ss.add(s);
+            else stringMap.put(s, command);
         }
         command.getAliases().removeAll(ss);
+        command.setProvider(this);
     }
 
     public Collection<Command> getCommands() {

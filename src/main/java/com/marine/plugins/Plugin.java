@@ -20,7 +20,10 @@
 package com.marine.plugins;
 
 import com.marine.Logging;
+import com.marine.game.CommandManager;
 import com.marine.game.chat.ChatColor;
+import com.marine.game.command.Command;
+import com.marine.game.command.CommandProvider;
 
 import java.io.File;
 import java.util.UUID;
@@ -36,7 +39,7 @@ import java.util.UUID;
  *
  * @author Citymonstret
  */
-public class Plugin {
+public class Plugin implements CommandProvider {
 
     private final UUID uuid;
     private boolean enabled;
@@ -212,5 +215,25 @@ public class Plugin {
     @Override
     public String toString() {
         return this.name;
+    }
+
+    @Override
+    final public String getProviderName() {
+        return getName().toLowerCase().replace(" ", "");
+    }
+
+    @Override
+    final public byte getProviderPriority() {
+        return (byte) 0x01;
+    }
+
+    /**
+     * Register a command using this instance as the
+     * provider
+     *
+     * @param command Command
+     */
+    final public void addCommand(Command command) {
+        CommandManager.getInstance().registerCommand(this, command);
     }
 }

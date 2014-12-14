@@ -19,9 +19,11 @@
 
 package com.marine.game.command;
 
+import com.marine.game.CommandManager;
 import com.marine.player.Player;
 import com.marine.server.Marine;
 import com.marine.util.Location;
+import com.marine.util.Protected;
 import com.marine.world.entity.Entity;
 
 import java.util.*;
@@ -34,19 +36,18 @@ import java.util.*;
 public abstract class Command {
 
     /**
-     * The actual command
-     */
-    private final String command;
-
-    /**
      * Command aliases
      */
     private final List<String> aliases;
-
     /**
      * Command description
      */
     private final String description;
+    /**
+     * The actual command
+     */
+    private String command;
+    private CommandManager provider;
 
     /**
      * Constructor
@@ -206,5 +207,28 @@ public abstract class Command {
     public Player getClosestPlayer(CommandSender sender) {
         if (sender instanceof Player) return (Player) sender;
         return getLocationClosestPlayer(sender.getLocation());
+    }
+
+    /**
+     * Get the command provider
+     *
+     * @return provider
+     */
+    public CommandManager getProvider() {
+        return provider;
+    }
+
+    /**
+     * Set the command provider
+     *
+     * @param provider Command provider
+     */
+    public void setProvider(CommandManager provider) {
+        this.provider = provider;
+    }
+
+    @Protected
+    public void setName(String name) {
+        this.command = name;
     }
 }

@@ -17,28 +17,31 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package com.marine.util;
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+package com.marine.game.command;
 
 /**
- * W.I.P
+ * Created 2014-12-14 for MarineStandalone
  *
  * @author Citymonstret
  */
-@Retention(RetentionPolicy.SOURCE)
-@Target({ElementType.METHOD, ElementType.CONSTRUCTOR, ElementType.TYPE})
-public @interface Protected {
-    /*
-        This doesn't do anything as of now, but I plan to make it
-        able to automatically block plugin-based requests
+public interface CommandProvider {
 
-        (Using)
-        // Security Check Start
-        System.getSecurityManager().checkPermission(MarineSecurityManager.MARINE_PERMISSION);
-        // Security Check end
+    /**
+     * Get the command provider name
+     *
+     * @return Command Provider
      */
+    public String getProviderName();
+
+    /**
+     * Command Provider Priority
+     * <p/>
+     * 0x00 = Internal
+     * 0x01 = Plugin
+     * 0x02 = Other
+     *
+     * @return Priority
+     */
+    public byte getProviderPriority();
+
 }

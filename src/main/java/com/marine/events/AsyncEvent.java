@@ -21,12 +21,17 @@ package com.marine.events;
 
 
 /**
- * Created 2014-12-07 for MarineStandalone
+ * Async Event
  *
  * @author Citymonstret
  */
 public class AsyncEvent extends MarineEvent {
 
+    /**
+     * Constructor
+     *
+     * @param name Unique Event Name
+     */
     public AsyncEvent(String name) {
         super(name);
     }

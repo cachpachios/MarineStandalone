@@ -30,11 +30,22 @@ public class PlayerEvent extends MarineEvent {
 
     private final Player player;
 
+    /**
+     * A player event
+     *
+     * @param player Player which is affected by the event
+     * @param name   The event name
+     */
     public PlayerEvent(final Player player, final String name) {
         super("player_event:" + name);
         this.player = player;
     }
 
+    /**
+     * Get the affected player
+     *
+     * @return affected player
+     */
     final public Player getPlayer() {
         return this.player;
     }

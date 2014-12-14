@@ -23,6 +23,7 @@ import java.util.EnumSet;
 import java.util.concurrent.ConcurrentHashMap;
 
 public final class Identifiers {
+
     private static ConcurrentHashMap<Byte, BlockID> block_id;
 
     public static BlockID getBlockID(byte id) {
@@ -32,8 +33,6 @@ public final class Identifiers {
             for (BlockID b : set)
                 block_id.put(b.getID(), b);
         }
-
-
         if (block_id.containsKey(id))
             return block_id.get(id);
         else
