@@ -33,7 +33,12 @@ import com.marine.util.Hacky;
 
 @Hacky
 public final class Identifiers {
+<<<<<<< HEAD
     private static Map<Byte, BlockID> block_id;
+=======
+
+    private static ConcurrentHashMap<Byte, BlockID> block_id;
+>>>>>>> origin/master
 
     public static BlockID getBlockID(byte id) {
         if (block_id == null) {
@@ -42,7 +47,10 @@ public final class Identifiers {
             for (BlockID b : set)
                 block_id.put(b.getID(), b);
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/master
         if (block_id.containsKey(id))
             return block_id.get(id);
         else

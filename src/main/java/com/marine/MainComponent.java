@@ -19,19 +19,38 @@
 
 package com.marine;
 
+import com.marine.game.system.MarineSecurityManager;
 import com.marine.settings.ServerSettings;
+import com.marine.util.Protected;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+@Protected
 public class MainComponent {
 
     public static List<String> arguments;
     public static Timer mainTimer;
 
-    private static double getJavaVersion() {
+    // SECURITY CHECK START ////////////////////////////////////////////////////////////////////////////////////////////
+
+    static {
+        if (System.getSecurityManager() == null) {
+            System.setSecurityManager(new MarineSecurityManager(System.getSecurityManager()));
+        }
+        System.getSecurityManager().checkPermission(MarineSecurityManager.MARINE_PERMISSION);
+    }
+
+    public MainComponent() {
+        System.getSecurityManager().checkPermission(MarineSecurityManager.MARINE_PERMISSION);
+    }
+
+    // SECURITY CHECK END //////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static double getJavaVersion() {
         try {
             return Double.parseDouble(System.getProperty("java.specification.version"));
         } catch (Throwable e) {
@@ -44,6 +63,11 @@ public class MainComponent {
             System.out.println("-- Could not start MarineStandalone: Requires java 1.7 or above --");
             System.exit(1);
         }
+        // Check if run from compressed folder
+        if (false /* TODO: Remove this, cannot use this check when in-dev */ && new File(".").getAbsolutePath().indexOf('!') == -1) {
+            System.out.println("-- Could not start MarineStandalone: Cannot run from compressed folder");
+            System.exit(1);
+        }
         try { // Check OS Arch and warn if lower than 64bit
             if (Integer.parseInt(System.getProperty("sun.arch.data.model")) < 64) {
                 Logging.getLogger().warn("Warning Server is running on 32bit this is highly not recommended and can cause fatal errors or lag!");
@@ -52,6 +76,14 @@ public class MainComponent {
         } catch (SecurityException e) { // If blocked print an error
             Logging.getLogger().error("Unable to retrieve computer arch! Perhaps blocked by the OS.");
         }
+        // Make sure that plugins can't
+        // close down the jvm
+        // or replace the security
+        // manager with a custom one
+        System.setSecurityManager(new MarineSecurityManager(System.getSecurityManager()));
+        // Use IPv4 instead of IPv6
+        System.setProperty("java.net.preferIPv4Stack", "true");
+        // Make math fast :D
         chargeUp();
         // Get the arguments
         arguments = Arrays.asList(args);

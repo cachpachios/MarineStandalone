@@ -17,40 +17,18 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package com.marine.util;
-
 /**
- * Created 2014-12-12 for MarineStandalone
+ * This package contains all the fun Plugin
+ * backend logic.
+ *
+ * Some of these classes should not be accessible
+ * from plugins, and some will just not work when
+ * accessed from a plugin.
+ *
+ * PluginClassLoader is parsed into the plugin when
+ * loaded, so you are free to use that from within
+ * a plugin if you want to.
  *
  * @author Citymonstret
  */
-public class Vector2i extends Vector2<Integer> {
-
-    public Vector2i(Integer x, Integer y) {
-        super(x, y);
-    }
-
-    @Override
-    public void add(Vector2<Integer> v2) {
-        setX(getX() + v2.getX());
-        setY(getY() + v2.getY());
-    }
-
-    @Override
-    public void subtract(Vector2<Integer> v2) {
-        setX(getX() - v2.getX());
-        setY(getY() - v2.getY());
-    }
-
-    @Override
-    public void multiply(int n) {
-        setX(getX() * n);
-        setY(getY() * n);
-    }
-
-    @Override
-    public void divide(int n) {
-        setX(getX() / n);
-        setY(getY() / n);
-    }
-}
+package com.marine.plugins;

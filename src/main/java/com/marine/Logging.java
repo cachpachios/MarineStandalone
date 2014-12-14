@@ -28,6 +28,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+/**
+ * Logging class - Used for all
+ * logging purposes, even the built
+ * in plugin loggers.
+ *
+ * @author Fozie
+ * @author Citymonstret
+ */
 public class Logging extends PrintStream {
 
     private static Logging instance;

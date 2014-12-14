@@ -19,67 +19,26 @@
 
 package com.marine.util;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
 /**
- * Created 2014-12-01 for MarineStandalone
+ * W.I.P
  *
  * @author Citymonstret
- * @author Fozie
  */
-public abstract class Vector3<T extends Number> {
+@Retention(RetentionPolicy.SOURCE)
+@Target({ElementType.METHOD, ElementType.CONSTRUCTOR, ElementType.TYPE})
+public @interface Protected {
+    /*
+        This doesn't do anything as of now, but I plan to make it
+        able to automatically block plugin-based requests
 
-    public T x, y, z;
-
-    /**
-     * Constructor
-     *
-     * @param x X Value
-     * @param y Y Value
-     * @param z Z Value
+        (Using)
+        // Security Check Start
+        System.getSecurityManager().checkPermission(MarineSecurityManager.MARINE_PERMISSION);
+        // Security Check end
      */
-    public Vector3(T x, T y, T z) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-    }
-
-    public abstract void add(Vector3<T> v2);
-
-    public abstract void subtract(Vector3<T> v2);
-
-    public abstract void multiply(int n);
-
-    public abstract void divide(int n);
-
-    public T getX() {
-        return this.x;
-    }
-
-    public void setX(T x) {
-        this.x = x;
-    }
-
-    public T getY() {
-        return this.y;
-    }
-
-    public void setY(T y) {
-        this.y = y;
-    }
-
-    public T getZ() {
-        return this.z;
-    }
-
-    public void setZ(T z) {
-        this.z = z;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 37;
-        hash = hash * 3 + getX().intValue();
-        hash = hash * 3 + getY().intValue();
-        hash = hash * 3 + getZ().intValue();
-        return hash;
-    }
 }

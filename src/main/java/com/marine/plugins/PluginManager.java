@@ -24,7 +24,9 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Created 2014-12-10 for MarineStandalone
+ * Plugin Manager
+ *
+ * This should be used rather than the @Protected PluginLoader
  *
  * @author Citymonstret
  */

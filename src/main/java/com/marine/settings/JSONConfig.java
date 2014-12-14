@@ -28,7 +28,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created 2014-12-03 for MarineStandalone
+ * JSON Config Class
+ *
+ * Used for all internal and
+ * external configuration files
+ * used by MarineStandalone and its
+ * plugins. Feel free to use this for
+ * all your plugin needs.
  *
  * @author Citymonstret
  */

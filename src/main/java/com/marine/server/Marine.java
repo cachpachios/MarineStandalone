@@ -21,8 +21,11 @@ package com.marine.server;
 
 import com.marine.Logging;
 import com.marine.StandaloneServer;
+import com.marine.game.chat.builder.Chat;
 import com.marine.game.scheduler.Scheduler;
+import com.marine.game.system.MarineSecurityManager;
 import com.marine.player.Player;
+import com.marine.util.Protected;
 import com.marine.world.World;
 
 import java.net.InetAddress;
@@ -30,9 +33,16 @@ import java.util.Collection;
 import java.util.UUID;
 
 /**
- * Created 2014-12-02 for MarineStandalone
+ * Static API Class - Fun stuff in here
+ *
+ * Static implementation of commonly used
+ * methods. It wraps around the global instances
+ * of:
+ * StandaloneServer
+ * MarineServer
  *
  * @author Citymonstret
+ * @author Fozie
  */
 public class Marine {
 
@@ -54,75 +64,161 @@ public class Marine {
      * @param username Username
      * @return Player
      */
-    public static Player getPlayer(String username) {
+    public static Player getPlayer(final String username) {
         return null;
     }
 
     /**
-     * @param uuid
-     * @return
+     * Get a player based on its uid
+     *
+     * @param uuid player uuid
+     * @return player or null
      */
-    public static Player getPlayer(UUID uuid) {
-        for (Player player : getPlayers())
+    public static Player getPlayer(final UUID uuid) {
+        for (final Player player : getPlayers())
             if (player.getUUID().equals(uuid))
                 return player;
         return null;
     }
 
-    public static World getWorld(String name) {
+    /**
+     * Get a world based on its name
+     *
+     * @param name World Name
+     * @return World or null
+     */
+    public static World getWorld(final String name) {
         return server.getWorld(name);
     }
 
+    /**
+     * Get the current MOTD
+     * @return Current MOTD
+     */
     public static String getMOTD() {
         return server.getMOTD();
     }
 
+    /**
+     * Get the MarineServer
+     * @return Marine Server
+     */
     public static MarineServer getServer() {
         return server;
     }
 
-    public static void setServer(MarineServer marine) {
+    // IGNORE
+    @Protected
+    public static void setServer(final MarineServer marine) {
+        // Security Check Start
+        System.getSecurityManager().checkPermission(MarineSecurityManager.MARINE_PERMISSION);
+        // Security Check end
         if (server != null) {
             throw new RuntimeException("Cannot replace the MarineServer");
         }
         server = marine;
     }
 
+    /**
+     * Stop the server
+     */
     public static void stop() {
         standaloneServer.stop();
     }
 
+    // IGNORE
+    @Protected
     public static void setStandalone(final StandaloneServer s) {
+        // Security Check Start
+        System.getSecurityManager().checkPermission(MarineSecurityManager.MARINE_PERMISSION);
+        // Security Check end
         if (standaloneServer != null) {
             throw new RuntimeException("Cannot replace the StandaloneServer");
         }
         standaloneServer = s;
     }
 
+    /**
+     * Get the max player number
+     *
+     * @return max players
+     */
     public static int getMaxPlayers() {
         return server.getMaxPlayers();
     }
 
+    /**
+     * Get the scheduler class
+     *
+     * @return scheduler class
+     */
     public static Scheduler getScheduler() {
         return getServer().getServer().getScheduler();
     }
 
-    public static void broadcastMessage(String string) {
-        for (Player player : getPlayers()) {
+    /**
+     * Broadcast a message to all players
+     *
+     * @param string message
+     */
+    public static void broadcastMessage(final String string) {
+        for (final Player player : getPlayers()) {
             player.sendMessage(string);
         }
         Logging.getLogger().log(string);
     }
 
-    public static Player getPlayer(short uid) {
+    /**
+     * Send raw JSON
+     *
+     * @param string json
+     */
+    public static void broadcastMessageRaw(final String string) {
+        for (final Player player : getPlayers()) {
+            player.sendMessageRaw(string);
+        }
+        Logging.getLogger().log("Raw JSON Sent: " + string);
+    }
+
+    /**
+     * Broadcast a message to all players
+     *
+     * @param chat message
+     */
+    public static void broadcastMessage(final Chat chat) {
+        for (final Player player : getPlayers()) {
+            player.sendMessage(chat);
+        }
+        Logging.getLogger().log("Raw Chat Sent: " + chat.toString());
+    }
+
+    /**
+     * Get a player based on its uid
+     *
+     * @param uid Unique ID
+     * @return Player or null
+     */
+    public static Player getPlayer(final short uid) {
         return getServer().getPlayer(uid);
     }
 
-    public static boolean isBanned(UUID uuid) {
+    /**
+     * Check if a player is banned
+     *
+     * @param uuid Player UUID
+     * @return boolean (banned)
+     */
+    public static boolean isBanned(final UUID uuid) {
         return false;
     }
 
-    public static boolean isBanned(InetAddress addres) {
+    /**
+     * Check if an IP is banned
+     *
+     * @param address IP
+     * @return boolean (banned)
+     */
+    public static boolean isBanned(final InetAddress address) {
         return false;
     }
 }

@@ -24,18 +24,47 @@ import com.marine.util.Location;
 
 
 /**
- * Created 2014-12-01 for MarineStandalone
+ * CommandSender = Player, Console, RCON & Command Blocks
  *
  * @author Citymonstret
  */
 public interface CommandSender extends ChatReciver {
+
+    /**
+     * Execute a command without any arguments
+     *
+     * @param command Command to execute
+     */
     public void executeCommand(String command);
 
+    /**
+     * Execute a command with arguments
+     *
+     * @param command   Command to execute
+     * @param arguments Arguments
+     */
     public void executeCommand(String command, String[] arguments);
 
+    /**
+     * Execute a command with arguments
+     *
+     * @param command Command to execute
+     * @param arguments Arguments
+     */
     public void executeCommand(Command command, String[] arguments);
 
+    /**
+     * Get the sender location
+     *
+     * @return current location
+     */
     public Location getLocation();
 
+    /**
+     * Check if the sender has the given permission
+     *
+     * @param permission Permission
+     * @return has permission?
+     */
     public boolean hasPermission(String permission);
 }

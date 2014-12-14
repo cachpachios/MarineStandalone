@@ -17,42 +17,45 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package com.marine.plugins;
+package com.marine.util.wrapper;
 
-
-import org.json.JSONObject;
-import org.json.JSONTokener;
-
-import java.io.InputStream;
+import com.marine.io.data.ByteData;
 
 /**
- * The plugin description file
+ * Packet Wrapper
  *
- * @author Citymonstret
+ * @param <T>
+ * @author Fozie
  */
-public class PluginFile {
+public abstract class PacketWrapper<T> {
 
-    public final String name;
-    public final String mainClass;
-    public final String author;
-    public final String version;
+    private T obj;
 
-    /**
-     * Constructor
-     *
-     * @param stream Stream with desc.json incoming
-     * @throws Exception If anything bad happens
-     */
-    public PluginFile(InputStream stream) throws Exception {
-        final JSONTokener tokener = new JSONTokener(stream);
-        final JSONObject object = new JSONObject(tokener);
-
-        this.name = object.getString("name");
-        this.mainClass = object.getString("main");
-        this.author = object.getString("author");
-        this.version = object.getString("version");
-
-        stream.close();
+    public PacketWrapper(T v) {
+        this.obj = v;
     }
 
+    public abstract T readFromData(ByteData d);
+
+    public T readFromBytes(byte[] b) {
+        return readFromData(new ByteData(b));
+    }
+
+    public abstract ByteData toByteData();
+
+    public byte[] getBytes() {
+        return toByteData().getBytes();
+    }
+
+    public T getData() {
+        return obj;
+    }
+
+    public void setData(T data) {
+        obj = data;
+    }
+
+    public T get() {
+        return obj;
+    }
 }

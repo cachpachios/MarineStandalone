@@ -17,38 +17,74 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package com.marine.util;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+package com.marine.util.vectors;
 
 /**
- * ID Object interface (blocks, materials)
+ * 2 Dimensional Vector
  *
  * @author Citymonstret
  */
-public interface IDObject {
+public abstract class Vector2<T extends Number> implements Vector {
 
     /**
-     * Get the string ID
-     *
-     * @return String ID
+     * X & Y Values
      */
-    public String getStringID();
+    public T x, y;
 
     /**
-     * Get the numeric ID
+     * Constructor
      *
-     * @return Numeric ID
+     * @param x X Value
+     * @param y Y Value
      */
-    public short getNumericID();
+    public Vector2(final T x, final T y) {
+        this.x = x;
+        this.y = y;
+    }
 
     /**
-     * Turn the item into a json object
+     * Add all values of the specified vector to the
+     * current instance
      *
-     * @return JSON Object
-     * @throws JSONException
+     * @param v2 Other instance
      */
-    public JSONObject toJSON() throws JSONException;
+    public abstract void add(Vector2<T> v2);
 
+    /**
+     * Subtract all values of the specified vector
+     * from the current instance
+     *
+     * @param v2 Other instance
+     */
+    public abstract void subtract(Vector2<T> v2);
+
+    @Override
+    public abstract void multiply(int n);
+
+    @Override
+    public abstract void divide(int n);
+
+    public T getX() {
+        return this.x;
+    }
+
+    public void setX(T x) {
+        this.x = x;
+    }
+
+    final public T getY() {
+        return this.y;
+    }
+
+    final public void setY(T y) {
+        this.y = y;
+    }
+
+    @Override
+    final public int hashCode() {
+        int hash = 37;
+        hash = hash * 3 + getX().intValue();
+        hash = hash * 3 + getY().intValue();
+        return hash;
+    }
 }

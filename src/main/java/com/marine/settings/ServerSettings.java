@@ -30,7 +30,7 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
- * Created 2014-12-02 for MarineStandalone
+ * Server settings (.properties) implementation
  *
  * @author Citymonstret
  */
@@ -99,10 +99,7 @@ public class ServerSettings {
     }
 
     public boolean getBoolean(String value) {
-        if (value == "true")
-            return true;
-        else
-            return false;
+        return value.equalsIgnoreCase("true") || value.equalsIgnoreCase("on") || value.equalsIgnoreCase("yes");
     }
 
     public int getInt(String value) {

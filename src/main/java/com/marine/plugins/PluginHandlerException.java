@@ -20,7 +20,8 @@
 package com.marine.plugins;
 
 /**
- * Created 2014-12-11 for MarineStandalone
+ * Exception thrown by the plugin internals when something
+ * that shouldn't occur, occurs.
  *
  * @author Citymonstret
  */

@@ -19,7 +19,7 @@
 
 package com.marine.world.entity;
 
-import com.marine.util.Vector3d;
+import com.marine.util.vectors.Vector3d;
 
 /**
  * Created 2014-12-11 for MarineStandalone

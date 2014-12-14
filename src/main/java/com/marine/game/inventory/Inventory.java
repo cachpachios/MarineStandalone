@@ -23,7 +23,7 @@ import com.marine.game.chat.ChatComponent;
 import com.marine.game.item.Item;
 import com.marine.game.item.ItemID;
 import com.marine.game.item.ItemSlot;
-import com.marine.util.PacketWrapper;
+import com.marine.util.wrapper.PacketWrapper;
 
 public abstract class Inventory {
 

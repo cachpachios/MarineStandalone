@@ -22,7 +22,7 @@ package com.marine.plugins;
 import com.marine.Logging;
 
 /**
- * Created 2014-12-10 for MarineStandalone
+ * The logger used in plugins
  *
  * @author Citymonstret
  */
@@ -30,18 +30,33 @@ public class PluginLogger {
 
     private final Plugin plugin;
 
+    /**
+     * The plugin to init with
+     *
+     * @param plugin Plugin
+     */
     public PluginLogger(Plugin plugin) {
         this.plugin = plugin;
     }
 
+    /**
+     * Log a string to the global logger
+     *
+     * @param message Message to log
+     */
     final public void log(String message) {
         Logging.getLogger().log(constructMessage(message));
     }
 
-    public PluginMessage constructMessage(String message) {
+    private PluginMessage constructMessage(String message) {
         return new PluginMessage(String.format("[%s] %s", plugin.getName(), message), this);
     }
 
+    /**
+     * Get the plugin for this logger
+     *
+     * @return plugin
+     */
     final public Plugin getPlugin() {
         return this.plugin;
     }
@@ -51,13 +66,33 @@ public class PluginLogger {
         private final String message;
         private final PluginLogger logger;
 
+        /**
+         * Construct a new message
+         *
+         * @param message Message
+         * @param logger  Logger
+         */
         public PluginMessage(String message, final PluginLogger logger) {
             this.message = message;
             this.logger = logger;
         }
 
+        /**
+         * Get the message
+         *
+         * @return
+         */
         public String getMessage() {
             return this.message;
+        }
+
+        /**
+         * Get the logger
+         *
+         * @return logger
+         */
+        public PluginLogger getLogger() {
+            return this.logger;
         }
     }
 }

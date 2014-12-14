@@ -17,63 +17,40 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package com.marine.util;
+package com.marine.util.vectors;
 
-public class Vector3d extends Vector3<Double> {
+/**
+ * Integer Implementation of a 2D Vector
+ *
+ * @author Citymonstret
+ */
+public class Vector2i extends Vector2<Integer> {
 
-    public Vector3d() {
-        super(0d, 0d, 0d);
-    }
-
-    public Vector3d(int x, int y, int z) {
-        super((double) x, (double) y, (double) z);
-    }
-
-    public Vector3d(double x, double y, double z) {
-        super(x, y, z);
-    }
-
-    public Vector3d(double t) {
-        super(t, t, t);
-    }
-
-    public double getLengthSquared() {
-        return (x * x + y * y + z * z);
-    }
-
-    public double getLength() {
-        return Math.sqrt(getX() * getX() + getY() * getY() + getZ() * getZ());
-    }
-
-    public Vector3i toIntVector() {
-        return new Vector3i(getX().intValue(), getY().intValue(), getZ().intValue());
+    public Vector2i(Integer x, Integer y) {
+        super(x, y);
     }
 
     @Override
-    public void add(Vector3<Double> v2) {
-        x += v2.x;
-        y += v2.y;
-        z += v2.z;
+    public void add(Vector2<Integer> v2) {
+        setX(getX() + v2.getX());
+        setY(getY() + v2.getY());
     }
 
     @Override
-    public void subtract(Vector3<Double> v2) {
-        x -= v2.x;
-        y -= v2.y;
-        z -= v2.y;
+    public void subtract(Vector2<Integer> v2) {
+        setX(getX() - v2.getX());
+        setY(getY() - v2.getY());
     }
 
     @Override
     public void multiply(int n) {
-        x *= n;
-        y *= n;
-        z *= n;
+        setX(getX() * n);
+        setY(getY() * n);
     }
 
     @Override
     public void divide(int n) {
-        x /= n;
-        y /= n;
-        z /= n;
+        setX(getX() / n);
+        setY(getY() / n);
     }
 }

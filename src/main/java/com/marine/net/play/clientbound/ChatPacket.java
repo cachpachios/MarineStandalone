@@ -44,6 +44,13 @@ public class ChatPacket extends Packet {
         this(message, 0);
     }
 
+    public ChatPacket(final String message, final boolean test) {
+        this.message = message;
+        this.position = 0;
+        if (test)
+            throw new UnsupportedOperationException("JSON Testing isn't implemented yet");
+    }
+
     public ChatPacket(final Chat chat) {
         this.message = chat.toString();
         this.position = 0;

@@ -20,17 +20,26 @@
 package com.marine.plugins;
 
 import com.marine.Logging;
+import com.marine.game.CommandManager;
 import com.marine.game.chat.ChatColor;
+import com.marine.game.command.Command;
+import com.marine.game.command.CommandProvider;
 
 import java.io.File;
 import java.util.UUID;
 
 /**
- * Created 2014-12-10 for MarineStandalone
+ * Plugins will need to implement this class in order
+ * to be loaded.
+ *
+ * Use the methods in here, rather than any external
+ * methods that do the same thing, as these are optimized
+ * for use in plugins, and will make sure that nothing
+ * breaks.
  *
  * @author Citymonstret
  */
-public class Plugin {
+public class Plugin implements CommandProvider {
 
     private final UUID uuid;
     private boolean enabled;
@@ -76,6 +85,8 @@ public class Plugin {
 
     /**
      * Used to enable the plugin
+     *
+     * @throws com.marine.plugins.PluginException If the plugin is already enabled, or if couldn't be enabled
      */
     final public void enable() {
         if (this.enabled)
@@ -92,6 +103,8 @@ public class Plugin {
 
     /**
      * Used to disable the plugin
+     *
+     * @throws com.marine.plugins.PluginException if it isn't enabled
      */
     final public void disable() {
         if (!this.enabled)
@@ -202,5 +215,25 @@ public class Plugin {
     @Override
     public String toString() {
         return this.name;
+    }
+
+    @Override
+    final public String getProviderName() {
+        return getName().toLowerCase().replace(" ", "");
+    }
+
+    @Override
+    final public byte getProviderPriority() {
+        return (byte) 0x01;
+    }
+
+    /**
+     * Register a command using this instance as the
+     * provider
+     *
+     * @param command Command
+     */
+    final public void addCommand(Command command) {
+        CommandManager.getInstance().registerCommand(this, command);
     }
 }

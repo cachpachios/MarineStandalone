@@ -26,7 +26,7 @@ import org.json.JSONObject;
 import java.io.File;
 
 /**
- * Created 2014-12-03 for MarineStandalone
+ * A File handler for the internal JSON Files
  *
  * @author Citymonstret
  */

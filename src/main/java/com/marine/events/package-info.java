@@ -17,44 +17,9 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package com.marine.util;
-
 /**
- * Created 2014-12-12 for MarineStandalone
+ * Event Internals
  *
  * @author Citymonstret
  */
-public class Vector3f extends Vector3<Float> {
-
-    public Vector3f(Float x, Float y, Float z) {
-        super(x, y, z);
-    }
-
-    @Override
-    public void add(Vector3<Float> v2) {
-        setX(getX() + v2.getX());
-        setY(getY() + v2.getY());
-        setZ(getZ() + v2.getZ());
-    }
-
-    @Override
-    public void subtract(Vector3<Float> v2) {
-        setX(getX() - v2.getX());
-        setY(getY() - v2.getY());
-        setZ(getZ() - v2.getZ());
-    }
-
-    @Override
-    public void multiply(int n) {
-        setX(getX() * n);
-        setY(getY() * n);
-        setZ(getZ() * n);
-    }
-
-    @Override
-    public void divide(int n) {
-        setX(getX() / n);
-        setY(getY() / n);
-        setZ(getZ() / n);
-    }
-}
+package com.marine.events;

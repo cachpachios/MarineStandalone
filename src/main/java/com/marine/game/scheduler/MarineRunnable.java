@@ -19,8 +19,11 @@
 
 package com.marine.game.scheduler;
 
+import com.marine.server.Marine;
+
 /**
- * Created 2014-12-08 for MarineStandalone
+ * A runnable class created for MarineStandalone,
+ * can be used in both internal files and plugins.
  *
  * @author Citymonstret
  */
@@ -50,16 +53,16 @@ public abstract class MarineRunnable {
      * @param scheduler Scheduler class
      */
     public void cancel(final Scheduler scheduler, final long n) {
+        // Will automatically remove THIS task :D
         scheduler.removeTask(n);
+        //
         this.requiredTick = Long.MIN_VALUE;
         this.tick = Long.MAX_VALUE;
         this.totalRuns = Long.MIN_VALUE;
         this.ran = Long.MAX_VALUE;
-        // Will make sure to GC it, to free up some memory
-        scheduler.forceGC(this);
     }
 
-    final public void tick(Scheduler scheduler, long n) {
+    final void tick(Scheduler scheduler, long n) {
         ++this.tick;
         if (this.tick >= this.requiredTick) {
             if ((totalRuns == -1 || ran++ <= totalRuns)) {
@@ -71,5 +74,27 @@ public abstract class MarineRunnable {
         }
     }
 
+    /**
+     * Create this task SYNC
+     *
+     * @return Task ID
+     */
+    final public long runSync() {
+        return Marine.getScheduler().createSyncTask(this);
+    }
+
+    /**
+     * Create this task ASYNC
+     *
+     * @return Task ID
+     */
+    final public long runAsync() {
+        return Marine.getScheduler().createAsyncTask(this);
+    }
+
+    /**
+     * Run the task (will be repeated)
+     * using the tick method
+     */
     public abstract void run();
 }

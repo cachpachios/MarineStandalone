@@ -17,7 +17,7 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package com.marine.util;
+package com.marine.util.mojang;
 
 import org.json.JSONTokener;
 import org.json.simple.JSONObject;
@@ -30,7 +30,7 @@ import java.net.URL;
 import java.net.URLConnection;
 
 /**
- * Created 2014-12-04 for MarineStandalone
+ * Mojang Utilities - Unsupported!
  *
  * @author Citymonstret
  */

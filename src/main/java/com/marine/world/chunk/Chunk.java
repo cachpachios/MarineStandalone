@@ -79,18 +79,15 @@ public class Chunk {
     //TODO: TileEntities, Entities
     
     protected void setType(int x, int y, int z, BlockID type) {
-    	int s = y >> 4;
-    	
-    	if(sections[s] == null)
-    		if(type.equals(BlockID.AIR))
-    			return;
-    		else
-    			sections[s] = new ChunkSection(this,s);
-    	
-    	if(s != 0)
-    		sections[s].setType(x, y/s, z, type);
-    	else
-    		sections[s].setType(x, y, z, type);
+        int section = y >> 4;
+        if (sections[section] == null)
+            if (type != BlockID.AIR)
+                sections[section] = new ChunkSection(this,section);
+            else return;
+        if (section > 0)
+            sections[section].setBlock(x, y / (section), z, type);
+        if (section == 0)
+            sections[section].setBlock(x, y, z, type);
     	
     }
     protected void setLight(int x, int y, int z, Byte light) {setLight(x,y,z,light.byteValue());}

@@ -22,8 +22,8 @@ package com.marine.world.entity;
 import com.marine.Logging;
 import com.marine.util.Location;
 import com.marine.util.Position;
-import com.marine.util.Vector3d;
-import com.marine.util.Vector3i;
+import com.marine.util.vectors.Vector3d;
+import com.marine.util.vectors.Vector3i;
 import com.marine.world.World;
 
 public abstract class Entity {

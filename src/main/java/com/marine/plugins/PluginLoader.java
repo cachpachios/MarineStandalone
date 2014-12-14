@@ -20,6 +20,7 @@
 package com.marine.plugins;
 
 import com.marine.Logging;
+import com.marine.game.system.MarineSecurityManager;
 import com.marine.util.FileUtils;
 import sun.misc.JarFilter;
 
@@ -34,11 +35,21 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 /**
- * Created 2014-12-10 for MarineStandalone
+ * The plugin loader - CANNOT BE ACCESS BY PLUGINS ITSELF
  *
  * @author Citymonstret
  */
 public class PluginLoader {
+
+    // SECURITY CHECK START ////////////////////////////////////////////////////////////////////////////////////////////
+    static {
+        System.getSecurityManager().checkPermission(MarineSecurityManager.MARINE_PERMISSION);
+    }
+
+    /* Instance */ {
+        System.getSecurityManager().checkPermission(MarineSecurityManager.MARINE_PERMISSION);
+    }
+    // SECURITY CHECK END //////////////////////////////////////////////////////////////////////////////////////////////
 
     private final ConcurrentMap<String, PluginClassLoader> loaders;
     private final ConcurrentMap<String, Class> classes;
@@ -50,6 +61,9 @@ public class PluginLoader {
      * @param manager Related PluginManager
      */
     public PluginLoader(PluginManager manager) {
+        // Security Check Start
+        System.getSecurityManager().checkPermission(MarineSecurityManager.MARINE_PERMISSION);
+        // Security Check End
         this.manager = manager;
         this.loaders = new ConcurrentHashMap<>();
         this.classes = new ConcurrentHashMap<>();

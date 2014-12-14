@@ -20,7 +20,7 @@
 package com.marine.game.item;
 
 import com.marine.io.data.ByteData;
-import com.marine.util.PacketWrapper;
+import com.marine.util.wrapper.PacketWrapper;
 
 public class ItemSlot extends PacketWrapper<Item> {
 

@@ -17,7 +17,7 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package com.marine.util;
+package com.marine.util.mojang;
 
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -28,7 +28,7 @@ import java.net.URLConnection;
 import java.util.UUID;
 
 /**
- * Created 2014-12-02 for MarineStandalone
+ * A Mojang Compatible implementation of the UUID Saver
  *
  * @author Citymonstret
  */

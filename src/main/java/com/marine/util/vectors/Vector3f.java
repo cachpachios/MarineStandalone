@@ -17,39 +17,44 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package com.marine.util;
+package com.marine.util.vectors;
 
-import com.marine.io.data.ByteData;
+/**
+ * Float Implementation of a 3D Vector
+ *
+ * @author Citymonstret
+ */
+public class Vector3f extends Vector3<Float> {
 
-public abstract class PacketWrapper<T> {
-
-    private T obj;
-
-    public PacketWrapper(T v) {
-        this.obj = v;
+    public Vector3f(Float x, Float y, Float z) {
+        super(x, y, z);
     }
 
-    public abstract T readFromData(ByteData d);
-
-    public T readFromBytes(byte[] b) {
-        return readFromData(new ByteData(b));
+    @Override
+    public void add(Vector3<Float> v2) {
+        setX(getX() + v2.getX());
+        setY(getY() + v2.getY());
+        setZ(getZ() + v2.getZ());
     }
 
-    public abstract ByteData toByteData();
-
-    public byte[] getBytes() {
-        return toByteData().getBytes();
+    @Override
+    public void subtract(Vector3<Float> v2) {
+        setX(getX() - v2.getX());
+        setY(getY() - v2.getY());
+        setZ(getZ() - v2.getZ());
     }
 
-    public T getData() {
-        return obj;
+    @Override
+    public void multiply(int n) {
+        setX(getX() * n);
+        setY(getY() * n);
+        setZ(getZ() * n);
     }
 
-    public void setData(T data) {
-        obj = data;
-    }
-
-    public T get() {
-        return obj;
+    @Override
+    public void divide(int n) {
+        setX(getX() / n);
+        setY(getY() / n);
+        setZ(getZ() / n);
     }
 }

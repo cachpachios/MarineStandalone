@@ -19,15 +19,14 @@
 
 package com.marine.game.command;
 
+import com.marine.game.CommandManager;
 import com.marine.player.Player;
 import com.marine.server.Marine;
 import com.marine.util.Location;
+import com.marine.util.Protected;
 import com.marine.world.entity.Entity;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created 2014-12-01 for MarineStandalone
@@ -37,19 +36,18 @@ import java.util.List;
 public abstract class Command {
 
     /**
-     * The actual command
-     */
-    private final String command;
-
-    /**
      * Command aliases
      */
     private final List<String> aliases;
-
     /**
      * Command description
      */
     private final String description;
+    /**
+     * The actual command
+     */
+    private String command;
+    private CommandManager provider;
 
     /**
      * Constructor
@@ -124,6 +122,40 @@ public abstract class Command {
     }
 
     /**
+     * Get a player based on the argument (@a, @r, @p)
+     *
+     * @param sender Sender of the command
+     * @param s      Argument
+     * @return Null if none found, else a collection
+     */
+    public Collection<Player> getPlayers(CommandSender sender, String s) {
+        if (s.equals("@a")) {
+            return Marine.getPlayers();
+        }
+        if (s.equals("@p")) {
+            if (sender instanceof Player)
+                return Arrays.asList((Player) sender);
+            return Arrays.asList(getLocationClosestPlayer(sender.getLocation()));
+        }
+        if (s.equals("@r")) {
+            return Arrays.asList(getRandomPlayer());
+        }
+        return null;
+    }
+
+    private Player getLocationClosestPlayer(final Location l) {
+        Player p = null;
+        double c, d = Double.MAX_VALUE;
+        for (Player player : Marine.getPlayers()) {
+            if ((c = l.getEuclideanDistanceSquared(player.getLocation())) < d) {
+                d = c;
+                p = player;
+            }
+        }
+        return p;
+    }
+
+    /**
      * Get the closets entity
      *
      * @param sender CommandSender
@@ -174,15 +206,29 @@ public abstract class Command {
      */
     public Player getClosestPlayer(CommandSender sender) {
         if (sender instanceof Player) return (Player) sender;
-        Player closets = null;
-        double distance = Double.MAX_VALUE, current;
-        Location loc = sender.getLocation();
-        for (Player player : Marine.getPlayers()) {
-            if ((current = loc.getEuclideanDistance(player.getLocation())) < distance) {
-                distance = current;
-                closets = player;
-            }
-        }
-        return closets;
+        return getLocationClosestPlayer(sender.getLocation());
+    }
+
+    /**
+     * Get the command provider
+     *
+     * @return provider
+     */
+    public CommandManager getProvider() {
+        return provider;
+    }
+
+    /**
+     * Set the command provider
+     *
+     * @param provider Command provider
+     */
+    public void setProvider(CommandManager provider) {
+        this.provider = provider;
+    }
+
+    @Protected
+    public void setName(String name) {
+        this.command = name;
     }
 }

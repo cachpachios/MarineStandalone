@@ -20,14 +20,20 @@
 package com.marine.events;
 
 /**
- * Created 2014-12-02 for MarineStandalone
+ * MarinEvent class
  *
  * @author Citymonstret
  */
 public class MarineEvent {
 
+
     private final String name;
 
+    /**
+     * Constructor
+     *
+     * @param name Unique Event Name
+     */
     public MarineEvent(String name) {
         this.name = name;
     }

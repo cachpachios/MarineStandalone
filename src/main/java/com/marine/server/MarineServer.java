@@ -30,12 +30,18 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Created 2014-12-02 for MarineStandalone
+ * MarineServer interface
  *
  * @author Citymonstret
+ * @author Fozie
  */
 public interface MarineServer {
 
+    /**
+     * Get the StandaloneServer instance
+     *
+     * @return instance
+     */
     public StandaloneServer getServer();
 
     /**
@@ -58,7 +64,7 @@ public interface MarineServer {
      * @param uid uid
      * @return Null if not found, else the player
      */
-    public Player getPlayer(short uid);
+    public Player getPlayer(final short uid);
 
     /**
      * Get a world based on its name
@@ -66,12 +72,12 @@ public interface MarineServer {
      * @param name World Name
      * @return World if found, else null
      */
-    public World getWorld(String name);
+    public World getWorld(final String name);
 
     /**
      * Get all worlds
      *
-     * @return A list containg all worlds
+     * @return A list containing all worlds
      */
     public List<World> getWorlds();
 
@@ -81,7 +87,7 @@ public interface MarineServer {
      * @param uuid UUID
      * @return Player
      */
-    public Player getPlayer(UUID uuid);
+    public Player getPlayer(final UUID uuid);
 
     /**
      * Get a player based on its username
@@ -89,19 +95,48 @@ public interface MarineServer {
      * @param username Username
      * @return Player
      */
-    public Player getPlayer(String username);
+    public Player getPlayer(final String username);
 
-    public void registerListener(Listener listener);
+    /**
+     * Register an event listener
+     *
+     * @param listener event listener
+     */
+    public void registerListener(final Listener listener);
 
-    public void unregisterListener(Listener listener);
+    /**
+     * UnRegister an event listener
+     *
+     * @param listener event listener
+     */
+    public void unregisterListener(final Listener listener);
 
-    public void callEvent(MarineEvent event);
+    /**
+     * Call an event
+     *
+     * @param event to call
+     */
+    public void callEvent(final MarineEvent event);
 
+    /**
+     * Get the current MOTD
+     *
+     * @return current MOTD
+     */
     public String getMOTD();
 
+    /**
+     * Get the max player count
+     *
+     * @return max player count
+     */
     public int getMaxPlayers();
 
-    public void setMaxPlayers(int n);
-
+    /**
+     * Set the amount of max players
+     *
+     * @param n max players
+     */
+    public void setMaxPlayers(final int n);
 
 }

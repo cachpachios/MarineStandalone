@@ -17,56 +17,68 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package com.marine.net.play.clientbound.inv;
+package com.marine.util.vectors;
 
-import com.marine.game.inventory.Inventory;
-import com.marine.game.item.Item;
-import com.marine.game.item.ItemID;
-import com.marine.io.data.ByteData;
-import com.marine.net.Packet;
-import com.marine.net.PacketOutputStream;
-import com.marine.net.States;
-import com.marine.util.wrapper.PacketWrapper;
+/**
+ * Double implementation of a 3D Vector
+ *
+ * @author Citymonstret
+ */
+public class Vector3d extends Vector3<Double> {
 
-import java.io.IOException;
+    public Vector3d() {
+        super(0d, 0d, 0d);
+    }
 
-public class InventoryContentPacket extends Packet {
+    public Vector3d(int x, int y, int z) {
+        super((double) x, (double) y, (double) z);
+    }
 
-    final Inventory inv;
+    public Vector3d(double x, double y, double z) {
+        super(x, y, z);
+    }
 
-    public InventoryContentPacket(Inventory inventory) {
-        this.inv = inventory;
+    public Vector3d(double t) {
+        super(t, t, t);
+    }
+
+    public double getLengthSquared() {
+        return (x * x + y * y + z * z);
+    }
+
+    public double getLength() {
+        return Math.sqrt(getX() * getX() + getY() * getY() + getZ() * getZ());
+    }
+
+    public Vector3i toIntVector() {
+        return new Vector3i(getX().intValue(), getY().intValue(), getZ().intValue());
     }
 
     @Override
-    public int getID() {
-        return 0x30;
+    public void add(Vector3<Double> v2) {
+        x += v2.x;
+        y += v2.y;
+        z += v2.z;
     }
 
     @Override
-    public void writeToStream(PacketOutputStream stream) throws IOException {
-        ByteData d = new ByteData();
-
-        d.writeByte(inv.getID());
-
-        d.writeShort((short) inv.getSlots().length);
-
-        for (PacketWrapper<Item> slot : inv.getSlots())
-            if (slot == null)
-                d.writeShort(ItemID.EMPTY.getID());
-            else
-                d.writeByte(slot.getBytes());
-
-        stream.write(getID(), d);
+    public void subtract(Vector3<Double> v2) {
+        x -= v2.x;
+        y -= v2.y;
+        z -= v2.y;
     }
 
     @Override
-    public void readFromBytes(ByteData input) {
+    public void multiply(int n) {
+        x *= n;
+        y *= n;
+        z *= n;
     }
 
     @Override
-    public States getPacketState() {
-        return States.INGAME;
+    public void divide(int n) {
+        x /= n;
+        y /= n;
+        z /= n;
     }
-
 }

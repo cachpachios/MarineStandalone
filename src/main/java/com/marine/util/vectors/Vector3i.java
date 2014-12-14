@@ -17,62 +17,61 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package com.marine.util;
+package com.marine.util.vectors;
 
 /**
- * Created 2014-12-02 for MarineStandalone
+ * Integer version of a 3D Vector
  *
  * @author Citymonstret
  */
+public class Vector3i extends Vector3<Integer> {
 
-/**
- * @author Empire92
- */
-public class StringWrapper {
-
-    public final String value;
-
-    /**
-     * Constructor
-     *
-     * @param value to wrap
-     */
-    public StringWrapper(final String value) {
-        this.value = value;
+    public Vector3i() {
+        super(0, 0, 0);
     }
 
-    /**
-     * Check if a wrapped string equals another one
-     *
-     * @param obj to compare
-     * @return true if obj equals the stored value
-     */
+    public Vector3i(int t) {
+        super(t, t, t);
+    }
+
+    public Vector3i(int x, int y, int z) {
+        super(x, y, z);
+    }
+
+    public double getLength() {
+        return Math.sqrt(getX() * getX() + getY() * getY() + getZ() * getZ());
+    }
+
+    public Vector3d toDoubleVector() {
+        return new Vector3d(getX(), getY(), getZ());
+    }
+
     @Override
-    public boolean equals(final Object obj) {
-        return (this == obj) &&
-                (obj != null) &&
-                (getClass() == obj.getClass()) &&
-                (obj instanceof StringWrapper) &&
-                ((StringWrapper) obj).value.toLowerCase().equals(this.value.toLowerCase());
+    public void add(Vector3<Integer> v2) {
+        setX(getX() + v2.getX());
+        setY(getY() + v2.getY());
+        setZ(getZ() + v2.getZ());
     }
 
-    /**
-     * Get the string value
-     *
-     * @return string value
-     */
     @Override
-    public String toString() {
-        return this.value;
+    public void subtract(Vector3<Integer> v2) {
+        setX(getX() - v2.getX());
+        setY(getY() - v2.getY());
+        setZ(getZ() - v2.getZ());
     }
 
-    /**
-     * Get the hash value
-     *
-     * @return has value
-     */
     @Override
-    public int hashCode() {
-        return this.value.toLowerCase().hashCode();
+    public void multiply(int n) {
+        setX(getX() * n);
+        setY(getY() * n);
+        setZ(getZ() * n);
     }
+
+    @Override
+    public void divide(int n) {
+        setX(getX() / n);
+        setY(getY() / n);
+        setZ(getZ() / n);
+    }
+
 }
