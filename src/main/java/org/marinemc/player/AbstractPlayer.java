@@ -30,7 +30,8 @@ import java.util.UUID;
 /**
  * Abstract Player Class
  * <p/>
- * Used for communication with the client/login process
+ * Used for communication with the client/login process/**
+ * @author Fozie
  */
 public class AbstractPlayer implements IPlayer {
 

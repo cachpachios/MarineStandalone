@@ -23,7 +23,9 @@ import org.marinemc.io.data.ByteData;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * @author Fozie
+ */
 public class NBTList implements NBTTag {
 
     private final String name;

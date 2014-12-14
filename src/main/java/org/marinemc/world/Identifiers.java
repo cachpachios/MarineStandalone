@@ -19,12 +19,14 @@
 
 package org.marinemc.world;
 
-import org.marinemc.util.annotations.Hacky;
-import org.marinemc.util.annotations.Unsafe;
-
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.marinemc.util.annotations.Cautious;
+import org.marinemc.util.annotations.Hacky;
+import org.marinemc.util.annotations.Unsafe;
+import org.marinemc.world.chunk.ChunkSection;
 
 /**
  * Static class to index map data values
@@ -37,6 +39,7 @@ import java.util.Map;
 public final class Identifiers {
 
     private static Map<Byte, BlockID> block_id;
+    private static Map<Character, BlockID> block_encode;
 
     public static BlockID getBlockID(byte id) {
         if (block_id == null) init();
@@ -47,12 +50,24 @@ public final class Identifiers {
             return BlockID.AIR;
     }
 
+    public static BlockID decodeBlock(char id) {
+        if (block_encode == null) init();
+
+        if (block_encode.containsKey(id))
+            return block_encode.get(id);
+        else
+            return BlockID.AIR;
+    }
+    
     @Unsafe
-    @Hacky
+    @Cautious
     public static void init() {
-        block_id = new HashMap<Byte, BlockID>();
+        block_id 	= new HashMap<Byte, BlockID>();
+        block_encode = new HashMap<Character, BlockID>();
         EnumSet<BlockID> set = EnumSet.allOf(BlockID.class);
-        for (BlockID b : set)
+        for (BlockID b : set) {
             block_id.put(b.getID(), b);
+            block_encode.put(ChunkSection.EncodeType(b), b);
+        }
     }
 }

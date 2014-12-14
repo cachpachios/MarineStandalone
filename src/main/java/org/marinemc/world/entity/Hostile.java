@@ -22,7 +22,7 @@ package org.marinemc.world.entity;
 /**
  * Created 2014-12-11 for MarineStandalone
  *
- * @author Citymonstret
+ * @author Fozie
  */
 public interface Hostile {
 }

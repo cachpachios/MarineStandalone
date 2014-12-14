@@ -29,7 +29,9 @@ import org.marinemc.net.play.serverbound.player.PlayerLookPacket;
 import org.marinemc.net.play.serverbound.player.PlayerPositionPacket;
 import org.marinemc.net.play.serverbound.player.ServerboundPlayerLookPositionPacket;
 import org.marinemc.util.Location;
-
+/**
+ * @author Fozie
+ */
 public class IngameInterceptor implements PacketInterceptor {
 
     PlayerManager players;

@@ -21,7 +21,9 @@ package org.marinemc.world;
 
 import org.marinemc.util.Position;
 import org.marinemc.world.chunk.Chunk;
-
+/**
+ * @author Fozie
+ */
 public class Block implements Comparable<BlockID> {
     private final Chunk chunk;
     private final byte localX, localZ;    // Local position in Chunk 			Range: (0-15)

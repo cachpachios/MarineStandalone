@@ -20,7 +20,9 @@
 package org.marinemc.io.nbt;
 
 import org.marinemc.io.data.ByteData;
-
+/**
+ * @author Fozie
+ */
 public class NBTString implements NBTTag {
 
     String string;

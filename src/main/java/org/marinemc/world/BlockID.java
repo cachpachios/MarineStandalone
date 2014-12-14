@@ -22,7 +22,9 @@ package org.marinemc.world;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.marinemc.util.IDObject;
-
+/**
+ * @author Fozie
+ */
 public enum BlockID implements IDObject {
     AIR(0, "air"),
     STONE(1, "stone"),

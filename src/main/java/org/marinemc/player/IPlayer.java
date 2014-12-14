@@ -25,7 +25,9 @@ import org.marinemc.util.Position;
 import org.marinemc.world.World;
 
 import java.util.UUID;
-
+/**
+ * @author Fozie
+ */
 public interface IPlayer {
 
     public PlayerID getInfo();

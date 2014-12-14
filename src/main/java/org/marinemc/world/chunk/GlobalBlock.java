@@ -21,7 +21,12 @@ package org.marinemc.world.chunk;
 
 import org.marinemc.util.Position;
 import org.marinemc.world.BlockID;
-
+/**
+ * 
+ * Used as a resepentation or pointer.
+ * 
+ * @author Fozie
+ */
 public class GlobalBlock {
     private final Position pos;
     private final BlockID type;

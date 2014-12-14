@@ -30,6 +30,10 @@ import org.marinemc.settings.ServerSettings;
 import org.marinemc.util.Protected;
 
 @Protected
+/**
+ * @author Fozie
+ * @author Citymonstret
+ */
 public class MainComponent {
 
     public static List<String> arguments;

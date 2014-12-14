@@ -36,6 +36,9 @@ import java.lang.ref.SoftReference;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * @author Fozie
+ */
 public class PlayerManager {
 
     private final StandaloneServer server;

@@ -22,7 +22,9 @@ package org.marinemc.net;
 import org.marinemc.io.data.ByteData;
 
 import java.io.IOException;
-
+/**
+ * @author Fozie
+ */
 public abstract class Packet {
 
     public static Packet createSimplePacket(final byte ID, final byte[] inputdata, final States state) {

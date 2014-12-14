@@ -27,7 +27,9 @@ import org.marinemc.net.play.clientbound.player.ClientboundPlayerLookPositionPac
 import org.marinemc.util.Location;
 
 import java.io.IOException;
-
+/**
+ * @author Fozie
+ */
 public class ServerboundPlayerLookPositionPacket extends Packet { //TODO Relative positions
 
     private Location l;

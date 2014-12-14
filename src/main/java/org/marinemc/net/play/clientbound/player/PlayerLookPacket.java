@@ -26,7 +26,9 @@ import org.marinemc.net.States;
 import org.marinemc.util.Location;
 
 import java.io.IOException;
-
+/**
+ * @author Fozie
+ */
 public class PlayerLookPacket extends Packet {
 
     private final Location loc;

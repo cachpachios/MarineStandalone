@@ -22,6 +22,9 @@ package org.marinemc.game;
 import org.marinemc.player.Player;
 import org.marinemc.util.Location;
 
+/**
+ * @author Fozie
+ */
 public class MovementManager { // Used to keep track of player movments and send them to the player
     public static int MAX_PACKET_MOVMENT = 5;
     private final PlayerManager players;

@@ -26,7 +26,9 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.*;
-
+/**
+ * @author Fozie
+ */
 public class NetworkManager {
     private final StandaloneServer marineServer;
     public PacketHandler packetHandler;

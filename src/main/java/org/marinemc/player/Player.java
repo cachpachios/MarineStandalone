@@ -52,7 +52,9 @@ import org.marinemc.world.entity.Entity;
 import org.marinemc.world.entity.EntityType;
 
 import java.util.*;
-
+/**
+ * @author Fozie
+ */
 public class Player extends Entity implements IPlayer, CommandSender {
 
     // PlayerManager

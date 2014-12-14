@@ -23,6 +23,7 @@ package org.marinemc.util.vectors;
  * Vector interface
  *
  * @author Citymonstret
+ * 
  */
 public interface Vector {
 

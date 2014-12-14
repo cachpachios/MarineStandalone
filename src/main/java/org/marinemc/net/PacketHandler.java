@@ -23,7 +23,9 @@ import org.marinemc.StandaloneServer;
 import org.marinemc.io.data.ByteData;
 import org.marinemc.net.interceptors.*;
 
-
+/**
+ * @author Fozie
+ */
 public class PacketHandler implements PacketInterceptor {
 
     HandshakeInterceptor handshake;

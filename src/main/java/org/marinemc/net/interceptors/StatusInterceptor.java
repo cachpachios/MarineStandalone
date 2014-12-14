@@ -23,7 +23,9 @@ import org.marinemc.io.data.ByteData;
 import org.marinemc.net.Client;
 import org.marinemc.net.handshake.ListPacket;
 import org.marinemc.net.handshake.PingPacket;
-
+/**
+ * @author Fozie
+ */
 public class StatusInterceptor implements PacketInterceptor {
 
     @Override

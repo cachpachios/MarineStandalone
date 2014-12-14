@@ -17,8 +17,10 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package org.marinemc.world.generators;
-
+package org.marinemc.world.gen;
+/**
+ * @author Fozie
+ */
 public enum LevelType {
 
     DEFAULT("default"),

@@ -28,7 +28,9 @@ import org.marinemc.world.Block;
 import org.marinemc.world.BlockID;
 
 import java.io.IOException;
-
+/**
+ * @author Fozie
+ */
 public class BlockChangePacket extends Packet {
     public Position pos;
     public int newBlock;

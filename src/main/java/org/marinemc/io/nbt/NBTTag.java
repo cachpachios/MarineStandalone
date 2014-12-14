@@ -19,7 +19,9 @@
 
 package org.marinemc.io.nbt;
 
-
+/**
+ * @author Fozie
+ */
 public interface NBTTag {
 
     public String getName();

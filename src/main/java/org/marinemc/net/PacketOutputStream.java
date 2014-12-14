@@ -23,7 +23,9 @@ import org.marinemc.io.data.ByteData;
 
 import java.io.IOException;
 import java.io.OutputStream;
-
+/**
+ * @author Fozie
+ */
 public class PacketOutputStream { // Here we enable encryption and compression if needed
 
     private final OutputStream stream;

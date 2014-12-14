@@ -19,16 +19,18 @@
 
 package org.marinemc.game;
 
-import org.marinemc.StandaloneServer;
-import org.marinemc.world.World;
-import org.marinemc.world.generators.TotalFlatGrassGenerator;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.marinemc.StandaloneServer;
+import org.marinemc.world.World;
+
+/**
+ * @author Fozie
+ */
 public class WorldManager {
 
     private static byte nextUID = -1;
@@ -54,7 +56,7 @@ public class WorldManager {
 
     public World getMainWorld() {
         if (mainWorld == -1) { // Temporary code when no world loader is implemented
-            World w = new World(server, "world", new TotalFlatGrassGenerator());
+            World w = new World(server, "world");
             w.generateChunk(0, 0);
             addWorld(w);
             mainWorld = w.getUID();

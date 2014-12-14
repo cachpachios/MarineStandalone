@@ -23,7 +23,9 @@ import org.marinemc.Logging;
 
 import java.io.IOException;
 import java.net.Socket;
-
+/**
+ * @author Fozie
+ */
 public class ConnectionThread extends Thread {
     private NetworkManager network;
 

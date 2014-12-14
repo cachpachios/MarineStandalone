@@ -28,9 +28,7 @@ import org.marinemc.net.States;
 import java.io.IOException;
 
 /**
- * Created 2014-12-06 for MarineStandalone
- *
- * @author Citymonstret
+ * @author Fozie
  */
 public class InventoryOpenPacket extends Packet {
 

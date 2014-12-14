@@ -26,7 +26,9 @@ import org.marinemc.io.data.ByteData;
 import org.marinemc.net.Client;
 import org.marinemc.net.login.DisconnectPacket;
 import org.marinemc.net.login.LoginPacket;
-
+/**
+ * @author Fozie
+ */
 public class LoginInterceptor implements PacketInterceptor {
 
     final StandaloneServer server;

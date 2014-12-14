@@ -27,7 +27,9 @@ import org.marinemc.world.Dimension;
 import org.marinemc.world.chunk.Chunk;
 
 import java.io.IOException;
-
+/**
+ * @author Fozie
+ */
 public class ChunkPacket extends Packet {
 
     final Chunk c;

@@ -22,7 +22,9 @@ package org.marinemc.net.interceptors;
 import org.marinemc.io.data.ByteData;
 import org.marinemc.net.Client;
 import org.marinemc.net.handshake.ClientHandshake;
-
+/**
+ * @author Fozie
+ */
 public class HandshakeInterceptor implements PacketInterceptor {
 
     @Override

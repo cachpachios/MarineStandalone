@@ -24,6 +24,9 @@ import org.marinemc.events.MarineEvent;
 import org.marinemc.util.Position;
 import org.marinemc.world.BlockID;
 
+/**
+ * @author Fozie
+ */
 public class BlockChangeEvent extends MarineEvent implements Cancellable {
 
     private final Position blockPos;

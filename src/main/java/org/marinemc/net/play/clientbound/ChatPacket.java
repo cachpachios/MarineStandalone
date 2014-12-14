@@ -33,6 +33,7 @@ import java.io.IOException;
  * Created 2014-12-04 for MarineStandalone
  *
  * @author Citymonstret
+ * @author Fozie
  */
 public class ChatPacket extends Packet {
 

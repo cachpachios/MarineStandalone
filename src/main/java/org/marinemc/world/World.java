@@ -19,20 +19,24 @@
 
 package org.marinemc.world;
 
-import org.marinemc.StandaloneServer;
-import org.marinemc.game.WorldManager;
-import org.marinemc.util.Position;
-import org.marinemc.world.chunk.Chunk;
-import org.marinemc.world.chunk.ChunkPos;
-import org.marinemc.world.generators.LevelType;
-import org.marinemc.world.generators.WorldGenerator;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.marinemc.StandaloneServer;
+import org.marinemc.game.WorldManager;
+import org.marinemc.util.Position;
+import org.marinemc.world.chunk.Chunk;
+import org.marinemc.world.chunk.ChunkPos;
+import org.marinemc.world.gen.LevelType;
+import org.marinemc.world.gen.WorldGenerator;
+import org.marinemc.world.gen.generators.TotalFlatGrassGenerator;
+
+/**
+ * @author Fozie
+ */
 public class World { // TODO Save and unload chunks...
 
     //Final Pointers:
@@ -54,7 +58,7 @@ public class World { // TODO Save and unload chunks...
 
     public World(StandaloneServer server, final String name) {
         this.server = server;
-        this.generator = null; //this should use the default generator
+        this.generator = new TotalFlatGrassGenerator(this); //this should use the default generator
         this.uid = WorldManager.getNextUID();
         this.name = name;
         this.dimension = Dimension.OVERWORLD;
@@ -68,7 +72,6 @@ public class World { // TODO Save and unload chunks...
         this.age = 0;
 
         this.generator = generator;
-        this.generator.setWorld(this);
 
         uid = WorldManager.getNextUID();
         this.name = name;
@@ -90,19 +93,19 @@ public class World { // TODO Save and unload chunks...
     }
 
     public void generateChunk(int x, int z) {
-        loadedChunks.put(ChunkPos.Encode(x, z), generator.generateChunk(x, z));
+        loadedChunks.put(ChunkPos.Encode(x, z), generator.generateChunk(new ChunkPos(x,z)));
     }
 
     public Chunk getChunk(int x, int z) { // Will generate/loadchunk if not loaded
         if (!isChunkLoaded(x, z))
-            return generator.generateChunk(x, z); // TODO Load world
+            return generator.generateChunk(new ChunkPos(x,z)); // TODO Load world
         else
             return loadedChunks.get(ChunkPos.Encode(x, z));
     }
 
     public Chunk getChunk(ChunkPos p) { // Will generate/loadchunk if not loaded
         if (!isChunkLoaded(p))
-            return generator.generateChunk(p.getX(), p.getY()); // TODO Load world
+            return generator.generateChunk(new ChunkPos(p.getX(), p.getY())); // TODO Load world
         else
             return loadedChunks.get(p.encode());
     }

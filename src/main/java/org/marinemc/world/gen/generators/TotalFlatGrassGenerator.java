@@ -17,18 +17,24 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package org.marinemc.world.generators;
+package org.marinemc.world.gen.generators;
 
 import org.marinemc.util.Location;
 import org.marinemc.world.BlockID;
 import org.marinemc.world.Dimension;
+import org.marinemc.world.World;
 import org.marinemc.world.chunk.Chunk;
 import org.marinemc.world.chunk.ChunkPos;
-
+import org.marinemc.world.gen.LevelType;
+import org.marinemc.world.gen.WorldGenerator;
+/**
+ * @author Fozie
+ */
 public final class TotalFlatGrassGenerator extends WorldGenerator {
 
 
-    public TotalFlatGrassGenerator() {
+    public TotalFlatGrassGenerator(World w) {
+    	super(w,null);
     }
 
     @Override
@@ -37,8 +43,8 @@ public final class TotalFlatGrassGenerator extends WorldGenerator {
     }
 
     @Override
-    public Chunk generateChunk(int x, int y) { // Really need to be improved i guess it could be made in a less laggy way :S
-        Chunk r = new Chunk(world, new ChunkPos(x, y));
+    public Chunk generateChunkTerrain(final ChunkPos pos) { // Really need to be improved i guess it could be made in a less laggy way :S
+        Chunk r = new Chunk(world, pos);
         for (int xx = 0; xx < 16; xx++)
             for (int zz = 0; zz < 16; zz++) {
                 r.setPrivateType(xx, 0, zz, BlockID.BEDROCK);
