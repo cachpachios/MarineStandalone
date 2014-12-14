@@ -134,6 +134,8 @@ public class StandaloneServer implements CommandProvider {
         CommandManager.getInstance().registerCommand(this, new SendAboveActionBarMessage());
         CommandManager.getInstance().registerCommand(this, new Teleport());
         CommandManager.getInstance().registerCommand(this, new Tellraw());
+        CommandManager.getInstance().registerCommand(this, new List());
+        CommandManager.getInstance().registerCommand(this, new Me());
     }
 
     public void start() {

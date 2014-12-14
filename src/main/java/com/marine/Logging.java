@@ -134,23 +134,28 @@ public class Logging extends PrintStream {
     private String format(final char color, final String prefix, final String msg) {
         final Date date = new Date();
         this.calendar.setTime(date);
-        return String.format("§%c[%d:%d:%d] [%s] §0%s",
+        return String.format("§%c[%s:%s:%s] [%s] §0%s",
                 color,
-                calendar.get(Calendar.HOUR_OF_DAY),
-                calendar.get(Calendar.MINUTE),
-                calendar.get(Calendar.SECOND),
+                get(Calendar.HOUR_OF_DAY),
+                get(Calendar.MINUTE),
+                get(Calendar.SECOND),
                 prefix,
                 msg
         );
     }
 
+    private String get(int n) {
+        int l = calendar.get(n);
+        return l < 10 ? "0" + l : l + "";
+    }
+
     private String format(final String prefix, final String msg) {
         final Date date = new Date();
         this.calendar.setTime(date);
-        return String.format("[%d:%d:%s] [%s] %s",
-                calendar.get(Calendar.HOUR_OF_DAY),
-                calendar.get(Calendar.MINUTE),
-                (calendar.get(Calendar.SECOND) + "").length() == 1 ? ("0" + calendar.get(Calendar.SECOND)) : calendar.get(Calendar.SECOND),
+        return String.format("[%s:%s:%s] [%s] %s",
+                get(Calendar.HOUR_OF_DAY),
+                get(Calendar.MINUTE),
+                get(Calendar.SECOND),
                 prefix,
                 msg
         ).replaceAll("§([a-z0-9])", "");
@@ -159,10 +164,10 @@ public class Logging extends PrintStream {
     private String format(final String msg) {
         final Date date = new Date();
         this.calendar.setTime(date);
-        return String.format("[%d:%d:%d] %s",
-                calendar.get(Calendar.HOUR_OF_DAY),
-                calendar.get(Calendar.MINUTE),
-                calendar.get(Calendar.SECOND),
+        return String.format("[%s:%s:%s] %s",
+                get(Calendar.HOUR_OF_DAY),
+                get(Calendar.MINUTE),
+                get(Calendar.SECOND),
                 msg
         ).replaceAll("§([a-z0-9])", "");
     }
@@ -170,11 +175,11 @@ public class Logging extends PrintStream {
     private String format(final char color, final String msg) {
         final Date date = new Date();
         this.calendar.setTime(date);
-        return String.format("§%c§l[%d:%d:%d] §0%s",
+        return String.format("§%c§l[%s:%s:%s] §0%s",
                 color,
-                calendar.get(Calendar.HOUR_OF_DAY),
-                calendar.get(Calendar.MINUTE),
-                calendar.get(Calendar.SECOND),
+                get(Calendar.HOUR_OF_DAY),
+                get(Calendar.MINUTE),
+                get(Calendar.SECOND),
                 msg
         );
     }
