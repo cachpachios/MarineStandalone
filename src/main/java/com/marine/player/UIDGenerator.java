@@ -22,6 +22,11 @@ package com.marine.player;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+* Used to generator a unique uid for players represented by a (unsigned) short
+*
+* @author Fozie
+*/ 
 public class UIDGenerator {
 
 	private static UIDGenerator instance;

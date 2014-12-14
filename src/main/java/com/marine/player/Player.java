@@ -37,6 +37,7 @@ import com.marine.net.play.clientbound.inv.InventoryOpenPacket;
 import com.marine.net.play.clientbound.player.ClientboundPlayerLookPositionPacket;
 import com.marine.net.play.clientbound.player.ExperiencePacket;
 import com.marine.net.play.clientbound.player.PlayerLookPacket;
+import com.marine.net.play.clientbound.world.BlockChangePacket;
 import com.marine.net.play.clientbound.world.MapChunkPacket;
 import com.marine.net.play.clientbound.world.SpawnPointPacket;
 import com.marine.net.play.clientbound.world.TimeUpdatePacket;
@@ -44,6 +45,7 @@ import com.marine.server.Marine;
 import com.marine.util.Location;
 import com.marine.util.Position;
 import com.marine.util.StringUtils;
+import com.marine.world.BlockID;
 import com.marine.world.World;
 import com.marine.world.chunk.Chunk;
 import com.marine.world.entity.Entity;
@@ -398,4 +400,8 @@ public class Player extends Entity implements IPlayer, CommandSender {
         Marine.broadcastMessage(event.getMessage().replace("%plr", getName()));
         cleanup();
     }
+
+	public void sendBlockUpdate(Position position, BlockID type) {
+		getClient().sendPacket(new BlockChangePacket(position, type));
+	}
 }

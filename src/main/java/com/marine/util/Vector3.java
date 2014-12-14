@@ -23,6 +23,7 @@ package com.marine.util;
  * Created 2014-12-01 for MarineStandalone
  *
  * @author Citymonstret
+ * @author Fozie
  */
 public abstract class Vector3<T extends Number> {
 

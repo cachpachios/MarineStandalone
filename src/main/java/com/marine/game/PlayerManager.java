@@ -228,7 +228,7 @@ public class PlayerManager {
 
         p.sendPosition();
 
-        p.sendMapData(p.getWorld().getChunks(0, 0, 7, 7));
+        p.sendMapData(p.getWorld().getChunks(0, 0, 2, 2));
 
         p.sendAbilites();
 

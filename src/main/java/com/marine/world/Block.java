@@ -19,69 +19,100 @@
 
 package com.marine.world;
 
-import com.marine.util.Location;
 import com.marine.util.Position;
 import com.marine.world.chunk.Chunk;
 
-public class Block { // Help class for easier reading not used to save/set data
+public class Block implements Comparable<BlockID> {
+	private final Chunk chunk;
+	
+	private BlockID type;
+	
+	private byte blockLight;
+	private byte skyLight;
+	
+	private final byte localX,localZ; 	// Local position in Chunk 			Range: (0-15)
+	private final short y;				// Y same both localy and globaly	Range: (0-255)
+	
+	public Block(Chunk c, int localX, int localY, int localZ, BlockID type, byte blockLight, byte skyLight) {
+		this.chunk = c;
+		this.localX = (byte) localX;
+		this.y = (byte) localY;
+		this.localZ = (byte) localZ;
+		this.type = type;
+		this.blockLight = blockLight;
+		this.skyLight = skyLight;
+	}
+	
+	public Block(Chunk c, int localX, int y, int localZ, BlockID type) {
+		this(c,localX,y, localZ, type,(byte)-1,(byte)-1);
+	}
+	
+	public Block(Chunk c, Position pos, BlockID type) {
+		this(c,pos.getX()/c.getPos().getX(),pos.getY(), pos.getZ()/c.getPos().getY(),type);
+	}
+	
+	public void setType(BlockID type) {
+		this.type = type;
+	}
+	
+	public void setBlockLight(byte light) {
+		blockLight = light; 
+	}
+	
+	public void setSkyLight(byte light) {
+		skyLight = light; 
+	}
+	
+	public Chunk getChunk() {
+		return chunk;
+	}
 
-    private Position blockPos;
-    private Chunk chunk;
-    private int lighting;
-    private BlockID type;
+	public BlockID getType() {
+		return type;
+	}
 
-    public Block(Position blockPos, Chunk chunk, int lighting, BlockID type) {
-        this.blockPos = blockPos;
-        this.chunk = chunk;
-        this.lighting = lighting;
-        this.type = type;
-    }
+	public byte getBlockLight() {
+		return blockLight;
+	}
 
-    public Block(Position pos, BlockID type) {
-        this.blockPos = pos;
-        // this.chunk = location.getWorld().getChunk(location.getX().intValue() >> 4, location.getZ().intValue() >> 4);
-        this.type = type;
-        this.lighting = -1;
-    }
+	public byte getSkyLight() {
+		return skyLight;
+	}
 
-    public Block(Location location, BlockID type) {
-        this.blockPos = location.getRelativePosition();
-        this.chunk = location.getWorld().getChunk(location.getX().intValue() >> 4, location.getZ().intValue() >> 4);
-        this.type = type;
-        this.lighting = -1;
-    }
+	public byte getLocalX() {
+		return localX;
+	}
 
-    public static Block getAirBlock(Position pos, Chunk chunk) {
-        return new Block(pos, chunk, 0, BlockID.AIR);
-    }
+	public int getGlobalX() {
+		return localX * chunk.getPos().getX();
+	}
+	public int getGlobalZ() {
+		return localZ * chunk.getPos().getY();
+	}
+	
+	public short getGlobalY() { // Dublicate of getY();
+		return getY();
+	}
+	
+	public short getY() {
+		return y;
+	}
 
-    public Position getBlockPos() {
-        return blockPos;
-    }
+	public byte getLocalZ() {
+		return localZ;
+	}
+	
+	public Position getGlobalPos() {
+		return new Position(localX * chunk.getPos().getX(), y, localZ * chunk.getPos().getY());
+	}
 
-    public Chunk getChunk() {
-        return chunk;
-    }
+	public short getPacketBlock() {
+		return (short)((type.getID() << 4) | type.getMetaBlock());
+	}
 
-    public void setChunk(Chunk chunk) {
-        this.chunk = chunk;
-    }
-
-    public int getLighting() {
-        return lighting;
-    }
-
-    public BlockID getType() {
-        return type;
-    }
-
-    public int getNBTBlockPos() {
-        return blockPos.getY() * 16 * 16 + blockPos.getZ() * 16 + blockPos.getX();
-    }
-
-    public int toPacketBlock() {
-        return type.getID() << 4; // TODO Replace 0 with avalible metadata
-    }
-
+	@Override
+	public int compareTo(BlockID o) {
+		return new Short(type.getPacketID()).compareTo(new Short(o.getPacketID()));
+	}
 }
 

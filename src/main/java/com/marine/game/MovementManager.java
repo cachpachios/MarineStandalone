@@ -30,6 +30,10 @@ public class MovementManager { // Used to keep track of player movments and send
         this.players = players;
     }
 
+    public void spawnPlayersLocaly(final Player target) {
+    	
+    }
+    
     public void registerLook(Player p, float yaw, float pitch) {
         p.getLocation().setYaw(yaw);
         p.getLocation().setPitch(pitch);
@@ -59,7 +63,6 @@ public class MovementManager { // Used to keep track of player movments and send
             p.sendMessage("You moved to quickly :<");
             p.sendPostionAndLook();
         }
-
     }
 
     public boolean checkMovment(Player p, Location target) { // Current position is p.getLocation();

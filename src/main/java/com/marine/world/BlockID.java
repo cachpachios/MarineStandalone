@@ -310,17 +310,17 @@ public enum BlockID implements IDObject {
     private BlockID(int ID, String NAME) {
         this.ID = (byte) ID;
         this.NAME = NAME;
-        this.metaData = -1;
+        this.metaData = 0;
     }
 
     private BlockID(int ID, String NAME, byte metaType) {
         this.ID = (byte) ID;
         this.NAME = NAME;
-        this.metaData = -1;
+        this.metaData = metaType;
     }
 
     public boolean isMetaBlock() {
-        return metaData != -1;
+        return metaData != 0;
     }
 
     public byte getID() {
@@ -335,11 +335,8 @@ public enum BlockID implements IDObject {
         return metaData;
     }
 
-    public int getPacketID() {
-        if (getMetaBlock() == -1)
-            return getID() << 4 | 0;
-        else
-            return getID() << 4 | getMetaBlock();
+    public short getPacketID() {
+            return (short)((getID() << 4) | getMetaBlock());
     }
 
     @Override

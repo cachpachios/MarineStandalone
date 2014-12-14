@@ -37,12 +37,12 @@ public class BlockManager {
 
 
     public void changeBlock(Block b, BlockID target) { // TODO EVENT
-        BlockChangeEvent event = new BlockChangeEvent(b.getBlockPos(), b.getType(), target);
+        BlockChangeEvent event = new BlockChangeEvent(b.getGlobalPos(), b.getType(), target);
         Marine.getServer().callEvent(event);
         if (event.isCancelled())
             return;
 
-        b.getChunk().getWorld().setTypeAt(b.getBlockPos(), target, true);
+        b.getChunk().getWorld().setTypeAt(b.getGlobalPos(), target, true);
     }
 
 

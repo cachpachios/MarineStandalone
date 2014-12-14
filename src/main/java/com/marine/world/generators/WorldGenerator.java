@@ -41,7 +41,16 @@ public abstract class WorldGenerator {
 
     public abstract LevelType getLevelType();
 
-    public abstract Chunk[] generateRegion(int x, int y, int width, int height);
+    public Chunk[] generateRegion(int x, int y, int width, int height) {
+        Chunk[] r = new Chunk[width * height];
+        int i = 0;
+        for (int xx = -(width / 2); xx < width / 2; xx++)
+            for (int yy = -(width / 2); yy < width / 2; yy++) {
+                r[i] = generateChunk(x + xx, y + yy);
+                i++;
+            }
+        return r;
+    }
 
     public abstract Dimension getDimension(); //TODO Enum for dimensions
 
@@ -49,4 +58,6 @@ public abstract class WorldGenerator {
 
     public abstract Location getSafeSpawnPoint();
 
+    
+    
 }

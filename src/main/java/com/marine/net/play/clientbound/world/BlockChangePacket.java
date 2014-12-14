@@ -34,7 +34,7 @@ public class BlockChangePacket extends Packet {
     public int newBlock;
 
     public BlockChangePacket(Block toBlock) {
-        this(toBlock.getBlockPos(), toBlock.getType().getPacketID());
+        this(toBlock.getGlobalPos(), toBlock.getType().getPacketID());
     }
 
     public BlockChangePacket(Position pos, int b) {

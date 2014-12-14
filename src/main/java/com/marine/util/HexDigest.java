@@ -30,8 +30,12 @@ public class HexDigest {
 
     private final char[] hex;
 
+    public HexDigest(char[] hexArray) {
+    	this.hex = hexArray;
+    }
+    
     public HexDigest() {
-        this.hex = "0123456789ABCDEF".toCharArray();
+        this("0123456789ABCDEF".toCharArray());
     }
 
     public String get(String s) throws Throwable {

@@ -19,79 +19,92 @@
 
 package com.marine.world.chunk;
 
-import com.marine.io.data.ByteData;
-import com.marine.util.Position;
-import com.marine.world.BiomeID;
-import com.marine.world.Block;
-import com.marine.world.BlockID;
-import com.marine.world.World;
-import com.marine.world.entity.Entity;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public final class Chunk {
+import com.marine.io.data.ByteData;
+import com.marine.player.Player;
+import com.marine.util.Position;
+import com.marine.util.Unsafe;
+import com.marine.world.BiomeID;
+import com.marine.world.BlockID;
+import com.marine.world.World;
+
+/**
+* Storage unit for ingame chunks
+*
+* @author Fozie
+*/ 
+public class Chunk {
     private final World w;
     private final ChunkPos pos;
 
     private ChunkSection[] sections;
     private BiomeID[][] biomes;
 
-    private List<Entity> entities;
+//    private List<Entity> entities;
+    
+    private List<Short> subscribingPlayers;
 
     public Chunk(World w, ChunkPos pos) {
         this.w = w;
         this.pos = pos;
         this.sections = new ChunkSection[16];
         this.biomes = new BiomeID[16][16];
-        this.entities = new ArrayList<Entity>();
+        this.subscribingPlayers = new ArrayList<Short>();
+    }
+    
+    public void unsubscribePlayer(final Player p) { // Make player unsubscribe to events within the chunks(BlockUpdates, entities etc)
+    	subscribingPlayers.remove(p.getUID());
+    }
+    
+    public void subscribePlayer(final Player p) { // Make player unsubscribe to events within the chunks(BlockUpdates, entities etc)
+    	if(!subscribingPlayers.contains(p.getUID()))
+    	subscribingPlayers.add(p.getUID());
     }
 
-    public void addEntity(Entity e) {
-        if (!(e.getX() / 16 == pos.getX() && e.getZ() / 16 == pos.getY())) // Check if Entity is inside chunk
-            return;
-        entities.add(e);
+    public void setBlock(Position pos, BlockID type) {
+    	setBlock(pos.x, pos.y, pos.z, type);
     }
-
-    public void setBlock(int x, int y, int z, Block block) {
-        block.getBlockPos().setX(x);
-        block.getBlockPos().setY(y);
-        block.getBlockPos().setZ(z);
-        block.setChunk(this);
-        int section = y >> 4;
-        if (sections[section] == null)
-            if (block.getType() != BlockID.AIR)
-                sections[section] = new ChunkSection(section);
-            else return;
-        if (section > 0)
-            sections[section].setBlock(block);
+    
+    public void updateBlockChange(Position pos, BlockID type) {
+    	for(Short s : subscribingPlayers)
+    		w.getServer().getPlayerManager().getPlayer(s).sendBlockUpdate(pos, type);
     }
-
-    public void setBlock(int x, int y, int z, BlockID id) {
-        int section = y >> 4;
-        if (sections[section] == null)
-            if (id != BlockID.AIR)
-                sections[section] = new ChunkSection(section);
-            else return;
-        if (section > 0)
-            sections[section].setBlock(x, y / (section), z, id);
-        if (section == 0)
-            sections[section].setBlock(x, y, z, id);
+    
+    public void updateBlockChange(int x, int y, int z, BlockID type) {
+    		updateBlockChange(new Position(x,y,z), type);
     }
-
-    public Block getBlock(Position pos) {
-        int section = pos.getY() >> 4;
-        if (sections[section] == null)
-            return null;
-        return sections[section].getBlock(new Position(pos.getX(), section == 0 ? pos.getY() : pos.getY() / section, pos.getZ()));
+    
+    //TODO: TileEntities, Entities
+    
+    protected void setType(int x, int y, int z, BlockID type) {
+    	int s = y >> 4;
+    	
+    	if(sections[s] == null)
+    		if(type.equals(BlockID.AIR))
+    			return;
+    		else
+    			sections[s] = new ChunkSection(this,s);
+    	
+    	if(s != 0)
+    		sections[s].setType(x, y/s, z, type);
+    	else
+    		sections[s].setType(x, y, z, type);
+    	
     }
-
-    public short getBlock(int x, int y, int z) {
-        int section = y >> 4;
-        if (sections[section] == null)
-            return 0;
-        else
-            return (short) sections[section].getBlockID(x, (section == 0) ? y : y / section, z);
+    protected void setLight(int x, int y, int z, Byte light) {setLight(x,y,z,light.byteValue());}
+    
+    protected void setLight(int x, int y, int z, byte light) {
+    	if(y > 255)
+    		return;
+    	
+    	int s = y >> 4;
+    	
+    	if(sections[s] == null)
+    		return;
+    	else
+    		sections[s].setLight(x, y/16, z, light);
     }
 
     public ByteData getData(boolean biomes, boolean skyLight) {
@@ -103,11 +116,7 @@ public final class Chunk {
         }
         for (ChunkSection s : sections) {
             if (s != null)
-                d.writeData(s.getBlockLightData());
-        }
-        for (ChunkSection s : sections) {
-            if (s != null)
-                d.writeData(s.getSkyLightData());
+                d.writeData(s.getLightData());
         }
 
         if (biomes)
@@ -144,4 +153,49 @@ public final class Chunk {
         return w;
     }
 
+	public void setBlock(Integer x, Integer y, Integer z, BlockID type) {
+    	setType(x, y, z,type);
+    	updateBlockChange(new Position(x*pos.getX(),y,z*pos.getY()), type);
+	}
+	
+	public void setPrivateType(int x, int y, int z, BlockID type) {
+    	setType(x, y, z,type);
+	}
+	
+	public void setPrivateLight(int x, int y, int z, byte light) {
+    	setLight(x, y, z, light);
+	}
+	
+	
+	public char getBlock(int x, int y, int z) {
+		int s = y >> 4;
+	
+        if(sections[s] == null)
+			return (char) -1;
+        
+        return sections[s].getType(x/16, y/16, z/16);
+	}
+	@Unsafe
+	public final ChunkSection getSection(int y) {
+        return sections[y >> 4];
+	}
+	
+	public void setPrivateCube(int x, int y, int z, int w, int d, int h, BlockID type) {
+		if(h == 0) return;
+		if(w == 0) return;
+		if(d == 0) return;
+				
+		int numSections = h/16;
+		
+		if(numSections == 0) {
+            if(getSection(y) == null)
+            	return;
+            getSection(y).setPrivateCube(x, y, z, w, d, h, type);
+		}
+		else {
+			//TODO Fix this stuff :P
+			
+		}
+		
+	}
 }

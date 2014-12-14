@@ -40,17 +40,6 @@ public class CityGenerator extends WorldGenerator {
     }
 
     @Override
-    public Chunk[] generateRegion(int x, int y, int width, int height) {
-        Chunk[] chunks = new Chunk[width * height];
-        for (int xx = x; xx < (xx + width); xx++) {
-            for (int yy = y; yy < (yy + height); y++) {
-                generateChunk(xx, yy);
-            }
-        }
-        return null;
-    }
-
-    @Override
     public Dimension getDimension() {
         return Dimension.OVERWORLD;
     }
@@ -91,7 +80,8 @@ public class CityGenerator extends WorldGenerator {
                         else
                             id = BlockID.GLASS;
                     }
-                    chunk.setBlock(x, y, z, id);
+                    chunk.setPrivateType(x, y, z, id);
+                    chunk.setPrivateLight(x, y, z, (byte) -1);
                 }
             }
         }
@@ -103,7 +93,6 @@ public class CityGenerator extends WorldGenerator {
     }
 
     private double isAirDrr(Chunk c, int x, int y, int z) {
-        short s = BlockID.AIR.getNumericID();
         double d = 0;
         if (isAir(c, x - 1, y, z)) d += 0.25;
         if (isAir(c, x, y, z - 1)) d += 0.25;

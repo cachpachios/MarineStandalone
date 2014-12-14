@@ -19,21 +19,26 @@
 
 package com.marine.game;
 
-import com.marine.world.World;
-import com.marine.world.generators.CityGenerator;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.marine.StandaloneServer;
+import com.marine.world.World;
+import com.marine.world.generators.CityGenerator;
+
 public class WorldManager {
+	
+	private final StandaloneServer server;
+	
     private static byte nextUID = -1;
     public Map<Byte, World> loadedWorlds;
     private byte mainWorld;
 
-    public WorldManager() {
+    public WorldManager(StandaloneServer server) {
+    	this.server = server;
         loadedWorlds = Collections.synchronizedMap(new ConcurrentHashMap<Byte, World>());
         mainWorld = -1;
     }
@@ -50,7 +55,7 @@ public class WorldManager {
 
     public World getMainWorld() {
         if (mainWorld == -1) { // Temporary code when no world loader is implemented
-            World w = new World("world", new CityGenerator());
+            World w = new World(server, "world", new CityGenerator());
             w.generateChunk(0, 0);
             addWorld(w);
             mainWorld = w.getUID();

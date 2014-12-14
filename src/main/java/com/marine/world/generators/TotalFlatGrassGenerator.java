@@ -56,19 +56,6 @@ public final class TotalFlatGrassGenerator extends WorldGenerator {
     }
 
     @Override
-    public Chunk[] generateRegion(int x, int y, int width, int height) {
-        Chunk[] r = new Chunk[width * height];
-        int i = 0;
-
-        for (int xx = -(width / 2); xx < width / 2; xx++)
-            for (int yy = -(width / 2); yy < width / 2; yy++) {
-                r[i] = generateChunk(x + xx, y + yy);
-                i++;
-            }
-        return r;
-    }
-
-    @Override
     public LevelType getLevelType() {
         return LevelType.FLAT;
     }

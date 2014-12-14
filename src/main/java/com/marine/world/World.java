@@ -19,6 +19,13 @@
 
 package com.marine.world;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import com.marine.StandaloneServer;
 import com.marine.game.WorldManager;
 import com.marine.util.Position;
 import com.marine.world.chunk.Chunk;
@@ -26,15 +33,12 @@ import com.marine.world.chunk.ChunkPos;
 import com.marine.world.generators.LevelType;
 import com.marine.world.generators.WorldGenerator;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 public class World { // TODO Save and unload chunks...
-
-    // Identifiers:
+	
+	//Final Pointers:
+	private final StandaloneServer server;
+	
+    //Identifiers:
     private final String name;
     private final byte uid;
     private final Dimension dimension;
@@ -48,7 +52,8 @@ public class World { // TODO Save and unload chunks...
 
     private WorldGenerator generator;
 
-    public World(final String name) {
+    public World(StandaloneServer server, final String name) {
+    	this.server = server;
         this.generator = null; //this should use the default generator
         this.uid = WorldManager.getNextUID();
         this.name = name;
@@ -57,8 +62,9 @@ public class World { // TODO Save and unload chunks...
         this.age = 0;
     }
 
-    public World(final String name, WorldGenerator generator) { //TODO Make it able to load world
-        this.time = 0;
+    public World(StandaloneServer server, final String name, WorldGenerator generator) { //TODO Make it able to load world
+        this.server = server;
+    	this.time = 0;
         this.age = 0;
 
         this.generator = generator;
@@ -163,4 +169,8 @@ public class World { // TODO Save and unload chunks...
     public WorldGenerator getGenerator() {
         return this.generator;
     }
+
+	public StandaloneServer getServer() {
+		return server;
+	}
 }

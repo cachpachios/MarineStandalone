@@ -75,7 +75,7 @@ public class StandaloneServer implements Listener {
         this.port = settings.port;
         this.skipTime = 1000000000 / settings.tickrate; // nanotime
         this.targetTickRate = settings.tickrate;
-        this.worlds = new WorldManager();
+        this.worlds = new WorldManager(this);
         this.players = new PlayerManager(this);
         this.server = new Server(this);
         this.jsonHandler = new JSONFileHandler(this, new File("./settings"), new File("./storage"));

@@ -1,116 +1,114 @@
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MarineStandalone is a minecraft server software and API.
-// Copyright (C) IntellectualSites (marine.intellectualsites.com)
-//
-// This program is free software; you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation; either version 2 of the License, or
-// (at your option) any later version.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License along
-// with this program; if not, write to the Free Software Foundation, Inc.,
-// 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 package com.marine.world.chunk;
 
+import java.util.Arrays;
+
 import com.marine.io.data.ByteData;
+import com.marine.util.Hacky;
 import com.marine.util.Position;
-import com.marine.world.Block;
 import com.marine.world.BlockID;
+import com.marine.world.Identifiers;
 
-public class ChunkSection {
-    public Chunk chunk;
-    private int sectionID;
-    private Block[] blockMap;
+/**
+* Final storage of blocks,
+*
+* @author Fozie
+*/ 
+public final class ChunkSection {
+	
+    private final int sectionID;
 
-    public ChunkSection(int y) {
+    private final ChunkPos chunkPos;
+    
+    private final static int DATA_SIZE = 16*16*16;
+    
+    private char[] blockMap;
+    private byte[] lightMap;
+
+    
+    public ChunkSection(final Chunk c, int y) {
+    	this.chunkPos = c.getPos();
         this.sectionID = y;
-        this.blockMap = new Block[16 * 16 * 16];
+        this.blockMap = new char[DATA_SIZE];
+        this.lightMap = new byte[DATA_SIZE];
     }
 
-    public ChunkSection(int y, Chunk chunk) {
-        this.sectionID = y;
-        this.chunk = chunk;
-        this.blockMap = new Block[16 * 16 * 16];
-    }
-
-    public static int getIndex(int x, int y, int z) {
-        return ((y & 0xf) << 8) | (z << 4) | x;
-    }
-
-    public ByteData getBlockData() {
+    public ByteData getBlockData() { //TODO: Optimize
         ByteData data = new ByteData();
-        for (Block id : blockMap) {
-            data.writeend((byte) (getID(id) & 0xff));
-            data.writeend((byte) (getID(id) >> 8));
+        for (char id : blockMap) {
+            data.writeend((byte) (id & 0xff));
+            data.writeend((byte) (id >> 8));
         }
-        return data;
+    	return data;
+    }
+   
+    public ByteData getLightData() { //TODO: Optimize
+    	return new ByteData(lightMap);
     }
 
-    public ByteData getSkyLightData() {
-        ByteData data = new ByteData();
-        boolean skip = false;
-        for (Block id : blockMap) { //TODO LightMap
-            if (!skip) {
-                data.writeend((byte) -1);
-                skip = true;
-            } else
-                skip = false;
-        }
-        return data;
+    public void setType(int x, int y, int z, BlockID id) {
+        blockMap[getIndex(x,y,z)] = (char) (id.getID() << 4);
+    }
+    
+    public void setLight(int x, int y, int z, byte light) {
+        lightMap[getIndex(x,y,z)] = light;
     }
 
-    public ByteData getBlockLightData() {
-        ByteData data = new ByteData();
-        boolean skip = false;
-        for (Block id : blockMap) { //TODO LightMap
-            if (!skip) {
-                data.writeend((byte) -1);
-                skip = true;
-            } else
-                skip = false;
-        }
-        return data;
+    public char getType(int x, int y, int z) {
+        return blockMap[getIndex(x,y,z)];
     }
 
-    public void setBlock(int x, int y, int z, BlockID id) {
-        // blockMap[getIndex(x, y, z)] = (char) (id.getID() << 4);
-        setBlock(new Position(x, y, z), new Block(new Position(x, y, z), chunk, -1, id));
-    }
-
-    public void setBlock(Position pos, Block block) {
-        blockMap[getIndex(pos.getX(), pos.getY(), pos.getZ())] = block;
-    }
-
-    public void setBlock(Block block) {
-        setBlock(block.getBlockPos(), block);
-    }
-
-    public char getBlockID(int x, int y, int z) {
-        return getID(blockMap[getIndex(x, y, z)]);
-    }
-
+    @Hacky
     public BlockID getBlock(int x, int y, int z) {
-        return BlockID.BEDROCK;
-    }
-
-    public Block getBlock(Position pos) {
-        return blockMap[getIndex(pos.getX(), pos.getY(), pos.getZ())];
+        return Identifiers.getBlockID((byte)(getType(x,y,z)& 0xff));
     }
 
     public int getID() {
         return sectionID;
     }
-
-    public char getID(Block block) {
-        if (block == null) return (char) 0;
-        return (char) (block.getType().getID() << 4);
+    
+    public void setPrivateCube(int x, int y, int z, int w, int d, int h, BlockID type) {
+    	for(int xx = clamp(-(w/2),0,15); xx < (w/2); xx++)
+        	for(int yy = clamp(-(h/2),0,15); yy < (h/2); yy++)
+            	for(int zz = clamp(-(d/2),0,15); yy < (d/2); zz++)
+            		setType(x+xx,y+yy,z+zz, type);
     }
-
+    
+    public GlobalBlock[] setCube(int x, int y, int z, int w, int d, int h, BlockID type) {
+    	final GlobalBlock[] r = new GlobalBlock[w*d*h];
+    	int i = 0;
+    	for(int xx = clamp(-(w/2),0,15); xx < (w/2); xx++)
+        	for(int yy = clamp(-(h/2),0,15); yy < (h/2); yy++)
+            	for(int zz = clamp(-(d/2),0,15); yy < (d/2); zz++) {
+            		setType(x+xx,y+yy,z+zz, type);
+            		r[++i] = new GlobalBlock(getGlobalBlockPos(x+xx,y+yy,z+zz),type);
+            	}
+    	return r;
+    }
+    
+    public Position getGlobalBlockPos(int x, int y, int z) {
+    	int cX = chunkPos.getX() + 1;
+    	int cY = chunkPos.getX() + 1;
+    	
+    	if(cX == 0) cX = -1;
+    	if(cY == 0) cY = -1;
+    	
+    	return new Position(x*cX, y * (sectionID + 1), z * cY);
+    }
+    
+    public void fillSection(BlockID type) {
+    	Arrays.fill(blockMap, (char) (type.getID() << 4));
+    }
+    
+    public static int getIndex(int x, int y, int z) {
+        return ((y & 0xf) << 8) | (z << 4) | x;
+    }
+    
+    public static final <T extends Comparable<T>> T clamp(T v, T min, T max) {
+    	if(v.compareTo(max) == 1)
+    		return max;
+    	else if(v.compareTo(min) == -1)
+    		return min;
+    	else
+    		return v;	
+    }
 }

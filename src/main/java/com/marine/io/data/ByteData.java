@@ -27,7 +27,7 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-public class ByteData implements Iterable<Byte> {
+public class ByteData implements Iterable<Byte>, Byteable {
 
     protected List<Byte> bytes;
 
@@ -38,9 +38,7 @@ public class ByteData implements Iterable<Byte> {
     }
 
     public ByteData(byte[] bytes) {
-    	this();
-    	for(byte b : bytes)
-    		this.bytes.add(b);
+    	this(wrap(bytes));
     }
 
     public ByteData() {
@@ -48,7 +46,7 @@ public class ByteData implements Iterable<Byte> {
     }
 
     public ByteData(Byte[] b) {
-    	this.bytes = Arrays.asList(b);
+    	this.bytes = new ArrayList<>(Arrays.asList(b));
 	}
 
 	public void writeByte(byte... b) {
@@ -245,6 +243,12 @@ public class ByteData implements Iterable<Byte> {
         } catch (IOException e) {
         }
     }
+    
+    public void backReader(int amt) {
+    	this.readerPos =- amt;
+    	if(readerPos < 0)
+    		readerPos = 0;
+    }
 
     public int getReaderPos() {
         return readerPos;
@@ -267,7 +271,27 @@ public class ByteData implements Iterable<Byte> {
         writeVarInt(bytes.length);
         writeend(bytes);
     }
+    
+    public void writeUTF16(String v) {
+        final byte[] bytes = v.getBytes(StandardCharsets.UTF_16);
+        if (bytes.length >= Short.MAX_VALUE) {
+            Logging.getLogger().error("Tried to write String greater then max value!");
+        }
+        // Write the string's length
+        writeVarInt(bytes.length);
+        writeend(bytes);
+    }
 
+    public void writeASCII(String v) {
+        final byte[] bytes = v.getBytes(StandardCharsets.US_ASCII);
+        if (bytes.length >= Short.MAX_VALUE) {
+            Logging.getLogger().error("Tried to write String greater then max value!");
+        }
+        // Write the string's length
+        writeVarInt(bytes.length);
+        writeend(bytes);
+    }
+    
     public void writeUTF8Short(String v) {
         final byte[] bytes = v.getBytes(StandardCharsets.UTF_8);
         writeShort((short) bytes.length);
@@ -280,10 +304,7 @@ public class ByteData implements Iterable<Byte> {
     }
 
     public void write(int pos, byte... v) {
-    	int i = -1;
-        for (byte b : v) {
-        	bytes.add(pos + ++i,b);
-        }
+    	bytes.addAll(pos, Arrays.asList(wrap(v)));
     }
 
     public void writeBoolean(boolean v) {
@@ -351,8 +372,7 @@ public class ByteData implements Iterable<Byte> {
     }
 
     public void writePacketPrefix() {
-        int l = bytes.size();
-        write(0, ByteEncoder.writeVarInt(l));
+        write(0, ByteEncoder.writeVarInt(bytes.size()));
     }
 
     @Override
@@ -372,4 +392,43 @@ public class ByteData implements Iterable<Byte> {
     public void writeData(ByteData data) {
         bytes.addAll(data.getByteList());
     }
+
+	public void writeArray(Byte[] array) {
+		bytes.addAll(Arrays.asList(array));
+	}
+
+	public void writeList(List<Byte> data) {
+		bytes.addAll(data);
+	}
+	
+	public final static Byte[] wrap(final byte[] array) {
+		 if(array == null)
+			 return null;
+		 else if(array.length == 0)
+			 return new Byte[] {};
+		 
+		 final Byte[] result = new Byte[array.length];
+		 for (int i = 0; i < array.length; i++) {
+			 result[i] = new Byte(array[i]);
+		 }
+		 	return result;
+		 }
+	public static byte[] unwrap(Byte[] array) {
+	    if (array == null)
+	        return null;
+	    else if (array.length == 0)
+	        return new byte[] {};
+	    
+	    final byte[] result = new byte[array.length];
+	    for (int i = 0; i < array.length; i++) {
+	        Byte b = array[i];
+	        result[i] = (b == null ? 0 : b.byteValue());
+	    }
+	    return result;
+	}
+	@Override
+	public byte[] toBytes() {
+		return unwrap((Byte[]) bytes.toArray());
+	}  
+	
 }

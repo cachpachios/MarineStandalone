@@ -23,6 +23,8 @@ import java.util.UUID;
 
 /**
  * Player ID Class
+ * 
+ * @author Fozie
  */
 public class PlayerID {
     public final String name;
