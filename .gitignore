@@ -1,0 +1,6 @@
+*.class
+*.json
+bin/org/marinemc/game/commands/COMMANDS
+settings.properties
+.classpath
+.project
