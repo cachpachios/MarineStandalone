@@ -19,10 +19,13 @@
 
 package com.marine.game.commands;
 
+import com.marine.game.chat.ChatColor;
 import com.marine.game.command.Command;
 import com.marine.game.command.CommandSender;
 import com.marine.player.Player;
 import com.marine.server.Marine;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -58,10 +61,27 @@ public class Tellraw extends Command {
                 sender.sendMessage("No players found");
             } else {
                 StringBuilder builder = new StringBuilder();
+                args = replaceAll(args, sender);
                 for (int i = 1; i < args.length; i++)
                     builder.append(args[i]).append(" ");
-                for (final Player p : r)
-                    p.sendMessageRaw(builder.toString());
+                String msg = ChatColor.transform('&', builder.toString());
+                if (msg.endsWith(" "))
+                    msg = msg.substring(0, msg.length() - 1);
+                if (!msg.startsWith("{") || !msg.endsWith("}"))
+                    msg = "{\"text\":\"" + msg + "\"}";
+                JSONObject o;
+                try {
+                    JSONTokener tokener = new JSONTokener(msg);
+                    o = new JSONObject(tokener);
+                } catch (Exception e) {
+                    o = null;
+                }
+                if (o == null) {
+                    sender.sendMessage("Invalid JSON");
+                } else {
+                    for (final Player p : r)
+                        p.sendMessageRaw(msg);
+                }
             }
         }
     }

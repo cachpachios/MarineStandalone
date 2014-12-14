@@ -68,7 +68,7 @@ public class PluginMain extends Plugin {
                 Marine.broadcastMessage(ChatColor.DARK_AQUA + "Hello World" + replaceAll(new String[] { "@p is @a when @r is @e" }, sender)[0]);
             }
         });
-        Marine.getScheduler().createSyncTask(new TickTack(this));
+        // Marine.getScheduler().createSyncTask(new TickTack(this));
     }
 
 }

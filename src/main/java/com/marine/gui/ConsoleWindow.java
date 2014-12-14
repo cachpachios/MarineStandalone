@@ -144,24 +144,6 @@ public class ConsoleWindow extends OutputStream {
                         commands.setVisible(true);
                     }
                 }),
-                execute = new JMenuItem(new AbstractAction("Execute Command") {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        String s = JOptionPane.showInputDialog(jFrame, "Enter a command", "Command", JOptionPane.QUESTION_MESSAGE);
-                        if (s.startsWith("/"))
-                            s = s.replaceFirst("/", "");
-                        String[] p = s.split(" ");
-                        if (p.length == 0)
-                            return;
-                        if (p.length == 1) {
-                            Marine.getServer().getServer().getConsole().executeCommand(p[0]);
-                            return;
-                        }
-                        String[] r = new String[p.length - 1];
-                        System.arraycopy(p, 1, r, 0, r.length);
-                        Marine.getServer().getServer().getConsole().executeCommand(p[0], r);
-                    }
-                }),
                 restart = new JMenuItem(new AbstractAction("Restart") {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -176,7 +158,6 @@ public class ConsoleWindow extends OutputStream {
                             player.kick(ChatColor.transform('&', s));
                     }
                 });
-        execute.setEnabled(true);
         authors.setEnabled(true);
         commands.setEnabled(true);
         restart.setEnabled(true);
@@ -185,7 +166,6 @@ public class ConsoleWindow extends OutputStream {
         help.add(commands);
         actions.add(restart);
         actions.add(kick_all);
-        actions.add(execute);
         menuBar.add(actions);
         menuBar.add(tools);
         menuBar.add(help);

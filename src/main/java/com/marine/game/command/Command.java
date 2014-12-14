@@ -134,12 +134,24 @@ public abstract class Command {
         if (s.equals("@p")) {
             if (sender instanceof Player)
                 return Arrays.asList((Player) sender);
-            return null;
+            return Arrays.asList(getLocationClosestPlayer(sender.getLocation()));
         }
         if (s.equals("@r")) {
             return Arrays.asList(getRandomPlayer());
         }
         return null;
+    }
+
+    private Player getLocationClosestPlayer(final Location l) {
+        Player p = null;
+        double c, d = Double.MAX_VALUE;
+        for (Player player : Marine.getPlayers()) {
+            if ((c = l.getEuclideanDistanceSquared(player.getLocation())) < d) {
+                d = c;
+                p = player;
+            }
+        }
+        return p;
     }
 
     /**
@@ -193,15 +205,6 @@ public abstract class Command {
      */
     public Player getClosestPlayer(CommandSender sender) {
         if (sender instanceof Player) return (Player) sender;
-        Player closets = null;
-        double distance = Double.MAX_VALUE, current;
-        Location loc = sender.getLocation();
-        for (Player player : Marine.getPlayers()) {
-            if ((current = loc.getEuclideanDistance(player.getLocation())) < distance) {
-                distance = current;
-                closets = player;
-            }
-        }
-        return closets;
+        return getLocationClosestPlayer(sender.getLocation());
     }
 }
