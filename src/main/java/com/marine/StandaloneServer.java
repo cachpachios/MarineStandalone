@@ -19,6 +19,12 @@
 
 package com.marine;
 
+import java.io.File;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import org.json.JSONException;
+
 import com.marine.game.CommandManager;
 import com.marine.game.PlayerManager;
 import com.marine.game.WorldManager;
@@ -28,7 +34,15 @@ import com.marine.game.chat.ChatMessage;
 import com.marine.game.command.Command;
 import com.marine.game.command.CommandProvider;
 import com.marine.game.command.CommandSender;
-import com.marine.game.commands.*;
+import com.marine.game.commands.Help;
+import com.marine.game.commands.Info;
+import com.marine.game.commands.Plugins;
+import com.marine.game.commands.Say;
+import com.marine.game.commands.SendAboveActionBarMessage;
+import com.marine.game.commands.Stop;
+import com.marine.game.commands.Teleport;
+import com.marine.game.commands.Tellraw;
+import com.marine.game.commands.Test;
 import com.marine.game.scheduler.Scheduler;
 import com.marine.net.NetworkManager;
 import com.marine.net.play.clientbound.KickPacket;
@@ -43,11 +57,7 @@ import com.marine.settings.JSONFileHandler;
 import com.marine.settings.ServerSettings;
 import com.marine.util.Location;
 import com.marine.world.Difficulty;
-import org.json.JSONException;
-
-import java.io.File;
-import java.util.Timer;
-import java.util.TimerTask;
+import com.marine.world.Identifiers;
 
 /**
  * StandaloneServer - Housing of the main loop
@@ -100,6 +110,8 @@ public class StandaloneServer implements CommandProvider {
         this.scheduler.start(1000 / targetTickRate);
         // Make the plugin loader
         this.pluginLoader = new PluginLoader(new PluginManager());
+        // Activate the identifier
+        Identifiers.init();
     }
 
     public Scheduler getScheduler() {

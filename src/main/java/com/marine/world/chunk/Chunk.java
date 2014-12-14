@@ -80,14 +80,16 @@ public class Chunk {
     
     protected void setType(int x, int y, int z, BlockID type) {
         int section = y >> 4;
+        
         if (sections[section] == null)
             if (type != BlockID.AIR)
                 sections[section] = new ChunkSection(this,section);
             else return;
+        
         if (section > 0)
-            sections[section].setBlock(x, y / (section), z, type);
+            sections[section].setType(x, y / (section), z, type);
         if (section == 0)
-            sections[section].setBlock(x, y, z, type);
+            sections[section].setType(x, y, z, type);
     	
     }
     protected void setLight(int x, int y, int z, Byte light) {setLight(x,y,z,light.byteValue());}

@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.marine.util.Hacky;
+import com.marine.util.Unsafe;
 /**
 * Static class to index map data values
 * Hacky and not recommended way, preformance is at the cost.
@@ -33,28 +34,23 @@ import com.marine.util.Hacky;
 
 @Hacky
 public final class Identifiers {
-<<<<<<< HEAD
+	
     private static Map<Byte, BlockID> block_id;
-=======
-
-    private static ConcurrentHashMap<Byte, BlockID> block_id;
->>>>>>> origin/master
 
     public static BlockID getBlockID(byte id) {
-        if (block_id == null) {
-            block_id = new HashMap<Byte, BlockID>();
-            EnumSet<BlockID> set = EnumSet.allOf(BlockID.class);
-            for (BlockID b : set)
-                block_id.put(b.getID(), b);
-        }
-<<<<<<< HEAD
+        if (block_id == null) init();
 
-=======
->>>>>>> origin/master
         if (block_id.containsKey(id))
             return block_id.get(id);
         else
             return BlockID.AIR;
     }
 
+    @Unsafe	@Hacky
+    public static void init() {
+        block_id = new HashMap<Byte, BlockID>();
+        EnumSet<BlockID> set = EnumSet.allOf(BlockID.class);
+        for (BlockID b : set)
+            block_id.put(b.getID(), b);
+    }
 }

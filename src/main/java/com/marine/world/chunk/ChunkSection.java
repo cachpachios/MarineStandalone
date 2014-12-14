@@ -5,6 +5,7 @@ import java.util.Arrays;
 import com.marine.io.data.ByteData;
 import com.marine.util.Hacky;
 import com.marine.util.Position;
+import com.marine.util.Unsafe;
 import com.marine.world.BlockID;
 import com.marine.world.Identifiers;
 
@@ -13,6 +14,7 @@ import com.marine.world.Identifiers;
 *
 * @author Fozie
 */ 
+@Unsafe
 public final class ChunkSection {
 	
     private final int sectionID;
