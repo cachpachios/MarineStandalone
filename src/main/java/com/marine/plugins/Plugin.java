@@ -26,7 +26,13 @@ import java.io.File;
 import java.util.UUID;
 
 /**
- * Created 2014-12-10 for MarineStandalone
+ * Plugins will need to implement this class in order
+ * to be loaded.
+ *
+ * Use the methods in here, rather than any external
+ * methods that do the same thing, as these are optimized
+ * for use in plugins, and will make sure that nothing
+ * breaks.
  *
  * @author Citymonstret
  */

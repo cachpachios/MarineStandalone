@@ -19,7 +19,6 @@
 
 package com.marine;
 
-import com.marine.events.Listener;
 import com.marine.game.CommandManager;
 import com.marine.game.PlayerManager;
 import com.marine.game.WorldManager;
@@ -44,8 +43,11 @@ import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ * StandaloneServer - Housing of the main loop
+ */
 @SuppressWarnings("unused")
-public class StandaloneServer implements Listener {
+public class StandaloneServer {
 
     // Final values
     public final int skipTime;
@@ -88,12 +90,7 @@ public class StandaloneServer implements Listener {
         // Create a new scheduler instance
         this.scheduler = new Scheduler();
         // Set it to run 20 times per second
-        new Timer("scheduler").scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                scheduler.run();
-            }
-        }, 0l, (1000 / 20));
+        this.scheduler.start(1000 / targetTickRate);
         // Make the plugin loader
         this.pluginLoader = new PluginLoader(new PluginManager());
     }

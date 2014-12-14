@@ -22,9 +22,12 @@ package com.marine.util.mojang;
 import java.util.UUID;
 
 /**
+ * UUID Saver / Fetcher
+ *
  * @author Citymonstret
  */
 public interface UUIDSaver {
+
     /**
      * Fetch uuid from mojang servers
      *

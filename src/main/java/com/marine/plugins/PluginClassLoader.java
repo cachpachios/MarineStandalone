@@ -28,7 +28,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Created 2014-12-10 for MarineStandalone
+ * A custom class loader used with plugins
  *
  * @author Citymonstret
  */

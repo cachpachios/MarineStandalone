@@ -20,7 +20,7 @@
 package com.marine.util.vectors;
 
 /**
- * Created 2014-12-12 for MarineStandalone
+ * Integer Implementation of a 2D Vector
  *
  * @author Citymonstret
  */

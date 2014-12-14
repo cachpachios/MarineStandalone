@@ -33,7 +33,7 @@ import java.util.Collection;
 import java.util.UUID;
 
 /**
- * Created 2014-12-02 for MarineStandalone
+ * Static API Class - Fun stuff in here
  *
  * Static implementation of commonly used
  * methods. It wraps around the global instances

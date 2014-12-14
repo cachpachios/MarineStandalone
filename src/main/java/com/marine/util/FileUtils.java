@@ -24,7 +24,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * Created 2014-12-12 for MarineStandalone
+ * File Utility Methods
  *
  * @author Citymonstret
  */

@@ -23,7 +23,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Created 2014-12-03 for MarineStandalone
+ * ID Object interface (blocks, materials)
  *
  * @author Citymonstret
  */

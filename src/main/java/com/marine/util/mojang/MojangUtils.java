@@ -30,7 +30,7 @@ import java.net.URL;
 import java.net.URLConnection;
 
 /**
- * Created 2014-12-04 for MarineStandalone
+ * Mojang Utilities - Unsupported!
  *
  * @author Citymonstret
  */

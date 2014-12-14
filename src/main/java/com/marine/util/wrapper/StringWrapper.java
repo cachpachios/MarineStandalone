@@ -20,6 +20,9 @@
 package com.marine.util.wrapper;
 
 /**
+ * A string wrapper,
+ * basically an improved string
+ *
  * @author Empire92
  */
 public class StringWrapper {

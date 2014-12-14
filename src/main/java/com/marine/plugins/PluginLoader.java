@@ -35,7 +35,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 /**
- * Created 2014-12-10 for MarineStandalone
+ * The plugin loader - CANNOT BE ACCESS BY PLUGINS ITSELF
  *
  * @author Citymonstret
  */

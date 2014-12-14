@@ -30,7 +30,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 /**
- * Created 2014-12-02 for MarineStandalone
+ * UUID Handler - Undocumented!
  *
  * @author Citymonstret
  */

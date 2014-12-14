@@ -27,7 +27,9 @@ import java.security.AccessControlException;
 import java.security.Permission;
 
 /**
- * Created 2014-12-13 for MarineStandalone
+ * A custom SecurityManager created for
+ * MarineStandalone. Will block pesky actions made
+ * by plugins.
  *
  * @author Citymonstret
  */

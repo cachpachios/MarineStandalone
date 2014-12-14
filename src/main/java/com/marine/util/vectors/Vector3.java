@@ -20,11 +20,11 @@
 package com.marine.util.vectors;
 
 /**
- * Created 2014-12-01 for MarineStandalone
+ * 3 Dimensional Vector
  *
  * @author Citymonstret
  */
-public abstract class Vector3<T extends Number> {
+public abstract class Vector3<T extends Number> implements Vector {
 
     public T x, y, z;
 
@@ -41,12 +41,26 @@ public abstract class Vector3<T extends Number> {
         this.z = z;
     }
 
+    /**
+     * Subtract all values of the specified vector
+     * from the current instance
+     *
+     * @param v2 Other instance
+     */
     public abstract void add(Vector3<T> v2);
 
+    /**
+     * Subtract all values of the specified vector
+     * from the current instance
+     *
+     * @param v2 Other instance
+     */
     public abstract void subtract(Vector3<T> v2);
 
+    @Override
     public abstract void multiply(int n);
 
+    @Override
     public abstract void divide(int n);
 
     public T getX() {

@@ -25,7 +25,8 @@ import java.util.Arrays;
 import java.util.Collection;
 
 /**
- * Created 2014-12-07 for MarineStandalone
+ * String Utility Class
+ * (Replacement to apache, and sun)
  *
  * @author Citymonstret
  */

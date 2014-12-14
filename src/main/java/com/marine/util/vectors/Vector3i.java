@@ -19,6 +19,11 @@
 
 package com.marine.util.vectors;
 
+/**
+ * Integer version of a 3D Vector
+ *
+ * @author Citymonstret
+ */
 public class Vector3i extends Vector3<Integer> {
 
     public Vector3i() {

@@ -20,25 +20,48 @@
 package com.marine.util.vectors;
 
 /**
- * Created 2014-12-12 for MarineStandalone
+ * 2 Dimensional Vector
  *
  * @author Citymonstret
  */
-public abstract class Vector2<T extends Number> {
+public abstract class Vector2<T extends Number> implements Vector {
 
+    /**
+     * X & Y Values
+     */
     public T x, y;
 
+    /**
+     * Constructor
+     *
+     * @param x X Value
+     * @param y Y Value
+     */
     public Vector2(final T x, final T y) {
         this.x = x;
         this.y = y;
     }
 
+    /**
+     * Add all values of the specified vector to the
+     * current instance
+     *
+     * @param v2 Other instance
+     */
     public abstract void add(Vector2<T> v2);
 
+    /**
+     * Subtract all values of the specified vector
+     * from the current instance
+     *
+     * @param v2 Other instance
+     */
     public abstract void subtract(Vector2<T> v2);
 
+    @Override
     public abstract void multiply(int n);
 
+    @Override
     public abstract void divide(int n);
 
     public T getX() {
@@ -49,16 +72,16 @@ public abstract class Vector2<T extends Number> {
         this.x = x;
     }
 
-    public T getY() {
+    final public T getY() {
         return this.y;
     }
 
-    public void setY(T y) {
+    final public void setY(T y) {
         this.y = y;
     }
 
     @Override
-    public int hashCode() {
+    final public int hashCode() {
         int hash = 37;
         hash = hash * 3 + getX().intValue();
         hash = hash * 3 + getY().intValue();

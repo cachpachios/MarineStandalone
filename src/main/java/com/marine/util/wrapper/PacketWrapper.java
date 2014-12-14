@@ -22,7 +22,7 @@ package com.marine.util.wrapper;
 import com.marine.io.data.ByteData;
 
 /**
- * Created for MojangStandalone
+ * Packet Wrapper
  *
  * @param <T>
  * @author Fozie

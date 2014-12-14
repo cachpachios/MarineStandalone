@@ -29,12 +29,13 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
 /**
- * Created 2014-12-01 for MarineStandalone
+ * Location class
+ * Used for precise positioning (entity location etc)
  *
  * @author Citymonstret
  * @author Fozie
  */
-public class Location extends Vector3d implements JSONAware, Cloneable, Comparable<Location> { // Used for absolute positioning (Entites etc)
+public class Location extends Vector3d implements JSONAware, Cloneable, Comparable<Location> { //
 
     private final World world;
     private float yaw, pitch;

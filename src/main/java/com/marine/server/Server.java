@@ -35,8 +35,6 @@ import java.util.UUID;
 import java.util.concurrent.Executor;
 
 /**
- * Created 2014-12-02 for MarineStandalone
- *
  * Server implementation
  *
  * @author Citymonstret

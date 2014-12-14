@@ -22,7 +22,7 @@ package com.marine.util;
 import java.security.MessageDigest;
 
 /**
- * Created 2014-12-04 for MarineStandalone
+ * Minecraft Style Hex Digestion
  *
  * @author Citymonstret
  * @author Based of example from Wiki.vg

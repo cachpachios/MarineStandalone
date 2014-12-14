@@ -19,6 +19,11 @@
 
 package com.marine.util.vectors;
 
+/**
+ * Double implementation of a 3D Vector
+ *
+ * @author Citymonstret
+ */
 public class Vector3d extends Vector3<Double> {
 
     public Vector3d() {

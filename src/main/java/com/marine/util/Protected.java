@@ -25,7 +25,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Created 2014-12-13 for MarineStandalone
+ * W.I.P
  *
  * @author Citymonstret
  */

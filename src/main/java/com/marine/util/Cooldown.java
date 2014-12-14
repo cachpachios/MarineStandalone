@@ -20,7 +20,8 @@
 package com.marine.util;
 
 /**
- * Created 2014-12-13 for MarineStandalone
+ * Cooldown Utility (long desc.)
+ *
  * <p/>
  * Use this instead of Runnables to compare cooldwns,
  * as these rely on much simpler data, and won't cause

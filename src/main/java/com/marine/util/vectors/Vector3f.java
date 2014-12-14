@@ -20,7 +20,7 @@
 package com.marine.util.vectors;
 
 /**
- * Created 2014-12-12 for MarineStandalone
+ * Float Implementation of a 3D Vector
  *
  * @author Citymonstret
  */

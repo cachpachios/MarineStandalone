@@ -30,8 +30,6 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Created 2014-12-02 for MarineStandalone
- *
  * MarineServer interface
  *
  * @author Citymonstret

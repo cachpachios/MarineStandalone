@@ -20,7 +20,7 @@
 package com.marine.settings;
 
 /**
- * Created 2014-12-11 for MarineStandalone
+ * Exception thrown by the JSON Config handlers
  *
  * @author Citymonstret
  */

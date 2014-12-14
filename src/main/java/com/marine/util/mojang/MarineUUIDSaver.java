@@ -28,7 +28,7 @@ import java.net.URLConnection;
 import java.util.UUID;
 
 /**
- * Created 2014-12-02 for MarineStandalone
+ * A Mojang Compatible implementation of the UUID Saver
  *
  * @author Citymonstret
  */

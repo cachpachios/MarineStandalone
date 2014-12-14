@@ -22,7 +22,7 @@ package com.marine.plugins;
 import com.marine.Logging;
 
 /**
- * Created 2014-12-10 for MarineStandalone
+ * The logger used in plugins
  *
  * @author Citymonstret
  */
