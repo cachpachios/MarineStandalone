@@ -27,7 +27,9 @@ import org.marinemc.player.Player;
 import org.marinemc.server.Marine;
 
 import java.io.IOException;
-
+/**
+ * @author Fozie
+ */
 public class JoinGamePacket extends Packet {
 
     final Player p;

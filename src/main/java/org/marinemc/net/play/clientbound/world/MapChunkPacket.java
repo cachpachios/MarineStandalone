@@ -29,7 +29,9 @@ import org.marinemc.world.chunk.Chunk;
 
 import java.io.IOException;
 import java.util.List;
-
+/**
+ * @author Fozie
+ */
 public class MapChunkPacket extends Packet {
 
     List<Chunk> chunks;

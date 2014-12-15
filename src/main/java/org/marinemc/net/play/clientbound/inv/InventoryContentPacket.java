@@ -29,7 +29,9 @@ import org.marinemc.net.States;
 import org.marinemc.util.wrapper.PacketWrapper;
 
 import java.io.IOException;
-
+/**
+ * @author Fozie
+ */
 public class InventoryContentPacket extends Packet {
 
     final Inventory inv;

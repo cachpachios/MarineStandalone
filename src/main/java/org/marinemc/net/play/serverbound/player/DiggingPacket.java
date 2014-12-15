@@ -26,7 +26,9 @@ import org.marinemc.net.States;
 import org.marinemc.util.Position;
 
 import java.io.IOException;
-
+/**
+ * @author Fozie
+ */
 public class DiggingPacket extends Packet {
 
     private Status status;

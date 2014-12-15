@@ -51,7 +51,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * StandaloneServer - Housing of the main loop
+ * StandaloneServer - Housing of the main loop 
+ * @author Fozie
+ * @author Citymonstret
  */
 @SuppressWarnings("unused")
 public class StandaloneServer implements CommandProvider {

@@ -26,7 +26,7 @@ import java.util.*;
  *
  * @author Fozie
  */
-public class MemoryEfficientNibbleArray implements NibbleArray {
+public class MemoryEfficientNibbleArray implements NibbleArray { // TODO WIP
 
     private List<Byte> values;
 

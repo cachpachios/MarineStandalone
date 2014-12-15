@@ -24,10 +24,12 @@ import org.marinemc.net.play.clientbound.player.PlayerListItemPacket;
 import org.marinemc.player.Player;
 import org.marinemc.server.Marine;
 
+
 /**
  * Created 2014-12-05 for MarineStandalone
  *
  * @author Citymonstret
+ * @author Fozie
  */
 public class TablistManager {
 

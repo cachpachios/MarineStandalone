@@ -20,9 +20,10 @@
 package org.marinemc.world.chunk;
 
 import org.marinemc.io.data.ByteData;
-import org.marinemc.net.play.Serverside;
 import org.marinemc.player.Player;
 import org.marinemc.util.Position;
+import org.marinemc.util.annotations.Cautious;
+import org.marinemc.util.annotations.Serverside;
 import org.marinemc.util.annotations.Unsafe;
 import org.marinemc.world.BiomeID;
 import org.marinemc.world.BlockID;
@@ -37,13 +38,17 @@ import java.util.List;
  * @author Fozie
  */
 public class Chunk {
+	
+	public static final int WIDTH = 16, HEIGHT = 16;
 
     private final World w;
     private final ChunkPos pos;
 
     private ChunkSection[] sections;
-    private BiomeID[][] biomes;
+    private BiomeID[] biomes;
 
+    private short[] heightMap; // Sorted x + y * width
+    
 //    private List<Entity> entities;
 
     private List<Short> subscribingPlayers;
@@ -52,7 +57,10 @@ public class Chunk {
         this.w = w;
         this.pos = pos;
         this.sections = new ChunkSection[16];
-        this.biomes = new BiomeID[16][16];
+        
+        this.biomes = new BiomeID	[WIDTH*HEIGHT];
+        this.heightMap = new short	[WIDTH*HEIGHT];
+        
         this.subscribingPlayers = new ArrayList<Short>();
     }
 
@@ -84,15 +92,38 @@ public class Chunk {
         int section = y >> 4;
 
         if (sections[section] == null)
-            if (type != BlockID.AIR)
+            if (type != BlockID.AIR) {
                 sections[section] = new ChunkSection(this, section);
+                
+                if (section > 0)
+                    sections[section].setType(x, y / (section), z, type);
+                if (section == 0)
+                    sections[section].setType(x, y, z, type);
+                setMaxHeight(x,z,(short) y);
+                
+                return;
+            }
             else return;
 
         if (section > 0)
             sections[section].setType(x, y / (section), z, type);
         if (section == 0)
             sections[section].setType(x, y, z, type);
-
+        
+        if(isTop(x,y,z))
+            setMaxHeight(x,z,(short) y);
+    }    
+    
+    @Cautious
+    public boolean isTop(int x, int y, int z) {
+        for(int i = y; i < 256 - y; i++){
+        	Character c = getNullableBlock(x,i,z);
+        	if(c == null)
+        		return true;
+        	if(c.charValue() != 0)
+        		return false;
+        }
+        return true;
     }
 
     protected void setLight(int x, int y, int z, Byte light) {
@@ -132,12 +163,11 @@ public class Chunk {
 
     public ByteData getBiomeData() {
         ByteData d = new ByteData();
-        for (int z = 0; z < 16; z++)
-            for (int x = 0; x < 16; x++)
-                if (biomes[x][z] != null)
-                    d.writeend(biomes[x][z].getID());
-                else
-                    d.writeend(BiomeID.PLAINS.getID());
+        for(BiomeID b : biomes)
+        	if(b != null)
+        		d.writeend(b.getID());
+            else
+            	d.writeend(BiomeID.PLAINS.getID());
         return d;
     }
 
@@ -177,11 +207,20 @@ public class Chunk {
         int s = y >> 4;
 
         if (sections[s] == null)
-            return (char) -1;
+            return (char) 0;
 
         return sections[s].getType(x / 16, y / 16, z / 16);
     }
+    
+    public Character getNullableBlock(int x, int y, int z) {
+        int s = y >> 4;
 
+        if (sections[s] == null)
+            return null;
+
+        return sections[s].getType(x / 16, y / 16, z / 16);
+    }
+    
     @Unsafe
     public final ChunkSection getSection(int y) {
         return sections[y >> 4];
@@ -202,6 +241,23 @@ public class Chunk {
             //TODO Fix this stuff :P
 
         }
+    }
+    
+    private void setMaxHeight(int x, int z, short y) {
+    	if(x > 15) return;
+    	if(z > 15) return;
+    	heightMap[index(x,z)] = y;
+    }
+    
+    public short getMaxHeightAt(int x, int z) {
+    	if(x > 15) return -1;
+    	if(z > 15) return -1;
+    	return heightMap[index(x,z)];
+    }
+   
+    
+    private int index(int x, int y) {
+    	return (x + (y * WIDTH));
     }
 
     public int getDataSize(boolean biomes, boolean skylight) {

@@ -33,6 +33,9 @@ import org.marinemc.world.World;
 
 import java.util.UUID;
 
+/**
+ * @author Fozie
+ */
 public class LoginHandler {
 
     private final PlayerManager playerManager;

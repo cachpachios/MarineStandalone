@@ -25,7 +25,9 @@ import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
 
 import java.io.IOException;
-
+/**
+ * @author Fozie
+ */
 public class PlayerPositionPacket extends Packet {
 
     public double X, Y, Z; // Absolute Position (Y is feets, head = Y+1.62)

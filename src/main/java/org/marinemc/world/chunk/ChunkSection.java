@@ -48,6 +48,10 @@ public final class ChunkSection {
         this.blockMap = new char[DATA_SIZE];
         this.lightMap = new byte[DATA_SIZE];
     }
+    
+    public static char EncodeType(final BlockID type) {
+    	return (char) (type.getID() << 4);
+    }
 
     public static int getIndex(int x, int y, int z) {
         return ((y & 0xf) << 8) | (z << 4) | x;
@@ -72,12 +76,12 @@ public final class ChunkSection {
         return raw;
     }
 
-    public byte[] getLightData() { //TODO: Optimize
+    public final byte[] getLightData() {
         return lightMap;
     }
 
     public void setType(int x, int y, int z, BlockID id) {
-        blockMap[getIndex(x, y, z)] = (char) (id.getID() << 4);
+        blockMap[getIndex(x, y, z)] = EncodeType(id);
     }
 
     public void setLight(int x, int y, int z, byte light) {

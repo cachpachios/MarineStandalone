@@ -26,7 +26,9 @@ import org.marinemc.net.States;
 import org.marinemc.world.World;
 
 import java.io.IOException;
-
+/**
+ * @author Fozie
+ */
 public class TimeUpdatePacket extends Packet {
     final long worldTime;
     final long worldAge;

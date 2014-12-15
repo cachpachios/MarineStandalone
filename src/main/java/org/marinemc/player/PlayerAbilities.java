@@ -23,6 +23,7 @@ import org.marinemc.net.play.clientbound.player.PlayerAbilitesPacket;
 
 /**
  * Player abilities
+ * @author Fozie
  */
 public class PlayerAbilities {
     private boolean godMode, canFly, creativeMode;

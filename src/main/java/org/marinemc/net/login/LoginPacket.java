@@ -25,7 +25,9 @@ import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
 
 import java.io.IOException;
-
+/**
+ * @author Fozie
+ */
 public class LoginPacket extends Packet {
 
     public String name;

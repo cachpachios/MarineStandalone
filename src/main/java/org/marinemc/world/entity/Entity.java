@@ -25,7 +25,9 @@ import org.marinemc.util.Position;
 import org.marinemc.util.vectors.Vector3d;
 import org.marinemc.util.vectors.Vector3i;
 import org.marinemc.world.World;
-
+/**
+ * @author Fozie
+ */
 public abstract class Entity {
 
     private static int nextEntityID = 0;

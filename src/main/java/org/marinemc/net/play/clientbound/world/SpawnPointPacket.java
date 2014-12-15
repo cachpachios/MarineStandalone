@@ -26,7 +26,9 @@ import org.marinemc.net.States;
 import org.marinemc.util.Position;
 
 import java.io.IOException;
-
+/**
+ * @author Fozie
+ */
 public class SpawnPointPacket extends Packet { // Only used to make the client know where the compass should point
 
     final Position spawnPoint;

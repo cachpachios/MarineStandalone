@@ -26,7 +26,9 @@ import org.marinemc.net.States;
 import org.marinemc.player.PlayerAbilities;
 
 import java.io.IOException;
-
+/**
+ * @author Fozie
+ */
 public class PlayerAbilitesPacket extends Packet {
 
     final PlayerAbilities abilites;

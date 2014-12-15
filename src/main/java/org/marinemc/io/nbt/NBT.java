@@ -24,7 +24,9 @@ import org.marinemc.io.data.ByteData;
 
 import java.io.File;
 import java.io.IOException;
-
+/**
+ * @author Fozie
+ */
 public class NBT {
 
     NBTCompound tag;

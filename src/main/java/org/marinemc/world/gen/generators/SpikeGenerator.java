@@ -17,23 +17,31 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package org.marinemc.world.generators;
+package org.marinemc.world.gen.generators;
 
 import org.marinemc.util.Location;
 import org.marinemc.world.BlockID;
 import org.marinemc.world.Dimension;
+import org.marinemc.world.World;
 import org.marinemc.world.chunk.Chunk;
 import org.marinemc.world.chunk.ChunkPos;
+import org.marinemc.world.gen.LevelType;
+import org.marinemc.world.gen.WorldGenerator;
 
 /**
  * Created 2014-12-12 for MarineStandalone
  *
  * @author Citymonstret
+ * @author Fozie
  */
-public class CityGenerator extends WorldGenerator {
+public class SpikeGenerator extends WorldGenerator {
 
     private static final int H = 32;
 
+    public SpikeGenerator(final World w) {
+    	super(w,null);
+    }
+    
     @Override
     public LevelType getLevelType() {
         return LevelType.FLAT;
@@ -54,9 +62,9 @@ public class CityGenerator extends WorldGenerator {
     }
 
     @Override
-    public Chunk generateChunk(int xCo, int yCo) {
-        Chunk chunk = new Chunk(world, new ChunkPos(xCo, yCo));
-        BlockID id;
+    public Chunk generateChunkTerrain(ChunkPos pos) {
+        Chunk chunk = new Chunk(world, pos);
+        BlockID id = BlockID.AIR;
         for (int y = 1; y < H; y++) {
             for (int x = 0; x < 16; x++) {
                 for (int z = 0; z < 16; z++) {

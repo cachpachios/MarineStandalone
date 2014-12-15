@@ -35,7 +35,9 @@ import org.marinemc.server.Marine;
 import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
-
+/**
+ * @author Fozie
+ */
 public class ListPacket extends Packet {
 
     private String img;

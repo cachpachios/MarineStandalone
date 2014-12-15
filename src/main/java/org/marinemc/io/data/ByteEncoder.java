@@ -22,7 +22,9 @@ package org.marinemc.io.data;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * @author Fozie
+ */
 public final class ByteEncoder {
     public static byte[] writeByte(byte b) {
         return new byte[]{

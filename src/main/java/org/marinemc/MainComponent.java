@@ -19,17 +19,21 @@
 
 package org.marinemc;
 
-import org.marinemc.game.system.MarineSecurityManager;
-import org.marinemc.settings.ServerSettings;
-import org.marinemc.util.Protected;
-
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.marinemc.game.system.MarineSecurityManager;
+import org.marinemc.settings.ServerSettings;
+import org.marinemc.util.Protected;
+
 @Protected
+/**
+ * @author Fozie
+ * @author Citymonstret
+ */
 public class MainComponent {
 
     public static List<String> arguments;
@@ -64,18 +68,20 @@ public class MainComponent {
             System.exit(1);
         }
         // Check if run from compressed folder
-        if (false /* TODO: Remove this, cannot use this check when in-dev */ && new File(".").getAbsolutePath().indexOf('!') == -1) {
+        if (!(new File(".").getAbsolutePath().indexOf('!') == -1)) {
             System.out.println("-- Could not start MarineStandalone: Cannot run from compressed folder");
             System.exit(1);
         }
+        
         try { // Check OS Arch and warn if lower than 64bit
             if (Integer.parseInt(System.getProperty("sun.arch.data.model")) < 64) {
                 Logging.getLogger().warn("Warning Server is running on 32bit this is highly not recommended and can cause fatal errors or lag!");
                 Logging.getLogger().warn("Consider updating java or your hardware.");
             }
         } catch (SecurityException e) { // If blocked print an error
-            Logging.getLogger().error("Unable to retrieve computer arch! Perhaps blocked by the OS.");
+            Logging.getLogger().warn("Unable to retrieve computer arch! Perhaps blocked by the JVM.");
         }
+        
         // Make sure that plugins can't
         // close down the jvm
         // or replace the security
@@ -83,8 +89,10 @@ public class MainComponent {
         System.setSecurityManager(new MarineSecurityManager(System.getSecurityManager()));
         // Use IPv4 instead of IPv6
         System.setProperty("java.net.preferIPv4Stack", "true");
+        
         // Make math fast :D
         chargeUp();
+        
         // Get the arguments
         arguments = Arrays.asList(args);
         // Init. ServerSettings
@@ -101,7 +109,7 @@ public class MainComponent {
             port = 25565;
         }
         if (tickrate != -1) {
-            tickrate = Math.min(tickrate, 120);
+            tickrate = Math.min(tickrate, 80);
             tickrate = Math.max(tickrate, 0);
         } else {
             tickrate = 20;

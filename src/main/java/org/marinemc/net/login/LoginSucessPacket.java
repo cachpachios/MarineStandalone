@@ -27,7 +27,9 @@ import org.marinemc.player.Player;
 
 import java.io.IOException;
 import java.util.UUID;
-
+/**
+ * @author Fozie
+ */
 public class LoginSucessPacket extends Packet {
 
     public final Player p;

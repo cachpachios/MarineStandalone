@@ -17,22 +17,26 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package org.marinemc.world.generators;
+package org.marinemc.world.gen;
 
 import org.marinemc.util.Location;
 import org.marinemc.world.Dimension;
 import org.marinemc.world.World;
 import org.marinemc.world.chunk.Chunk;
+import org.marinemc.world.chunk.ChunkPos;
 
+/**
+ * @author Fozie
+ */
 public abstract class WorldGenerator {
 
-    protected World world;
+    protected final World world;
+    
+    private ChunkPopulator[] populators;
 
-    public WorldGenerator() {
-    }
-
-    public void setWorld(World w) {
-        world = w;
+    public WorldGenerator(final World w, final ChunkPopulator[] populators) {
+    	world = w;
+    	this.populators = populators;
     }
 
     public Chunk[] generateRegion(int x, int y) {
@@ -46,7 +50,7 @@ public abstract class WorldGenerator {
         int i = 0;
         for (int xx = -(width / 2); xx < width / 2; xx++)
             for (int yy = -(width / 2); yy < width / 2; yy++) {
-                r[i] = generateChunk(x + xx, y + yy);
+                r[i] = generateChunk(new ChunkPos(x + xx, y + yy));
                 i++;
             }
         return r;
@@ -54,8 +58,21 @@ public abstract class WorldGenerator {
 
     public abstract Dimension getDimension(); //TODO Enum for dimensions
 
-    public abstract Chunk generateChunk(int x, int y);
+    public void populateChunk(Chunk c) {
+    	if(populators == null)
+    		return;
+    	for(ChunkPopulator pop : populators)
+    		pop.populate(c);
+    }
 
+    public Chunk generateChunk(final ChunkPos pos) {
+    	Chunk c = generateChunkTerrain(pos);
+    	populateChunk(c);
+    	return c;
+    }
+    
+    public abstract Chunk generateChunkTerrain(final ChunkPos pos);
+    
     public abstract Location getSafeSpawnPoint();
 
 

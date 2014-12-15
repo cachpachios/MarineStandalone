@@ -28,7 +28,9 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * @author Fozie
+ */
 public class Client {
 
     private final NetworkManager networkManager;

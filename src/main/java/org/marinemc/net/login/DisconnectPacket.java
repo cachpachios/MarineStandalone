@@ -27,7 +27,9 @@ import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
 
 import java.io.IOException;
-
+/**
+ * @author Fozie
+ */
 public class DisconnectPacket extends Packet {
 
     String msg;

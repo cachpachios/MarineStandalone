@@ -20,7 +20,9 @@
 package org.marinemc.world.chunk;
 
 import org.marinemc.util.vectors.Vector2i;
-
+/**
+ * @author Fozie
+ */
 public class ChunkPos extends Vector2i implements Comparable<ChunkPos> {
 
     public ChunkPos(int x, int y) {
@@ -38,7 +40,7 @@ public class ChunkPos extends Vector2i implements Comparable<ChunkPos> {
     public long encode() {
         return (long) getX() << 32 | getY() & 0xFFFFFFFFL;
     }
-
+    
     @Override
     public int compareTo(ChunkPos v) {
         int
