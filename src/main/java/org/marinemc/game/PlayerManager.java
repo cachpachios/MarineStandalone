@@ -231,13 +231,17 @@ public class PlayerManager {
 
         p.sendPosition();
 
+        
+        
         p.sendMapData(p.getWorld().getChunks(0, 0, 2, 2));
 
         p.sendAbilites();
 
         p.sendPosition();
+        
         p.sendTime();
-        //p.loginPopulation();
+        
+        p.loginPopulation();
     }
 
     public void keepAlive(short uid, int ID) {
@@ -246,9 +250,7 @@ public class PlayerManager {
         timeout.keepAlive(getPlayer(uid));
     }
 
-    // TODO: Make this work, its just freezes the server now
-
-    public void forceGC(Player player) {
+    protected void forceGC(Player player) {
         Reference<Player> ref = new SoftReference<>(player);
         player = null;
         while (ref.get() != null) {

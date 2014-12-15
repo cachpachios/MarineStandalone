@@ -19,6 +19,7 @@
 
 package org.marinemc.world.chunk;
 
+import org.marinemc.io.data.ByteData;
 import org.marinemc.util.Position;
 import org.marinemc.util.annotations.Hacky;
 import org.marinemc.util.annotations.Unsafe;
@@ -50,7 +51,10 @@ public final class ChunkSection {
     }
     
     public static char EncodeType(final BlockID type) {
-    	return (char) (type.getID() << 4);
+    	if(type.isMetaBlock())
+    		return (char) (((type.getIntID() << 4) & 0xfff0) | type.getMetaBlock());
+    	else
+    		return (char) (type.getIntID() << 4);
     }
 
     public static int getIndex(int x, int y, int z) {
@@ -77,7 +81,10 @@ public final class ChunkSection {
     }
 
     public final byte[] getLightData() {
-        return lightMap;
+    	ByteData d = new ByteData();
+    	for(char id : blockMap)
+    		d.writeend((byte)-1);
+    	return d.getBytes();
     }
 
     public void setType(int x, int y, int z, BlockID id) {
