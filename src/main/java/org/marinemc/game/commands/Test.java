@@ -30,6 +30,7 @@ import org.marinemc.player.Player;
 import org.marinemc.util.StringUtils;
 
 import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * Created 2014-12-06 for MarineStandalone
@@ -106,5 +107,15 @@ public class Test extends Command {
             default:
                 break;
         }
+    }
+
+    @Override
+    public Collection<String> getCompletion(CommandSender sender, String command) {
+        String[] s = command.split(" ");
+        // Only return the suggestions if the sender has not inputted
+        // a test yet (/test [suggestion request])
+        if (s.length == 1)
+            return Arrays.asList(acceptableArguments);
+        return Arrays.asList();
     }
 }

@@ -237,4 +237,16 @@ public abstract class Command {
     public void setName(String name) {
         this.command = name;
     }
+
+    /**
+     * Return a new collection of a string based
+     * on the command (including arguments) specified
+     *
+     * @param sender  Sender wanting the completion
+     * @param command Command inputted at the time of request
+     * @return Suggestions
+     */
+    public Collection<String> getCompletion(CommandSender sender, String command) {
+        return Arrays.asList();
+    }
 }

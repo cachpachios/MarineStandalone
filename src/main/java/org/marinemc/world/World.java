@@ -19,12 +19,6 @@
 
 package org.marinemc.world;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 import org.marinemc.StandaloneServer;
 import org.marinemc.game.WorldManager;
 import org.marinemc.util.Position;
@@ -33,6 +27,12 @@ import org.marinemc.world.chunk.ChunkPos;
 import org.marinemc.world.gen.LevelType;
 import org.marinemc.world.gen.WorldGenerator;
 import org.marinemc.world.gen.generators.TotalFlatGrassGenerator;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Fozie
