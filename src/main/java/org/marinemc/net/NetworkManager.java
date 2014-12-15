@@ -112,7 +112,7 @@ public class NetworkManager {
     public boolean processAll() {
         synchronized (clientList) {
             boolean didProccessSomething = false;
-            for (Client c : clientList) {
+            for (final Client c : clientList) {
                 Client.ConnectionStatus status = c.process();
                 if (status == Client.ConnectionStatus.CONNECTION_PROBLEMS)
                     if (c.getUID() != -1) {
@@ -143,11 +143,12 @@ public class NetworkManager {
     public void tryConnections() {
         if (hasClientsConnected())
             synchronized (clientList) {
-                for (Client c : clientList) {
+                for (final Client c : clientList) {
                     if (!c.isActive()) {
                         if (c.getUID() != -1)
                             marineServer.getPlayerManager().disconnect(marineServer.getPlayerManager().getPlayerByClient(c), "Connection Quit");
                         cleanUp(c);
+                        continue;
                     }
                 }
             }
