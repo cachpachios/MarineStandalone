@@ -31,13 +31,13 @@ public class Rand {
 	public static int randomInteger(final int maxValue) {
 		return (int) (Math.random() * maxValue);
 	}
-	
+
 	public static int randomInteger() {
 		return (int)(Math.random()*Integer.MAX_VALUE);
 	}
 	
 	public static float randomFloat() {
-		return (float)(Math.random());
+		return (float) randomDouble();
 	}
 	
 	public static double randomDouble() {
