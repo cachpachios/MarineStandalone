@@ -19,15 +19,15 @@
 
 package org.marinemc;
 
+import org.marinemc.game.system.MarineSecurityManager;
+import org.marinemc.settings.ServerSettings;
+import org.marinemc.util.Protected;
+
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import org.marinemc.game.system.MarineSecurityManager;
-import org.marinemc.settings.ServerSettings;
-import org.marinemc.util.Protected;
 
 @Protected
 /**
@@ -87,6 +87,7 @@ public class MainComponent {
         // or replace the security
         // manager with a custom one
         System.setSecurityManager(new MarineSecurityManager(System.getSecurityManager()));
+
         // Use IPv4 instead of IPv6
         System.setProperty("java.net.preferIPv4Stack", "true");
         
@@ -169,14 +170,15 @@ public class MainComponent {
 
     private static void chargeUp() {
         for (int x = 0; x < 10000; x++) {
-            Math.sqrt(222039929);
-            Math.sin(93);
-            Math.cos(93);
-            Math.tan(93);
-            Math.random();
-            Math.asin(93);
-            Math.acos(93);
-            Math.atan(93);
+            double v;
+            v = Math.sqrt(222039929);
+            v = Math.sin(93);
+            v = Math.cos(93);
+            v = Math.tan(93);
+            v = Math.random();
+            v = Math.asin(93);
+            v = Math.acos(93);
+            v = Math.atan(93);
         }
     }
 
