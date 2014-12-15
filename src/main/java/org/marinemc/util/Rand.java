@@ -19,6 +19,9 @@
 
 package org.marinemc.util;
 
+/**
+ * Random, literally Random, utility class
+ */
 public class Rand {
 
 	public static boolean randomBoolean() {
