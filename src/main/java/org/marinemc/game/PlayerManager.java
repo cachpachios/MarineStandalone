@@ -79,12 +79,12 @@ public class PlayerManager {
     }
 
     public void broadcastPacket(Packet packet) {
-        for (Player p : uids.values())
+        for (final Player p : uids.values())
             p.getClient().sendPacket(packet);
     }
 
     public void updateThemAll() {
-        for (Player p : uids.values()) {
+        for (final Player p : uids.values()) {
             p.update();
             p.sendTime();
         }
@@ -99,7 +99,7 @@ public class PlayerManager {
     }
 
     public boolean isPlayerOnline(UUID uid) {
-        for (Player player : uids.values())
+        for (final Player player : uids.values())
             if (player.getUUID().equals(uid))
                 return true;
         return false;
@@ -122,7 +122,7 @@ public class PlayerManager {
         // if (!playerIDs.containsKey(uuid))
         //    return null;
         // return playerIDs.get(uuid);
-        for (Player player : uids.values())
+        for (final Player player : uids.values())
             if (player.getUUID().equals(uuid))
                 return player;
         return null;
