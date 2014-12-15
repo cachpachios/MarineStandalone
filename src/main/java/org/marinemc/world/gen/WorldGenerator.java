@@ -30,15 +30,21 @@ import org.marinemc.world.chunk.ChunkPos;
  */
 public abstract class WorldGenerator {
 
-    protected final World world;
+	public final static ChunkPopulator[] NO_POPULATION = new ChunkPopulator[]{new ChunkPopulator() {@Override public void populate(Chunk c) {} }};
+	
+    protected World world;
     
     private ChunkPopulator[] populators;
 
-    public WorldGenerator(final World w, final ChunkPopulator[] populators) {
-    	world = w;
+    public WorldGenerator(final ChunkPopulator[] populators) {
     	this.populators = populators;
     }
-
+    
+    public void setGenerationWorld(World w) {
+    	world = w;
+    }
+    
+    
     public Chunk[] generateRegion(int x, int y) {
         return generateRegion(x, y, 16, 16);
     }

@@ -39,7 +39,7 @@ public class SpikeGenerator extends WorldGenerator {
     private static final int H = 32;
 
     public SpikeGenerator(final World w) {
-    	super(w,null);
+    	super(WorldGenerator.NO_POPULATION);
     }
     
     @Override
