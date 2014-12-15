@@ -110,17 +110,15 @@ public class Chunk {
         if (section == 0)
             sections[section].setType(x, y, z, type);
         
-        if(isTop(x,y,z))
+        if(y > getMaxHeightAt(x,z)) {
             setMaxHeight(x,z,(short) y);
+        }
     }    
     
     @Cautious
     public boolean isTop(int x, int y, int z) {
-        for(int i = y; i < 256 - y; i++){
-        	Character c = getNullableBlock(x,i,z);
-        	if(c == null)
-        		return true;
-        	if(c.charValue() != 0)
+        for(int i = y; i < (256 - y); i++){
+        	if((int)getBlock(x,i,z) != 0)
         		return false;
         }
         return true;

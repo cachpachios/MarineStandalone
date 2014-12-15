@@ -58,7 +58,9 @@ public class World { // TODO Save and unload chunks...
 
     public World(StandaloneServer server, final String name) {
         this.server = server;
-        this.generator = new TotalFlatGrassGenerator(this); //this should use the default generator
+        loadedChunks = Collections.synchronizedMap(new ConcurrentHashMap<Long, Chunk>());
+        this.generator = new TotalFlatGrassGenerator();
+        this.generator.setGenerationWorld(this);
         this.uid = WorldManager.getNextUID();
         this.name = name;
         this.dimension = Dimension.OVERWORLD;
@@ -70,15 +72,14 @@ public class World { // TODO Save and unload chunks...
         this.server = server;
         this.time = 0;
         this.age = 0;
-
-        this.generator = generator;
-
         uid = WorldManager.getNextUID();
         this.name = name;
-
         loadedChunks = Collections.synchronizedMap(new ConcurrentHashMap<Long, Chunk>());
+        
+        this.generator = generator;
+        this.generator.setGenerationWorld(this);
 
-        spawnPoint = new Position(0, 5, 0); //TODO make this get loaded from world or generate random based on worldgenerator
+        spawnPoint = generator.getSafeSpawnPoint().getRelativePosition(); //TODO make this get loaded from world or generate random based on worldgenerator
 
 
         dimension = this.generator.getDimension();

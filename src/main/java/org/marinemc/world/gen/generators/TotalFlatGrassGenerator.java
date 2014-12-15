@@ -22,19 +22,20 @@ package org.marinemc.world.gen.generators;
 import org.marinemc.util.Location;
 import org.marinemc.world.BlockID;
 import org.marinemc.world.Dimension;
-import org.marinemc.world.World;
 import org.marinemc.world.chunk.Chunk;
 import org.marinemc.world.chunk.ChunkPos;
+import org.marinemc.world.gen.ChunkPopulator;
 import org.marinemc.world.gen.LevelType;
 import org.marinemc.world.gen.WorldGenerator;
+import org.marinemc.world.gen.pop.TallGrassPop;
 /**
  * @author Fozie
  */
 public final class TotalFlatGrassGenerator extends WorldGenerator {
 
 
-    public TotalFlatGrassGenerator(World w) {
-    	super(w,null);
+    public TotalFlatGrassGenerator() {
+    	super(new ChunkPopulator[]{new TallGrassPop()});
     }
 
     @Override
