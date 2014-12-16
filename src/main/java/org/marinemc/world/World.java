@@ -37,11 +37,11 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @author Fozie
  */
-public class World { // TODO Save and unload chunks...
-
+public class World { // TODO Save and unload chunks...	
+	
     //Final Pointers:
     private final StandaloneServer server;
-
+    
     //Identifiers:
     private final String name;
     private final byte uid;
@@ -59,8 +59,9 @@ public class World { // TODO Save and unload chunks...
     public World(StandaloneServer server, final String name) {
         this.server = server;
         loadedChunks = Collections.synchronizedMap(new ConcurrentHashMap<Long, Chunk>());
-        this.generator = new TotalFlatGrassGenerator();
+        this.generator = new TotalFlatGrassGenerator(); // StandardGenerator
         this.generator.setGenerationWorld(this);
+        spawnPoint = generator.getSafeSpawnPoint().getRelativePosition(); //TODO make this get loaded from world or generate random based on worldgenerator
         this.uid = WorldManager.getNextUID();
         this.name = name;
         this.dimension = Dimension.OVERWORLD;
@@ -127,7 +128,10 @@ public class World { // TODO Save and unload chunks...
     }
 
     public Position getSpawnPoint() {
-        return spawnPoint;
+    	if(spawnPoint!=null)
+    		return spawnPoint;
+    	else
+    		return generator.getSafeSpawnPoint().getRelativePosition();
     }
 
     public String getName() {

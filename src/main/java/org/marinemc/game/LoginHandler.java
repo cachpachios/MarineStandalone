@@ -63,25 +63,29 @@ public class LoginHandler {
         if (playerManager.isPlayerOnline(uuid))
             return new LoginResponse("Failed to login player is already connected.");
 
-        // Check for bans
-        if (Marine.isBanned(uuid)) {
+        // Check for uuid ban
+        if (Marine.isBanned(uuid))
             return new LoginResponse("Banned from the server");
-        }
-        // Check if the IP is banned
-        if (Marine.isBanned(c.getAdress())) {
+        
+        // Check for ip ban
+        if (Marine.isBanned(c.getAdress()))
             return new LoginResponse("IP Banned from the server");
-        }
-
-        IPlayer p = new AbstractPlayer(playerManager.getServer(), playerManager.getServer().getWorldManager().getMainWorld(), new PlayerID(name, uuid), c, new PlayerAbilities(false, true, false, 0.2f, 0.2f), spawnLocation);
-
+        
+        IPlayer p = new AbstractPlayer(playerManager.getServer(), playerManager.getServer().getWorldManager().getMainWorld(), new PlayerID(name, uuid), c, new PlayerAbilities(false, true, false, 0.2f, 0.2f), playerManager.getServer().getWorldManager().getMainWorld().getSpawnPoint().toLocation());
+        
+        p.getLocation().setWorld(p.getWorld());
+        
         short uid = UIDGenerator.instance().getUID(name);
+        
+        c.setUID(uid);
+        
         if (uid == Short.MIN_VALUE) {
             new RuntimeException(
-                    String.format("UID Error: (%d) < (%d) for '%s'", uid, Short.MIN_VALUE, name)
+                    String.format("UID Error: (%d) < (%d) for '%s'", uid, Short.MIN_VALUE+1, name)
             ).printStackTrace();
             return new LoginResponse("Failed to log you in. (UID < accepted)");
         }
-
+        
         return new LoginResponse(p);
     }
 
