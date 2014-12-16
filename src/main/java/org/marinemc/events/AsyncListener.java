@@ -19,20 +19,10 @@
 
 package org.marinemc.events;
 
-
 /**
- * Async Event
+ * Listener for async events
  *
  * @author Citymonstret
  */
-public class AsyncEvent extends MarineEvent {
-
-    /**
-     * Constructor
-     *
-     * @param name Unique Event Name
-     */
-    public AsyncEvent(String name) {
-        super("async_event" + name);
-    }
+public class AsyncListener {
 }

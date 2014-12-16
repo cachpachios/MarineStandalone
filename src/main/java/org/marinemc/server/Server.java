@@ -23,6 +23,7 @@ import com.google.common.eventbus.AsyncEventBus;
 import com.google.common.eventbus.EventBus;
 import org.marinemc.StandaloneServer;
 import org.marinemc.events.AsyncEvent;
+import org.marinemc.events.AsyncListener;
 import org.marinemc.events.Listener;
 import org.marinemc.events.MarineEvent;
 import org.marinemc.game.system.MarineSecurityManager;
@@ -106,13 +107,23 @@ public class Server implements MarineServer {
     }
 
     @Override
+    final public void registerAsyncListener(final AsyncListener listener) {
+        this.asyncEventBus.register(listener);
+    }
+
+    @Override
     final public void unregisterListener(final Listener listener) {
         this.eventBus.unregister(listener);
     }
 
     @Override
+    final public void unregisterAsyncListener(final AsyncListener listener) {
+        this.asyncEventBus.unregister(listener);
+    }
+
+    @Override
     final public void callEvent(final MarineEvent event) {
-        if (event instanceof AsyncEvent) {
+        if (event instanceof AsyncEvent) { // Async events are called with another event bus
             this.asyncEventBus.post(event);
         } else {
             this.eventBus.post(event);

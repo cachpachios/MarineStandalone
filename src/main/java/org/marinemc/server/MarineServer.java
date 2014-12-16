@@ -20,6 +20,7 @@
 package org.marinemc.server;
 
 import org.marinemc.StandaloneServer;
+import org.marinemc.events.AsyncListener;
 import org.marinemc.events.Listener;
 import org.marinemc.events.MarineEvent;
 import org.marinemc.player.Player;
@@ -110,6 +111,20 @@ public interface MarineServer {
      * @param listener event listener
      */
     public void unregisterListener(final Listener listener);
+
+    /**
+     * Register an async event listener
+     *
+     * @param listener event listener
+     */
+    public void registerAsyncListener(final AsyncListener listener);
+
+    /**
+     * UnRegister an async event listener
+     *
+     * @param listener event listener
+     */
+    public void unregisterAsyncListener(final AsyncListener listener);
 
     /**
      * Call an event

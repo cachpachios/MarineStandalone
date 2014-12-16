@@ -19,20 +19,13 @@
 
 package org.marinemc.events;
 
+import org.marinemc.player.Player;
 
 /**
- * Async Event
+ * Created 2014-12-16 for MarineStandalone
  *
  * @author Citymonstret
  */
-public class AsyncEvent extends MarineEvent {
-
-    /**
-     * Constructor
-     *
-     * @param name Unique Event Name
-     */
-    public AsyncEvent(String name) {
-        super("async_event" + name);
-    }
+public interface PlayerEventStruct {
+    public Player getPlayer();
 }

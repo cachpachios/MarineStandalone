@@ -26,7 +26,7 @@ import org.marinemc.player.Player;
  *
  * @author Citymonstret
  */
-public class PlayerEvent extends MarineEvent {
+public class PlayerEvent extends MarineEvent implements PlayerEventStruct {
 
     private final Player player;
 
