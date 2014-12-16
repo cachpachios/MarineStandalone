@@ -1,8 +1,7 @@
 package test.plugin;
 
-import com.google.common.eventbus.Subscribe;
 import org.marinemc.MainComponent;
-import org.marinemc.events.Listener;
+import org.marinemc.events.EventListener;
 import org.marinemc.events.standardevents.ListEvent;
 import org.marinemc.game.chat.ChatColor;
 import org.marinemc.game.command.Command;
@@ -49,9 +48,9 @@ public class PluginMain extends Plugin {
             }
         }
         getLogger().log(getName() + " is enabled");
-        Marine.getServer().registerListener(new Listener() {
-            @Subscribe
-            public void onPing(ListEvent event) {
+        registerListener(new EventListener<ListEvent>(this) {
+            @Override
+            public void listen(ListEvent event) {
                 event.setResponse(new ListResponse("Hello World", 666, 999, event.getResponse().SAMPLE_PLAYERS, event.getResponse().FAVICON));
             }
         });

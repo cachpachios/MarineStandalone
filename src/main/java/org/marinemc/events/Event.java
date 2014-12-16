@@ -20,9 +20,44 @@
 package org.marinemc.events;
 
 /**
- * Listener for async events
+ * Created 2014-12-16 for MarineStandalone
  *
  * @author Citymonstret
  */
-public class AsyncListener {
+public abstract class Event {
+
+    private final String name;
+    private final boolean async;
+
+    public Event(final String name) {
+        this(name, false);
+    }
+
+    public Event(final String name, final boolean async) {
+        this.name = name;
+        this.async = async;
+    }
+
+    @Override
+    public String toString() {
+        return this.getClass().getName();
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.name.hashCode();
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        return o instanceof Event && ((Event) o).getName().equals(this.getName());
+    }
+
+    public boolean async() {
+        return this.async;
+    }
 }

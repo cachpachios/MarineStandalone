@@ -20,7 +20,7 @@
 package org.marinemc.events.standardevents;
 
 import org.marinemc.events.Cancellable;
-import org.marinemc.events.MarineEvent;
+import org.marinemc.events.Event;
 import org.marinemc.net.handshake.ListResponse;
 
 /**
@@ -28,7 +28,7 @@ import org.marinemc.net.handshake.ListResponse;
  *
  * @author Citymonstret
  */
-public class ListEvent extends MarineEvent implements Cancellable {
+public class ListEvent extends Event implements Cancellable {
 
     private ListResponse response;
     private boolean cancelled;

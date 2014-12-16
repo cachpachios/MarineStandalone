@@ -20,6 +20,8 @@
 package org.marinemc.plugins;
 
 import org.marinemc.Logging;
+import org.marinemc.events.EventListener;
+import org.marinemc.events.EventManager;
 import org.marinemc.game.CommandManager;
 import org.marinemc.game.chat.ChatColor;
 import org.marinemc.game.command.Command;
@@ -235,5 +237,9 @@ public class Plugin implements CommandProvider {
      */
     final public void addCommand(Command command) {
         CommandManager.getInstance().registerCommand(this, command);
+    }
+
+    public void registerListener(final EventListener listener) {
+        EventManager.getInstance().addListener(listener);
     }
 }

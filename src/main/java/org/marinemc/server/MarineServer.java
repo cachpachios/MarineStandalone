@@ -20,9 +20,7 @@
 package org.marinemc.server;
 
 import org.marinemc.StandaloneServer;
-import org.marinemc.events.AsyncListener;
-import org.marinemc.events.Listener;
-import org.marinemc.events.MarineEvent;
+import org.marinemc.events.Event;
 import org.marinemc.player.Player;
 import org.marinemc.world.World;
 
@@ -99,39 +97,11 @@ public interface MarineServer {
     public Player getPlayer(final String username);
 
     /**
-     * Register an event listener
-     *
-     * @param listener event listener
-     */
-    public void registerListener(final Listener listener);
-
-    /**
-     * UnRegister an event listener
-     *
-     * @param listener event listener
-     */
-    public void unregisterListener(final Listener listener);
-
-    /**
-     * Register an async event listener
-     *
-     * @param listener event listener
-     */
-    public void registerAsyncListener(final AsyncListener listener);
-
-    /**
-     * UnRegister an async event listener
-     *
-     * @param listener event listener
-     */
-    public void unregisterAsyncListener(final AsyncListener listener);
-
-    /**
      * Call an event
      *
-     * @param event to call
+     * @param event Event to call
      */
-    public void callEvent(final MarineEvent event);
+    public void callEvent(final Event event);
 
     /**
      * Get the current MOTD

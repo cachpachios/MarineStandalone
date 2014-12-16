@@ -19,8 +19,8 @@
 
 package org.marinemc.player;
 
-import com.google.common.eventbus.Subscribe;
-import org.marinemc.events.Listener;
+import org.marinemc.events.EventListener;
+import org.marinemc.events.EventManager;
 import org.marinemc.events.standardevents.LeaveEvent;
 import org.marinemc.server.Marine;
 import org.marinemc.util.ArgumentOperation;
@@ -36,7 +36,7 @@ import java.util.UUID;
  * @author Citymonstret
  * @author Fozie
  */
-public class PlayerList extends ArrayList<Short> implements Listener {
+public class PlayerList extends ArrayList<Short> {
 
     private static final long serialVersionUID = -3119271835517339073L;
 
@@ -75,8 +75,14 @@ public class PlayerList extends ArrayList<Short> implements Listener {
                 }
             }
         }
-        if (registerAsListener)
-            Marine.getServer().registerListener(this);
+        if (registerAsListener) {
+            EventManager.getInstance().addListener(new EventListener<LeaveEvent>(null) {
+                @Override
+                public void listen(final LeaveEvent event) {
+                    onLeave(event);
+                }
+            });
+        }
     }
 
     /**
@@ -97,7 +103,6 @@ public class PlayerList extends ArrayList<Short> implements Listener {
         this(null, false, false);
     }
 
-    @Subscribe
     public void onLeave(final LeaveEvent event) {
         final Player p = event.getPlayer();
         synchronized (this) {
@@ -204,9 +209,7 @@ public class PlayerList extends ArrayList<Short> implements Listener {
 
     /**
      * Overrides ArrayList toArray()
-     * Converts this list to an array of Playesr taken from PlayerManager
-     *
-     * @param Collection to add
+     * Converts this list to an array of Players taken from PlayerManager
      */
     @Override
     public Player[] toArray() {
@@ -256,7 +259,7 @@ public class PlayerList extends ArrayList<Short> implements Listener {
     /**
      * Overrides from ArrayList
      *
-     * @param Collection to add
+     * @param c to add
      */
     @SuppressWarnings("rawtypes")
     @Override
@@ -276,5 +279,4 @@ public class PlayerList extends ArrayList<Short> implements Listener {
         }
         return all;
     }
-
 }

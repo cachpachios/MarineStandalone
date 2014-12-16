@@ -19,10 +19,32 @@
 
 package org.marinemc.events;
 
+import org.marinemc.plugins.Plugin;
+
+import java.lang.reflect.ParameterizedType;
+
 /**
- * Listener interface
+ * Created 2014-12-16 for MarineStandalone
  *
  * @author Citymonstret
  */
-public interface Listener {
+public abstract class EventListener<T extends Event> {
+
+    private final String listenTo;
+    private final Plugin plugin;
+
+    public EventListener(final Plugin plugin) {
+        this.listenTo = ((Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0]).getName();
+        this.plugin = plugin;
+    }
+
+    public abstract void listen(T t);
+
+    public Plugin getPlugin() {
+        return this.plugin;
+    }
+
+    final public String listeningTo() {
+        return this.listenTo;
+    }
 }

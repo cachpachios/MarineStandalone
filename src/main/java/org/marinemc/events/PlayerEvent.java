@@ -22,31 +22,24 @@ package org.marinemc.events;
 import org.marinemc.player.Player;
 
 /**
- * Created 2014-12-11 for MarineStandalone
+ * Created 2014-12-16 for MarineStandalone
  *
  * @author Citymonstret
  */
-public class PlayerEvent extends MarineEvent implements PlayerEventStruct {
+public abstract class PlayerEvent extends Event {
 
     private final Player player;
 
-    /**
-     * A player event
-     *
-     * @param player Player which is affected by the event
-     * @param name   The event name
-     */
     public PlayerEvent(final Player player, final String name) {
-        super("player_event:" + name);
+        this(player, name, false);
+    }
+
+    public PlayerEvent(final Player player, final String name, final boolean async) {
+        super("player_event:" + name, async);
         this.player = player;
     }
 
-    /**
-     * Get the affected player
-     *
-     * @return affected player
-     */
-    final public Player getPlayer() {
+    public Player getPlayer() {
         return this.player;
     }
 }

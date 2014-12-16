@@ -22,10 +22,8 @@ package org.marinemc.server;
 import com.google.common.eventbus.AsyncEventBus;
 import com.google.common.eventbus.EventBus;
 import org.marinemc.StandaloneServer;
-import org.marinemc.events.AsyncEvent;
-import org.marinemc.events.AsyncListener;
-import org.marinemc.events.Listener;
-import org.marinemc.events.MarineEvent;
+import org.marinemc.events.Event;
+import org.marinemc.events.EventManager;
 import org.marinemc.game.system.MarineSecurityManager;
 import org.marinemc.player.Player;
 import org.marinemc.world.World;
@@ -102,37 +100,13 @@ public class Server implements MarineServer {
     }
 
     @Override
-    final public void registerListener(final Listener listener) {
-        this.eventBus.register(listener);
-    }
-
-    @Override
-    final public void registerAsyncListener(final AsyncListener listener) {
-        this.asyncEventBus.register(listener);
-    }
-
-    @Override
-    final public void unregisterListener(final Listener listener) {
-        this.eventBus.unregister(listener);
-    }
-
-    @Override
-    final public void unregisterAsyncListener(final AsyncListener listener) {
-        this.asyncEventBus.unregister(listener);
-    }
-
-    @Override
-    final public void callEvent(final MarineEvent event) {
-        if (event instanceof AsyncEvent) { // Async events are called with another event bus
-            this.asyncEventBus.post(event);
-        } else {
-            this.eventBus.post(event);
-        }
-    }
-
-    @Override
     final public String getMOTD() {
         return this.server.getMOTD();
+    }
+
+    @Override
+    final public void callEvent(final Event event) {
+        EventManager.getInstance().handle(event);
     }
 
     @Override

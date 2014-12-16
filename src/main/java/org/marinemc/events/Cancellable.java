@@ -20,24 +20,13 @@
 package org.marinemc.events;
 
 /**
- * Cancellable Events
+ * Created 2014-12-16 for MarineStandalone
  *
  * @author Citymonstret
  */
 public interface Cancellable {
 
-    /**
-     * Check if an event is cancelled
-     *
-     * @return is event cancelled
-     */
     public boolean isCancelled();
 
-    /**
-     * Decide if the event should be
-     * cancelled or not
-     *
-     * @param b Event status
-     */
-    public void setCancelled(boolean b);
+    public void setCancelled(final boolean n);
 }

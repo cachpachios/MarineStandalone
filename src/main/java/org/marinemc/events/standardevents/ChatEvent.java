@@ -34,7 +34,7 @@ public class ChatEvent extends PlayerEvent implements Cancellable {
     private boolean cancelled;
 
     public ChatEvent(final Player sender, String message) {
-        super(sender, "chat");
+        super(sender, "chat", true);
         this.message = message;
         this.cancelled = false;
     }

@@ -20,14 +20,14 @@
 package org.marinemc.events.standardevents;
 
 import org.marinemc.events.Cancellable;
-import org.marinemc.events.MarineEvent;
+import org.marinemc.events.Event;
 import org.marinemc.util.Position;
 import org.marinemc.world.BlockID;
 
 /**
  * @author Fozie
  */
-public class BlockChangeEvent extends MarineEvent implements Cancellable {
+public class BlockChangeEvent extends Event implements Cancellable {
 
     private final Position blockPos;
     private final BlockID current;
