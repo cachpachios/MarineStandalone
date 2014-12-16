@@ -112,16 +112,11 @@ public class PlayerManager {
     protected void putPlayer(Player p) {
         if (uids.containsValue(p))
             return;
-        // al.add(p);
-        //playerIDs.put(p.getUUID(), p);
         uids.put(p.getUID(), p);
         playerNames.put(p.getName(), p);
     }
 
     public Player getPlayer(UUID uuid) {
-        // if (!playerIDs.containsKey(uuid))
-        //    return null;
-        // return playerIDs.get(uuid);
         for (final Player player : uids.values())
             if (player.getUUID().equals(uuid))
                 return player;

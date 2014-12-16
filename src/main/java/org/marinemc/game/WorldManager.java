@@ -33,15 +33,15 @@ import org.marinemc.world.World;
  */
 public class WorldManager {
 
-    private static byte nextUID = -1;
+    private static byte nextUID = Byte.MIN_VALUE;
     private final StandaloneServer server;
     public Map<Byte, World> loadedWorlds;
-    private byte mainWorld;
+    private Byte mainWorld;
 
     public WorldManager(StandaloneServer server) {
         this.server = server;
         loadedWorlds = Collections.synchronizedMap(new ConcurrentHashMap<Byte, World>());
-        mainWorld = -1;
+        mainWorld = null;
     }
 
     // TODO World loading..
@@ -55,9 +55,8 @@ public class WorldManager {
     }
 
     public World getMainWorld() {
-        if (mainWorld == -1) { // Temporary code when no world loader is implemented
-            World w = new World(server, "world");
-            w.generateChunk(0, 0);
+        if (mainWorld == null) { // Temporary code when no world loader is implemented
+            World w = new World(server, "MainWorld");
             addWorld(w);
             mainWorld = w.getUID();
             return w;

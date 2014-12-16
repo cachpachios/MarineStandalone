@@ -141,10 +141,11 @@ public class NetworkManager {
     }
 
     public void tryConnections() {
+    	synchronized(clientList) {
 		for (final Client c : clientList) {
 		    if (!c.isActive())
 		            marineServer.getPlayerManager().disconnect(marineServer.getPlayerManager().getPlayerByClient(c), "Connection Quit");
-		}
+		}}
     }
 
     // Client processing thread

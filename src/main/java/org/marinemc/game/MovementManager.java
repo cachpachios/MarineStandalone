@@ -26,7 +26,7 @@ import org.marinemc.util.Location;
  * @author Fozie
  */
 public class MovementManager { // Used to keep track of player movments and send them to the player
-    public static int MAX_PACKET_MOVMENT = 5;
+    public static final int MAX_PACKET_MOVMENT = 5;
     private final PlayerManager players;
 
     public MovementManager(PlayerManager players) {
@@ -51,7 +51,12 @@ public class MovementManager { // Used to keep track of player movments and send
     }
 
     public void registerMovment(Player p, Location target) {
-        boolean allowed = checkMovment(p, target);
+    	if(p == null) return;
+    	
+    	if(target == null)
+    		p.sendPostionAndLook();
+    	
+        boolean allowed = checkMovment(p,target);
         if (allowed) {
             p.getLocation().setX(target.getX());
             p.getLocation().setY(target.getY());

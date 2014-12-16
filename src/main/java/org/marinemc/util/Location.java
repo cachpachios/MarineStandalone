@@ -37,7 +37,7 @@ import org.marinemc.world.chunk.Chunk;
  */
 public class Location extends Vector3d implements JSONAware, Cloneable, Comparable<Location> { //
 
-    private final World world;
+    private World world;
     private float yaw, pitch;
 
     private boolean onGround;
@@ -52,6 +52,16 @@ public class Location extends Vector3d implements JSONAware, Cloneable, Comparab
      */
     public Location(World world, double x, double y, double z) {
         this(world, x, y, z, 0f, 0f);
+    }
+    
+    /**
+     * Sets the world the location are in
+     *
+     * @param world World
+     * @param v     Vector3
+     */
+    public void setWorld(World w) {
+    	this.world = w;
     }
 
     /**
