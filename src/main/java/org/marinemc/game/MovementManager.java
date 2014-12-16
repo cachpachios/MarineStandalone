@@ -40,17 +40,18 @@ public class MovementManager { // Used to keep track of player movments and send
     public void registerLook(Player p, float yaw, float pitch) {
         p.getLocation().setYaw(yaw);
         p.getLocation().setPitch(pitch);
-
+        
+        
         // TODO Send to every other players in a sphere of ? blocks
-
+        
     }
-
+    
     public void teleport(Player p, Location target) {
 
     }
 
     public void registerMovment(Player p, Location target) {
-        boolean allowed = true; //checkMovment(p, target);
+        boolean allowed = checkMovment(p, target);
         if (allowed) {
             p.getLocation().setX(target.getX());
             p.getLocation().setY(target.getY());
@@ -69,7 +70,7 @@ public class MovementManager { // Used to keep track of player movments and send
     }
 
     public boolean checkMovment(Player p, Location target) { // Current position is p.getLocation();
-        if (p.getLocation().getEuclideanDistance(target) > MAX_PACKET_MOVMENT)
+        if (p.getLocation().getEuclideanDistanceSquared(target) > MAX_PACKET_MOVMENT*MAX_PACKET_MOVMENT)
             return false;
         return true; // TODO : Some cheat check in diffrent levels :P
     }

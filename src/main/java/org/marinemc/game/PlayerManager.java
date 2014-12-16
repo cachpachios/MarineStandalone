@@ -66,7 +66,7 @@ public class PlayerManager {
         movement = new MovementManager(this);
 
         // Will run it at a FIXED rater, rather than dynamic rate
-        new Timer("timeoutmanager").scheduleAtFixedRate(new TimerTask() {
+        new Timer("timeoutManager").scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
                 timeout.run();
@@ -194,8 +194,7 @@ public class PlayerManager {
 
     private void cleanUp(Player p) {
         removePlayer(p);
-        // timeout.cleanUp(p);
-        //TODO: send player remove packet to every other client
+        timeout.cleanUp(p);
         server.getNetwork().cleanUp(p.getClient());
     }
 
@@ -230,8 +229,6 @@ public class PlayerManager {
         p.getClient().sendPacket(new JoinGamePacket(p));
 
         p.sendPosition();
-
-        
         
         p.sendMapData(p.getWorld().getChunks(0, 0, 2, 2));
 

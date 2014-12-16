@@ -55,7 +55,7 @@ public class InventoryContentPacket extends Packet {
 
         for (PacketWrapper<Item> slot : inv.getSlots())
             if (slot == null)
-                d.writeShort(ItemID.EMPTY.getID());
+                d.writeShort(ItemID.EMPTY.getFirst());
             else
                 d.writeByte(slot.getBytes());
 

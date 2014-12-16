@@ -65,18 +65,26 @@ public class TimeoutManager {
         lastReceived.remove(uid);
         lastSent.remove(uid);
     }
+    
+    private void clean(Short uid) {
+        lastReceived.remove(uid);
+        lastSent.remove(uid);
+    }
 
     private void disconnect(final Player p) {
         // players.disconnect(p, "Connection Timed Out");
         players.disconnect_timeout(p, "Connection Timed Out");
         cleanUp(p);
     }
-
+    
     public void run() { // Will update each second :D
         int time = (int) getMiliTime();
-        for (final Short p : lastReceived.keySet())
-            if (lastReceived.get(p) - time >= 10) {
-                Player plr = players.getPlayer(p);
+        for (final Short uid : lastReceived.keySet()) 
+        	if(!players.isPlayerOnline(uid))
+        		clean(uid);
+        	else
+            if (lastReceived.get(uid) - time >= 10) {
+                Player plr = players.getPlayer(uid);
                 disconnect(plr);
             }
     }
