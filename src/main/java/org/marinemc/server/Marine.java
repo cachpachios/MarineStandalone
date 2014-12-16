@@ -65,7 +65,7 @@ public class Marine {
      * @return Player
      */
     public static Player getPlayer(final String username) {
-        return null;
+        return server.getPlayer(username);
     }
 
     /**
