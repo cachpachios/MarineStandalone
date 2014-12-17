@@ -66,13 +66,13 @@ public class CommandManager {
         name = command.toString();
         final List<String> ss = new ArrayList<>();
         stringMap.put(name, command);
-        command.setName(name);
         for (String s : command.getAliases()) {
             if (stringMap.containsKey(s)) ss.add(s);
             else stringMap.put(s, command);
         }
         command.getAliases().removeAll(ss);
         command.setProvider(this);
+        command.setCommandProvider(provider);
     }
 
     public Collection<Command> getCommands() {

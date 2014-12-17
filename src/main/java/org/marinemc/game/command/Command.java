@@ -148,6 +148,12 @@ public abstract class Command {
         return null;
     }
 
+    /**
+     * Get the closets player
+     *
+     * @param l Location to test from
+     * @return player
+     */
     private Player getLocationClosestPlayer(final Location l) {
         Player p = null;
         double c, d = Double.MAX_VALUE;
@@ -242,10 +248,21 @@ public abstract class Command {
         return Arrays.asList();
     }
 
+    /**
+     * Get the command provider
+     *
+     * @return command provider
+     */
     public CommandProvider getCommandProvider() {
         return this.commandProvider;
     }
 
+    /**
+     * Set the command provider
+     *
+     * @param commandProvider Provider
+     * @throws java.lang.UnsupportedOperationException if the provider is already set
+     */
     public void setCommandProvider(final CommandProvider commandProvider) {
         if (this.commandProvider != null) {
             throw new UnsupportedOperationException("Cannot replace command provider");
