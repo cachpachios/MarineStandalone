@@ -19,10 +19,9 @@
 
 package org.marinemc.util;
 
-import org.marinemc.player.Player;
-
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Iterator;
 
 /**
  * String Utility Class
@@ -51,6 +50,37 @@ public class StringUtils {
     }
 
     /**
+     * Join a collection as a string
+     *
+     * @param e Collection to join
+     * @param s Separator (when more than one item left)
+     * @param l Separator (before last item)
+     * @return Joined String
+     */
+    public static String join(final Collection e, final String s, final String l) {
+        if (e == null || e.size() == 0)
+            return "";
+        final StringBuilder sb = new StringBuilder();
+        final Iterator it = e.iterator();
+        Object o;
+        boolean first = true;
+        for (; ; ) {
+            o = it.next();
+            if (!it.hasNext()) {
+                if (sb.toString().length() == 0)
+                    return o.toString();
+                else
+                    return sb.append(l).append(o).toString();
+            }
+            if (first)
+                first = false;
+            else
+                sb.append(s);
+            sb.append(o);
+        }
+    }
+
+    /**
      * Join an object array
      *
      * @param e Object array
@@ -64,45 +94,17 @@ public class StringUtils {
 
     /**
      * Format a string
-     * <br>
-     * <p/>
-     * Currently replaces:
-     * <ul>
-     * <li>Player - %plr</li>
-     * <li>String - %s</li>
-     * <li>Integer, Long - %d</li>
-     * <li>Boolean - %b</li>
-     * <li>Location - %loc</li>
-     * <li>Position: %pos</li>
-     * </ul>
-     *
+     * <p>
+     * Used to replace (%plr, %b) etc. Uses
+     * {0}, {1} and so on instead...
+     * </p>
      * @param s  String containing placeholders
      * @param os Objects to replace with
      * @return replaced string
      */
     public static String format(String s, final Object... os) {
-        String r;
-        for (final Object o : os) {
-            try {
-                if (o instanceof String)
-                    r = "s";
-                else if (o instanceof Integer || o instanceof Long)
-                    r = "d";
-                else if (o instanceof Float || o instanceof Double)
-                    r = "f";
-                else if (o instanceof Boolean || o instanceof Byte)
-                    r = "b";
-                else if (o instanceof Player)
-                    r = "plr";
-                else if (o instanceof Location)
-                    r = "loc";
-                else if (o instanceof Position)
-                    r = "pos";
-                else
-                    continue;
-                s = s.replaceFirst("%" + r, o.toString());
-            } catch (Throwable ignored) {
-            }
+        for (int x = 0; x < os.length; x++) {
+            s = s.replace("{" + x + "}", os[x].toString());
         }
         return s;
     }

@@ -24,6 +24,7 @@ import org.marinemc.events.EventManager;
 import org.marinemc.events.standardevents.LeaveEvent;
 import org.marinemc.server.Marine;
 import org.marinemc.util.ArgumentOperation;
+import org.marinemc.util.StringUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -277,18 +278,6 @@ public class PlayerList extends ArrayList<Short> implements Serializable {
 
     @Override
     final public String toString() {
-        final StringBuilder sb = new StringBuilder();
-        final Iterator<Player> it = Marine.getPlayers().iterator();
-        Player player;
-        for (; ; ) {
-            player = it.next();
-            if (!it.hasNext()) {
-                if (sb.toString().length() == 0)
-                    return player.getName();
-                else
-                    return sb.append(" and ").append(player.getName()).toString();
-            }
-            sb.append(", ").append(player.getName());
-        }
+        return StringUtils.join(getPlayers(), ", ", " and ");
     }
 }

@@ -21,13 +21,11 @@ package org.marinemc;
 
 import org.marinemc.game.system.MarineSecurityManager;
 import org.marinemc.settings.ServerSettings;
+import org.marinemc.util.StringUtils;
 import org.marinemc.util.annotations.Protected;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 @Protected
 /**
@@ -63,6 +61,8 @@ public class MainComponent {
     }
 
     public static void main(String[] args) {
+        List<String> list = new ArrayList<>(Arrays.asList("Peter", "Johan", "Matilda", "Henrike"));
+        System.out.println(StringUtils.join(list, ", ", " and "));
         if (getJavaVersion() < 1.7) {
             System.out.println("-- Could not start MarineStandalone: Requires java 1.7 or above --");
             System.exit(1);
@@ -123,7 +123,7 @@ public class MainComponent {
             //ServerSettings.getInstance().verbose();
             System.setErr(Logging.getLogger());
         }
-        Logging.getLogger().logf("Starting MarineStandalone Server - Protocol Version §c§o%d§0 (Minecraft §c§o%s§0)",
+        Logging.getLogger().logf("Starting MarineStandalone Server - Protocol Version §c§o{0}§0 (Minecraft §c§o{1}§0)",
                 ServerProperties.PROTOCOL_VERSION, ServerProperties.MINECRAFT_NAME);
         StandaloneServer server = null;
         try {

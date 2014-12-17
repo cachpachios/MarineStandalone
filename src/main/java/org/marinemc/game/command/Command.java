@@ -23,10 +23,14 @@ import org.marinemc.game.CommandManager;
 import org.marinemc.player.Player;
 import org.marinemc.server.Marine;
 import org.marinemc.util.Location;
+import org.marinemc.util.StringUtils;
 import org.marinemc.util.annotations.Protected;
 import org.marinemc.world.entity.Entity;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Created 2014-12-01 for MarineStandalone
@@ -182,19 +186,7 @@ public abstract class Command {
      * @return string containing all player names separated by "," and "and"
      */
     public String getAllPlayers() {
-        StringBuilder sb = new StringBuilder();
-        Iterator<Player> it = Marine.getPlayers().iterator();
-        Player player;
-        for (; ; ) {
-            player = it.next();
-            if (!it.hasNext()) {
-                if (sb.toString().length() == 0)
-                    return player.getName();
-                else
-                    return sb.append(" and ").append(player.getName()).toString();
-            }
-            sb.append(", ").append(player.getName());
-        }
+        return StringUtils.join(Marine.getPlayers(), ", ", " and ");
     }
 
     /**
