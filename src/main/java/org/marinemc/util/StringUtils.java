@@ -67,7 +67,7 @@ public class StringUtils {
         for (; ; ) {
             o = it.next();
             if (!it.hasNext()) {
-                if (sb.toString().length() == 0)
+                if (first)
                     return o.toString();
                 else
                     return sb.append(l).append(o).toString();
