@@ -239,7 +239,14 @@ public class Plugin implements CommandProvider {
         CommandManager.getInstance().registerCommand(this, command);
     }
 
+    /**
+     * Register a listener using this
+     * instance as the provider
+     *
+     * @param listener Listener to register
+     */
     public void registerListener(final EventListener listener) {
+        listener.setIDENTIFIERObject__DO_NOT_USE__(this);
         EventManager.getInstance().addListener(listener);
     }
 }

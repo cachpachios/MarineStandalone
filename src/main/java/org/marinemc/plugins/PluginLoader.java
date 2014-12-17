@@ -19,7 +19,6 @@
 
 package org.marinemc.plugins;
 
-import org.json.JSONArray;
 import org.marinemc.Logging;
 import org.marinemc.game.system.MarineSecurityManager;
 import org.marinemc.util.FileUtils;
@@ -55,6 +54,9 @@ public class PluginLoader {
     private final ConcurrentMap<String, PluginClassLoader> loaders;
     private final ConcurrentMap<String, Class> classes;
     private final PluginManager manager;
+    private final String[] BLOCKED_NAMES = new String[]{
+            "org.marinemc", "com.intellectualsites.marinemc"
+    };
 
     /**
      * Constructor
@@ -79,6 +81,13 @@ public class PluginLoader {
         return this.manager;
     }
 
+    private void checkIllegal(final PluginFile desc) {
+        final String main = desc.mainClass;
+        for (final String blocked : BLOCKED_NAMES)
+            if (main.contains(blocked))
+                throw new PluginHandlerException(this, "Plugin " + desc.name + " contains illegal main class path");
+    }
+
     /**
      * Load all plugins
      *
@@ -89,41 +98,13 @@ public class PluginLoader {
         if (!folder.exists() || !folder.isDirectory()) {
             throw new PluginHandlerException(this, "Invalid plugin folder (doesn't exist)");
         }
-        File[] files = folder.listFiles(new JarFilter());
-        List<PluginClassLoader> later = new ArrayList<>();
-        JSONArray depends;
-        for (File file : files) {
+        final File[] files = folder.listFiles(new JarFilter());
+        for (final File file : files) {
             PluginClassLoader loader;
             try {
                 loader = loadPlugin(file);
-                depends = loader.getDesc().dependencies;
-                for (int i = 0; i < depends.length(); i++) {
-                    if (!manager.getPluginRAW().contains(depends.get(i))) {
-                        later.add(loader);
-                        break;
-                    }
-                }
-                if (!later.contains(loader)) {
-                    loader.create(loader.plugin);
-                    manager.addPlugin(loader.plugin);
-                    if (new File(loader.getData(), "lib").exists()) {
-                        File[] fs = new File(loader.getData(), "lib").listFiles(new JarFilter());
-                        for (File f : fs) {
-                            try {
-                                loader.loadJar(f);
-                            } catch (Exception e) {
-                                new PluginHandlerException(this, "Could not load in lib " + f.getName(), e).printStackTrace();
-                            }
-                        }
-                    }
-                }
-            } catch (PluginHandlerException e) {
-                Logging.getLogger().log("Could not load in plugin: " + file.getName());
-                e.printStackTrace();
-            }
-        }
-        for (final PluginClassLoader loader : later) {
-            try {
+                // Make sure the path name is valid
+                checkIllegal(loader.getDesc());
                 loader.create(loader.plugin);
                 manager.addPlugin(loader.plugin);
                 if (new File(loader.getData(), "lib").exists()) {
@@ -137,7 +118,7 @@ public class PluginLoader {
                     }
                 }
             } catch (PluginHandlerException e) {
-                Logging.getLogger().log("Could not load in plugin " + loader.getDesc().name);
+                Logging.getLogger().log("Could not load in plugin: " + file.getName());
                 e.printStackTrace();
             }
         }
@@ -250,6 +231,7 @@ public class PluginLoader {
             if (!loaders.containsKey(name))
                 loaders.put(name, plugin.getClassLoader());
             manager.enablePlugin(plugin);
+            plugin.getLogger().log(plugin.getName() + " is enabled");
         }
     }
 

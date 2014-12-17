@@ -78,7 +78,7 @@ public class PlayerList extends ArrayList<Short> implements Serializable {
             }
         }
         if (registerAsListener) {
-            EventManager.getInstance().addListener(new EventListener<LeaveEvent>(null) {
+            EventManager.getInstance().addListener(new EventListener<LeaveEvent>() {
                 @Override
                 public void listen(final LeaveEvent event) {
                     onLeave(event);

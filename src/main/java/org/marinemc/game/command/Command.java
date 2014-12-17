@@ -43,15 +43,28 @@ public abstract class Command {
      * Command aliases
      */
     private final List<String> aliases;
+
     /**
      * Command description
      */
     private final String description;
+
     /**
      * The actual command
      */
     private String command;
+
+    /**
+     * The manager in which the
+     * command was "created"
+     */
     private CommandManager provider;
+
+    /**
+     * The provider of the command,
+     * containing the priority level
+     * and such
+     */
     private CommandProvider commandProvider;
 
     /**
@@ -212,7 +225,7 @@ public abstract class Command {
      *
      * @return provider
      */
-    public CommandManager getProvider() {
+    final public CommandManager getProvider() {
         return provider;
     }
 
@@ -221,7 +234,7 @@ public abstract class Command {
      *
      * @param provider Command provider
      */
-    public void setProvider(CommandManager provider) {
+    final public void setProvider(CommandManager provider) {
         this.provider = provider;
     }
 
@@ -232,7 +245,7 @@ public abstract class Command {
      * @param name new name
      */
     @Protected
-    public void setName(String name) {
+    final public void setName(String name) {
         this.command = name;
     }
 
@@ -253,7 +266,7 @@ public abstract class Command {
      *
      * @return command provider
      */
-    public CommandProvider getCommandProvider() {
+    final public CommandProvider getCommandProvider() {
         return this.commandProvider;
     }
 
@@ -263,7 +276,7 @@ public abstract class Command {
      * @param commandProvider Provider
      * @throws java.lang.UnsupportedOperationException if the provider is already set
      */
-    public void setCommandProvider(final CommandProvider commandProvider) {
+    final public void setCommandProvider(final CommandProvider commandProvider) {
         if (this.commandProvider != null) {
             throw new UnsupportedOperationException("Cannot replace command provider");
         }

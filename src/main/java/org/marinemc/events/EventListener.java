@@ -19,8 +19,6 @@
 
 package org.marinemc.events;
 
-import org.marinemc.plugins.Plugin;
-
 import java.lang.reflect.ParameterizedType;
 
 /**
@@ -31,17 +29,20 @@ import java.lang.reflect.ParameterizedType;
 public abstract class EventListener<T extends Event> {
 
     private final String listenTo;
-    private final Plugin plugin;
+    private Object y = null;
 
-    public EventListener(final Plugin plugin) {
+    public EventListener() {
         this.listenTo = ((Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0]).getName();
-        this.plugin = plugin;
+    }
+
+    public void setIDENTIFIERObject__DO_NOT_USE__(final Object q) {
+        y = q;
     }
 
     public abstract void listen(T t);
 
-    public Plugin getPlugin() {
-        return this.plugin;
+    public Object getIDENTIFIERObject() {
+        return this.y;
     }
 
     final public String listeningTo() {
