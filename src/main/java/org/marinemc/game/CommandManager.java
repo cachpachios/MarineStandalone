@@ -22,7 +22,11 @@ package org.marinemc.game;
 import org.marinemc.game.command.Command;
 import org.marinemc.game.command.CommandProvider;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created 2014-12-01 for MarineStandalone
@@ -36,7 +40,7 @@ public class CommandManager {
     private final Map<String, Command> stringMap;
 
     public CommandManager() {
-        stringMap = new HashMap<>();
+        stringMap = new ConcurrentHashMap<>();
     }
 
     public static CommandManager getInstance() {
@@ -66,7 +70,7 @@ public class CommandManager {
         name = command.toString();
         final List<String> ss = new ArrayList<>();
         stringMap.put(name, command);
-        for (String s : command.getAliases()) {
+        for (final String s : command.getAliases()) {
             if (stringMap.containsKey(s)) ss.add(s);
             else stringMap.put(s, command);
         }
@@ -77,7 +81,7 @@ public class CommandManager {
 
     public Collection<Command> getCommands() {
         Collection<Command> commands = new ArrayList<>();
-        for (Command command : stringMap.values()) {
+        for (final Command command : stringMap.values()) {
             if (!commands.contains(command))
                 commands.add(command);
         }
