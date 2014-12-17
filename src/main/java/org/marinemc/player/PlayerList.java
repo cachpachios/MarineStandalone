@@ -279,4 +279,21 @@ public class PlayerList extends ArrayList<Short> {
         }
         return all;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        Iterator<Player> it = Marine.getPlayers().iterator();
+        Player player;
+        for (; ; ) {
+            player = it.next();
+            if (!it.hasNext()) {
+                if (sb.toString().length() == 0)
+                    return player.getName();
+                else
+                    return sb.append(" and ").append(player.getName()).toString();
+            }
+            sb.append(", ").append(player.getName());
+        }
+    }
 }

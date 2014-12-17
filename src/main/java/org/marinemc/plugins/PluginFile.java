@@ -20,6 +20,7 @@
 package org.marinemc.plugins;
 
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -36,6 +37,7 @@ public class PluginFile {
     public final String mainClass;
     public final String author;
     public final String version;
+    public final JSONArray dependencies;
 
     /**
      * Constructor
@@ -51,6 +53,10 @@ public class PluginFile {
         this.mainClass = object.getString("main");
         this.author = object.getString("author");
         this.version = object.getString("version");
+        if (object.isNull("depends"))
+            this.dependencies = new JSONArray();
+        else
+            this.dependencies = object.getJSONArray("depends");
 
         stream.close();
     }

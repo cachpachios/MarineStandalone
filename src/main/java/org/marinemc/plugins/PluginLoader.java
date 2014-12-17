@@ -19,6 +19,7 @@
 
 package org.marinemc.plugins;
 
+import org.json.JSONArray;
 import org.marinemc.Logging;
 import org.marinemc.game.system.MarineSecurityManager;
 import org.marinemc.util.FileUtils;
@@ -89,11 +90,54 @@ public class PluginLoader {
             throw new PluginHandlerException(this, "Invalid plugin folder (doesn't exist)");
         }
         File[] files = folder.listFiles(new JarFilter());
+        List<PluginClassLoader> later = new ArrayList<>();
+        JSONArray depends;
         for (File file : files) {
+            PluginClassLoader loader;
             try {
-                loadPlugin(file);
+                loader = loadPlugin(file);
+                depends = loader.getDesc().dependencies;
+                for (int i = 0; i < depends.length(); i++) {
+                    if (!manager.getPluginRAW().contains(depends.get(i))) {
+                        later.add(loader);
+                        break;
+                    }
+                }
+                if (!later.contains(loader)) {
+                    loader.create(loader.plugin);
+                    manager.addPlugin(loader.plugin);
+                    if (new File(loader.getData(), "lib").exists()) {
+                        File[] fs = new File(loader.getData(), "lib").listFiles(new JarFilter());
+                        for (File f : fs) {
+                            try {
+                                loader.loadJar(f);
+                            } catch (Exception e) {
+                                new PluginHandlerException(this, "Could not load in lib " + f.getName(), e).printStackTrace();
+                            }
+                        }
+                    }
+                }
             } catch (PluginHandlerException e) {
                 Logging.getLogger().log("Could not load in plugin: " + file.getName());
+                e.printStackTrace();
+            }
+        }
+        for (final PluginClassLoader loader : later) {
+            try {
+                loader.create(loader.plugin);
+                manager.addPlugin(loader.plugin);
+                if (new File(loader.getData(), "lib").exists()) {
+                    File[] fs = new File(loader.getData(), "lib").listFiles(new JarFilter());
+                    for (File f : fs) {
+                        try {
+                            loader.loadJar(f);
+                        } catch (Exception e) {
+                            new PluginHandlerException(this, "Could not load in lib " + f.getName(), e).printStackTrace();
+                        }
+                    }
+                }
+            } catch (PluginHandlerException e) {
+                Logging.getLogger().log("Could not load in plugin " + loader.getDesc().name);
                 e.printStackTrace();
             }
         }
@@ -129,7 +173,7 @@ public class PluginLoader {
      * @throws PluginHandlerException If the file doesn't exists
      * @throws PluginHandlerException If the PluginClassLoader is unable to be loaded
      */
-    public Plugin loadPlugin(final File file) throws PluginHandlerException {
+    public PluginClassLoader loadPlugin(final File file) throws PluginHandlerException {
         if (!file.exists())
             throw new PluginHandlerException(this, "Could not load plugin -> File cannot be null", new FileNotFoundException(file.getPath() + " does not exist"));
         final PluginFile desc = getPluginFile(file);
@@ -147,19 +191,7 @@ public class PluginLoader {
             throw new PluginHandlerException(this, "Could not get the PluginClassLoader", e);
         }
         loaders.put(desc.name, loader);
-        loader.create(loader.plugin);
-        manager.addPlugin(loader.plugin);
-        if (new File(data, "lib").exists()) {
-            File[] files = new File(data, "lib").listFiles(new JarFilter());
-            for (File f : files) {
-                try {
-                    loader.loadJar(f);
-                } catch (Exception e) {
-                    new PluginHandlerException(this, "Could not load in lib " + f.getName(), e).printStackTrace();
-                }
-            }
-        }
-        return loader.plugin;
+        return loader;
     }
 
     /**

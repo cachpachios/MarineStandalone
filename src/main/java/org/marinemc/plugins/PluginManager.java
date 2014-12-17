@@ -95,6 +95,13 @@ public class PluginManager {
         return this.plugins;
     }
 
+    protected Collection<String> getPluginRAW() {
+        List<String> strings = new ArrayList<>();
+        for (final Plugin plugin : this.plugins)
+            strings.add(plugin.getName());
+        return strings;
+    }
+
     /**
      * Get a collection containing all ENABLED plugins
      *

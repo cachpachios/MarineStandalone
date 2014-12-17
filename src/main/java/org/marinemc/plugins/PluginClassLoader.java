@@ -76,6 +76,10 @@ public class PluginClassLoader extends URLClassLoader {
         }
     }
 
+    public File getData() {
+        return this.data;
+    }
+
     /**
      * Load a jar file into [this] instance
      *
@@ -124,5 +128,9 @@ public class PluginClassLoader extends URLClassLoader {
             throw new RuntimeException(plugin.getName() + " is already created");
         this.init = plugin;
         plugin.create(desc, data, this);
+    }
+
+    public PluginFile getDesc() {
+        return this.desc;
     }
 }

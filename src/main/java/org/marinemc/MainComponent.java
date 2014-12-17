@@ -21,7 +21,7 @@ package org.marinemc;
 
 import org.marinemc.game.system.MarineSecurityManager;
 import org.marinemc.settings.ServerSettings;
-import org.marinemc.util.Protected;
+import org.marinemc.util.annotations.Protected;
 
 import java.io.File;
 import java.util.Arrays;
