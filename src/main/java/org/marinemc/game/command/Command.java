@@ -52,6 +52,7 @@ public abstract class Command {
      */
     private String command;
     private CommandManager provider;
+    private CommandProvider commandProvider;
 
     /**
      * Constructor
@@ -239,5 +240,16 @@ public abstract class Command {
      */
     public Collection<String> getCompletion(CommandSender sender, String command) {
         return Arrays.asList();
+    }
+
+    public CommandProvider getCommandProvider() {
+        return this.commandProvider;
+    }
+
+    public void setCommandProvider(final CommandProvider commandProvider) {
+        if (this.commandProvider != null) {
+            throw new UnsupportedOperationException("Cannot replace command provider");
+        }
+        this.commandProvider = commandProvider;
     }
 }

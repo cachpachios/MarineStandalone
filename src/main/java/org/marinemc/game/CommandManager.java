@@ -54,7 +54,16 @@ public class CommandManager {
     }
 
     public void registerCommand(final CommandProvider provider, final Command command) {
-        final String name = stringMap.containsKey(command.toString()) ? provider.getProviderName() + ":" + command : command.toString();
+        String name = command.toString();
+        if (stringMap.containsKey(name)) {
+            final Command old = stringMap.get(name);
+            if (old.getCommandProvider().getProviderPriority() == 0x00 && provider.getProviderPriority() != 0x00) {
+                old.setName(old.getCommandProvider().getProviderName() + ":" + old.toString());
+            } else {
+                command.setName(provider.getProviderName() + ":" + command);
+            }
+        }
+        name = command.toString();
         final List<String> ss = new ArrayList<>();
         stringMap.put(name, command);
         command.setName(name);
