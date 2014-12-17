@@ -95,8 +95,13 @@ public class PluginManager {
         return this.plugins;
     }
 
-    protected Collection<String> getPluginRAW() {
-        List<String> strings = new ArrayList<>();
+    /**
+     * Get the plugins in strng format
+     *
+     * @return A collection containing the names of the plugins
+     */
+    public Collection<String> getPluginNames() {
+        final List<String> strings = new ArrayList<>();
         for (final Plugin plugin : this.plugins)
             strings.add(plugin.getName());
         return strings;

@@ -63,7 +63,7 @@ public class PluginLoader {
      *
      * @param manager Related PluginManager
      */
-    public PluginLoader(PluginManager manager) {
+    public PluginLoader(final PluginManager manager) {
         // Security Check Start
         System.getSecurityManager().checkPermission(MarineSecurityManager.MARINE_PERMISSION);
         // Security Check End
@@ -81,7 +81,16 @@ public class PluginLoader {
         return this.manager;
     }
 
-    private void checkIllegal(final PluginFile desc) {
+    /**
+     * Used to check if the main file path of a plugin description file includes a path
+     * which we have marked as illegal.
+     * <p/>
+     * BY THE WAY, DON'T USE OUR FREAKING DOMAIN NAME...
+     *
+     * @param desc File to be checked
+     * @throws org.marinemc.plugins.PluginHandlerException If the file uses a bad name
+     */
+    public void checkIllegal(final PluginFile desc) {
         final String main = desc.mainClass;
         for (final String blocked : BLOCKED_NAMES)
             if (main.contains(blocked))
@@ -94,7 +103,7 @@ public class PluginLoader {
      * @param folder Folder to load from
      * @throws PluginHandlerException if the folder doesn't exist
      */
-    public void loadAllPlugins(File folder) throws PluginHandlerException {
+    public void loadAllPlugins(final File folder) throws PluginHandlerException {
         if (!folder.exists() || !folder.isDirectory()) {
             throw new PluginHandlerException(this, "Invalid plugin folder (doesn't exist)");
         }
@@ -254,7 +263,7 @@ public class PluginLoader {
      * Copy the config and lib files from the plugin jar
      * to a specified data folder
      *
-     * @param file        Jar File
+     * @param file        Jar File, which contains the files you want to copy
      * @param destination Destination Folder
      * @throws PluginHandlerException If jar file cannot be loaded
      */
@@ -308,14 +317,14 @@ public class PluginLoader {
     /**
      * Get a plugin description file from a jar file
      *
-     * @param file Jar File
-     * @return Plugin Description file, or null (if it cannot be found)
+     * @param file File, should be a jarfile containing a "desc.json" and the source folder
+     * @return Plugin Description file, or null (if it cannot be found) loaded from the loaded from the input file
      * @throws PluginHandlerException If the file is unable to be loaded
      * @throws PluginHandlerException If the file doesn't exist
      * @throws PluginHandlerException If the stream is unable to be loaded
      * @throws PluginHandlerException If a file cannot be loaded from the stream
      */
-    private PluginFile getPluginFile(File file) throws PluginHandlerException {
+    private PluginFile getPluginFile(final File file) throws PluginHandlerException {
         JarFile jar;
         try {
             jar = new JarFile(file);
