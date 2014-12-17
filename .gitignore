@@ -9,6 +9,7 @@ storage/
 .gradle
 bin/
 tmp/
+doc/
 *.tmp
 *.bak
 *.swp
