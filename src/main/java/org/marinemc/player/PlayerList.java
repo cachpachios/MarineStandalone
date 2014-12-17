@@ -25,6 +25,7 @@ import org.marinemc.events.standardevents.LeaveEvent;
 import org.marinemc.server.Marine;
 import org.marinemc.util.ArgumentOperation;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -36,7 +37,7 @@ import java.util.UUID;
  * @author Citymonstret
  * @author Fozie
  */
-public class PlayerList extends ArrayList<Short> {
+public class PlayerList extends ArrayList<Short> implements Serializable {
 
     private static final long serialVersionUID = -3119271835517339073L;
 
@@ -104,10 +105,8 @@ public class PlayerList extends ArrayList<Short> {
     }
 
     public void onLeave(final LeaveEvent event) {
-        final Player p = event.getPlayer();
         synchronized (this) {
-            if (this.contains(p))
-                this.remove(p);
+            super.remove((Object) event.getPlayer().getUID());
         }
     }
 
@@ -144,10 +143,11 @@ public class PlayerList extends ArrayList<Short> {
         return super.contains(player.getUID());
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public synchronized boolean contains(final Object o) {
         if (o instanceof Player)
-            return this.contains((Player) o);
+            return super.contains(((Player) o).getUID());
         if (o instanceof UUID)
             return this.contains((UUID) o);
         else return super.contains(o);
@@ -161,11 +161,6 @@ public class PlayerList extends ArrayList<Short> {
     @Override
     final public synchronized boolean add(final Short s) {
         return super.add(s);
-    }
-
-    @Override
-    final public synchronized Short get(int n) {
-        return super.get(n);
     }
 
     @Override
@@ -201,7 +196,7 @@ public class PlayerList extends ArrayList<Short> {
     /**
      * Remove a player from the list
      *
-     * @param player
+     * @param player Player to remove
      */
     final public synchronized void remove(final Player player) {
         super.remove(((Object) player.getUID()));
@@ -211,19 +206,19 @@ public class PlayerList extends ArrayList<Short> {
      * Overrides ArrayList toArray()
      * Converts this list to an array of Players taken from PlayerManager
      */
+    @SuppressWarnings("ALL")
     @Override
-    public Player[] toArray() {
-        final Player[] players = new Player[size()];
+    final public Player[] toArray() {
+        final Collection<Player> players;
         synchronized (this) {
-            for (int x = 0; x < players.length; x++)
-                players[x] = Marine.getPlayer(get(x));
+            players = getPlayers();
         }
-        return players;
+        return new Player[players.size()];
     }
 
-    @SuppressWarnings({"unchecked", "hiding"})
+    @SuppressWarnings("ALL")
     @Override
-    public synchronized <Short> Short[] toArray(final Short[] r) {
+    final public synchronized <Short> Short[] toArray(final Short[] r) {
         return super.toArray((Short[]) new Object[size()]);
     }
 
@@ -252,7 +247,7 @@ public class PlayerList extends ArrayList<Short> {
      *
      * @return player iterator
      */
-    public Iterator<Player> getIterator() {
+    final public Iterator<Player> getIterator() {
         return getPlayers().iterator();
     }
 
@@ -261,7 +256,7 @@ public class PlayerList extends ArrayList<Short> {
      *
      * @param c to add
      */
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings("deprecation")
     @Override
     final public boolean addAll(final Collection c) {
         boolean all = true;
@@ -281,9 +276,9 @@ public class PlayerList extends ArrayList<Short> {
     }
 
     @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        Iterator<Player> it = Marine.getPlayers().iterator();
+    final public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        final Iterator<Player> it = Marine.getPlayers().iterator();
         Player player;
         for (; ; ) {
             player = it.next();

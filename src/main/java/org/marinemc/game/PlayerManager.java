@@ -31,8 +31,6 @@ import org.marinemc.player.AbstractPlayer;
 import org.marinemc.player.IPlayer;
 import org.marinemc.player.Player;
 
-import java.lang.ref.Reference;
-import java.lang.ref.SoftReference;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -224,15 +222,15 @@ public class PlayerManager {
         p.getClient().sendPacket(new JoinGamePacket(p));
 
         p.sendPosition();
-        
+        //
         p.sendMapData(p.getWorld().getChunks(0, 0, 2, 2));
-
+        //
         p.sendAbilites();
-
+        //
         p.sendPosition();
-        
+        //
         p.sendTime();
-        
+        //
         p.loginPopulation();
     }
 
@@ -240,14 +238,6 @@ public class PlayerManager {
         if (uid == -1)
             return;
         timeout.keepAlive(getPlayer(uid));
-    }
-
-    protected void forceGC(Player player) {
-        Reference<Player> ref = new SoftReference<>(player);
-        player = null;
-        while (ref.get() != null) {
-            System.gc();
-        }
     }
 
     public MovementManager getMovementManager() {
