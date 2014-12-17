@@ -51,7 +51,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * StandaloneServer - Housing of the main loop 
+ * StandaloneServer - Housing of the main loop
+ *
  * @author Fozie
  * @author Citymonstret
  */
@@ -83,6 +84,12 @@ public class StandaloneServer implements CommandProvider {
     private boolean initialized = false;
     private CommandSender console;
 
+    /**
+     * Constructor
+     *
+     * @param settings Startup settings
+     * @throws Throwable If anything goes wrong
+     */
     public StandaloneServer(final MainComponent.StartSettings settings) throws Throwable {
         this.port = settings.port;
         this.skipTime = 1000000000 / settings.tickrate; // nanotime
@@ -107,10 +114,18 @@ public class StandaloneServer implements CommandProvider {
         Identifiers.init();
     }
 
+    /**
+     * Get the internal scheduler
+     *
+     * @return scheduler
+     */
     public Scheduler getScheduler() {
         return this.scheduler;
     }
 
+    /**
+     * Load all plugins
+     */
     private void loadPlugins() {
         final File pluginFolder = new File("./plugins");
         Logging.getLogger().log("Plugin Folder: " + pluginFolder.getPath());
@@ -126,6 +141,9 @@ public class StandaloneServer implements CommandProvider {
         this.pluginLoader.enableAllPlugins();
     }
 
+    /**
+     * Register default (internal) commands
+     */
     private void registerDefaultCommands() {
         CommandManager.getInstance().registerCommand(this, new Info());
         CommandManager.getInstance().registerCommand(this, new Help());
@@ -140,19 +158,37 @@ public class StandaloneServer implements CommandProvider {
         CommandManager.getInstance().registerCommand(this, new Me());
     }
 
+    /**
+     * Start the server
+     */
     public void start() {
+        if (this.shouldRun)
+            throw new UnsupportedOperationException("Cannot start the server twice...");
         this.shouldRun = true;
         run();
     }
 
+    /**
+     * Get the MarineServer implementation
+     *
+     * @return server API
+     */
     public MarineServer getServer() {
         return this.server;
     }
 
+    /**
+     * Get the internal player manager
+     *
+     * @return player manager
+     */
     public PlayerManager getPlayerManager() {
         return players;
     }
 
+    /**
+     * Init. the server
+     */
     private void init() {
         // Start the networking stuffz
         if (this.network == null) {
@@ -166,7 +202,10 @@ public class StandaloneServer implements CommandProvider {
         initialized = true;
     }
 
-    public void run() {
+    /**
+     * Run!
+     */
+    protected void run() {
         if (!this.initialized)
             init();
         players.updateThemAll();
@@ -184,6 +223,9 @@ public class StandaloneServer implements CommandProvider {
         }
     }
 
+    /**
+     * Stop the server
+     */
     public void stop() {
         Logging.getLogger().info("Shutting down...");
         for (final Player player : players.getPlayers()) {
@@ -203,6 +245,9 @@ public class StandaloneServer implements CommandProvider {
         System.exit(0);
     }
 
+    /**
+     * Restart the server
+     */
     public void restart() {
         Logging.getLogger().log("Server is restarting...");
         for (final Player player : players.getPlayers()) {
@@ -228,6 +273,11 @@ public class StandaloneServer implements CommandProvider {
         }, 0l, 1500l);
     }
 
+    /**
+     * Get the internal network manager
+     *
+     * @return internal network manager
+     */
     public NetworkManager getNetwork() {
         return this.network;
     }
@@ -251,34 +301,74 @@ public class StandaloneServer implements CommandProvider {
         this.standard_motd = motd;
     }
 
+    /**
+     * Get max players
+     *
+     * @return Max players
+     */
     public int getMaxPlayers() {
         return this.standard_maxplayers;
     }
 
+    /**
+     * Set default max players
+     *
+     * @param maxplayers Standard Max Players
+     */
     public void setMaxPlayers(final int maxplayers) {
         this.standard_maxplayers = maxplayers;
     }
 
+    /**
+     * Get the default difficulty
+     *
+     * @return Standard difficulty
+     */
     public Difficulty getDifficulty() {
         return this.standard_difficulty;
     }
 
+    /**
+     * Set the default difficulty
+     *
+     * @param difficulty Standard Difficulty
+     */
     public void setDifficulty(final Difficulty difficulty) {
         this.standard_difficulty = difficulty;
     }
 
+    /**
+     * Get the default GameMode
+     *
+     * @return Default GameMode
+     */
     public Gamemode getGamemode() {
         return this.standard_gamemode;
     }
 
+    /**
+     * Set the default GameMode
+     *
+     * @param gm Standard GameMode
+     */
     public void setGameMode(final Gamemode gm) {
         this.standard_gamemode = gm;
     }
 
+    /**
+     * Get the internal plugin loader
+     *
+     * @return Plugin Loader
+     */
     public PluginLoader getPluginLoader() {
         return this.pluginLoader;
     }
 
+    /**
+     * Get the console command sender
+     *
+     * @return Console Command Sender (creates on first use)
+     */
     public CommandSender getConsole() {
         if (this.console == null) {
             this.console = new CommandSender() {
