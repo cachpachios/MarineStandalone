@@ -23,7 +23,7 @@ import org.marinemc.io.data.ByteData;
 /**
  * @author Fozie
  */
-public class NBTLong extends NBTTag {
+public class NBTLong extends NBTTag<Long> {
 
     long data;
 

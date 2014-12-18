@@ -24,7 +24,7 @@ import org.marinemc.io.data.ByteData;
 /**
  * @author Fozie
  */
-public class NBTDouble extends NBTTag {
+public class NBTDouble extends NBTTag<Double> {
 
     private double data;
 

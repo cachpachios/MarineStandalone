@@ -23,7 +23,7 @@ import org.marinemc.io.data.ByteData;
 /**
  * @author Fozie
  */
-public class NBTByte extends NBTTag {
+public class NBTByte extends NBTTag<Byte> {
 
     private byte data;
 

@@ -32,11 +32,22 @@ public abstract class NBTTag<T> {
     public final String name;
     private final byte id;
 
+    /**
+     * Constructor
+     *
+     * @param name Tag Name
+     * @param id   Type ID
+     */
     public NBTTag(final String name, final int id) {
         this.name = name;
         this.id = (byte) id;
     }
 
+    /**
+     * Get the type (class)
+     *
+     * @return
+     */
     final public Class<T> getType() {
         return ((Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0]);
     }
