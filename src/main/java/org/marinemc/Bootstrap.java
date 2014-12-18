@@ -44,10 +44,10 @@ public class Bootstrap {
         }
         System.getSecurityManager().checkPermission(MarineSecurityManager.MARINE_PERMISSION);
     }
+    // SECURITY CHECK END //////////////////////////////////////////////////////////////////////////////////////////////
 
     private static Bootstrap instance;
-    // SECURITY CHECK END //////////////////////////////////////////////////////////////////////////////////////////////
-    // LOCAL VARIABLES (instance) ////
+
     public List<String> arguments;
     public Timer mainTimer;
 
@@ -82,7 +82,6 @@ public class Bootstrap {
         instance = new Bootstrap();
         instance.start(args);
     }
-    // LOCAL VARIABLES END ///////////
 
     private static int getInteger(final String argument) {
         for (final String s : instance.arguments) {
