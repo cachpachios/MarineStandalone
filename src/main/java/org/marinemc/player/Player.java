@@ -41,18 +41,24 @@ import org.marinemc.net.play.clientbound.world.BlockChangePacket;
 import org.marinemc.net.play.clientbound.world.MapChunkPacket;
 import org.marinemc.net.play.clientbound.world.SpawnPointPacket;
 import org.marinemc.net.play.clientbound.world.TimeUpdatePacket;
+import org.marinemc.net.play.clientbound.world.UnloadChunkPacket;
 import org.marinemc.server.Marine;
 import org.marinemc.util.Location;
 import org.marinemc.util.Position;
 import org.marinemc.util.StringUtils;
+import org.marinemc.util.TrackedLocation;
 import org.marinemc.world.BlockID;
 import org.marinemc.world.World;
 import org.marinemc.world.chunk.Chunk;
+import org.marinemc.world.chunk.ChunkPos;
 import org.marinemc.world.entity.Entity;
 import org.marinemc.world.entity.EntityType;
 
 import java.util.*;
 /**
+ * The main ingame PlayerClass
+ * Used tpo
+ * 
  * @author Fozie
  */
 public class Player extends Entity implements IPlayer, CommandSender {
@@ -89,7 +95,7 @@ public class Player extends Entity implements IPlayer, CommandSender {
     private List<Long> loadedChunks;
 
     public Player(final PlayerManager manager, final Client connection, final PlayerID id, final PlayerInventory inventory,
-                  final int entityID, final World world, final Location pos, final PlayerAbilities abilites, final Gamemode gamemode) {
+                  final int entityID, final World world, final TrackedLocation pos, final PlayerAbilities abilites, final Gamemode gamemode) {
         super(EntityType.PLAYER, entityID, world, pos);
         this.inventory = inventory;
         this.manager = manager;
@@ -113,7 +119,7 @@ public class Player extends Entity implements IPlayer, CommandSender {
     }
 
     public Player(AbstractPlayer player, Gamemode gm) {
-        this(player.getServer().getPlayerManager(), player.getClient(), player.getInfo(), new PlayerInventory((byte) 0x00), Entity.generateEntityID(), player.getWorld(), player.getLocation(), player.getAbilities(), gm);
+        this(player.getServer().getPlayerManager(), player.getClient(), player.getInfo(), new PlayerInventory((byte) 0x00), Entity.generateEntityID(), player.getWorld(), new TrackedLocation(player.getLocation()), player.getAbilities(), gm);
     }
 
     public short getUID() {
@@ -265,7 +271,7 @@ public class Player extends Entity implements IPlayer, CommandSender {
             --max;
         }
     }
-
+    
     @Override
     public String toString() {
         return getName();
@@ -306,7 +312,7 @@ public class Player extends Entity implements IPlayer, CommandSender {
     public Position getRelativePosition() {
         return this.getLocation().getRelativePosition();
     }
-
+    
     public PlayerManager getPlayerManager() {
         return manager;
     }
@@ -410,5 +416,29 @@ public class Player extends Entity implements IPlayer, CommandSender {
     public void sendMessageRaw(String string) {
         getClient().sendPacket(new ChatPacket(string, false));
     }
+
+	public void loadChunks(List<Chunk> chunksToLoad) {
+		for(Chunk c : chunksToLoad)
+			if(!loadedChunks.contains(c.getPos().encode()))
+				loadedChunks.add(c.getPos().encode());
+	}
+	
+	public void loadChunk(Chunk... chunks) {
+		for(Chunk c : chunks)
+			if(!loadedChunks.contains(c.getPos().encode()))
+				loadedChunks.add(c.getPos().encode());
+	}
+	
+	public void unloadChunk(Chunk c) {
+		getClient().sendPacket(new UnloadChunkPacket(c.getPos()));
+	}
+	
+	public Chunk[] getAllLoadedChunks() {
+		final Chunk[] r = new Chunk[loadedChunks.size()];	
+		int i = -1;
+		for(final long l : loadedChunks)
+			r[++i] = this.getWorld().getChunk(new ChunkPos(l));
+		return r;
+	}
 
 }

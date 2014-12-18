@@ -272,4 +272,14 @@ public class Chunk {
 
         return size;
     }
+
+	public Player[] getSubscribingPlayers() {
+		final Player[] pl = new Player[subscribingPlayers.size()];
+		
+		int i = -1;
+		for(final short s : subscribingPlayers)
+			pl[i] = w.getServer().getPlayerManager().getPlayer(s);
+		
+		return pl;
+	}
 }

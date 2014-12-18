@@ -22,6 +22,7 @@ package org.marinemc.world.entity;
 import org.marinemc.Logging;
 import org.marinemc.util.Location;
 import org.marinemc.util.Position;
+import org.marinemc.util.TrackedLocation;
 import org.marinemc.util.vectors.Vector3d;
 import org.marinemc.util.vectors.Vector3i;
 import org.marinemc.world.World;
@@ -30,18 +31,25 @@ import org.marinemc.world.World;
  */
 public abstract class Entity {
 
-    private static int nextEntityID = 0;
+    private static int nextEntityID = Integer.MIN_VALUE;
     private final int entityID;
     private final EntityType type;
     private World world;
-    private Location position;
+    
+    private TrackedLocation position;
+    
+    
     private int ticksLived;
 
-    public Entity(final EntityType type, final int ID, final Location pos) {
+    public Entity(final EntityType type, final int ID, final TrackedLocation pos) {
         this(type, ID, pos.getWorld(), pos);
     }
+    
+    public Entity(final EntityType type, final int ID, final Location pos) {
+        this(type, ID, pos.getWorld(), new TrackedLocation(pos));
+    }
 
-    public Entity(final EntityType type, final int ID, final World world, final Location pos) {
+    public Entity(final EntityType type, final int ID, final World world, final TrackedLocation pos) {
         this.entityID = ID;
         this.world = pos.getWorld();
         this.position = pos;
@@ -50,7 +58,7 @@ public abstract class Entity {
     }
 
     public static int generateEntityID() {
-        return nextEntityID++;
+        return ++nextEntityID;
     }
 
     public EntityType getType() {
@@ -110,6 +118,10 @@ public abstract class Entity {
         return position;
     }
 
+    public TrackedLocation getTrackedPosition() {
+        return position;
+    }
+    
     public int getSecoundsLived() {
         return ticksLived / 20;
     }

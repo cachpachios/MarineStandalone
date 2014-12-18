@@ -30,6 +30,7 @@ import org.marinemc.net.play.clientbound.KickPacket;
 import org.marinemc.player.AbstractPlayer;
 import org.marinemc.player.IPlayer;
 import org.marinemc.player.Player;
+import org.marinemc.world.chunk.Chunk;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -53,7 +54,7 @@ public class PlayerManager {
 
     public PlayerManager(StandaloneServer server) {
         this.server = server;
-        loginManager = new LoginHandler(this, this.server.getWorldManager().getMainWorld(), this.server.getWorldManager().getMainWorld().getSpawnPoint());
+        loginManager = new LoginHandler(this, this.server.getWorldManager().getMainWorld());
         // allPlayers = Collections.synchronizedSet(new HashSet<Player>());
         // playerIDs = Collections.synchronizedMap(new ConcurrentHashMap<UUID, Player>());
         uids = Collections.synchronizedMap(new ConcurrentHashMap<Short, Player>());
@@ -222,16 +223,27 @@ public class PlayerManager {
         p.getClient().sendPacket(new JoinGamePacket(p));
 
         p.sendPosition();
-        //
-        p.sendMapData(p.getWorld().getChunks(0, 0, 2, 2));
-        //
+        
+        final List<Chunk> chunksToSend = p.getWorld().getChunks(0, 0, 2, 2);
+        
+        for(final Chunk c : chunksToSend)
+        	c.subscribePlayer(p);
+        
+        p.loadChunks(chunksToSend);
+        
+        p.sendMapData(chunksToSend);
+        
         p.sendAbilites();
-        //
+        
         p.sendPosition();
-        //
+        
         p.sendTime();
-        //
+        
         p.loginPopulation();
+        
+        movement.spawnPlayersLocaly(p);
+        
+        movement.updatePlayerChunk(p);
     }
 
     public void keepAlive(short uid, int ID) {

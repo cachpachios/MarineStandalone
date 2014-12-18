@@ -81,4 +81,9 @@ public class Vector3d extends Vector3<Double> {
         y /= n;
         z /= n;
     }
+    
+    public Vector3<Double> getGen() {
+    	return this;
+    }
+    
 }

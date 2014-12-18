@@ -19,19 +19,22 @@
 
 package org.marinemc.game;
 
+import java.util.UUID;
+
 import org.marinemc.events.standardevents.JoinEvent;
 import org.marinemc.game.async.ChatManager;
 import org.marinemc.net.Client;
 import org.marinemc.net.States;
 import org.marinemc.net.login.LoginSucessPacket;
-import org.marinemc.player.*;
+import org.marinemc.player.AbstractPlayer;
+import org.marinemc.player.IPlayer;
+import org.marinemc.player.Player;
+import org.marinemc.player.PlayerAbilities;
+import org.marinemc.player.PlayerID;
+import org.marinemc.player.UIDGenerator;
 import org.marinemc.server.Marine;
-import org.marinemc.util.Location;
-import org.marinemc.util.Position;
 import org.marinemc.util.mojang.UUIDHandler;
 import org.marinemc.world.World;
-
-import java.util.UUID;
 
 /**
  * @author Fozie
@@ -40,11 +43,8 @@ public class LoginHandler {
 
     private final PlayerManager playerManager;
 
-    private Location spawnLocation;
-
-    public LoginHandler(PlayerManager playerManager, World w, Position spawnLocation) {
+    public LoginHandler(PlayerManager playerManager, World w) {
         // this.spawnLocation = new Location(w, 0, 5, 0);
-        this.spawnLocation = w.getGenerator().getSafeSpawnPoint();
 
         this.playerManager = playerManager;
     }

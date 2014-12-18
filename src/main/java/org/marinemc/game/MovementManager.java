@@ -19,8 +19,11 @@
 
 package org.marinemc.game;
 
+import org.marinemc.net.play.clientbound.player.SpawnPlayerPacket;
+import org.marinemc.net.play.clientbound.world.entities.EntityLookMovePacket;
 import org.marinemc.player.Player;
 import org.marinemc.util.Location;
+import org.marinemc.world.chunk.Chunk;
 
 /**
  * @author Fozie
@@ -34,20 +37,45 @@ public class MovementManager { // Used to keep track of player movments and send
     }
 
     public void spawnPlayersLocaly(final Player target) {
-
+//    	for(final Chunk c : target.getAllLoadedChunks())
+//    		for(final Player p : c.getSubscribingPlayers())
+//    			if(p.getUID() != target.getUID()) {
+//    				target.getClient().sendPacket(new SpawnPlayerPacket(p));
+//    				System.out.println("Sent: " + p.getName() + " to " + target.getName());
+//    			}
+    	
+    	//TODO: TEMP CODE:
+    	for(Player p : players.getPlayers())
+			if(p.getName() != target.getName())
+				target.getClient().sendPacket(new SpawnPlayerPacket(p));
     }
 
     public void registerLook(Player p, float yaw, float pitch) {
         p.getLocation().setYaw(yaw);
         p.getLocation().setPitch(pitch);
         
+        updatePlayerChunk(p);
         
         // TODO Send to every other players in a sphere of ? blocks
         
     }
+   
+    public void updatePlayerChunk(final Player ref) {
+//    	for(final Chunk c : ref.getAllLoadedChunks())
+//    		for(final Player p : c.getSubscribingPlayers())
+//    			if(p.getUID() != ref.getUID())
+//    				p.getClient().sendPacket(new EntityLookMovePacket(ref));
+    	
+    	//TODO: TEMP CODE:
+    	for(Player p : players.getPlayers())
+			if(p.getName() != ref.getName())
+				p.getClient().sendPacket(new EntityLookMovePacket(ref));
+    	
+    }
     
     public void teleport(Player p, Location target) {
-
+    	p.sendPostionAndLook();
+    	updatePlayerChunk(p);
     }
 
     public void registerMovment(Player p, Location target) {
@@ -61,13 +89,13 @@ public class MovementManager { // Used to keep track of player movments and send
             p.getLocation().setX(target.getX());
             p.getLocation().setY(target.getY());
             p.getLocation().setZ(target.getZ());
-
+            
             p.getLocation().setYaw(target.getYaw());
             p.getLocation().setPitch(target.getPitch());
-
+            
             p.getLocation().setOnGround(target.isOnGround());
-
-            // TODO Send to every other players in a sphere of ? blocks
+            
+            updatePlayerChunk(p);
         } else {
             p.sendMessage("You moved to quickly :<");
             p.sendPostionAndLook();
