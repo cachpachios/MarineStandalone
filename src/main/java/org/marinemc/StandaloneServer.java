@@ -87,7 +87,7 @@ public class StandaloneServer implements CommandProvider {
      * @param settings Startup settings
      * @throws Throwable If anything goes wrong
      */
-    public StandaloneServer(final MainComponent.StartSettings settings) throws Throwable {
+    public StandaloneServer(final Bootstrap.StartSettings settings) throws Throwable {
         this.port = settings.port;
         this.skipTime = 1000000000 / settings.tickrate; // nanotime
         this.targetTickRate = settings.tickrate;
@@ -217,7 +217,7 @@ public class StandaloneServer implements CommandProvider {
         // Disable all plugins
         pluginLoader.disableAllPlugins();
         // Should not run, smart stuff
-        MainComponent.mainTimer.cancel();
+        Bootstrap.instance().mainTimer.cancel();
         // Save all json configs
         Logging.getLogger().info("Saving JSON Files");
         jsonHandler.saveAll();
