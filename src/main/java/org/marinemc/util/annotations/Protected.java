@@ -29,7 +29,7 @@ import java.lang.annotation.Target;
  *
  * @author Citymonstret
  */
-@Retention(RetentionPolicy.SOURCE)
+@Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD, ElementType.CONSTRUCTOR, ElementType.TYPE})
 public @interface Protected {
     /*

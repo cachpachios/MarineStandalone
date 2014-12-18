@@ -26,22 +26,22 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 public class BinaryFile {
-    File file;
 
+    File file;
     ByteData data;
 
-    public BinaryFile(File f) {
+    public BinaryFile(final File f) {
         this.file = f;
         this.data = new ByteData();
     }
 
-    public BinaryFile(File f, ByteData v) {
+    public BinaryFile(final File f, final ByteData v) {
         this.data = v;
         this.file = f;
     }
 
-    public static InputStream decompressStream(InputStream input) throws IOException {
-        PushbackInputStream pb = new PushbackInputStream(input, 2); //we need a pushbackstream to look ahead
+    public static InputStream decompressStream(final InputStream input) throws IOException {
+        final PushbackInputStream pb = new PushbackInputStream(input, 2); //we need a pushbackstream to look ahead
         byte[] signature = new byte[2];
         pb.read(signature); //read the signature
         pb.unread(signature); //push back the signature to the stream
@@ -55,8 +55,7 @@ public class BinaryFile {
     public BinaryFile readBinary() throws IOException {
         if (!file.canRead()) throw new IOException("Can't read file: " + file.getName());
         if (!file.exists()) throw new FileNotFoundException("File not found: " + file.getName());
-
-        byte[] r = new byte[(int) file.length()];
+        final byte[] r = new byte[(int) file.length()];
         InputStream input = new BufferedInputStream(new FileInputStream(file));
         input.read(r);
         data = new ByteData(r);
@@ -66,8 +65,7 @@ public class BinaryFile {
     public BinaryFile readGZIPBinary() throws IOException {
         if (!file.canRead()) throw new IOException("Can't read file: " + file.getName());
         if (!file.exists()) throw new FileNotFoundException("File not found: " + file.getName());
-
-        byte[] r = new byte[(int) file.length()];
+        final byte[] r = new byte[(int) file.length()];
         InputStream input = decompressStream(new BufferedInputStream(new FileInputStream(file)));
         input.read(r);
         data = new ByteData(r);
@@ -77,8 +75,7 @@ public class BinaryFile {
     public void writeBinary() throws IOException {
         if (!file.exists())
             file.createNewFile();
-        OutputStream output = null;
-        output = new BufferedOutputStream(new FileOutputStream(file));
+        OutputStream output = new BufferedOutputStream(new FileOutputStream(file));
         output.write(data.getBytes());
         output.close();
     }
@@ -92,8 +89,6 @@ public class BinaryFile {
     }
 
     public ByteData getData() {
-        if (data == null)
-            return null;
         return data;
     }
 }

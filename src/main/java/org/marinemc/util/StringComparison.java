@@ -82,7 +82,7 @@ public class StringComparison {
         for (final Object aP1 : p1) {
             for (final Object aP2 : p2) {
                 if (aP1.equals(aP2)) {
-                    intersection++;
+                    ++intersection;
                     p2.remove(aP2);
                     break;
                 }

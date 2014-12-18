@@ -22,6 +22,7 @@ package org.marinemc.game.system;
 import org.marinemc.Logging;
 import org.marinemc.plugins.Plugin;
 import org.marinemc.plugins.PluginClassLoader;
+import org.marinemc.util.annotations.Protected;
 
 import java.security.AccessControlException;
 import java.security.Permission;
@@ -52,6 +53,33 @@ public class MarineSecurityManager extends SecurityManager {
      */
     public MarineSecurityManager(final SecurityManager defaultSecurityManager) {
         this.defaultSecurityManager = defaultSecurityManager;
+    }
+
+    /**
+     * Check if a class is @Protected
+     *
+     * @param context Class
+     * @return true if the class is @Protected
+     */
+    public boolean isProtected(final Class context) {
+        return context.getAnnotation(Protected.class) instanceof Protected;
+    }
+
+    /**
+     * Check if a context is allowed to even access the class
+     *
+     * @param context Class
+     * @return true if the context is allowed to, false if not
+     */
+    public boolean checkAllowed(final Class context) {
+        if (!isProtected(context))
+            return false;
+        try {
+            status("Attempt Access", true);
+        } catch (final Throwable e) {
+            return false;
+        }
+        return true;
     }
 
     /**

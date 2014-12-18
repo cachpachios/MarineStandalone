@@ -19,7 +19,6 @@
 
 package org.marinemc;
 
-import org.json.JSONException;
 import org.marinemc.game.CommandManager;
 import org.marinemc.game.PlayerManager;
 import org.marinemc.game.WorldManager;
@@ -47,8 +46,6 @@ import org.marinemc.world.Difficulty;
 import org.marinemc.world.Identifiers;
 
 import java.io.File;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * StandaloneServer - Housing of the main loop
@@ -159,16 +156,6 @@ public class StandaloneServer implements CommandProvider {
     }
 
     /**
-     * Start the server
-     */
-    public void start() {
-        if (this.shouldRun)
-            throw new UnsupportedOperationException("Cannot start the server twice...");
-        this.shouldRun = true;
-        run();
-    }
-
-    /**
      * Get the MarineServer implementation
      *
      * @return server API
@@ -205,22 +192,17 @@ public class StandaloneServer implements CommandProvider {
     /**
      * Run!
      */
-    protected void run() {
+    protected void run() throws Exception {
         if (!this.initialized)
             init();
         players.updateThemAll();
         network.tryConnections();
-        try {
-            this.players.tickAllPlayers();
-            this.worlds.tick();
-            this.scheduler.tickSync();
-            // Should really not be static
-            // TODO Fix this
-            ServerProperties.tick();
-        } catch (Throwable e) {
-            // Oh noes :(
-            e.printStackTrace();
-        }
+        this.players.tickAllPlayers();
+        this.worlds.tick();
+        this.scheduler.tickSync();
+        // Should really not be static
+        // TODO Fix this
+        ServerProperties.tick();
     }
 
     /**
@@ -243,34 +225,6 @@ public class StandaloneServer implements CommandProvider {
         Logging.getLogger().saveLog();
         // When finished
         System.exit(0);
-    }
-
-    /**
-     * Restart the server
-     */
-    public void restart() {
-        Logging.getLogger().log("Server is restarting...");
-        for (final Player player : players.getPlayers()) {
-            player.kick("Server Restarting");
-        }
-        pluginLoader.disableAllPlugins();
-        shouldRun = false;
-        jsonHandler.saveAll();
-        Logging.getLogger().clearLogger();
-        Logging.getLogger().logf("Starting MarineStandalone Server - Protocol Version §c§o%d§0 (Minecraft §c§o%s§0)",
-                ServerProperties.PROTOCOL_VERSION, ServerProperties.MINECRAFT_NAME);
-        final StandaloneServer server = this;
-        new Timer("restarter").schedule(new TimerTask() {
-            @Override
-            public void run() {
-                try {
-                    jsonHandler = new JSONFileHandler(server, new File("./settings"), new File("./storage"));
-                } catch (JSONException e) {
-                }
-                server.shouldRun = true;
-                server.run();
-            }
-        }, 0l, 1500l);
     }
 
     /**

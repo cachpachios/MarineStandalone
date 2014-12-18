@@ -137,7 +137,7 @@ public class Position extends Vector3i {
 
     @Override
     public String toString() {
-        return String.format("\"position\": {\"x\": %f, \"y\": %f, \"z\": %f}", getX(), getY(), getZ());
+        return StringUtils.format("\"position\": {\"x\": {0}, \"y\": {1}, \"z\": {2}}", getX(), getY(), getZ());
     }
 
 }

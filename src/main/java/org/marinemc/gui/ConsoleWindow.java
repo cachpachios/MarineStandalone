@@ -148,7 +148,7 @@ public class ConsoleWindow extends OutputStream {
                 restart = new JMenuItem(new AbstractAction("Restart") {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        Marine.getServer().getServer().restart();
+                        Logging.getLogger().error("Restart Disabled");
                     }
                 }),
                 kick_all = new JMenuItem(new AbstractAction("Kick All") {

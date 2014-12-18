@@ -29,7 +29,7 @@ public interface ArgumentOperation<T> {
     /**
      * Perform this action for on object
      *
-     * @param Type object to perform the action on
+     * @param t object to perform the action on
      */
-    void accept(T t);
+    public void accept(T t);
 }

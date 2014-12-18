@@ -117,6 +117,16 @@ public class Logging extends PrintStream {
         list.add(l);
     }
 
+    public void error(final String s, final Throwable cause) {
+        c.write(format('c', "ERROR", s));
+        String l = format("ERROR", s);
+        System.out.println(l);
+        list.add(l);
+        // We should handle this better
+        // TODO Better solution
+        cause.printStackTrace();
+    }
+
     public void error(final String s) {
         c.write(format('c', "ERROR", s));
         String l = format("ERROR", s);
@@ -129,6 +139,14 @@ public class Logging extends PrintStream {
         String l = format("WARNING", s);
         System.out.println(l);
         list.add(l);
+    }
+
+    public void warn(final String s, final Throwable cause) {
+        c.write(format('c', "WARNING", s));
+        String l = format("WARNING", s);
+        System.out.println(l);
+        list.add(l);
+        cause.printStackTrace();
     }
 
     private String format(final char color, final String prefix, final String msg) {
@@ -255,9 +273,9 @@ public class Logging extends PrintStream {
             entry = zin.getNextEntry();
         }
         zin.close();
-        for (int i = 0; i < files.length; i++) {
-            InputStream in = new FileInputStream(files[i]);
-            out.putNextEntry(new ZipEntry(files[i].getName()));
+        for (File file1 : files) {
+            InputStream in = new FileInputStream(file1);
+            out.putNextEntry(new ZipEntry(file1.getName()));
             int len;
             while ((len = in.read(buf)) > 0) {
                 out.write(buf, 0, len);

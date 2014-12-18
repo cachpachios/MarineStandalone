@@ -88,7 +88,7 @@ public enum BiomeID {
     private final byte ID;
     private final String name;
 
-    private BiomeID(int id, String name) {
+    private BiomeID(final int id, final String name) {
         this.ID = (byte) id;
         this.name = name;
     }

@@ -21,9 +21,9 @@ package org.marinemc;
 
 import org.marinemc.game.system.MarineSecurityManager;
 import org.marinemc.settings.ServerSettings;
+import org.marinemc.util.StringUtils;
 import org.marinemc.util.annotations.Protected;
 
-import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Timer;
@@ -40,60 +40,61 @@ public class MainComponent {
     public static Timer mainTimer;
 
     // SECURITY CHECK START ////////////////////////////////////////////////////////////////////////////////////////////
-
     static {
         if (System.getSecurityManager() == null) {
             System.setSecurityManager(new MarineSecurityManager(System.getSecurityManager()));
         }
         System.getSecurityManager().checkPermission(MarineSecurityManager.MARINE_PERMISSION);
     }
-
     public MainComponent() {
         System.getSecurityManager().checkPermission(MarineSecurityManager.MARINE_PERMISSION);
     }
-
     // SECURITY CHECK END //////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static double getJavaVersion() {
+    /**
+     * Get the java version as a number
+     *
+     * @return Java Specification Version Times 10 Minus 10
+     */
+    public static int getJavaVersion() {
         try {
-            return Double.parseDouble(System.getProperty("java.specification.version"));
+            return (int) (Double.parseDouble(System.getProperty("java.specification.version")) * 10) - 10;
         } catch (Throwable e) {
             return -1;
         }
     }
 
-    public static void main(String[] args) {
-        if (getJavaVersion() < 1.7) {
-            System.out.println("-- Could not start MarineStandalone: Requires java 1.7 or above --");
+    public static void printf(final String s, final Object... os) {
+        System.out.println(StringUtils.format("[Marine] " + s, os));
+    }
+
+    public static void main(final String[] args) {
+        if (getJavaVersion() < 7) {
+            printf("-- Could not start MarineStandalone: Requires java {0} or above, you have {1} --", 7, getJavaVersion());
             System.exit(1);
         }
         // Check if run from compressed folder
-        if (!(new File(".").getAbsolutePath().indexOf('!') == -1)) {
+        /*if (!(new File(".").getAbsolutePath().indexOf('!') == -1)) {
             System.out.println("-- Could not start MarineStandalone: Cannot run from compressed folder");
             System.exit(1);
-        }
-        
+        }*/
         try { // Check OS Arch and warn if lower than 64bit
             if (Integer.parseInt(System.getProperty("sun.arch.data.model")) < 64) {
                 Logging.getLogger().warn("Warning Server is running on 32bit this is highly not recommended and can cause fatal errors or lag!");
                 Logging.getLogger().warn("Consider updating java or your hardware.");
             }
         } catch (SecurityException e) { // If blocked print an error
-            Logging.getLogger().warn("Unable to retrieve computer arch! Perhaps blocked by the JVM.");
+            Logging.getLogger().warn("Unable to retrieve computer arch! Perhaps blocked by the JVM.", e);
         }
-        
         // Make sure that plugins can't
         // close down the jvm
         // or replace the security
-        // manager with a custom one
+        // manager with a custom one, etc.
         System.setSecurityManager(new MarineSecurityManager(System.getSecurityManager()));
-
         // Use IPv4 instead of IPv6
         System.setProperty("java.net.preferIPv4Stack", "true");
-        
         // Make math fast :D
         chargeUp();
-        
         // Get the arguments
         arguments = Arrays.asList(args);
         // Init. ServerSettings
@@ -128,9 +129,8 @@ public class MainComponent {
         StandaloneServer server = null;
         try {
             server = new StandaloneServer(settings); // Port and TickRate
-        } catch (Throwable e) {
-            Logging.getLogger().error("Could not start the server, errrors occured");
-            e.printStackTrace();
+        } catch (final Throwable e) {
+            Logging.getLogger().error("Could not start the server, errors occurred", e);
             System.exit(1);
         }
         // Check if the build is stable
@@ -146,15 +146,23 @@ public class MainComponent {
         mainTimer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                server.run();
+                // Let's do the logging here instead
+                // rather than in the run method
+                // to make sure that the error is
+                // outputted properly
+                try {
+                    server.run();
+                } catch (final Exception e) {
+                    Logging.getLogger().error("Something went wrong in the main thread...", e);
+                }
             }
-        }, 0l, (1000 / tickrate));
+        }, 0L, (1000 / tickrate));
     }
 
-    private static int getInteger(String argument) {
-        for (String s : arguments) {
+    private static int getInteger(final String argument) {
+        for (final String s : arguments) {
             if (s.contains(argument)) {
-                String[] ss = s.split(":");
+                final String[] ss = s.split(":");
                 if (ss.length < 2) {
                     return -1;
                 }
@@ -169,16 +177,16 @@ public class MainComponent {
     }
 
     private static void chargeUp() {
+        double v;
         for (int x = 0; x < 10000; x++) {
-            double v;
-            v = Math.sqrt(222039929);
-            v = Math.sin(93);
-            v = Math.cos(93);
-            v = Math.tan(93);
+            v = Math.sqrt(x * 255);
+            v = Math.sin(x);
+            v = Math.cos(x);
+            v = Math.tan(x);
+            v = Math.asin(x);
+            v = Math.acos(x);
+            v = Math.atan(x);
             v = Math.random();
-            v = Math.asin(93);
-            v = Math.acos(93);
-            v = Math.atan(93);
         }
     }
 

@@ -50,20 +50,10 @@ public class Location extends Vector3d implements JSONAware, Cloneable, Comparab
      * @param y     Y Coord
      * @param z     Z Coord
      */
-    public Location(World world, double x, double y, double z) {
+    public Location(final World world, final double x, final double y, final double z) {
         this(world, x, y, z, 0f, 0f);
     }
     
-    /**
-     * Sets the world the location are in
-     *
-     * @param world World
-     * @param v     Vector3
-     */
-    public void setWorld(World w) {
-    	this.world = w;
-    }
-
     /**
      * Get a new location based on a world and a vector
      *
@@ -71,7 +61,7 @@ public class Location extends Vector3d implements JSONAware, Cloneable, Comparab
      * @param v     Vector3
      */
     @SuppressWarnings("rawtypes")
-    public Location(World world, Vector3 v) {
+    public Location(final World world, final Vector3 v) {
         this(world, (double) v.getX(), (double) v.getY(), (double) v.getZ());
     }
 
@@ -80,9 +70,9 @@ public class Location extends Vector3d implements JSONAware, Cloneable, Comparab
      *
      * @param json JSON string
      */
-    public Location(String json) {
+    public Location(final String json) {
         super(0d, 0d, 0d);
-        JSONObject object = (JSONObject) JSONValue.parse(json);
+        final JSONObject object = (JSONObject) JSONValue.parse(json);
         this.world = Marine.getWorld(object.get("world").toString());
         this.setX((double) object.get("x"));
         this.setY((double) object.get("y"));
@@ -101,12 +91,11 @@ public class Location extends Vector3d implements JSONAware, Cloneable, Comparab
      * @param yaw   Yaw
      * @param pitch Pitch
      */
-
-    public Location(World w, double x, double y, double z, float yaw, float pitch) {
+    public Location(final World w, final double x, final double y, final double z, final float yaw, final float pitch) {
         this(w, x, y, z, yaw, pitch, false);
     }
 
-    public Location(World world, double x, double y, double z, float yaw, float pitch, boolean onGround) {
+    public Location(final World world, final double x, final double y, final double z, final float yaw, final float pitch, final boolean onGround) {
         super(x, y, z);
         this.yaw = yaw;
         this.pitch = pitch;
@@ -120,7 +109,7 @@ public class Location extends Vector3d implements JSONAware, Cloneable, Comparab
      * @param spawnLocation Spawn position
      * @param w             World
      */
-    public Location(Position spawnLocation, World w) {
+    public Location(final Position spawnLocation, final World w) {
         this(w, (double) spawnLocation.getX(), (double) spawnLocation.getY(), (double) spawnLocation.getZ());
     }
 
@@ -134,6 +123,15 @@ public class Location extends Vector3d implements JSONAware, Cloneable, Comparab
     }
 
     /**
+     * Sets the world the location are in
+     *
+     * @param w World
+     */
+    public void setWorld(final World w) {
+        this.world = w;
+    }
+
+    /**
      * Get the yaw
      *
      * @return yaw
@@ -142,7 +140,12 @@ public class Location extends Vector3d implements JSONAware, Cloneable, Comparab
         return this.yaw;
     }
 
-    public void setYaw(float v) {
+    /**
+     * Set the yaw
+     *
+     * @param v new yaw
+     */
+    public void setYaw(final float v) {
         this.yaw = v;
     }
 
@@ -164,6 +167,11 @@ public class Location extends Vector3d implements JSONAware, Cloneable, Comparab
         return this.pitch;
     }
 
+    /**
+     * Set the pitch
+     *
+     * @param v new pitch
+     */
     public void setPitch(float v) {
         this.pitch = v;
     }
@@ -174,7 +182,7 @@ public class Location extends Vector3d implements JSONAware, Cloneable, Comparab
      * @param p Location too look towards
      * @return New Location (this)
      */
-    public Location lookAt(Location p) {
+    public Location lookAt(final Location p) {
         double l = p.getX() - getX();
         double w = p.getZ() - getX();
         double c = Math.sqrt(l * l + w * w);
@@ -186,7 +194,7 @@ public class Location extends Vector3d implements JSONAware, Cloneable, Comparab
 
     @Override
     public String toJSONString() {
-        JSONObject o = new JSONObject();
+        final JSONObject o = new JSONObject();
         o.put("x", getX());
         o.put("y", getY());
         o.put("z", getZ());
@@ -204,7 +212,7 @@ public class Location extends Vector3d implements JSONAware, Cloneable, Comparab
      * @return JSON Object
      */
     public org.json.JSONObject toJSONObject() {
-        org.json.JSONObject o = new org.json.JSONObject();
+        final org.json.JSONObject o = new org.json.JSONObject();
         try {
             o.put("x", getX());
             o.put("y", getY());
@@ -244,7 +252,7 @@ public class Location extends Vector3d implements JSONAware, Cloneable, Comparab
      * @param l2 Other location
      * @return distance (actual)
      */
-    public double getEuclideanDistance(Location l2) {
+    public double getEuclideanDistance(final Location l2) {
         double x = getX() - l2.getX();
         double y = getY() - l2.getY();
         double z = getZ() - l2.getZ();
@@ -260,15 +268,15 @@ public class Location extends Vector3d implements JSONAware, Cloneable, Comparab
      * @param l2 Other location
      * @return distance squared
      */
-    public double getEuclideanDistanceSquared(Location l2) {
-        double x = getX() - l2.getX(), y = getY() - l2.getY(), z = getZ() - l2.getZ();
+    public double getEuclideanDistanceSquared(final Location l2) {
+        final double x = getX() - l2.getX(), y = getY() - l2.getY(), z = getZ() - l2.getZ();
         return (x * x) + (y * y) + (z * z);
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (!(o instanceof Location)) return false;
-        Location loc = (Location) o;
+        final Location loc = (Location) o;
         return (loc.getX().equals(getX()) && loc.getY().equals(getY()) && loc.getZ().equals(getZ())
                 && loc.getYaw() == getYaw() && loc.getPitch() == getPitch() && loc.getWorld().getName().equals(getWorld().getName()));
     }
@@ -276,7 +284,7 @@ public class Location extends Vector3d implements JSONAware, Cloneable, Comparab
     @Override
     public int hashCode() {
         int hash = 127;
-        int x = getX().intValue(), y = getY().intValue(), z = getZ().intValue();
+        final int x = getX().intValue(), y = getY().intValue(), z = getZ().intValue();
         hash = hash * 31 + x;
         hash = hash * 31 + y;
         hash = hash * 31 + z;
@@ -314,7 +322,7 @@ public class Location extends Vector3d implements JSONAware, Cloneable, Comparab
      *
      * @param v On ground
      */
-    public void setOnGround(boolean v) {
+    public void setOnGround(final boolean v) {
         onGround = v;
     }
 
@@ -325,7 +333,7 @@ public class Location extends Vector3d implements JSONAware, Cloneable, Comparab
      * @param max Max Loc
      * @return boolean
      */
-    public boolean isInAABB(Location min, Location max) {
+    public boolean isInAABB(final Location min, final Location max) {
         return (x >= min.x && x <= max.x) && (y >= min.y && y <= max.y) && (z >= max.z && z <= max.z);
     }
 
@@ -336,7 +344,7 @@ public class Location extends Vector3d implements JSONAware, Cloneable, Comparab
      * @param radius Sphere radius
      * @return boolean
      */
-    public boolean isInSphere(Location origin, int radius) {
+    public boolean isInSphere(final Location origin, final int radius) {
         return (getEuclideanDistanceSquared(origin) < (radius * radius));
     }
 
@@ -350,7 +358,7 @@ public class Location extends Vector3d implements JSONAware, Cloneable, Comparab
     }
 
     @Override
-    public int compareTo(Location o) {
+    public int compareTo(final Location o) {
         if (o == null)
             throw new NullPointerException("Object specified was null");
         double

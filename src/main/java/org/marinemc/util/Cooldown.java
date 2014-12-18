@@ -23,7 +23,7 @@ package org.marinemc.util;
  * Cooldown Utility (long desc.)
  * <p/>
  * <p/>
- * Use this instead of Runnables to compare cooldwns,
+ * Use this instead of Runnables to compare cooldowns,
  * as these rely on much simpler data, and won't cause
  * memory leaks. Nor will they cause problems if the
  * player is absent when the runnable executes. This
@@ -68,7 +68,7 @@ public class Cooldown {
      * @return milliseconds
      */
     public long getMillisecondsLeft() {
-        long n = time = (System.currentTimeMillis() - start);
+        long n = time - (System.currentTimeMillis() - start);
         return n < 0 ? 0 : n;
     }
 
@@ -98,4 +98,46 @@ public class Cooldown {
     public int getHoursLeft() {
         return (int) (getMillisecondsLeft() / 3600 * 1000);
     }
+
+    /**
+     * Get the formatted time
+     *
+     * @return Formatted time
+     */
+    public String formatTime() {
+        double sec, min, hou;
+        sec = getSecondsLeft();
+        min = (sec % 3600) / 60;
+        hou = sec / 3600;
+        sec %= 60;
+        String
+                hS = (int) hou + " " + ((int) hou != 1 ? "hours" : "hour"),
+                mS = (int) min + " " + ((int) min != 1 ? "minutes" : "minute"),
+                sS = (int) sec + " " + ((int) sec != 1 ? "seconds" : "second");
+        StringBuilder builder = new StringBuilder();
+        boolean p;
+        if (hou >= 1) {
+            builder.append(hS);
+            p = true;
+        } else {
+            p = false;
+        }
+        if (min >= 1) {
+            if (p)
+                builder.append(", ");
+            p = true;
+            builder.append(mS);
+        } else {
+            p = false;
+        }
+        if (sec >= 1) {
+            if (p)
+                builder.append(" and ");
+            else
+                return builder.append(sS).toString().replace(",", " and");
+            builder.append(sS);
+        }
+        return builder.toString();
+    }
+
 }

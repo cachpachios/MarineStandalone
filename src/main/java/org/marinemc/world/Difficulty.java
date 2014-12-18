@@ -27,8 +27,8 @@ public enum Difficulty {
     NORMAL("Normal", 2),
     HARD("Hard", 3);
 
-    final String name;
-    final byte id;
+    private final String name;
+    private final byte id;
 
     private Difficulty(String name, int id) {
         this.name = name;
