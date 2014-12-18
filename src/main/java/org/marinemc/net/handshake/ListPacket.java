@@ -73,20 +73,17 @@ public class ListPacket extends Packet {
         JSONArray samples = new JSONArray();
         JSONObject player = new JSONObject();
 
-        if (Marine.getServer().getPlayerCount() < 1) {
+        if (Marine.getServer().getPlayerCount() == 0) {
             player.put("id", UUID.fromString("1-1-3-3-7").toString());
             player.put("name", "§cThere is nobody online!");
         }
-
-
-        for (Player p : Marine.getPlayers()) {
-            player = new JSONObject();
-            player.put("id", p.getUUID().toString());
-            player.put("name", p.getName());
-            samples.add(player);
-        }
-
-        samples.add(player);
+        else
+        	for (Player p : Marine.getPlayers()) {
+        		player = new JSONObject();
+        		player.put("id", p.getUUID().toString());
+        		player.put("name", p.getName());
+        		samples.add(player);
+        	}
 
         ListResponse response = new ListResponse(Marine.getMOTD(), Marine.getPlayers().size(), Marine.getMaxPlayers(), samples, getImage());
         ListEvent event = new ListEvent(response);
