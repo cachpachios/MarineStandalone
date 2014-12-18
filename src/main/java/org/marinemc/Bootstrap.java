@@ -37,6 +37,7 @@ import java.util.TimerTask;
  */
 public class Bootstrap {
 
+    // SECURITY CHECK START ////////////////////////////////////////////////////////////////////////////////////////////
     static {
         if (System.getSecurityManager() == null) {
             System.setSecurityManager(new MarineSecurityManager(System.getSecurityManager()));
@@ -45,7 +46,8 @@ public class Bootstrap {
     }
 
     private static Bootstrap instance;
-
+    // SECURITY CHECK END //////////////////////////////////////////////////////////////////////////////////////////////
+    // LOCAL VARIABLES (instance) ////
     public List<String> arguments;
     public Timer mainTimer;
 
@@ -80,6 +82,7 @@ public class Bootstrap {
         instance = new Bootstrap();
         instance.start(args);
     }
+    // LOCAL VARIABLES END ///////////
 
     private static int getInteger(final String argument) {
         for (final String s : instance.arguments) {
