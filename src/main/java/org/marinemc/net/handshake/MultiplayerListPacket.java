@@ -39,7 +39,7 @@ import java.util.UUID;
 /**
  * @author Fozie
  */
-public class ListPacket extends Packet {
+public class MultiplayerListPacket extends Packet {
 
     private String img;
 
@@ -118,7 +118,6 @@ public class ListPacket extends Packet {
 
         JSONObject players = new JSONObject();
 
-
         players.put("max", response.MAX_PLAYERS);
         players.put("online", response.CURRENT_PLAYERS);
         players.put("sample", response.SAMPLE_PLAYERS);
@@ -135,4 +134,3 @@ public class ListPacket extends Packet {
 
     }
 }
-
