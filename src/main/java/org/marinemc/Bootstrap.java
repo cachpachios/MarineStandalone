@@ -61,7 +61,7 @@ public class Bootstrap {
 
     public static Bootstrap instance() {
         if (instance == null) {
-            throw new RuntimeException("Boostrap not initialized");
+            throw new RuntimeException("Bootstrap not initialized");
         }
         return instance;
     }
