@@ -23,29 +23,17 @@ import org.marinemc.io.data.ByteData;
 /**
  * @author Fozie
  */
-public class NBTString implements NBTTag {
+public class NBTString extends NBTTag {
 
     String string;
 
-    String name;
-
     public NBTString(String name, String v) {
-        this.name = name;
+        super(name, 8);
         string = v;
     }
 
     public NBTString(String name, ByteData data) {
         this(name, data.readUTF8Short());
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public byte getTagID() {
-        return 8;
     }
 
     @Override

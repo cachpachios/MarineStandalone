@@ -19,17 +19,39 @@
 
 package org.marinemc.io.nbt;
 
+import java.lang.reflect.ParameterizedType;
+
 /**
+ * NBTTag abstract class
+ *
  * @author Fozie
+ * @author Citymonstret
  */
-public interface NBTTag {
+public abstract class NBTTag<T> {
 
-    public String getName();
+    public final String name;
+    private final byte id;
 
-    public byte getTagID();
+    public NBTTag(final String name, final int id) {
+        this.name = name;
+        this.id = (byte) id;
+    }
 
-    public byte[] toByteArray();
+    final public Class<T> getType() {
+        return ((Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0]);
+    }
 
-    public byte[] toNonPrefixedByteArray();
+    final public String getName() {
+        return this.name;
+    }
+
+    final public byte getTagID() {
+        return this.id;
+    }
+
+    public abstract byte[] toByteArray();
+
+    public abstract byte[] toNonPrefixedByteArray();
+
 
 }

@@ -23,25 +23,18 @@ import org.marinemc.io.data.ByteData;
 /**
  * @author Fozie
  */
-public class NBTShort implements NBTTag {
+public class NBTShort extends NBTTag {
 
     private short data;
-    private String name;
 
     public NBTShort(String name, short v) {
+        super(name, 2);
         data = v;
-        this.name = name;
     }
 
 
     public NBTShort(String name, ByteData data) {
-        this.data = data.readShort();
-        this.name = name;
-    }
-
-    @Override
-    public byte getTagID() {
-        return 2;
+        this(name, data.readShort());
     }
 
     @Override
@@ -55,12 +48,6 @@ public class NBTShort implements NBTTag {
 
     public short toShort() {
         return data;
-    }
-
-
-    @Override
-    public String getName() {
-        return name;
     }
 
     @Override

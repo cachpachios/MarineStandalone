@@ -23,28 +23,17 @@ import org.marinemc.io.data.ByteData;
 /**
  * @author Fozie
  */
-public class NBTByte implements NBTTag {
+public class NBTByte extends NBTTag {
 
-    private final String name;
     private byte data;
 
     public NBTByte(String name, Byte v) {
-        this.name = name;
+        super(name, 1);
         data = v;
     }
 
     public NBTByte(String name, ByteData data) {
         this(name, data.readByte());
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public byte getTagID() {
-        return 1;
     }
 
     @Override

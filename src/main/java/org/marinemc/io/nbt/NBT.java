@@ -38,7 +38,6 @@ public class NBT {
         if (!(preTag instanceof NBTCompound)) {
             throw new IOException("File was in wrong format");
         } else this.tag = (NBTCompound) preTag;
-
     }
 
     public NBT(final String name) {

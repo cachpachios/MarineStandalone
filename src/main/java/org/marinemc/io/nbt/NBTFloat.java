@@ -23,41 +23,29 @@ import org.marinemc.io.data.ByteData;
 /**
  * @author Fozie
  */
-public class NBTFloat implements NBTTag {
-    private final String name;
+public class NBTFloat extends NBTTag {
+
     private float data;
 
     public NBTFloat(String name, float v) {
+        super(name, 5);
         data = v;
-        this.name = name;
     }
 
     public NBTFloat(String name, ByteData data) {
-        this.data = data.readFloat();
-        this.name = name;
-    }
-
-    @Override
-    public byte getTagID() {
-        return 5;
+        this(name, data.readFloat());
     }
 
     @Override
     public byte[] toByteArray() {
         ByteData d = new ByteData();
         d.writeByte(getTagID());
-        d.writeUTF8Short(name);
         d.writeFloat(data);
         return d.getBytes();
     }
 
     public float toFloat() {
         return data;
-    }
-
-    @Override
-    public String getName() {
-        return name;
     }
 
     @Override

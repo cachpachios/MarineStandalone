@@ -26,9 +26,8 @@ import java.util.List;
 /**
  * @author Fozie
  */
-public class NBTCompound implements NBTTag {
+public class NBTCompound extends NBTTag {
 
-    private final String name;
     List<NBTTag> data;
 
     public NBTCompound(String name, ByteData data) {
@@ -40,13 +39,8 @@ public class NBTCompound implements NBTTag {
     }
 
     public NBTCompound(String name) {
-        this.name = name;
-        this.data = new ArrayList<NBTTag>();
-    }
-
-    @Override
-    public byte getTagID() {
-        return 10;
+        super(name, 10);
+        this.data = new ArrayList<>();
     }
 
     @Override
@@ -69,11 +63,6 @@ public class NBTCompound implements NBTTag {
 
     public List<NBTTag> getTags() {
         return data;
-    }
-
-    @Override
-    public String getName() {
-        return name;
     }
 
     @Override

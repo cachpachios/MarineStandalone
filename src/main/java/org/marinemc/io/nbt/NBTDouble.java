@@ -20,26 +20,21 @@
 package org.marinemc.io.nbt;
 
 import org.marinemc.io.data.ByteData;
+
 /**
  * @author Fozie
  */
-public class NBTDouble implements NBTTag {
-    private final String name;
+public class NBTDouble extends NBTTag {
+
     private double data;
 
     public NBTDouble(String name, double v) {
-        this.name = name;
+        super(name, 6);
         data = v;
     }
 
     public NBTDouble(String name, ByteData data) {
-        this.name = name;
-        this.data = data.readDouble();
-    }
-
-    @Override
-    public byte getTagID() {
-        return 6;
+        this(name, data.readDouble());
     }
 
     @Override
@@ -53,11 +48,6 @@ public class NBTDouble implements NBTTag {
 
     public double toDouble() {
         return data;
-    }
-
-    @Override
-    public String getName() {
-        return name;
     }
 
     @Override

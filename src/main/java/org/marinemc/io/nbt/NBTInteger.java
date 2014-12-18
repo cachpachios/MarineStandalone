@@ -23,23 +23,16 @@ import org.marinemc.io.data.ByteData;
 /**
  * @author Fozie
  */
-public class NBTInteger implements NBTTag {
-    private final String name;
+public class NBTInteger extends NBTTag {
     private int data;
 
     public NBTInteger(String name, int v) {
-        this.name = name;
+        super(name, 3);
         data = v;
     }
 
     public NBTInteger(String name, ByteData data) {
-        this.name = name;
-        this.data = data.readInt();
-    }
-
-    @Override
-    public byte getTagID() {
-        return 3;
+        this(name, data.readInt());
     }
 
     @Override
@@ -53,11 +46,6 @@ public class NBTInteger implements NBTTag {
 
     public int toInt() {
         return data;
-    }
-
-    @Override
-    public String getName() {
-        return name;
     }
 
     @Override

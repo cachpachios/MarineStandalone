@@ -26,15 +26,14 @@ import java.util.List;
 /**
  * @author Fozie
  */
-public class NBTList implements NBTTag {
+public class NBTList extends NBTTag {
 
-    private final String name;
     byte type;
     int size;
     List<NBTTag> data;
 
     public NBTList(String name, ByteData data) {
-        this.name = name;
+        super(name, 9);
         this.data = new ArrayList<NBTTag>();
         this.type = data.readByte();
         this.size = data.readInt();
@@ -44,11 +43,6 @@ public class NBTList implements NBTTag {
             this.data.add(NBT.parse(data, type));
         }
 
-    }
-
-    @Override
-    public byte getTagID() {
-        return 9;
     }
 
     @Override
@@ -65,11 +59,6 @@ public class NBTList implements NBTTag {
 
 
         return data.getBytes();
-    }
-
-    @Override
-    public String getName() {
-        return name;
     }
 
     @Override

@@ -23,24 +23,17 @@ import org.marinemc.io.data.ByteData;
 /**
  * @author Fozie
  */
-public class NBTLong implements NBTTag {
+public class NBTLong extends NBTTag {
 
-    private final String name;
     long data;
 
     public NBTLong(String name, long v) {
+        super(name, 4);
         data = v;
-        this.name = name;
     }
 
     public NBTLong(String name, ByteData data) {
-        this.data = data.readShort();
-        this.name = name;
-    }
-
-    @Override
-    public byte getTagID() {
-        return 4;
+        this(name, data.readShort());
     }
 
     @Override
@@ -54,11 +47,6 @@ public class NBTLong implements NBTTag {
 
     public long toLong() {
         return data;
-    }
-
-    @Override
-    public String getName() {
-        return name;
     }
 
     @Override
