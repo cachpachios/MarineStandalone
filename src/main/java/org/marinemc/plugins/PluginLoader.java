@@ -20,6 +20,7 @@
 package org.marinemc.plugins;
 
 import org.marinemc.Logging;
+import org.marinemc.events.EventManager;
 import org.marinemc.events.standardevents.PluginEnableEvent;
 import org.marinemc.game.system.MarineSecurityManager;
 import org.marinemc.server.Marine;
@@ -260,6 +261,7 @@ public class PluginLoader {
             PluginClassLoader loader = plugin.getClassLoader();
             for (final String name : loader.getClasses())
                 removeClass(name);
+            EventManager.getInstance().removeAll(plugin);
         }
     }
 
