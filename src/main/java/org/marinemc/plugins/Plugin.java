@@ -201,12 +201,7 @@ public class Plugin implements CommandProvider {
 
     @Override
     public boolean equals(Object object) {
-        if (object == null || !(object instanceof Plugin))
-            return false;
-        if (object == this)
-            return true;
-        Plugin plugin = (Plugin) object;
-        return plugin.getUUID().equals(getUUID()) && getName().equals(plugin.getName());
+        return object instanceof Plugin && ((Plugin) object).getUUID().equals(getUUID());
     }
 
     @Override
