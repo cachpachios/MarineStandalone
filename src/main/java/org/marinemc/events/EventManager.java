@@ -103,19 +103,17 @@ public class EventManager {
      * @param event event to be handled
      */
     public void handle(final Event event) {
-        try {
-            if (event.async()) {
+        if (event.async()) {
+            call(event);
+        } else {
+            synchronized (this) {
                 call(event);
-            } else {
-                synchronized (this) {
-                    call(event);
-                }
             }
-        } catch (Throwable ignored) {
         }
     }
 
     private void call(final Event event) throws NullPointerException {
+        if (!listeners.containsKey(event.hashCode())) return;
         for (final EventListener listener : listeners.get(event.hashCode())) {
             listener.listen(event);
         }
