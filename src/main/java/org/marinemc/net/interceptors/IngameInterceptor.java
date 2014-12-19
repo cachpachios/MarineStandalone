@@ -68,7 +68,7 @@ public class IngameInterceptor implements PacketInterceptor {
         } else if (id == 0x06) {
             ServerboundPlayerLookPositionPacket packet = new ServerboundPlayerLookPositionPacket();
             packet.readFromBytes(data);
-            players.getMovementManager().registerMovment(players.getPlayerByClient(c), packet.getLocation());
+            players.getMovementManager().registerMovement(players.getPlayerByClient(c), packet.getLocation());
             return true;
         } else if (id == 0x05) {
             PlayerLookPacket packet = new PlayerLookPacket();
@@ -78,7 +78,7 @@ public class IngameInterceptor implements PacketInterceptor {
         } else if (id == 0x04) {
             PlayerPositionPacket packet = new PlayerPositionPacket();
             packet.readFromBytes(data);
-            players.getMovementManager().registerMovment(players.getPlayerByClient(c), new Location(null, packet.X, packet.Y, packet.Z));
+            players.getMovementManager().registerMovement(players.getPlayerByClient(c), new Location(null, packet.X, packet.Y, packet.Z));
             return true;
         }
         return false;

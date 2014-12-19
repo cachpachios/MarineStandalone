@@ -100,6 +100,7 @@ public class Bootstrap {
         return -1;
     }
 
+    @SuppressWarnings("ALL")
     private static void chargeUp() {
         double v;
         for (int x = 0; x < 10000; x++) {

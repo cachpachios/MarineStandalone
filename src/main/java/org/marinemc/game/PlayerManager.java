@@ -240,8 +240,8 @@ public class PlayerManager {
         p.sendTime();
         
         p.loginPopulation();
-        
-        movement.spawnPlayersLocaly(p);
+
+        movement.spawnPlayersLocally(p);
         
         movement.updatePlayerChunk(p);
     }

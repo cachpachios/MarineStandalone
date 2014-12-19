@@ -37,11 +37,7 @@ import org.marinemc.net.play.clientbound.inv.InventoryOpenPacket;
 import org.marinemc.net.play.clientbound.player.ClientboundPlayerLookPositionPacket;
 import org.marinemc.net.play.clientbound.player.ExperiencePacket;
 import org.marinemc.net.play.clientbound.player.PlayerLookPacket;
-import org.marinemc.net.play.clientbound.world.BlockChangePacket;
-import org.marinemc.net.play.clientbound.world.MapChunkPacket;
-import org.marinemc.net.play.clientbound.world.SpawnPointPacket;
-import org.marinemc.net.play.clientbound.world.TimeUpdatePacket;
-import org.marinemc.net.play.clientbound.world.UnloadChunkPacket;
+import org.marinemc.net.play.clientbound.world.*;
 import org.marinemc.server.Marine;
 import org.marinemc.util.Location;
 import org.marinemc.util.Position;
@@ -337,7 +333,7 @@ public class Player extends Entity implements IPlayer, CommandSender {
         this.getClient().sendPacket(new InventoryContentPacket(getInventory()));
     }
 
-    public void sendPostionAndLook() {
+    public void sendPositionAndLook() {
         this.getClient().sendPacket(new ClientboundPlayerLookPositionPacket(getPosition()));
     }
 
@@ -346,9 +342,8 @@ public class Player extends Entity implements IPlayer, CommandSender {
     }
 
     public void sendPosition() {
-        sendPostionAndLook();
+        sendPositionAndLook();
     }
-
 
     public void sendMapData(List<Chunk> chunks) {
         this.getClient().sendPacket(new MapChunkPacket(this.getWorld(), chunks));

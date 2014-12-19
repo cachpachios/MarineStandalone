@@ -23,20 +23,24 @@ import org.marinemc.net.play.clientbound.player.SpawnPlayerPacket;
 import org.marinemc.net.play.clientbound.world.entities.EntityLookMovePacket;
 import org.marinemc.player.Player;
 import org.marinemc.util.Location;
-import org.marinemc.world.chunk.Chunk;
 
 /**
+ * Movement Manager
+ *
  * @author Fozie
+ * @author Citymonstret
  */
-public class MovementManager { // Used to keep track of player movments and send them to the player
-    public static final int MAX_PACKET_MOVMENT = 5;
+public class MovementManager {
+
+    public static final int MAX_PACKET_MOVEMENT = 5;
+
     private final PlayerManager players;
 
     public MovementManager(PlayerManager players) {
         this.players = players;
     }
 
-    public void spawnPlayersLocaly(final Player target) {
+    public void spawnPlayersLocally(final Player target) {
 //    	for(final Chunk c : target.getAllLoadedChunks())
 //    		for(final Player p : c.getSubscribingPlayers())
 //    			if(p.getUID() != target.getUID()) {
@@ -46,8 +50,8 @@ public class MovementManager { // Used to keep track of player movments and send
     	
     	//TODO: TEMP CODE:
     	for(Player p : players.getPlayers())
-			if(p.getName() != target.getName())
-				target.getClient().sendPacket(new SpawnPlayerPacket(p));
+            if (!p.getName().equals(target.getName()))
+                target.getClient().sendPacket(new SpawnPlayerPacket(p));
     }
 
     public void registerLook(Player p, float yaw, float pitch) {
@@ -68,44 +72,42 @@ public class MovementManager { // Used to keep track of player movments and send
     	
     	//TODO: TEMP CODE:
     	for(Player p : players.getPlayers())
-			if(p.getName() != ref.getName())
-				p.getClient().sendPacket(new EntityLookMovePacket(ref));
-    	
+            if (p.getName().equals(ref.getName()))
+                p.getClient().sendPacket(new EntityLookMovePacket(ref));
     }
     
     public void teleport(Player p, Location target) {
-    	p.sendPostionAndLook();
-    	updatePlayerChunk(p);
+        p.sendPositionAndLook();
+        updatePlayerChunk(p);
     }
 
-    public void registerMovment(Player p, Location target) {
-    	if(p == null) return;
-    	
-    	if(target == null)
-    		p.sendPostionAndLook();
-    	
-        boolean allowed = checkMovment(p,target);
-        if (allowed) {
+    public void registerMovement(Player p, Location target) {
+        if (p == null) {
+            return;
+        }
+        if (target == null) {
+            p.sendPositionAndLook();
+            return;
+        }
+        if (checkMovement(p, target)) {
             p.getLocation().setX(target.getX());
             p.getLocation().setY(target.getY());
             p.getLocation().setZ(target.getZ());
-            
+
             p.getLocation().setYaw(target.getYaw());
             p.getLocation().setPitch(target.getPitch());
-            
+
             p.getLocation().setOnGround(target.isOnGround());
-            
             updatePlayerChunk(p);
         } else {
             p.sendMessage("You moved to quickly :<");
-            p.sendPostionAndLook();
+            p.sendPositionAndLook();
         }
     }
 
-    public boolean checkMovment(Player p, Location target) { // Current position is p.getLocation();
-        if (p.getLocation().getEuclideanDistanceSquared(target) > MAX_PACKET_MOVMENT*MAX_PACKET_MOVMENT)
-            return false;
-        return true; // TODO : Some cheat check in diffrent levels :P
+    public boolean checkMovement(Player p, Location target) { // Current position is p.getLocation();
+        return p.getLocation().getEuclideanDistanceSquared(target) <= MAX_PACKET_MOVEMENT * MAX_PACKET_MOVEMENT;
+        // TODO Cheat detection
     }
 
 }

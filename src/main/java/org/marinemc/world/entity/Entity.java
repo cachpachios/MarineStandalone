@@ -121,8 +121,8 @@ public abstract class Entity {
     public TrackedLocation getTrackedPosition() {
         return position;
     }
-    
-    public int getSecoundsLived() {
+
+    public int getSecondsLived() {
         return ticksLived / 20;
     }
 
