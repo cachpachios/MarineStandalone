@@ -60,7 +60,6 @@ public class MovementManager {
         updatePlayerChunk(p);
         
         // TODO Send to every other players in a sphere of ? blocks
-        
     }
    
     public void updatePlayerChunk(final Player ref) {
@@ -99,7 +98,7 @@ public class MovementManager {
             p.getLocation().setOnGround(target.isOnGround());
             updatePlayerChunk(p);
         } else {
-            p.sendMessage("You moved to quickly :<");
+            p.sendMessage("You moved too quickly");
             p.sendPositionAndLook();
         }
     }

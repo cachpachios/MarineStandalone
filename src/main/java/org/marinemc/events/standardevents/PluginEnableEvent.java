@@ -17,49 +17,26 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package org.marinemc.events;
+package org.marinemc.events.standardevents;
+
+import org.marinemc.events.Event;
+import org.marinemc.plugins.Plugin;
 
 /**
- * Created 2014-12-16 for MarineStandalone
+ * Created 2014-12-19 for MarineStandalone
  *
  * @author Citymonstret
  */
-public abstract class Event {
+public class PluginEnableEvent extends Event {
 
-    private final String name;
-    private final boolean async;
-    private final int accessor;
+    private final Plugin plugin;
 
-    public Event(final String name) {
-        this(name, false);
+    public PluginEnableEvent(final Plugin plugin) {
+        super("plugin_load", false);
+        this.plugin = plugin;
     }
 
-    public Event(final String name, final boolean async) {
-        this.name = name;
-        this.async = async;
-        this.accessor = getClass().getName().hashCode();
-    }
-
-    @Override
-    public String toString() {
-        return this.getClass().getName();
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    @Override
-    public int hashCode() {
-        return this.accessor;
-    }
-
-    @Override
-    public boolean equals(final Object o) {
-        return o instanceof Event && ((Event) o).getName().equals(this.getName());
-    }
-
-    public boolean async() {
-        return this.async;
+    final public Plugin getPlugin() {
+        return this.plugin;
     }
 }

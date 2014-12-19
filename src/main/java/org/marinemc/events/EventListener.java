@@ -29,10 +29,12 @@ import java.lang.reflect.ParameterizedType;
 public abstract class EventListener<T extends Event> {
 
     private final String listenTo;
+    private final int accessor;
     private Object y = null;
 
     public EventListener() {
         this.listenTo = ((Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0]).getName();
+        this.accessor = listenTo.hashCode();
     }
 
     public void setIDENTIFIERObject__DO_NOT_USE__(final Object q) {
@@ -47,5 +49,10 @@ public abstract class EventListener<T extends Event> {
 
     final public String listeningTo() {
         return this.listenTo;
+    }
+
+    @Override
+    final public int hashCode() {
+        return accessor;
     }
 }

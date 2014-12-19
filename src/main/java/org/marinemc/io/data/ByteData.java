@@ -29,6 +29,7 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.zip.DataFormatException;
+
 /**
  * @author Fozie
  */
@@ -58,10 +59,6 @@ public class ByteData implements Iterable<Byte>, Byteable {
 			return new ByteData(ByteCompressor.instance().decode(data));
     }
     
-    public byte[] compress() throws EncodingUseless {
-    	return ByteCompressor.instance().encode(getBytes());
-    }
-    
     public final static Byte[] wrap(final byte[] array) {
         if (array == null)
             return null;
@@ -87,6 +84,10 @@ public class ByteData implements Iterable<Byte>, Byteable {
             result[i] = (b == null ? 0 : b.byteValue());
         }
         return result;
+    }
+
+    public byte[] compress() throws EncodingUseless {
+        return ByteCompressor.instance().encode(getBytes());
     }
 
     public void writeByte(byte... b) {

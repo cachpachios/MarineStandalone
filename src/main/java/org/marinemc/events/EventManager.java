@@ -19,8 +19,11 @@
 
 package org.marinemc.events;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import org.marinemc.plugins.Plugin;
+
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.IdentityHashMap;
 import java.util.Map;
 
 /**
@@ -31,10 +34,10 @@ import java.util.Map;
 public class EventManager {
 
     private static EventManager instance;
-    public final Map<String, ArrayList<EventListener>> listeners;
+    public final Map<Integer, ArrayDeque<EventListener>> listeners;
 
     public EventManager() {
-        this.listeners = new HashMap<>();
+        this.listeners = new IdentityHashMap<>();
     }
 
     public static EventManager getInstance() {
@@ -43,36 +46,49 @@ public class EventManager {
         return instance;
     }
 
+    public void removeAll(final Plugin plugin) {
+        synchronized (listeners) {
+            for (Deque<EventListener> listeners : this.listeners.values()) {
+                for (EventListener listener : listeners) {
+                    if (listener.getIDENTIFIERObject() instanceof Plugin && listener.getIDENTIFIERObject().equals(plugin))
+                        listeners.remove(listener);
+                }
+            }
+        }
+    }
+
     public void addListener(final EventListener listener) {
         synchronized (listeners) {
-            if (!listeners.containsKey(listener.listeningTo())) {
-                listeners.put(listener.listeningTo(), new ArrayList<EventListener>());
+            if (!listeners.containsKey(listener.hashCode())) {
+                listeners.put(listener.hashCode(), new ArrayDeque<EventListener>());
             }
-            listeners.get(listener.listeningTo()).add(listener);
+            listeners.get(listener.hashCode()).add(listener);
         }
     }
 
     public void removeListener(final EventListener listener) {
         synchronized (listeners) {
-            for (ArrayList<EventListener> ll : listeners.values()) {
+            for (Deque<EventListener> ll : listeners.values()) {
                 ll.remove(listener);
             }
         }
     }
 
     public void handle(final Event event) {
-        if (event.async()) {
-            call(event);
-        } else {
-            synchronized (this) {
+        try {
+            if (event.async()) {
                 call(event);
+            } else {
+                synchronized (this) {
+                    call(event);
+                }
             }
+        } catch (Throwable ignored) {
         }
     }
 
-    private void call(final Event event) {
-        if (!listeners.containsKey(event.toString())) return;
-        for (final EventListener listener : listeners.get(event.toString())) {
+    private void call(final Event event) throws NullPointerException {
+        for (final EventListener listener : listeners.get(event.hashCode())) {
             listener.listen(event);
         }
     }

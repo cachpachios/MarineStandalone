@@ -19,6 +19,7 @@
 
 package org.marinemc;
 
+import org.marinemc.events.standardevents.ServerReadyEvent;
 import org.marinemc.game.CommandManager;
 import org.marinemc.game.PlayerManager;
 import org.marinemc.game.WorldManager;
@@ -58,9 +59,8 @@ public class StandaloneServer implements CommandProvider {
 
     // Final values
     public final int skipTime;
+    public final int targetTickRate;
     private final int port;
-    private final int targetTickRate;
-
     // Managers and handlers
     private final PlayerManager players;
     private final WorldManager worlds;
@@ -187,6 +187,7 @@ public class StandaloneServer implements CommandProvider {
         // Load in and enable plugins
         this.loadPlugins();
         initialized = true;
+        getServer().callEvent(new ServerReadyEvent());
     }
 
     /**

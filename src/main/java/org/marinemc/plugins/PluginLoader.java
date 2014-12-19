@@ -20,7 +20,9 @@
 package org.marinemc.plugins;
 
 import org.marinemc.Logging;
+import org.marinemc.events.standardevents.PluginEnableEvent;
 import org.marinemc.game.system.MarineSecurityManager;
+import org.marinemc.server.Marine;
 import org.marinemc.util.FileUtils;
 import sun.misc.JarFilter;
 
@@ -241,6 +243,8 @@ public class PluginLoader {
                 loaders.put(name, plugin.getClassLoader());
             manager.enablePlugin(plugin);
             plugin.getLogger().log(plugin.getName() + " is enabled");
+            PluginEnableEvent loadEvent = new PluginEnableEvent(plugin);
+            Marine.getServer().callEvent(loadEvent);
         }
     }
 
