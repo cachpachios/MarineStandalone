@@ -22,7 +22,7 @@ package org.marinemc.events;
 import java.lang.reflect.ParameterizedType;
 
 /**
- * Created 2014-12-16 for MarineStandalone
+ * Event Listener Class
  *
  * @author Citymonstret
  */
@@ -37,13 +37,15 @@ public abstract class EventListener<T extends Event> {
         this.accessor = listenTo.hashCode();
     }
 
-    public void setIDENTIFIERObject__DO_NOT_USE__(final Object q) {
+    public abstract void listen(T t);
+
+    // USED IN INTERNAL METHODS
+
+    final public void setIDENTIFIERObject__DO_NOT_USE__(final Object q) {
         y = q;
     }
 
-    public abstract void listen(T t);
-
-    public Object getIDENTIFIERObject() {
+    final public Object getIDENTIFIERObject() {
         return this.y;
     }
 

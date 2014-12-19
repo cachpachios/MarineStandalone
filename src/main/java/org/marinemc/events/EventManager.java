@@ -27,25 +27,38 @@ import java.util.IdentityHashMap;
 import java.util.Map;
 
 /**
- * Created 2014-12-16 for MarineStandalone
+ * Event Manager
  *
  * @author Citymonstret
  */
 public class EventManager {
 
     private static EventManager instance;
-    public final Map<Integer, ArrayDeque<EventListener>> listeners;
+    private final Map<Integer, ArrayDeque<EventListener>> listeners;
 
+    /**
+     * Constructor
+     */
     public EventManager() {
         this.listeners = new IdentityHashMap<>();
     }
 
+    /**
+     * Get the static instance
+     *
+     * @return THIS, literally THIS
+     */
     public static EventManager getInstance() {
         if (instance == null)
             instance = new EventManager();
         return instance;
     }
 
+    /**
+     * Remove all listeners registered by a plugin
+     *
+     * @param plugin Plugin for which the listeners should be removed
+     */
     public void removeAll(final Plugin plugin) {
         synchronized (listeners) {
             for (Deque<EventListener> listeners : this.listeners.values()) {
@@ -57,6 +70,11 @@ public class EventManager {
         }
     }
 
+    /**
+     * Add a listener
+     *
+     * @param listener listener to add
+     */
     public void addListener(final EventListener listener) {
         synchronized (listeners) {
             if (!listeners.containsKey(listener.hashCode())) {
@@ -66,6 +84,11 @@ public class EventManager {
         }
     }
 
+    /**
+     * Remove a listener
+     *
+     * @param listener listener to remove
+     */
     public void removeListener(final EventListener listener) {
         synchronized (listeners) {
             for (Deque<EventListener> ll : listeners.values()) {
@@ -74,6 +97,11 @@ public class EventManager {
         }
     }
 
+    /**
+     * Handle an event
+     *
+     * @param event event to be handled
+     */
     public void handle(final Event event) {
         try {
             if (event.async()) {

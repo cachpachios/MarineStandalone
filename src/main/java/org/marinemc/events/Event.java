@@ -20,7 +20,7 @@
 package org.marinemc.events;
 
 /**
- * Created 2014-12-16 for MarineStandalone
+ * Event Super Class - Extend to create an event
  *
  * @author Citymonstret
  */
@@ -30,25 +30,51 @@ public abstract class Event {
     private final boolean async;
     private final int accessor;
 
+    /**
+     * Constructor, will default async to false
+     *
+     * @param name Event Name
+     */
     public Event(final String name) {
         this(name, false);
     }
 
+    /**
+     * Constructor
+     *
+     * @param name  Event Name
+     * @param async Async
+     */
     public Event(final String name, final boolean async) {
         this.name = name;
         this.async = async;
         this.accessor = getClass().getName().hashCode();
     }
 
+    /**
+     * Get the class name
+     *
+     * @return #getClass().getName();
+     */
     @Override
     public String toString() {
         return this.getClass().getName();
     }
 
+    /**
+     * Get the name of the event
+     *
+     * @return event name
+     */
     public String getName() {
         return this.name;
     }
 
+    /**
+     * Return the accessor hashcode (class name hashcode)
+     *
+     * @return accessor hashcode
+     */
     @Override
     public int hashCode() {
         return this.accessor;
@@ -59,6 +85,11 @@ public abstract class Event {
         return o instanceof Event && ((Event) o).getName().equals(this.getName());
     }
 
+    /**
+     * Is the event async?
+     *
+     * @return true of the event is async
+     */
     public boolean async() {
         return this.async;
     }
