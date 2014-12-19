@@ -8,6 +8,14 @@ import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
 import org.marinemc.player.Player;
 
+/*
+ * 
+ * Used to spawn a player locally when they are in sight.
+ * Warning this is not used to tell a client to spawn themself!
+ * 
+ * @author Fozie
+ * 
+ */
 public class SpawnPlayerPacket extends Packet {
 	final Player p;
 	

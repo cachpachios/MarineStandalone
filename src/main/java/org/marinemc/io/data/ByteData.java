@@ -20,12 +20,15 @@
 package org.marinemc.io.data;
 
 import org.marinemc.Logging;
+import org.marinemc.io.ByteCompressor;
+import org.marinemc.io.ByteCompressor.EncodingUseless;
 import org.marinemc.util.Position;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.zip.DataFormatException;
 /**
  * @author Fozie
  */
@@ -39,7 +42,7 @@ public class ByteData implements Iterable<Byte>, Byteable {
         this.bytes = list;
     }
 
-    public ByteData(byte[] bytes) {
+    public ByteData(final byte[] bytes) {
         this(wrap(bytes));
     }
 
@@ -47,10 +50,18 @@ public class ByteData implements Iterable<Byte>, Byteable {
         this.bytes = new ArrayList<Byte>();
     }
 
-    public ByteData(Byte[] b) {
+    public ByteData(final Byte[] b) {
         this.bytes = new ArrayList<>(Arrays.asList(b));
     }
 
+    public static ByteData getDataDecompressed(final byte[] data) throws DataFormatException {
+			return new ByteData(ByteCompressor.instance().decode(data));
+    }
+    
+    public byte[] compress() throws EncodingUseless {
+    	return ByteCompressor.instance().encode(getBytes());
+    }
+    
     public final static Byte[] wrap(final byte[] array) {
         if (array == null)
             return null;

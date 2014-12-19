@@ -28,7 +28,6 @@ import org.marinemc.util.Location;
  * Movement Manager
  *
  * @author Fozie
- * @author Citymonstret
  */
 public class MovementManager {
 
@@ -50,7 +49,7 @@ public class MovementManager {
     	
     	//TODO: TEMP CODE:
     	for(Player p : players.getPlayers())
-            if (!p.getName().equals(target.getName()))
+            if (target.getUID() != p.getUID())
                 target.getClient().sendPacket(new SpawnPlayerPacket(p));
     }
 
@@ -72,7 +71,7 @@ public class MovementManager {
     	
     	//TODO: TEMP CODE:
     	for(Player p : players.getPlayers())
-            if (p.getName().equals(ref.getName()))
+            if (ref.getUID() != p.getUID())
                 p.getClient().sendPacket(new EntityLookMovePacket(ref));
     }
     
@@ -106,8 +105,8 @@ public class MovementManager {
     }
 
     public boolean checkMovement(Player p, Location target) { // Current position is p.getLocation();
-        return p.getLocation().getEuclideanDistanceSquared(target) <= MAX_PACKET_MOVEMENT * MAX_PACKET_MOVEMENT;
-        // TODO Cheat detection
+    	return true;
+        //return p.getLocation().getEuclideanDistanceSquared(target) <= MAX_PACKET_MOVEMENT * MAX_PACKET_MOVEMENT;
     }
 
 }
