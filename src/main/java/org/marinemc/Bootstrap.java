@@ -114,6 +114,10 @@ public class Bootstrap {
         }
     }
 
+    public static boolean debug() {
+        return instance.arguments.contains("debug");
+    }
+
     private void start(final String[] args) {
         if (SystemUtils.getArch() != 64) {
             if (SystemUtils.getArch() == 32) {
@@ -153,9 +157,11 @@ public class Bootstrap {
         settings.port = port;
         settings.tickrate = tickrate;
         // Check for GUI and init it
+        if (arguments.contains("debug")) {
+            ServerSettings.getInstance().verbose();
+        }
         if (!arguments.contains("nogui")) {// Check if GUI shouldn't be shown (Yes lazy implementation...)
             Logging.getLogger().createConsoleWindow(); // Create the simplest gui you will ever see :)
-            //ServerSettings.getInstance().verbose();
             System.setErr(Logging.getLogger());
         }
         Logging.getLogger().logf("Starting MarineStandalone Server - Protocol Version §c§o{0}§0 (Minecraft §c§o{1}§0)",

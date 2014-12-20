@@ -113,7 +113,7 @@ public class ServerSettings {
     @SuppressWarnings("rawtypes")
     public void verbose() {
         for (Map.Entry entry : config.entrySet()) {
-            Logging.getLogger().log("Key: " + entry.getKey() + " | Value: " + entry.getValue());
+            Logging.getLogger().debug("Key: " + entry.getKey() + " | Value: " + entry.getValue());
         }
     }
 

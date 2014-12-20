@@ -19,6 +19,7 @@
 
 package org.marinemc.events;
 
+import org.marinemc.Bootstrap;
 import org.marinemc.Logging;
 import org.marinemc.plugins.Plugin;
 
@@ -112,6 +113,9 @@ public class EventManager {
         }
     }
 
+    /**
+     * Bake the listeners...
+     */
     public void bake() {
         Logging.getLogger().log("Baking Event Listeners...");
         synchronized (this) {
@@ -152,9 +156,19 @@ public class EventManager {
                 bakedListeners.put(entry.getKey(), array);
             }
         }
-        Logging.getLogger().log("Baked!");
+        if (Bootstrap.debug()) {
+            for (Map.Entry<Integer, EventListener[]> entry : bakedListeners.entrySet()) {
+                Logging.getLogger().debug("Listeners for " + entry.getKey());
+                int index = 0;
+                for (EventListener listener : entry.getValue()) {
+                    Logging.getLogger().debug("[" + ++index + "] Listing to: " + listener.listeningTo() + ", Class: " + listener.getClass());
+                }
+            }
+            Logging.getLogger().debug("Baked!");
+        }
     }
 
+    @SuppressWarnings("ALL")
     private void call(final Event event) throws NullPointerException {
         if (bakedListeners == null || !bakedListeners.containsKey(event.hashCode())) return;
         for (final EventListener listener : bakedListeners.get(event.hashCode())) {
