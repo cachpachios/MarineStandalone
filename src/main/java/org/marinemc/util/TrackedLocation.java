@@ -31,15 +31,15 @@ public class TrackedLocation extends Location {
 	public TrackedLocation(World world, double x, double y, double z, float yaw, float pitch, boolean onGround) {
 		super(world, x, y, z, yaw, pitch, onGround);
 		this.oldX = x;
-		this.oldY = x;
-		this.oldZ = x;
+		this.oldY = y;
+		this.oldZ = z;
 	}
 	
 	public TrackedLocation(Location l) {
 		super(l.getWorld(),l.getX(), l.getY(), l.getZ(), l.getYaw(), l.getPitch(), l.isOnGround());
 		this.oldX = x;
-		this.oldY = x;
-		this.oldZ = x;
+		this.oldY = y;
+		this.oldZ = z;
 	}
 	
 	@Override

@@ -20,8 +20,15 @@
 package org.marinemc.game.commands;
 
 import org.marinemc.ServerProperties;
+import org.marinemc.game.chat.ChatColor;
+import org.marinemc.game.chat.builder.Chat;
+import org.marinemc.game.chat.builder.ClickEvent;
+import org.marinemc.game.chat.builder.HoverEvent;
+import org.marinemc.game.chat.builder.Part;
 import org.marinemc.game.command.Command;
 import org.marinemc.game.command.CommandSender;
+import org.marinemc.player.Player;
+import org.marinemc.util.StringUtils;
 
 /**
  * Created 2014-12-05 for MarineStandalone
@@ -36,9 +43,27 @@ public class Info extends Command {
 
     @Override
     public void execute(CommandSender sender, String[] arguments) {
-        sender.sendMessage(
-                String.format("Server Software: Marine Standalone - Version: %s | Protocol: %d | Minecraft: %s",
-                        ServerProperties.BUILD_VERSION, ServerProperties.PROTOCOL_VERSION, ServerProperties.MINECRAFT_NAME)
-        );
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(
+                    StringUtils
+                            .format(
+                                    "Server Info - Software: {0}, Version: {1}, Protocol: {2}, Minecraft: {3}",
+                                    "MarineStandalone", ServerProperties.BUILD_VERSION, ServerProperties.PROTOCOL_VERSION, ServerProperties.MINECRAFT_NAME));
+        } else {
+            ((Player) sender).sendMessage(new Chat("Server Info\n")
+                            .color(ChatColor.RED)
+                            .format(ChatColor.BOLD)
+                            .with(new Part("  Software: ", ChatColor.RED))
+                            .with(new Part("MarineStandalone\n", ChatColor.WHITE)
+                                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, "§chttps://marinemc.org §f- Click for URL"))
+                                    .event(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://marinemc.org")))
+                            .with(new Part("  Version: ", ChatColor.RED))
+                            .with(new Part(ServerProperties.BUILD_VERSION, ChatColor.WHITE))
+                            .with(new Part("\n  Protocol: ", ChatColor.RED))
+                            .with(new Part(ServerProperties.PROTOCOL_VERSION + "", ChatColor.WHITE))
+                            .with(new Part("\n  Minecraft: ", ChatColor.RED))
+                            .with(new Part(ServerProperties.MINECRAFT_NAME, ChatColor.WHITE))
+            );
+        }
     }
 }

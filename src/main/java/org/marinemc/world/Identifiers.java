@@ -19,14 +19,14 @@
 
 package org.marinemc.world;
 
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.marinemc.util.annotations.Cautious;
 import org.marinemc.util.annotations.Hacky;
 import org.marinemc.util.annotations.Unsafe;
 import org.marinemc.world.chunk.ChunkSection;
+
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Static class to index map data values
@@ -62,8 +62,8 @@ public final class Identifiers {
     @Unsafe
     @Cautious
     public static void init() {
-        block_id 	= new HashMap<Byte, BlockID>();
-        block_encode = new HashMap<Character, BlockID>();
+        block_id = new HashMap<>();
+        block_encode = new HashMap<>();
         EnumSet<BlockID> set = EnumSet.allOf(BlockID.class);
         for (BlockID b : set) {
             block_id.put(b.getID(), b);

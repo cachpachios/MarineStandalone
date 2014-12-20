@@ -20,7 +20,7 @@
 package org.marinemc.game.command;
 
 /**
- * Created 2014-12-14 for MarineStandalone
+ * Command Provider
  *
  * @author Citymonstret
  */

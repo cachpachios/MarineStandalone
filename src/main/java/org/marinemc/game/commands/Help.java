@@ -65,7 +65,7 @@ public class Help extends Command {
             max = commands.size();
         StringBuilder message = new StringBuilder();
         message
-                .append("§9§m--------------------[§r §f§fHelp §9§m]-------------------")
+                .append("§9§m--------------------[§r §f§lHelp §9§m]-------------------")
                 .append("\n")
                 .append("§9Page: §f")
                 .append(page + 1)

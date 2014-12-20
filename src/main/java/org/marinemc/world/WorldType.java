@@ -18,11 +18,13 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 package org.marinemc.world;
+
 /**
+ * WorldType Enumeration
+ *
  * @author Fozie
  */
 public enum WorldType {
-
     DEFAULT("default"),
     FLAT("flat"),
     LARGE_BIOMES("largeBiomes"),
