@@ -64,7 +64,7 @@ public class SpikeGenerator extends WorldGenerator {
     @Override
     public Chunk generateChunkTerrain(ChunkPos pos) {
         Chunk chunk = new Chunk(world, pos);
-        BlockID id = BlockID.AIR;
+        BlockID id;
         for (int y = 1; y < H; y++) {
             for (int x = 0; x < 16; x++) {
                 for (int z = 0; z < 16; z++) {
@@ -97,7 +97,7 @@ public class SpikeGenerator extends WorldGenerator {
     }
 
     private boolean isAir(Chunk c, int x, int y, int z) {
-        return !(x < 1 || y < 1 || z < 1) && c.getBlock(x, y, z) == BlockID.AIR.getNumericID();
+        return (x >= 1 && y >= 1 && z >= 1) && c.getBlock(x, y, z) == BlockID.AIR.getNumericID();
     }
 
     private double isAirDrr(Chunk c, int x, int y, int z) {

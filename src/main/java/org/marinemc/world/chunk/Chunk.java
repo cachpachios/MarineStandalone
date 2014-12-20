@@ -31,6 +31,7 @@ import org.marinemc.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Storage unit for ingame chunks
@@ -48,6 +49,7 @@ public class Chunk {
     private BiomeID[] biomes;
 
     private short[] heightMap; // Sorted x + y * width
+    private Random random;
     
 //    private List<Entity> entities;
 
@@ -60,8 +62,13 @@ public class Chunk {
         
         this.biomes = new BiomeID	[WIDTH*HEIGHT];
         this.heightMap = new short	[WIDTH*HEIGHT];
-        
-        this.subscribingPlayers = new ArrayList<Short>();
+
+        this.subscribingPlayers = new ArrayList<>();
+        this.random = new Random();
+    }
+
+    public Random getRandom() {
+        return this.random;
     }
 
     public void unsubscribePlayer(final Player p) { // Make player unsubscribe to events within the chunks(BlockUpdates, entities etc)
