@@ -39,6 +39,11 @@ public class SystemUtils {
         }
     }
 
+    /**
+     * Get the system arch
+     *
+     * @return System Arch
+     */
     public static int getArch() {
         try {
             return Integer.parseInt(System.getProperty("sun.arch.data.model"));

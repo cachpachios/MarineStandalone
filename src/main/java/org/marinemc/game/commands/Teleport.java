@@ -32,7 +32,7 @@ import org.marinemc.util.Location;
 public class Teleport extends Command {
 
     public Teleport() {
-        super("teleport", new String[]{"tp", "setloc"}, "Teleport a player");
+        super("teleport", "marine.teleport", "Teleport a player", "tp");
     }
 
     @Override

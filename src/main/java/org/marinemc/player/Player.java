@@ -23,6 +23,7 @@ import org.marinemc.Logging;
 import org.marinemc.events.standardevents.LeaveEvent;
 import org.marinemc.game.CommandManager;
 import org.marinemc.game.PlayerManager;
+import org.marinemc.game.chat.ChatColor;
 import org.marinemc.game.chat.ChatComponent;
 import org.marinemc.game.chat.ChatMessage;
 import org.marinemc.game.chat.builder.Chat;
@@ -62,7 +63,7 @@ public class Player extends Entity implements IPlayer, CommandSender {
     // PlayerManager
     private final PlayerManager manager;
     // Permissions
-    private final List<String> permissions;
+    private final Collection<String> permissions;
     // Unique ID
     private final short uid;
     // Levels
@@ -233,21 +234,32 @@ public class Player extends Entity implements IPlayer, CommandSender {
 
     @Override
     public void executeCommand(Command command, String[] arguments) {
-        String args = StringUtils.join(Arrays.asList(arguments), " ");
-        Logging.getLogger().log(
-                String.format("%s executed command: /%s",
-                        getName(), command + " " + args)
-        );
-        command.execute(this, arguments);
+        if (!hasPermission(command.getPermission())) {
+            sendMessage(
+                    new Chat("You do not have the required permission")
+                            .color(ChatColor.RED)
+            );
+        } else {
+            String args = StringUtils.join(Arrays.asList(arguments), " ");
+            Logging.getLogger().log(
+                    String.format("%s executed command: /%s",
+                            getName(), command + " " + args)
+            );
+            command.execute(this, arguments);
+        }
     }
 
     public void openInventory(final Inventory inventory) {
         getClient().sendPacket(new InventoryOpenPacket(inventory));
     }
 
+    public boolean isOP() {
+        return true; // TODO: Implement the system
+    }
+
     @Override
     public boolean hasPermission(String permission) {
-        if (permission.contains(permission)) return true;
+        if (isOP() || permission.contains(permission)) return true;
         String[] parts = permission.split(".");
         if (parts.length < 2) return false;
         StringBuilder builder;

@@ -21,6 +21,8 @@ package org.marinemc.util;
 
 /**
  * Random, literally Random, utility class
+ *
+ * @author Fozie
  */
 public class Rand {
 

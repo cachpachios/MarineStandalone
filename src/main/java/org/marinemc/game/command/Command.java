@@ -68,21 +68,36 @@ public abstract class Command {
     private CommandProvider commandProvider;
 
     /**
+     * Required permission
+     */
+    private String permission;
+
+    /**
      * Constructor
      *
      * @param command     Command
      * @param aliases     Aliases
      * @param description Description
      */
-    public Command(String command, String[] aliases, String description) {
+    public Command(final String command, final String permission, final String description, final String... aliases) {
         this.command = command.toLowerCase();
-        this.aliases = new ArrayList<>(Arrays.asList(aliases == null ? new String[]{} : aliases));
+        this.aliases = new ArrayList<>(Arrays.asList(aliases));
         this.description = description;
+        this.permission = permission;
     }
 
     @Override
     final public String toString() {
         return command;
+    }
+
+    /**
+     * Get the required permission node
+     *
+     * @return required permission
+     */
+    public String getPermission() {
+        return this.permission;
     }
 
     /**

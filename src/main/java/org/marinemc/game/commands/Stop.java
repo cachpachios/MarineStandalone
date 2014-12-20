@@ -31,7 +31,7 @@ import org.marinemc.server.Marine;
 public class Stop extends Command {
 
     public Stop() {
-        super("stop", new String[]{}, "Stop the server");
+        super("stop", "marine.stop", "Stop the server");
     }
 
     @Override

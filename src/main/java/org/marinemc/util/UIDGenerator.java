@@ -17,40 +17,54 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package org.marinemc.player;
+package org.marinemc.util;
 
-import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.Map;
 
 /**
  * Used to generator a unique uid for players represented by a (unsigned) short
  *
  * @author Fozie
+ * @author Citymonstret
  */
 public class UIDGenerator {
 
     private static UIDGenerator instance;
-    private Map<Integer, Short> UIDMap;
+    private final Map<Integer, Short> UIDMap;
     private short nextUnassigned = Short.MIN_VALUE;
 
-    public UIDGenerator() {
-        UIDMap = new HashMap<>();
+    private UIDGenerator() {
+        UIDMap = new IdentityHashMap<>();
         nextUnassigned = Short.MIN_VALUE;
     }
 
+    /**
+     * Get the instance
+     *
+     * @return instance
+     */
     public static UIDGenerator instance() {
         if (instance == null)
             instance = new UIDGenerator();
         return instance;
     }
 
-    public short getUID(String username) { // Will return a UID for the player, if no one can be found will return Short.MIN_VALUE
+    /**
+     * Return the UID for the player, if no one can be found will return Short.MIN_VALUE
+     *
+     * @param username Player Username
+     * @return UID
+     */
+    public short getUID(final String username) {
         if (UIDMap.containsKey(username.hashCode()))
             return UIDMap.get(username.hashCode());
-        short uid = ++nextUnassigned;
+        short uid = nextUnassigned;
         try {
-            while (UIDMap.containsValue(uid)) // Too make sure u get a unused uid
-                uid = ++nextUnassigned;
+            for (; ; ) {
+                if (!UIDMap.containsValue(++uid))
+                    break;
+            }
         } catch (Exception e) {
             return Short.MIN_VALUE; // Error code
         }

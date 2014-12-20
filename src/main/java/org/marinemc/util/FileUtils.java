@@ -44,20 +44,20 @@ public class FileUtils {
             while ((length = in.read(buffer)) > 0) {
                 out.write(buffer, 0, length);
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         } finally {
             try {
                 in.close();
                 out.close();
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 e.printStackTrace();
             }
         }
     }
 
     /**
-     * Get the size of a file
+     * Get the size of a file or directory
      *
      * @param file File
      * @return Size of file
@@ -65,7 +65,10 @@ public class FileUtils {
     public static long getSize(final File file) {
         long size = 0;
         if (file.isDirectory()) {
-            for (final File f : file.listFiles()) {
+            final File[] files = file.listFiles();
+            if (files == null)
+                return size;
+            for (final File f : files) {
                 if (f.isFile())
                     size += f.length();
                 else

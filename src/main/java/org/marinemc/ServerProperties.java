@@ -34,7 +34,7 @@ public class ServerProperties {
 
     public static boolean BUILD_STABLE = false;
 
-    private static long currentTick;
+    private static long currentTick = 0l;
 
     protected static void tick() {
         ++currentTick;

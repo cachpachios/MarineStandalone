@@ -34,7 +34,7 @@ import org.marinemc.util.StringUtils;
 public class Me extends Command {
 
     public Me() {
-        super("me", new String[]{"emote"}, "Do something...");
+        super("me", "marine.me", "Do something...", "emote");
     }
 
     public void execute(CommandSender sender, String[] args) {

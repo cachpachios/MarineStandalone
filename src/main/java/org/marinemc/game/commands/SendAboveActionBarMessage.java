@@ -35,7 +35,7 @@ import java.util.Arrays;
 public class SendAboveActionBarMessage extends Command {
 
     public SendAboveActionBarMessage() {
-        super("sendaboveactionbarmessage", new String[]{}, "Send above action bar message");
+        super("sendaboveactionbarmessage", "marine.saabm", "Send above action bar message", "saabm");
     }
 
     @Override

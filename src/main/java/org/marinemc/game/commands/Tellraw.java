@@ -38,7 +38,7 @@ import java.util.Collection;
 public class Tellraw extends Command {
 
     public Tellraw() {
-        super("tellraw", new String[]{"tw"}, "Send a pure JSON Message");
+        super("tellraw", "marine.tellraw", "Send a pure JSON Message", "tr");
     }
 
     public void execute(CommandSender sender, String... args) {

@@ -35,7 +35,7 @@ import java.util.Arrays;
 public class Say extends Command {
 
     public Say() {
-        super("say", new String[]{}, "Say something");
+        super("say", "marine.say", "Say something");
     }
 
     @Override

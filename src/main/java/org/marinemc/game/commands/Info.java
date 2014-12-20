@@ -31,7 +31,7 @@ import org.marinemc.game.command.CommandSender;
 public class Info extends Command {
 
     public Info() {
-        super("info", new String[]{"version", "i"}, "Display server info");
+        super("info", "marine.info", "Display server info", "version", "i");
     }
 
     @Override

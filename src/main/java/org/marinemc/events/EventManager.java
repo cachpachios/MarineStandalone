@@ -61,8 +61,8 @@ public class EventManager {
      */
     public void removeAll(final Plugin plugin) {
         synchronized (listeners) {
-            for (Deque<EventListener> listeners : this.listeners.values()) {
-                for (EventListener listener : listeners) {
+            for (final Deque<EventListener> listeners : this.listeners.values()) {
+                for (final EventListener listener : listeners) {
                     if (listener.getIDENTIFIERObject() instanceof Plugin && listener.getIDENTIFIERObject().equals(plugin))
                         listeners.remove(listener);
                 }
@@ -91,7 +91,7 @@ public class EventManager {
      */
     public void removeListener(final EventListener listener) {
         synchronized (listeners) {
-            for (Deque<EventListener> ll : listeners.values()) {
+            for (final Deque<EventListener> ll : listeners.values()) {
                 ll.remove(listener);
             }
         }
@@ -118,4 +118,5 @@ public class EventManager {
             listener.listen(event);
         }
     }
+
 }

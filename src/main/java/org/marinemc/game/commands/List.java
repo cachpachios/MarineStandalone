@@ -30,7 +30,7 @@ import org.marinemc.game.command.CommandSender;
 public class List extends Command {
 
     public List() {
-        super("list", new String[]{"l"}, "List all players");
+        super("list", "marine.list", "List all players", "l");
     }
 
     public void execute(CommandSender sender, String[] args) {

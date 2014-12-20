@@ -44,7 +44,7 @@ public class Test extends Command {
     };
 
     public Test() {
-        super("test", new String[]{"debug"}, "Debug");
+        super("test", "marine.test", "Debug", "debug");
     }
 
 

@@ -37,7 +37,7 @@ public abstract class EventListener<T extends Event> {
         this.accessor = listenTo.hashCode();
     }
 
-    public abstract void listen(T t);
+    public abstract void listen(final T t);
 
     // USED IN INTERNAL METHODS
 

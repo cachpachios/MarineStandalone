@@ -17,14 +17,13 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package org.marinemc.player;
+package org.marinemc.util;
 
 import org.marinemc.events.EventListener;
 import org.marinemc.events.EventManager;
 import org.marinemc.events.standardevents.LeaveEvent;
+import org.marinemc.player.Player;
 import org.marinemc.server.Marine;
-import org.marinemc.util.ArgumentOperation;
-import org.marinemc.util.StringUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;

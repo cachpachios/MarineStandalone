@@ -79,8 +79,7 @@ public class Bootstrap {
             System.out.println("-- Could not start MarineStandalone: Cannot run from compressed folder");
             System.exit(1);
         }*/
-        instance = new Bootstrap();
-        instance.start(args);
+        (instance = new Bootstrap()).start(args);
     }
 
     private static int getInteger(final String argument) {

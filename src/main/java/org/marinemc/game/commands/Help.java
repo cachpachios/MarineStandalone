@@ -34,7 +34,7 @@ import java.util.Collection;
 public class Help extends Command {
 
     public Help() {
-        super("help", new String[]{"h"}, "Display this help list");
+        super("help", "marine.help", "Display this help list", "h");
     }
 
     @Override
