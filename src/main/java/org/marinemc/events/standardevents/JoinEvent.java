@@ -43,4 +43,5 @@ public class JoinEvent extends PlayerEvent {
     public void setJoinMessage(String joinMessage) {
         this.joinMessage = joinMessage;
     }
+
 }

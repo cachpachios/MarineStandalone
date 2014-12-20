@@ -19,12 +19,10 @@
 
 package org.marinemc.events;
 
+import org.marinemc.Logging;
 import org.marinemc.plugins.Plugin;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.IdentityHashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Event Manager
@@ -35,12 +33,13 @@ public class EventManager {
 
     private static EventManager instance;
     private final Map<Integer, ArrayDeque<EventListener>> listeners;
+    private Map<Integer, EventListener[]> bakedListeners;
 
     /**
      * Constructor
      */
     public EventManager() {
-        this.listeners = new IdentityHashMap<>();
+        this.listeners = new HashMap<>();
     }
 
     /**
@@ -67,6 +66,7 @@ public class EventManager {
                         listeners.remove(listener);
                 }
             }
+            bake();
         }
     }
 
@@ -112,9 +112,52 @@ public class EventManager {
         }
     }
 
+    public void bake() {
+        Logging.getLogger().log("Baking Event Listeners...");
+        synchronized (this) {
+            bakedListeners = new HashMap<>();
+            List<EventListener> low, med, hig;
+            int index;
+            EventListener[] array;
+            for (Map.Entry<Integer, ArrayDeque<EventListener>> entry : listeners.entrySet()) {
+                low = new ArrayList<>();
+                med = new ArrayList<>();
+                hig = new ArrayList<>();
+                for (final EventListener listener : entry.getValue()) {
+                    switch (listener.getPriority()) {
+                        case LOW:
+                            low.add(listener);
+                            break;
+                        case MEDIUM:
+                            low.add(listener);
+                            break;
+                        case HIGH:
+                            hig.add(listener);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                array = new EventListener[low.size() + med.size() + hig.size()];
+                index = 0;
+                for (EventListener listener : low) {
+                    array[index++] = listener;
+                }
+                for (EventListener listener : med) {
+                    array[index++] = listener;
+                }
+                for (EventListener listener : hig) {
+                    array[index++] = listener;
+                }
+                bakedListeners.put(entry.getKey(), array);
+            }
+        }
+        Logging.getLogger().log("Baked!");
+    }
+
     private void call(final Event event) throws NullPointerException {
-        if (!listeners.containsKey(event.hashCode())) return;
-        for (final EventListener listener : listeners.get(event.hashCode())) {
+        if (bakedListeners == null || !bakedListeners.containsKey(event.hashCode())) return;
+        for (final EventListener listener : bakedListeners.get(event.hashCode())) {
             listener.listen(event);
         }
     }

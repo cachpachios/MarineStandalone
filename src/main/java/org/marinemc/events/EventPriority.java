@@ -19,52 +19,13 @@
 
 package org.marinemc.events;
 
-import java.lang.reflect.ParameterizedType;
-
 /**
- * Event Listener Class
+ * Created 2014-12-20 for MarineStandalone
  *
  * @author Citymonstret
  */
-public abstract class EventListener<T extends Event> {
-
-    private final String listenTo;
-    private final int accessor;
-    private final EventPriority priority;
-    private Object y = null;
-
-    public EventListener() {
-        this(EventPriority.MEDIUM);
-    }
-
-    public EventListener(final EventPriority priority) {
-        this.listenTo = ((Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0]).getName();
-        this.accessor = listenTo.hashCode();
-        this.priority = priority;
-    }
-
-    public EventPriority getPriority() {
-        return this.priority;
-    }
-
-    public abstract void listen(final T t);
-
-    // USED IN INTERNAL METHODS
-
-    final public void setIDENTIFIERObject__DO_NOT_USE__(final Object q) {
-        y = q;
-    }
-
-    final public Object getIDENTIFIERObject() {
-        return this.y;
-    }
-
-    final public String listeningTo() {
-        return this.listenTo;
-    }
-
-    @Override
-    final public int hashCode() {
-        return accessor;
-    }
+public enum EventPriority {
+    LOW,
+    MEDIUM,
+    HIGH
 }

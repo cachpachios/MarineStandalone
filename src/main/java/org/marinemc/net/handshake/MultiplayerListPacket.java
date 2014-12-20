@@ -77,6 +77,7 @@ public class MultiplayerListPacket extends Packet {
         if (Marine.getServer().getPlayerCount() == 0) {
             player.put("id", UUID.fromString("1-1-3-3-7").toString());
             player.put("name", ChatColor.red + "There is nobody online!");
+            samples.add(player);
         } else {
             for (Player p : Marine.getPlayers()) {
                 player = new JSONObject();
@@ -118,17 +119,17 @@ public class MultiplayerListPacket extends Packet {
 
         JSONObject players = new JSONObject();
 
-        players.put("max", response.MAX_PLAYERS);
-        players.put("online", response.CURRENT_PLAYERS);
-        players.put("sample", response.SAMPLE_PLAYERS);
+        players.put("max", response.getMaxPlayers());
+        players.put("online", response.getCurrentPlayers());
+        players.put("sample", response.getSamplePlayers());
         json.put("players", players);
 
         JSONObject description = new JSONObject();
-        description.put("text", response.MOTD);
+        description.put("text", response.getMOTD());
         json.put("description", description);
 
-        if (response.FAVICON != null && response.FAVICON.length() > 0)
-            json.put("favicon", "data:image/png;base64," + response.FAVICON);
+        if (response.getFavicon() != null && response.getFavicon().length() > 0)
+            json.put("favicon", "data:image/png;base64," + response.getFavicon());
 
         return json.toJSONString();
 

@@ -17,54 +17,44 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package org.marinemc.events;
+package org.marinemc.events.standardevents;
 
-import java.lang.reflect.ParameterizedType;
+import org.marinemc.events.Event;
+import org.marinemc.player.IPlayer;
 
 /**
- * Event Listener Class
+ * Created 2014-12-20 for MarineStandalone
  *
  * @author Citymonstret
  */
-public abstract class EventListener<T extends Event> {
+public class PreLoginEvent extends Event {
 
-    private final String listenTo;
-    private final int accessor;
-    private final EventPriority priority;
-    private Object y = null;
+    private IPlayer player;
+    private boolean allowed = true;
+    private String message = "";
 
-    public EventListener() {
-        this(EventPriority.MEDIUM);
+    public PreLoginEvent(IPlayer player) {
+        super("pre_join", true);
+        this.player = player;
     }
 
-    public EventListener(final EventPriority priority) {
-        this.listenTo = ((Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0]).getName();
-        this.accessor = listenTo.hashCode();
-        this.priority = priority;
+    public boolean isAllowed() {
+        return this.allowed;
     }
 
-    public EventPriority getPriority() {
-        return this.priority;
+    public void setAllowed(boolean n) {
+        this.allowed = n;
     }
 
-    public abstract void listen(final T t);
-
-    // USED IN INTERNAL METHODS
-
-    final public void setIDENTIFIERObject__DO_NOT_USE__(final Object q) {
-        y = q;
+    public String getMessage() {
+        return this.message;
     }
 
-    final public Object getIDENTIFIERObject() {
-        return this.y;
+    public void setMessage(String s) {
+        this.message = s;
     }
 
-    final public String listeningTo() {
-        return this.listenTo;
-    }
-
-    @Override
-    final public int hashCode() {
-        return accessor;
+    public IPlayer getPlayer() {
+        return this.player;
     }
 }

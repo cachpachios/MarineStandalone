@@ -19,6 +19,7 @@
 
 package org.marinemc;
 
+import org.marinemc.events.EventManager;
 import org.marinemc.events.standardevents.ServerReadyEvent;
 import org.marinemc.game.CommandManager;
 import org.marinemc.game.PlayerManager;
@@ -186,6 +187,9 @@ public class StandaloneServer implements CommandProvider {
         // Open connection
         // Load in and enable plugins
         this.loadPlugins();
+
+        EventManager.getInstance().bake();
+
         initialized = true;
         getServer().callEvent(new ServerReadyEvent());
     }
