@@ -152,7 +152,7 @@ public class UUIDHandler {
      * @param name to use as key
      * @return UUID (name hash)
      */
-    private static UUID getUuidOfflineMode(final StringWrapper name) {
+    public static UUID getUuidOfflineMode(final StringWrapper name) {
         final UUID uuid = UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes(Charsets.UTF_8));
         add(name, uuid);
         return uuid;

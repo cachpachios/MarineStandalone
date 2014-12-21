@@ -30,6 +30,7 @@ import org.marinemc.player.*;
 import org.marinemc.server.Marine;
 import org.marinemc.util.UIDGenerator;
 import org.marinemc.util.mojang.UUIDHandler;
+import org.marinemc.util.wrapper.StringWrapper;
 import org.marinemc.world.World;
 
 import java.util.UUID;
@@ -48,9 +49,8 @@ public class LoginHandler {
     }
 
     private LoginResponse preJoin(String preName, Client c) { // Returns null if login succeded, otherwise makes LoginInterceptor drop the client
-        UUID uuid = UUIDHandler.getUUID(preName); //UUID.randomUUID();
-        String name = preName; // UUIDHandler.getName(uuid);
-
+        UUID uuid = UUIDHandler.getUuidOfflineMode(new StringWrapper(preName)); // TODO Fix back, temporary "offline mode" workaround // UUIDHandler.getUUID(preName); //UUID.randomUUID();
+        String name = preName; // TODO Fix back, temporary "offline mode" workaround // UUIDHandler.getName(uuid);
 
         if (uuid == null) {
             uuid = UUID.randomUUID();
