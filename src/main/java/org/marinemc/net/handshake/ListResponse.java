@@ -20,19 +20,49 @@
 package org.marinemc.net.handshake;
 
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.marinemc.game.chat.ChatColor;
 import org.marinemc.util.Base64Image;
 
+import java.util.UUID;
+
 /**
- * Created 2014-12-02 for MarineStandalone
+ * List Response
  *
  * @author Citymonstret
  */
 public class ListResponse {
 
+    /**
+     * Get a json object that can be used in player samples as pure text
+     *
+     * @param text Text
+     * @return JSONObject
+     */
+    public static JSONObject getText(final String text) {
+        final JSONObject o = new JSONObject();
+        o.put("id", UUID.randomUUID().toString());
+        o.put("name", ChatColor.transform('&', text));
+        return o;
+    }
+
     private String motd;
     private Base64Image favicon;
     private int maxPlayers, currentPlayers;
     private JSONArray samplePlayers;
+
+    /**
+     * Get a json object that can be used in player samples as pure text
+     *
+     * @param text Text
+     * @return JSONObject
+     */
+    public static JSONObject getText(final String text) {
+        final JSONObject o = new JSONObject();
+        o.put("id", UUID.randomUUID().toString());
+        o.put("name", ChatColor.transform('&', text));
+        return o;
+    }
 
     /**
      * Create a new list response

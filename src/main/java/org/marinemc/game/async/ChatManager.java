@@ -78,6 +78,10 @@ public class ChatManager {
     }
 
     public void sendChatMessage(Player player, String message) {
+        if (player.insertMessage()) {
+            player.kick("Spam!");
+            return;
+        }
         ChatEvent event = new ChatEvent(player, message);
         Marine.getServer().callEvent(event);
         if (!event.isCancelled()) {

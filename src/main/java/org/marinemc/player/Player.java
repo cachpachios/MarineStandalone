@@ -87,6 +87,8 @@ public class Player extends Entity implements IPlayer, CommandSender {
     private PlayerFile playerFile;
     // Loaded chunks...
     private List<Long> loadedChunks;
+    private Long lastChatReset;
+    private int sentChatMessage;
 
     public Player(final PlayerManager manager, final Client connection, final PlayerID id, final PlayerInventory inventory,
                   final int entityID, final World world, final TrackedLocation pos, final PlayerAbilities abilites, final Gamemode gamemode) {
@@ -110,6 +112,8 @@ public class Player extends Entity implements IPlayer, CommandSender {
             return;
         }
         this.loadedChunks = Collections.synchronizedList(new ArrayList<Long>());
+        this.lastChatReset = System.currentTimeMillis();
+        this.sentChatMessage = 0;
     }
 
     public Player(AbstractPlayer player, Gamemode gm) {
@@ -456,4 +460,13 @@ public class Player extends Entity implements IPlayer, CommandSender {
 		return r;
 	}
 
+    public boolean insertMessage() {
+        if (System.currentTimeMillis() - lastChatReset >= (5000 /* 5 seconds */)) {
+            lastChatReset = System.currentTimeMillis();
+            sentChatMessage = 1;
+            return false;
+        }
+        ++sentChatMessage;
+        return sentChatMessage > 10;
+    }
 }
