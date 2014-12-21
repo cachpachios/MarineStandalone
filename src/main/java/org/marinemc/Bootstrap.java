@@ -21,17 +21,16 @@ package org.marinemc;
 
 import org.marinemc.game.system.MarineSecurityManager;
 import org.marinemc.logging.Logging;
+import org.marinemc.server.Server;
 import org.marinemc.server.ServerProperties;
-import org.marinemc.server.StandaloneServer;
 import org.marinemc.settings.ServerSettings;
+import org.marinemc.util.StartSettings;
 import org.marinemc.util.StringUtils;
 import org.marinemc.util.SystemUtils;
 import org.marinemc.util.annotations.Protected;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 @Protected
 /**
@@ -52,7 +51,6 @@ public class Bootstrap {
     private static Bootstrap instance;
 
     public List<String> arguments;
-    public Timer mainTimer;
 
     public Bootstrap() {
         System.getSecurityManager().checkPermission(MarineSecurityManager.MARINE_PERMISSION);
@@ -121,7 +119,11 @@ public class Bootstrap {
         return instance.arguments.contains("debug");
     }
 
-    private void start(final String[] args) {
+    private void systemChecks() {
+        if (SystemUtils.getJavaVersion() < 7) {
+            System.out.println("-- Cannot Start The Server: Required Java 1.7 or above");
+            System.exit(1);
+        }
         if (SystemUtils.getArch() != 64) {
             if (SystemUtils.getArch() == 32) {
                 Logging.getLogger().warn("Server is running on 32bit, this is not recommended as it can cause fatal errors and lag");
@@ -130,11 +132,16 @@ public class Bootstrap {
                 Logging.getLogger().warn("Unable to retrieve computer arch, either you're running a 128bit computer (impressive) or it's blocked.");
             }
         }
-        // Custom Security Manager = WE BE DA SAFEST
+    }
+
+    private void systemSettings() {
         System.setSecurityManager(new MarineSecurityManager(System.getSecurityManager()));
-        // Use IPv4 instead of IPv6
         System.setProperty("java.net.preferIPv4Stack", "true");
-        // Make math fast(er than my brain) :D
+    }
+
+    private void start(final String[] args) {
+        systemChecks();
+        systemSettings();
         chargeUp();
         // Get the arguments
         arguments = Arrays.asList(args);
@@ -160,7 +167,7 @@ public class Bootstrap {
         settings.port = port;
         settings.tickrate = tickrate;
         // Check for GUI and init it
-        if (arguments.contains("debug")) {
+        if (debug()) {
             ServerSettings.getInstance().verbose();
         }
         if (!arguments.contains("nogui")) {// Check if GUI shouldn't be shown (Yes lazy implementation...)
@@ -169,52 +176,14 @@ public class Bootstrap {
         }
         Logging.getLogger().logf("Starting MarineStandalone Server - Protocol Version §c§o{0}§0 (Minecraft §c§o{1}§0)",
                 ServerProperties.PROTOCOL_VERSION, ServerProperties.MINECRAFT_NAME);
-        StandaloneServer server = null;
-        try {
-            server = new StandaloneServer(settings); // Port and TickRate
-        } catch (final Throwable e) {
-            Logging.getLogger().error("Could not start the server, errors occurred", e);
-            System.exit(1);
-        }
         // Check if the build is stable
         if (!ServerProperties.BUILD_STABLE)
             Logging.getLogger().warn("You are running an unstable build");
-        // Start the server
-        // server.start();
-        startTimer(server, tickrate);
-    }
-
-    private void startTimer(final StandaloneServer server, final int tickrate) {
-        mainTimer = new Timer("mainTimer");
-        mainTimer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                // Let's do the logging here instead
-                // rather than in the run method
-                // to make sure that the error is
-                // outputted properly
-                try {
-                    server.run();
-                } catch (final Exception e) {
-                    Logging.getLogger().error("Something went wrong in the main thread...", e);
-                }
-            }
-        }, 0L, (1000 / tickrate));
-    }
-
-    public static class StartSettings {
-
-        public int port;
-        public int tickrate;
-
-        public StartSettings() {
-            this.port = 25565;
-            this.tickrate = 20;
-        }
-
-        public StartSettings(int port, int tickrate) {
-            this.port = port;
-            this.tickrate = tickrate;
+        try {
+            new Server(settings);
+        } catch (final Throwable e) {
+            Logging.getLogger().error("Could not start the server, errors occurred", e);
         }
     }
+
 }

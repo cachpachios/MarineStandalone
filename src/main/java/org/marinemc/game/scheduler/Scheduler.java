@@ -19,12 +19,12 @@
 
 package org.marinemc.game.scheduler;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
+import org.marinemc.game.command.ServiceProvider;
 
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * A Scheduler implementation made for MarineStandalone
@@ -33,8 +33,8 @@ import java.util.TimerTask;
  */
 public class Scheduler {
 
-    private final BiMap<Long, MarineRunnable> asyncRunnables;
-    private final BiMap<Long, MarineRunnable> syncRunnables;
+    private final Map<Long, MarineRunnable> asyncRunnables;
+    private final Map<Long, MarineRunnable> syncRunnables;
     private long id;
     private int tick = 0, tickRate;
     private boolean started = false;
@@ -44,8 +44,8 @@ public class Scheduler {
      */
     public Scheduler() {
         this.id = -1;
-        this.asyncRunnables = HashBiMap.create();
-        this.syncRunnables = HashBiMap.create();
+        this.asyncRunnables = new ConcurrentHashMap<>();
+        this.syncRunnables = new ConcurrentHashMap<>();
     }
 
     /**
@@ -195,4 +195,18 @@ public class Scheduler {
         return id;
     }
 
+    public void removeAll(final ServiceProvider provider) {
+        synchronized (this) {
+            for (Map.Entry<Long, MarineRunnable> r : asyncRunnables.entrySet()) {
+                if (r.getValue().getProvider().equals(provider)) {
+                    removeTask(r.getKey());
+                }
+            }
+            for (Map.Entry<Long, MarineRunnable> r : syncRunnables.entrySet()) {
+                if (r.getValue().getProvider().equals(provider)) {
+                    removeTask(r.getKey());
+                }
+            }
+        }
+    }
 }

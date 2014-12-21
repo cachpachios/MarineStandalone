@@ -21,7 +21,10 @@ package org.marinemc.server;
 
 import org.marinemc.events.Event;
 import org.marinemc.game.PlayerManager;
+import org.marinemc.game.WorldManager;
 import org.marinemc.game.command.CommandSender;
+import org.marinemc.game.scheduler.Scheduler;
+import org.marinemc.net.NetworkManager;
 import org.marinemc.player.Gamemode;
 import org.marinemc.player.Player;
 import org.marinemc.plugins.PluginLoader;
@@ -40,7 +43,22 @@ import java.util.UUID;
  * @author Citymonstret
  * @author Fozie
  */
+@SuppressWarnings("unused")
 public interface MarineServer {
+
+    /**
+     * Get the settings folder
+     *
+     * @return settings folder
+     */
+    public File getSettingsFolder();
+
+    /**
+     * Get the storage folder
+     *
+     * @return storage folder
+     */
+    public File getStorageFolder();
 
     /**
      * Get the default gamemode
@@ -49,14 +67,39 @@ public interface MarineServer {
      */
     public Gamemode getDefaultGamemode();
 
+    /**
+     * Set the default gamemode
+     *
+     * @param gamemode Default Gamemode
+     */
     public void setDefaultGamemode(Gamemode gamemode);
 
+    /**
+     * Get the default difficulty
+     *
+     * @return default difficulty
+     */
     public Difficulty getDefaultDifficulty();
 
+    /**
+     * Set the default difficulty
+     *
+     * @param difficulty default difficulty
+     */
     public void setDefaultDifficulty(Difficulty difficulty);
 
+    /**
+     * Get the current MOTD
+     *
+     * @return current motd
+     */
     public String getMotd();
 
+    /**
+     * Set the motd
+     *
+     * @param motd new motd
+     */
     public void setMotd(String motd);
 
     /**
@@ -98,13 +141,6 @@ public interface MarineServer {
      * @return Server Favicon
      */
     public Base64Image getFavicon();
-
-    /**
-     * Get the StandaloneServer instance
-     *
-     * @return instance
-     */
-    public StandaloneServer getServer();
 
     /**
      * Get all online players
@@ -180,4 +216,44 @@ public interface MarineServer {
      */
     public void setMaxPlayers(final int n);
 
+    /**
+     * Get the network manager
+     *
+     * @return internal network manager
+     */
+    public NetworkManager getNetworkManager();
+
+    /**
+     * Get the scheduler
+     *
+     * @return internal scheduler
+     */
+    public Scheduler getScheduler();
+
+    /**
+     * Get the world manager
+     *
+     * @return internal world manager
+     */
+    public WorldManager getWorldManager();
+
+    /**
+     * Get the port the server is running on
+     *
+     * @return port
+     */
+    public int getPort();
+
+    /**
+     * Get the tickrate of the server
+     * (server ticks every 1000 / tickrate ms)
+     *
+     * @return tickrate
+     */
+    public int getTickRate();
+
+    /**
+     * Stop the server
+     */
+    public void stop();
 }

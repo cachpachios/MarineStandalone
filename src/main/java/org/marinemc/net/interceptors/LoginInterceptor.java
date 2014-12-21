@@ -25,15 +25,16 @@ import org.marinemc.logging.Logging;
 import org.marinemc.net.Client;
 import org.marinemc.net.login.DisconnectPacket;
 import org.marinemc.net.login.LoginPacket;
-import org.marinemc.server.StandaloneServer;
+import org.marinemc.server.MarineServer;
+
 /**
  * @author Fozie
  */
 public class LoginInterceptor implements PacketInterceptor {
 
-    final StandaloneServer server;
+    final MarineServer server;
 
-    public LoginInterceptor(StandaloneServer server) {
+    public LoginInterceptor(MarineServer server) {
         this.server = server;
     }
 
@@ -49,7 +50,7 @@ public class LoginInterceptor implements PacketInterceptor {
             if (!loginReturn.succeed()) {
                 DisconnectPacket nopePacket = new DisconnectPacket(loginReturn.response);
                 c.sendPacket(nopePacket);
-                server.getNetwork().cleanUp(c);
+                server.getNetworkManager().cleanUp(c);
                 return true;
             }
 

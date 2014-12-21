@@ -59,6 +59,7 @@ public class BinaryFile {
         InputStream input = new BufferedInputStream(new FileInputStream(file));
         input.read(r);
         data = new ByteData(r);
+        input.close();
         return this;
     }
 
@@ -69,6 +70,7 @@ public class BinaryFile {
         InputStream input = decompressStream(new BufferedInputStream(new FileInputStream(file)));
         input.read(r);
         data = new ByteData(r);
+        input.close();
         return this;
     }
 

@@ -253,15 +253,20 @@ public class PluginLoader {
      * Disable a plugin
      *
      * @param plugin Plugin to disable
+     * @throws java.lang.UnsupportedOperationException If the plugin is already disabled
      */
     public void disablePlugin(final Plugin plugin) {
         if (plugin.isEnabled()) {
             manager.disablePlugin(plugin);
             loaders.remove(plugin.getName());
             PluginClassLoader loader = plugin.getClassLoader();
-            for (final String name : loader.getClasses())
+            for (final String name : loader.getClasses()) {
                 removeClass(name);
+            }
             EventManager.getInstance().removeAll(plugin);
+            Marine.getServer().getScheduler().removeAll(plugin);
+        } else {
+            throw new UnsupportedOperationException("Cannot disable an already disabled plugin");
         }
     }
 

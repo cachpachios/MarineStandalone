@@ -17,20 +17,31 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package org.marinemc.server;
+package org.marinemc.game.command;
 
-public class ServerProperties {
+/**
+ * Command Provider
+ *
+ * @author Citymonstret
+ */
+public interface ServiceProvider {
 
-    //FINAL VALUES
-    public static final int PROTOCOL_VERSION = 47;
-    public static final int MAX_Y = 256;
+    /**
+     * Get the command provider name
+     *
+     * @return Command Provider
+     */
+    public String getProviderName();
 
-    // BUILD INFO
-    public static String
-            BUILD_VERSION = "0.0.1-SNAPSHOT",
-            BUILD_TYPE = "Development",
-            BUILD_NAME = "WorldWideWorld",
-            MINECRAFT_NAME = "1.8";
+    /**
+     * Command Provider Priority
+     * <p/>
+     * 0x00 = Internal
+     * 0x01 = Plugin
+     * 0x02 = Other
+     *
+     * @return Priority
+     */
+    public byte getProviderPriority();
 
-    public static boolean BUILD_STABLE = false;
 }

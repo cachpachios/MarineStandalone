@@ -20,7 +20,7 @@
 package org.marinemc.world;
 
 import org.marinemc.game.WorldManager;
-import org.marinemc.server.StandaloneServer;
+import org.marinemc.server.MarineServer;
 import org.marinemc.util.Position;
 import org.marinemc.world.chunk.Chunk;
 import org.marinemc.world.chunk.ChunkPos;
@@ -40,7 +40,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class World { // TODO Save and unload chunks...	
 	
     //Final Pointers:
-    private final StandaloneServer server;
+    private final MarineServer server;
     
     //Identifiers:
     private final String name;
@@ -56,7 +56,7 @@ public class World { // TODO Save and unload chunks...
 
     private WorldGenerator generator;
 
-    public World(StandaloneServer server, final String name) {
+    public World(MarineServer server, final String name) {
         this.server = server;
         loadedChunks = Collections.synchronizedMap(new ConcurrentHashMap<Long, Chunk>());
         this.generator = new TotalFlatGrassGenerator(); // StandardGenerator
@@ -69,7 +69,7 @@ public class World { // TODO Save and unload chunks...
         this.age = 0;
     }
 
-    public World(StandaloneServer server, final String name, WorldGenerator generator) { //TODO Make it able to load world
+    public World(MarineServer server, final String name, WorldGenerator generator) { //TODO Make it able to load world
         this.server = server;
         this.time = 0;
         this.age = 0;
@@ -178,7 +178,7 @@ public class World { // TODO Save and unload chunks...
         return this.generator;
     }
 
-    public StandaloneServer getServer() {
-        return server;
+    public MarineServer getServer() {
+        return this.server;
     }
 }

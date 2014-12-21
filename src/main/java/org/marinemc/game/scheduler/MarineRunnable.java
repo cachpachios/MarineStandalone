@@ -19,6 +19,7 @@
 
 package org.marinemc.game.scheduler;
 
+import org.marinemc.game.command.ServiceProvider;
 import org.marinemc.server.Marine;
 
 /**
@@ -29,9 +30,9 @@ import org.marinemc.server.Marine;
  */
 public abstract class MarineRunnable {
 
-    private long requiredTick;
+    private final ServiceProvider provider;
+    private final long requiredTick, totalRuns;
     private long tick;
-    private long totalRuns;
     private long ran;
 
     /**
@@ -40,9 +41,10 @@ public abstract class MarineRunnable {
      * @param requiredTick ticks between each #run();
      * @param runs         number of times the runnable will run, set to -1 for inf.
      */
-    public MarineRunnable(final long requiredTick, final long runs) {
+    public MarineRunnable(final ServiceProvider provider, final long requiredTick, final long runs) {
         this.requiredTick = requiredTick;
         this.totalRuns = runs;
+        this.provider = provider;
         this.ran = 0;
         this.tick = 0;
     }
@@ -56,9 +58,7 @@ public abstract class MarineRunnable {
         // Will automatically remove THIS task :D
         scheduler.removeTask(n);
         //
-        this.requiredTick = Long.MIN_VALUE;
         this.tick = Long.MAX_VALUE;
-        this.totalRuns = Long.MIN_VALUE;
         this.ran = Long.MAX_VALUE;
     }
 
@@ -97,4 +97,8 @@ public abstract class MarineRunnable {
      * using the tick method
      */
     public abstract void run();
+
+    public ServiceProvider getProvider() {
+        return this.provider;
+    }
 }

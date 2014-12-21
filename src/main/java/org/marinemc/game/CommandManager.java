@@ -20,7 +20,7 @@
 package org.marinemc.game;
 
 import org.marinemc.game.command.Command;
-import org.marinemc.game.command.CommandProvider;
+import org.marinemc.game.command.ServiceProvider;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -57,12 +57,12 @@ public class CommandManager {
         }
     }
 
-    public void registerCommand(final CommandProvider provider, final Command command) {
+    public void registerCommand(final ServiceProvider provider, final Command command) {
         String name = command.toString();
         if (stringMap.containsKey(name)) {
             final Command old = stringMap.get(name);
-            if (old.getCommandProvider().getProviderPriority() == 0x00 && provider.getProviderPriority() != 0x00) {
-                old.setName(old.getCommandProvider().getProviderName() + ":" + old.toString());
+            if (old.getServiceProvider().getProviderPriority() == 0x00 && provider.getProviderPriority() != 0x00) {
+                old.setName(old.getServiceProvider().getProviderName() + ":" + old.toString());
             } else {
                 command.setName(provider.getProviderName() + ":" + command);
             }
@@ -76,7 +76,7 @@ public class CommandManager {
         }
         command.getAliases().removeAll(ss);
         command.setProvider(this);
-        command.setCommandProvider(provider);
+        command.setServiceProvider(provider);
     }
 
     public Collection<Command> getCommands() {

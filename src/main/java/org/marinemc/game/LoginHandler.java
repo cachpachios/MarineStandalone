@@ -68,7 +68,10 @@ public class LoginHandler {
         // Check for ip ban
         if (Marine.isBanned(c.getAdress()))
             return new LoginResponse("IP Banned from the server");
-        
+
+        if (Marine.getPlayers().size() >= Marine.getMaxPlayers())
+            return new LoginResponse("Server is full");
+
         IPlayer p = new AbstractPlayer(playerManager.getServer(), playerManager.getServer().getWorldManager().getMainWorld(), new PlayerID(name, uuid), c, new PlayerAbilities(false, true, false, 0.2f, 0.2f), playerManager.getServer().getWorldManager().getMainWorld().getSpawnPoint().toLocation());
 
         PreLoginEvent event = new PreLoginEvent(p);

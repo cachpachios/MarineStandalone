@@ -17,31 +17,24 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package org.marinemc.game.command;
+package org.marinemc.util;
 
 /**
- * Command Provider
+ * Created 2014-12-21 for MarineStandalone
  *
  * @author Citymonstret
  */
-public interface CommandProvider {
+public class StartSettings {
+    public int port;
+    public int tickrate;
 
-    /**
-     * Get the command provider name
-     *
-     * @return Command Provider
-     */
-    public String getProviderName();
+    public StartSettings() {
+        this.port = 25565;
+        this.tickrate = 20;
+    }
 
-    /**
-     * Command Provider Priority
-     * <p/>
-     * 0x00 = Internal
-     * 0x01 = Plugin
-     * 0x02 = Other
-     *
-     * @return Priority
-     */
-    public byte getProviderPriority();
-
+    public StartSettings(int port, int tickrate) {
+        this.port = port;
+        this.tickrate = tickrate;
+    }
 }

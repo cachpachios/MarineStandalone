@@ -19,7 +19,7 @@
 
 package org.marinemc.game;
 
-import org.marinemc.server.StandaloneServer;
+import org.marinemc.server.MarineServer;
 import org.marinemc.world.World;
 
 import java.util.ArrayList;
@@ -34,11 +34,11 @@ import java.util.concurrent.ConcurrentHashMap;
 public class WorldManager {
 
     private static byte nextUID = Byte.MIN_VALUE;
-    private final StandaloneServer server;
+    private final MarineServer server;
     public Map<Byte, World> loadedWorlds;
     private Byte mainWorld;
 
-    public WorldManager(StandaloneServer server) {
+    public WorldManager(MarineServer server) {
         this.server = server;
         loadedWorlds = Collections.synchronizedMap(new ConcurrentHashMap<Byte, World>());
         mainWorld = null;

@@ -52,7 +52,7 @@ public class JoinGamePacket extends Packet {
         d.writeByte(p.getGamemode().getID()); // Gamemode
 
         d.writeByte(p.getWorld().getDimension().getID()); // Dimension
-        d.writeByte(p.getPlayerManager().getServer().getDifficulty().getID()); // Difficulty
+        d.writeByte(p.getPlayerManager().getServer().getDefaultDifficulty().getID()); // Difficulty
 
         d.writeByte((byte) Marine.getMaxPlayers()); // MaxPlayers
         d.writeUTF8("flat");

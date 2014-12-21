@@ -43,10 +43,10 @@ import java.util.UUID;
  * @author Citymonstret
  * @author Fozie
  */
+@SuppressWarnings("unused")
 public class Marine {
 
     protected static MarineServer server;
-    protected static StandaloneServer standaloneServer;
 
     /**
      * Get the current motd
@@ -124,19 +124,7 @@ public class Marine {
      * Stop the server
      */
     public static void stop() {
-        standaloneServer.stop();
-    }
-
-    // IGNORE
-    @Protected
-    public static void setStandalone(final StandaloneServer s) {
-        // Security Check Start
-        System.getSecurityManager().checkPermission(MarineSecurityManager.MARINE_PERMISSION);
-        // Security Check end
-        if (standaloneServer != null) {
-            throw new RuntimeException("Cannot replace the StandaloneServer");
-        }
-        standaloneServer = s;
+        server.stop();
     }
 
     /**
@@ -154,7 +142,7 @@ public class Marine {
      * @return scheduler class
      */
     public static Scheduler getScheduler() {
-        return getServer().getServer().getScheduler();
+        return getServer().getScheduler();
     }
 
     /**

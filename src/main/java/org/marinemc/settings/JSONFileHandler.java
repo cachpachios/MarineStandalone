@@ -21,7 +21,6 @@ package org.marinemc.settings;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.marinemc.server.StandaloneServer;
 
 import java.io.File;
 
@@ -32,12 +31,10 @@ import java.io.File;
  */
 public class JSONFileHandler {
 
-    private final StandaloneServer server;
     private final JSONConfig administrators, banned, whitelist;
     private final File settingsPath, storagePath;
 
-    public JSONFileHandler(final StandaloneServer server, final File settingsPath, final File storagePath) throws JSONException {
-        this.server = server;
+    public JSONFileHandler(final File settingsPath, final File storagePath) throws JSONException {
         this.settingsPath = settingsPath;
         this.storagePath = storagePath;
         this.administrators = new StorageConfig(storagePath, "administrators");

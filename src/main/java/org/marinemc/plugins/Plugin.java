@@ -24,7 +24,7 @@ import org.marinemc.events.EventManager;
 import org.marinemc.game.CommandManager;
 import org.marinemc.game.chat.ChatColor;
 import org.marinemc.game.command.Command;
-import org.marinemc.game.command.CommandProvider;
+import org.marinemc.game.command.ServiceProvider;
 import org.marinemc.logging.Logging;
 
 import java.io.File;
@@ -41,7 +41,7 @@ import java.util.UUID;
  *
  * @author Citymonstret
  */
-public class Plugin implements CommandProvider {
+public class Plugin implements ServiceProvider {
 
     private final UUID uuid;
     private boolean enabled;
@@ -244,4 +244,5 @@ public class Plugin implements CommandProvider {
         listener.setIDENTIFIERObject__DO_NOT_USE__(this);
         EventManager.getInstance().addListener(listener);
     }
+
 }

@@ -29,7 +29,7 @@ import org.marinemc.net.play.clientbound.KickPacket;
 import org.marinemc.player.AbstractPlayer;
 import org.marinemc.player.IPlayer;
 import org.marinemc.player.Player;
-import org.marinemc.server.StandaloneServer;
+import org.marinemc.server.MarineServer;
 import org.marinemc.world.chunk.Chunk;
 
 import java.util.*;
@@ -40,7 +40,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class PlayerManager {
 
-    private final StandaloneServer server;
+    private final MarineServer server;
     // private Set<Player> allPlayers;
     // private Map<UUID, Player> playerIDs;
     private final Map<Short, Player> uids;
@@ -52,7 +52,7 @@ public class PlayerManager {
     private MovementManager movement;
     private ChatManager chat;
 
-    public PlayerManager(StandaloneServer server) {
+    public PlayerManager(MarineServer server) {
         this.server = server;
         loginManager = new LoginHandler(this, this.server.getWorldManager().getMainWorld());
         // allPlayers = Collections.synchronizedSet(new HashSet<Player>());
@@ -89,7 +89,7 @@ public class PlayerManager {
         }
     }
 
-    public StandaloneServer getServer() {
+    public MarineServer getServer() {
         return server;
     }
 
@@ -171,7 +171,7 @@ public class PlayerManager {
             putPlayer((Player) player);
             return (Player) player;
         } else if (player instanceof AbstractPlayer) {
-            Player p = new Player((AbstractPlayer) player, server.getServer().getDefaultGamemode());
+            Player p = new Player((AbstractPlayer) player, server.getDefaultGamemode());
             putPlayer(p);
             return p;
         }
@@ -189,7 +189,7 @@ public class PlayerManager {
     private void cleanUp(Player p) {
         removePlayer(p);
         timeout.cleanUp(p);
-        server.getNetwork().cleanUp(p.getClient());
+        server.getNetworkManager().cleanUp(p.getClient());
     }
 
     public void disconnect(Player p, String reason) {

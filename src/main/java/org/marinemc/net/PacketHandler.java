@@ -21,7 +21,7 @@ package org.marinemc.net;
 
 import org.marinemc.io.data.ByteData;
 import org.marinemc.net.interceptors.*;
-import org.marinemc.server.StandaloneServer;
+import org.marinemc.server.MarineServer;
 
 /**
  * @author Fozie
@@ -33,7 +33,7 @@ public class PacketHandler implements PacketInterceptor {
     LoginInterceptor login;
     IngameInterceptor ingame;
 
-    public PacketHandler(StandaloneServer server) {
+    public PacketHandler(MarineServer server) {
         handshake = new HandshakeInterceptor();
         status = new StatusInterceptor();
         login = new LoginInterceptor(server);

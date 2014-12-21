@@ -39,9 +39,12 @@ public class ServerSettings {
     private static ServerSettings instance;
     public int port = 25565;
     public int tickrate = 20;
+    public int maxPlayers = 20;
     public String host = "0.0.0.0";
     public String motd = "&cNo MOTD";
+    public String gamemode = "survival";
     public boolean useHasing;
+    public String difficulty = "peaceful";
     private Properties config;
 
     public ServerSettings() {
@@ -64,6 +67,9 @@ public class ServerSettings {
                     put("motd", "&cTesting...");
                     put("tickrate", "20");
                     put("useHashing", "false"); // Depending on what server you are running hashing is best for big servers with many players online, linear scanning for small servers with less players
+                    put("gamemode", "survival");
+                    put("difficulty", "peaceful");
+                    put("maxPlayers", "20");
                 }
             };
 
@@ -84,7 +90,9 @@ public class ServerSettings {
             this.motd = config.getProperty("motd");
             this.tickrate = getInt(config.getProperty("tickrate"));
             this.useHasing = getBoolean(config.getProperty("useHashing"));
-
+            this.gamemode = config.getProperty("gamemode");
+            this.difficulty = config.getProperty("difficulty");
+            this.maxPlayers = getInt(config.getProperty("maxPlayers"));
             reader.close();
         } catch (Exception e) {
             e.printStackTrace();

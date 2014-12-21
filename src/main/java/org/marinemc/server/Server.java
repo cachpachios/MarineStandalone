@@ -21,25 +21,37 @@ package org.marinemc.server;
 
 import org.marinemc.events.Event;
 import org.marinemc.events.EventManager;
+import org.marinemc.events.standardevents.ServerReadyEvent;
+import org.marinemc.game.CommandManager;
 import org.marinemc.game.PlayerManager;
+import org.marinemc.game.WorldManager;
 import org.marinemc.game.chat.ChatColor;
-import org.marinemc.game.command.CommandProvider;
+import org.marinemc.game.command.Command;
 import org.marinemc.game.command.CommandSender;
 import org.marinemc.game.command.ConsoleSender;
+import org.marinemc.game.command.ServiceProvider;
+import org.marinemc.game.commands.*;
+import org.marinemc.game.scheduler.Scheduler;
 import org.marinemc.game.system.MarineSecurityManager;
 import org.marinemc.logging.Logging;
+import org.marinemc.net.NetworkManager;
+import org.marinemc.net.play.clientbound.KickPacket;
 import org.marinemc.player.Gamemode;
 import org.marinemc.player.Player;
 import org.marinemc.plugins.PluginLoader;
 import org.marinemc.plugins.PluginManager;
+import org.marinemc.settings.JSONFileHandler;
 import org.marinemc.settings.ServerSettings;
 import org.marinemc.util.Base64Image;
+import org.marinemc.util.StartSettings;
 import org.marinemc.world.Difficulty;
+import org.marinemc.world.Identifiers;
 import org.marinemc.world.World;
 
 import java.io.File;
 import java.util.Collection;
-import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
 
 /**
@@ -48,30 +60,88 @@ import java.util.UUID;
  * @author Citymonstret
  * @author Fozie
  */
-public class Server implements MarineServer, CommandProvider {
+public class Server extends TimerTask implements MarineServer, ServiceProvider {
 
-    private final StandaloneServer server;
     private final PluginLoader pluginLoader;
-    private final File pluginFolder;
+    private final File pluginFolder, settingsFolder, storageFolder;
+    private final int port;
     private final CommandSender console;
+    private final NetworkManager networkManager;
+    private final PlayerManager playerManager;
+    private final WorldManager worldManager;
+    private final Scheduler scheduler;
+    private final JSONFileHandler jsonFileHandler;
+    private final Timer timer;
+    private final int tickRate;
     private Base64Image image;
     private Gamemode gamemode;
     private Difficulty difficulty;
     private String motd;
     private int maxPlayers;
 
-    public Server(final StandaloneServer server) {
+    public Server(final StartSettings settings) {
         // Security Check Start
         System.getSecurityManager().checkPermission(MarineSecurityManager.MARINE_PERMISSION);
         // Security Check end
-        this.server = server;
+        this.timer = new Timer("mainTimer", true);
+        this.port = settings.port;
+        this.tickRate = settings.tickrate;
+        this.networkManager = new NetworkManager(this, port, ServerSettings.getInstance().useHasing);
+        this.worldManager = new WorldManager(this);
+        this.playerManager = new PlayerManager(this);
         this.pluginLoader = new PluginLoader(new PluginManager());
         this.pluginFolder = new File("./plugins");
+        this.storageFolder = new File("./storage");
+        this.settingsFolder = new File("./settings");
+        this.jsonFileHandler = new JSONFileHandler(settingsFolder, storageFolder);
+        this.scheduler = new Scheduler();
         this.console = new ConsoleSender();
-        this.gamemode = Gamemode.SURVIVAL;
-        this.difficulty = Difficulty.PEACEFUL;
+        this.gamemode = Gamemode.valueOf(ServerSettings.getInstance().gamemode.toUpperCase());
+        this.difficulty = Difficulty.valueOf(ServerSettings.getInstance().difficulty.toUpperCase());
         this.motd = ChatColor.transform('&', ServerSettings.getInstance().motd);
-        this.maxPlayers = 999;
+        this.maxPlayers = ServerSettings.getInstance().maxPlayers;
+        // INIT :D
+        init();
+    }
+
+    private void init() {
+        Marine.setServer(this);
+        this.scheduler.start(1000 / tickRate);
+        registerDefaultCommands();
+        Identifiers.init();
+        this.networkManager.openConnection();
+        loadPlugins();
+        EventManager.getInstance().bake();
+        callEvent(new ServerReadyEvent());
+        this.timer.scheduleAtFixedRate(this, 0l, (1000 / tickRate));
+    }
+
+    @Override
+    final public void run() {
+        try {
+            playerManager.updateThemAll();
+            networkManager.tryConnections();
+            playerManager.tickAllPlayers();
+            worldManager.tick();
+            scheduler.tickSync();
+        } catch (final Throwable e) {
+            Logging.getLogger().error("Something went wrong in the main thread...", e);
+        }
+    }
+
+    private void registerDefaultCommands() {
+        final Command[] defaults = new Command[]{
+                new Info(), new Help(),
+                new Test(), new Say(),
+                new Stop(), new Plugins(),
+                new SendAboveActionBarMessage(),
+                new Teleport(), new Me(),
+                new Tellraw(), new List(),
+        };
+        final CommandManager commandManager = CommandManager.getInstance();
+        for (final Command command : defaults) {
+            commandManager.registerCommand(this, command);
+        }
     }
 
     @Override
@@ -80,7 +150,7 @@ public class Server implements MarineServer, CommandProvider {
     }
 
     @Override
-    final public void setDefaultGamemode(Gamemode gamemode) {
+    final public void setDefaultGamemode(final Gamemode gamemode) {
         this.gamemode = gamemode;
     }
 
@@ -106,7 +176,7 @@ public class Server implements MarineServer, CommandProvider {
 
     @Override
     final public PlayerManager getPlayerManager() {
-        return server.players;
+        return playerManager;
     }
 
     @Override
@@ -157,11 +227,6 @@ public class Server implements MarineServer, CommandProvider {
     }
 
     @Override
-    final public StandaloneServer getServer() {
-        return this.server;
-    }
-
-    @Override
     final public Collection<Player> getPlayers() {
         return this.getPlayerManager().getPlayers();
     }
@@ -177,8 +242,8 @@ public class Server implements MarineServer, CommandProvider {
     }
 
     @Override
-    final public List<World> getWorlds() {
-        return this.server.getWorldManager().getWorlds();
+    final public java.util.List<World> getWorlds() {
+        return worldManager.getWorlds();
     }
 
     @Override
@@ -207,6 +272,11 @@ public class Server implements MarineServer, CommandProvider {
     }
 
     @Override
+    final public NetworkManager getNetworkManager() {
+        return this.networkManager;
+    }
+
+    @Override
     final public PluginLoader getPluginLoader() {
         return this.pluginLoader;
     }
@@ -217,7 +287,57 @@ public class Server implements MarineServer, CommandProvider {
     }
 
     @Override
-    public byte getProviderPriority() {
+    final public byte getProviderPriority() {
         return 0x00;
+    }
+
+    @Override
+    final public void stop() {
+        Logging.getLogger().info("Shutting down...");
+        for (final Player player : getPlayers()) {
+            player.getClient().sendPacket(new KickPacket(ChatColor.red + ChatColor.bold + "Server stopped"));
+        }
+        Logging.getLogger().info("Plugin Handler Shutting Down");
+        // Disable all plugins
+        pluginLoader.disableAllPlugins();
+        // Should not run, smart stuff
+        timer.cancel();
+        // Save all json configs
+        Logging.getLogger().info("Saving JSON Files");
+        jsonFileHandler.saveAll();
+        // Logging stop
+        Logging.getLogger().saveLog();
+        // When finished
+        System.exit(0);
+    }
+
+    @Override
+    final public Scheduler getScheduler() {
+        return this.scheduler;
+    }
+
+    @Override
+    final public WorldManager getWorldManager() {
+        return this.worldManager;
+    }
+
+    @Override
+    final public int getPort() {
+        return this.port;
+    }
+
+    @Override
+    final public int getTickRate() {
+        return this.tickRate;
+    }
+
+    @Override
+    final public File getStorageFolder() {
+        return this.storageFolder;
+    }
+
+    @Override
+    final public File getSettingsFolder() {
+        return settingsFolder;
     }
 }

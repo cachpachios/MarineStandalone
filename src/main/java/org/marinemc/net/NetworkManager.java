@@ -20,7 +20,7 @@
 package org.marinemc.net;
 
 import org.marinemc.logging.Logging;
-import org.marinemc.server.StandaloneServer;
+import org.marinemc.server.MarineServer;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -30,7 +30,7 @@ import java.util.*;
  * @author Fozie
  */
 public class NetworkManager {
-    private final StandaloneServer marineServer;
+    private final MarineServer marineServer;
     public PacketHandler packetHandler;
     public ServerSocket server;
     public ClientProcessor clientHandler;
@@ -39,7 +39,7 @@ public class NetworkManager {
 
     private ConnectionThread connector;
 
-    public NetworkManager(StandaloneServer marineServer, int port, boolean hashing) {
+    public NetworkManager(MarineServer marineServer, int port, boolean hashing) {
         this.marineServer = marineServer;
 
         if (hashing)
@@ -64,10 +64,6 @@ public class NetworkManager {
         packetHandler = new PacketHandler(marineServer);
 
         clientHandler = new ClientProcessor(this);
-    }
-
-    public StandaloneServer getServer() {
-        return marineServer;
     }
 
     public void openConnection() {

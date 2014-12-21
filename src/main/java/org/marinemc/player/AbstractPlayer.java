@@ -20,7 +20,7 @@
 package org.marinemc.player;
 
 import org.marinemc.net.Client;
-import org.marinemc.server.StandaloneServer;
+import org.marinemc.server.MarineServer;
 import org.marinemc.util.Location;
 import org.marinemc.util.Position;
 import org.marinemc.world.World;
@@ -35,7 +35,7 @@ import java.util.UUID;
  */
 public class AbstractPlayer implements IPlayer {
 
-    private final StandaloneServer s;
+    private final MarineServer s;
 
     private final PlayerID id;
     private final Client client;
@@ -44,7 +44,7 @@ public class AbstractPlayer implements IPlayer {
 
     private World w;
 
-    public AbstractPlayer(StandaloneServer server, World w, PlayerID id, Client c, PlayerAbilities abilites, Location spawnLocation) {
+    public AbstractPlayer(MarineServer server, World w, PlayerID id, Client c, PlayerAbilities abilites, Location spawnLocation) {
         this.s = server;
         this.w = w;
         this.client = c;
@@ -97,7 +97,7 @@ public class AbstractPlayer implements IPlayer {
         return location.getRelativePosition();
     }
 
-    public StandaloneServer getServer() {
+    public MarineServer getServer() {
         return s;
     }
 }

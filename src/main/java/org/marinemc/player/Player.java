@@ -392,7 +392,7 @@ public class Player extends Entity implements IPlayer, CommandSender {
         //        (reason.length() > 0) ? reason : "Kicked"
         // ));
         // cleanup();
-        Marine.getServer().getServer().getPlayerManager().disconnect(this, reason);
+        Marine.getServer().getPlayerManager().disconnect(this, reason);
     }
 
     private void cleanup() {

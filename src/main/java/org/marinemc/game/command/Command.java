@@ -65,7 +65,7 @@ public abstract class Command {
      * containing the priority level
      * and such
      */
-    private CommandProvider commandProvider;
+    private ServiceProvider serviceProvider;
 
     /**
      * Required permission
@@ -281,20 +281,20 @@ public abstract class Command {
      *
      * @return command provider
      */
-    final public CommandProvider getCommandProvider() {
-        return this.commandProvider;
+    final public ServiceProvider getServiceProvider() {
+        return this.serviceProvider;
     }
 
     /**
      * Set the command provider
      *
-     * @param commandProvider Provider
+     * @param serviceProvider Provider
      * @throws java.lang.UnsupportedOperationException if the provider is already set
      */
-    final public void setCommandProvider(final CommandProvider commandProvider) {
-        if (this.commandProvider != null) {
+    final public void setServiceProvider(final ServiceProvider serviceProvider) {
+        if (this.serviceProvider != null) {
             throw new UnsupportedOperationException("Cannot replace command provider");
         }
-        this.commandProvider = commandProvider;
+        this.serviceProvider = serviceProvider;
     }
 }
