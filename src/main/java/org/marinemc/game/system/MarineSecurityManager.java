@@ -142,7 +142,7 @@ public class MarineSecurityManager extends SecurityManager {
 
     @Override
     public void checkAccess(ThreadGroup g) {
-        status("Thread Group Access", true);
+        // status("Thread Group Access", true);
     }
 
     @Override

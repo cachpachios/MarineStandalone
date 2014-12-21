@@ -33,37 +33,10 @@ import java.util.UUID;
  */
 public class ListResponse {
 
-    /**
-     * Get a json object that can be used in player samples as pure text
-     *
-     * @param text Text
-     * @return JSONObject
-     */
-    public static JSONObject getText(final String text) {
-        final JSONObject o = new JSONObject();
-        o.put("id", UUID.randomUUID().toString());
-        o.put("name", ChatColor.transform('&', text));
-        return o;
-    }
-
     private String motd;
     private Base64Image favicon;
     private int maxPlayers, currentPlayers;
     private JSONArray samplePlayers;
-
-    /**
-     * Get a json object that can be used in player samples as pure text
-     *
-     * @param text Text
-     * @return JSONObject
-     */
-    public static JSONObject getText(final String text) {
-        final JSONObject o = new JSONObject();
-        o.put("id", UUID.randomUUID().toString());
-        o.put("name", ChatColor.transform('&', text));
-        return o;
-    }
-
     /**
      * Create a new list response
      *
@@ -79,6 +52,19 @@ public class ListResponse {
         this.maxPlayers = maxPlayers;
         this.currentPlayers = currentPlayers;
         this.samplePlayers = samplePlayers;
+    }
+
+    /**
+     * Get a json object that can be used in player samples as pure text
+     *
+     * @param text Text
+     * @return JSONObject
+     */
+    public static JSONObject getText(final String text) {
+        final JSONObject o = new JSONObject();
+        o.put("id", UUID.randomUUID().toString());
+        o.put("name", ChatColor.transform('&', text));
+        return o;
     }
 
     public String getMOTD() {

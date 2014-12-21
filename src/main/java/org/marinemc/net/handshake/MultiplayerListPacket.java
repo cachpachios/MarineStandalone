@@ -24,6 +24,7 @@ import org.json.simple.JSONObject;
 import org.marinemc.events.standardevents.ListEvent;
 import org.marinemc.game.chat.ChatColor;
 import org.marinemc.io.data.ByteData;
+import org.marinemc.net.Client;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
@@ -37,6 +38,12 @@ import java.util.UUID;
  * @author Fozie
  */
 public class MultiplayerListPacket extends Packet {
+
+    private final Client c;
+
+    public MultiplayerListPacket(final Client c) {
+        this.c = c;
+    }
 
     @Override
     public int getID() {
@@ -63,7 +70,7 @@ public class MultiplayerListPacket extends Packet {
         }
 
         ListResponse response = new ListResponse(Marine.getMotd(), Marine.getPlayers().size(), Marine.getMaxPlayers(), samples, Marine.getServer().getFavicon());
-        ListEvent event = new ListEvent(response);
+        ListEvent event = new ListEvent(c, response);
 
         Marine.getServer().callEvent(event);
 

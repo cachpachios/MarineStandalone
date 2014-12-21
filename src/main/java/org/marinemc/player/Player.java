@@ -88,15 +88,15 @@ public class Player extends Entity implements IPlayer, CommandSender {
     // Loaded chunks...
     private List<Long> loadedChunks;
     private Long lastChatReset;
-    private int sentChatMessage;
+    private int sentChatMessages;
 
     public Player(final PlayerManager manager, final Client connection, final PlayerID id, final PlayerInventory inventory,
-                  final int entityID, final World world, final TrackedLocation pos, final PlayerAbilities abilites, final Gamemode gamemode) {
+                  final int entityID, final World world, final TrackedLocation pos, final PlayerAbilities abilities, final Gamemode gamemode) {
         super(EntityType.PLAYER, entityID, world, pos);
         this.inventory = inventory;
         this.manager = manager;
         this.id = id;
-        this.abilites = abilites;
+        this.abilites = abilities;
         this.connection = connection;
         this.gamemode = gamemode;
         this.gamemodeUpdate = false;
@@ -113,7 +113,7 @@ public class Player extends Entity implements IPlayer, CommandSender {
         }
         this.loadedChunks = Collections.synchronizedList(new ArrayList<Long>());
         this.lastChatReset = System.currentTimeMillis();
-        this.sentChatMessage = 0;
+        this.sentChatMessages = 0;
     }
 
     public Player(AbstractPlayer player, Gamemode gm) {
@@ -447,7 +447,7 @@ public class Player extends Entity implements IPlayer, CommandSender {
 			if(!loadedChunks.contains(c.getPos().encode()))
 				loadedChunks.add(c.getPos().encode());
 	}
-	
+
 	public void unloadChunk(Chunk c) {
 		getClient().sendPacket(new UnloadChunkPacket(c.getPos()));
 	}
@@ -463,10 +463,10 @@ public class Player extends Entity implements IPlayer, CommandSender {
     public boolean insertMessage() {
         if (System.currentTimeMillis() - lastChatReset >= (5000 /* 5 seconds */)) {
             lastChatReset = System.currentTimeMillis();
-            sentChatMessage = 1;
+            sentChatMessages = 1;
             return false;
         }
-        ++sentChatMessage;
-        return sentChatMessage > 10;
+        ++sentChatMessages;
+        return sentChatMessages > 10;
     }
 }

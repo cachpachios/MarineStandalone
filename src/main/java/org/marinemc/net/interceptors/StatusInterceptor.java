@@ -31,7 +31,7 @@ public class StatusInterceptor implements PacketInterceptor {
     @Override
     public boolean intercept(int id, ByteData data, Client c) {
         if (id == 0x00) {
-            MultiplayerListPacket packet = new MultiplayerListPacket();
+            MultiplayerListPacket packet = new MultiplayerListPacket(c);
             c.sendPacket(packet);
         } else if (id == 0x01) {
             PingPacket packet = new PingPacket();

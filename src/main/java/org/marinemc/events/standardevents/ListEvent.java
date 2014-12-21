@@ -21,6 +21,7 @@ package org.marinemc.events.standardevents;
 
 import org.marinemc.events.Cancellable;
 import org.marinemc.events.Event;
+import org.marinemc.net.Client;
 import org.marinemc.net.handshake.ListResponse;
 
 /**
@@ -32,11 +33,17 @@ public class ListEvent extends Event implements Cancellable {
 
     private ListResponse response;
     private boolean cancelled;
+    private Client client;
 
-    public ListEvent(ListResponse response) {
+    public ListEvent(Client client, ListResponse response) {
         super("list");
         this.response = response;
         this.cancelled = false;
+        this.client = client;
+    }
+
+    public Client getClient() {
+        return this.client;
     }
 
     public ListResponse getResponse() {
