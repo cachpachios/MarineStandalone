@@ -20,7 +20,6 @@
 package org.marinemc.net.interceptors;
 
 import org.marinemc.game.PlayerManager;
-import org.marinemc.game.async.ChatManager;
 import org.marinemc.io.data.ByteData;
 import org.marinemc.net.Client;
 import org.marinemc.net.play.KeepAlivePacket;
@@ -62,8 +61,8 @@ public class IngameInterceptor implements PacketInterceptor {
                 }
                 players.getPlayerByClient(c).executeCommand(parts[0], args);
             } else {
-                players.getChat().brodcastMessage(ChatManager.format(p.getMessage(), players.getPlayerByClient(c)));
-
+                // players.getChat().brodcastMessage(ChatManager.format(p.getMessage(), players.getPlayerByClient(c)));
+                players.getChat().sendChatMessage(players.getPlayerByClient(c), p.getMessage());
             }
         } else if (id == 0x06) {
             ServerboundPlayerLookPositionPacket packet = new ServerboundPlayerLookPositionPacket();

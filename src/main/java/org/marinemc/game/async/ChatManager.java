@@ -21,6 +21,7 @@ package org.marinemc.game.async;
 
 import org.marinemc.events.standardevents.ChatEvent;
 import org.marinemc.game.PlayerManager;
+import org.marinemc.logging.Logging;
 import org.marinemc.net.play.clientbound.ChatPacket;
 import org.marinemc.player.Player;
 import org.marinemc.server.Marine;
@@ -73,6 +74,7 @@ public class ChatManager {
 
     public void brodcastMessage(String msg) {
         manager.broadcastPacket(new ChatPacket(msg));
+        Logging.getLogger().log(msg);
     }
 
     public void sendChatMessage(Player player, String message) {

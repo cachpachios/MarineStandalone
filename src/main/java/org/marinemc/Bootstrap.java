@@ -178,7 +178,7 @@ public class Bootstrap {
                 ServerProperties.PROTOCOL_VERSION, ServerProperties.MINECRAFT_NAME);
         // Check if the build is stable
         if (!ServerProperties.BUILD_STABLE) {
-            Logging.getLogger().warn("-- You are running an unstable build");
+            Logging.getLogger().warn("You are running an unstable build");
         }
         if (ServerSettings.getInstance().offlineMode) {
             Logging.getLogger().warn("-- You are running the server with §c§loffline§f mode");

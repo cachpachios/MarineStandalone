@@ -90,7 +90,7 @@ public class Logging extends PrintStream {
     }
 
     public void log(final String s) {
-        c.write(format('3', s));
+        c.write(format('3', s).replace("<", "&lt;").replace(">", "&gt;"));
         String l = format(s);
         System.out.println(l);
         list.add(l);
