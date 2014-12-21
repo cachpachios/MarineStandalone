@@ -1,29 +1,32 @@
 package org.marinemc.io.binary;
 
 import java.nio.charset.Charset;
-import java.util.Deque;
-import java.util.LinkedList;
 
-public class ByteWrapper implements ByteOutput, Byteable {
-	final Deque<Byte> queue;
+public class ByteArray extends AbstractInput implements ByteOutput, StoredReader {
+
+	byte[] data;
 	
-	public ByteWrapper() {
-		queue = new LinkedList<Byte>();
+	int position = -1;
+	
+	public ByteArray(byte[] data) {
+		this.data = data;
 	}
-
+	
 	@Override
-	public void writeBoolean(boolean v) {
-		if(v)
-			writeByte((byte) 0x01);
-		else
-			writeByte((byte) 0x00);
+	public byte readByte() {
+		return 0;
 	}
 
 	@Override
 	public void writeByte(byte v) {
-		queue.add(v);
+		write(new byte[] {v});
 	}
 
+	
+	public void write(byte... v) {
+		data = ByteUtils.writeEnd(data, v);
+	}
+	
 	@Override
 	public void writeShort(short v) {
 		writeByte((byte) (0xff & (v >> 8)));
@@ -97,18 +100,43 @@ public class ByteWrapper implements ByteOutput, Byteable {
 	}
 
 	@Override
-	public void write(byte... input) {
-		for(byte b : input)
-			queue.add(b);
+	public void writeBoolean(boolean v) {
+		if(v)
+			writeByte((byte) 0x01);
+		else
+			writeByte((byte) 0x00);
 	}
 
 	@Override
-	public byte[] toBytes() {
-		final int size = queue.size();
-        final byte[] result = new byte[size];
-        for (int i = 0; i < size; i++) {
-            result[i] = queue.poll();
-        }
-        return result;
+	public int getReaderPosition() {
+		return position;
 	}
+
+	@Override
+	public int getRemainingBytes() {
+		return data.length - position;
+	}
+
+	@Override
+	public int getByteLength() {
+		return data.length;
+	}
+
+	@Override
+	public void skipBytes(int amount) {
+		position += amount;
+	}
+
+	@Override
+	public void backReader(int amount) {
+		position -= amount;
+	}
+
+	@Override
+	public void skipNextByte() {
+		++position;
+	}
+
+
+	
 }

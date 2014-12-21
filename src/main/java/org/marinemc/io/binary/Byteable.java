@@ -17,8 +17,10 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package org.marinemc.io.data;
+package org.marinemc.io.binary;
 /**
+ * Used to indicate that the object can return its self in a byte array in use of saving/sending to client
+ * 
  * @author Fozie
  */
 public interface Byteable {

@@ -19,6 +19,7 @@
 
 package org.marinemc.server;
 
+import org.json.JSONException;
 import org.marinemc.events.Event;
 import org.marinemc.events.EventManager;
 import org.marinemc.events.standardevents.ServerReadyEvent;
@@ -70,7 +71,7 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
     private final PlayerManager playerManager;
     private final WorldManager worldManager;
     private final Scheduler scheduler;
-    private final JSONFileHandler jsonFileHandler;
+    private JSONFileHandler jsonFileHandler;
     private final Timer timer;
     private final int tickRate;
     private Base64Image image;
@@ -94,7 +95,11 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
         this.pluginFolder = new File("./plugins");
         this.storageFolder = new File("./storage");
         this.settingsFolder = new File("./settings");
-        this.jsonFileHandler = new JSONFileHandler(settingsFolder, storageFolder);
+        try {
+			this.jsonFileHandler = new JSONFileHandler(settingsFolder, storageFolder);
+		} catch (JSONException e) {
+			this.jsonFileHandler = null;
+		}
         this.scheduler = new Scheduler();
         this.console = new ConsoleSender();
         this.gamemode = Gamemode.valueOf(ServerSettings.getInstance().gamemode.toUpperCase());

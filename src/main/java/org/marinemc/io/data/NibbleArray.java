@@ -20,6 +20,8 @@
 package org.marinemc.io.data;
 
 import java.util.List;
+
+import org.marinemc.io.binary.Byteable;
 /**
  * @author Fozie
  */

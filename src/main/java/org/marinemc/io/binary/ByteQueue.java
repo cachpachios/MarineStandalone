@@ -4,7 +4,7 @@ import java.nio.charset.Charset;
 import java.util.Deque;
 import java.util.LinkedList;
 
-public class ByteQueue extends AbstractInput implements ByteOutput, ByteFlusher {
+public class ByteQueue extends AbstractInput implements ByteOutput, Byteable {
 	final Deque<Byte> queue;
 	
 	public ByteQueue(byte[] data) {
@@ -110,7 +110,7 @@ public class ByteQueue extends AbstractInput implements ByteOutput, ByteFlusher 
 	}
 
 	@Override
-	public byte[] flushBytes() {
+	public byte[] toBytes() {
 		final int size = queue.size();
 		final byte[] result = new byte[size];
 		for (int i = 0; i < size; i++) {

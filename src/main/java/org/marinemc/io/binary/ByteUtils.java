@@ -14,7 +14,7 @@ public class ByteUtils {
         return result;
     }
 
-    public static byte[] unwrap(Byte[] array) {
+    public static byte[] unwrap(final Byte[] array) {
         if (array == null)
             return null;
         else if (array.length == 0)
@@ -26,5 +26,14 @@ public class ByteUtils {
             result[i] = (b == null ? 0 : b.byteValue());
         }
         return result;
+    }
+    
+    public static byte[] writeEnd(final byte[] input, final byte[] data) {
+    	final byte[] r = new byte[input.length + data.length];
+    	
+    	System.arraycopy(input, 0, r, 0, input.length);
+    	System.arraycopy(data, 0, r, input.length, data.length);
+    	
+    	return r;
     }
 }

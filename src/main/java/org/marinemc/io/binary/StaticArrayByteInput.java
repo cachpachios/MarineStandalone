@@ -1,6 +1,6 @@
 package org.marinemc.io.binary;
 
-public class StaticArrayByteInput extends AbstractInput implements StoredReader, ByteFlusher {
+public class StaticArrayByteInput extends AbstractInput implements StoredReader, Byteable {
 
 	final byte[] data;
 
@@ -18,13 +18,14 @@ public class StaticArrayByteInput extends AbstractInput implements StoredReader,
 
 	@Override
 	public int getReaderPosition() {
-		// TODO Auto-generated method stub
-		return position;
+		if(position == -1)
+			return 0;
+		else
+			return position;
 	}
 
 	@Override
 	public int getRemainingBytes() {
-		// TODO Auto-generated method stub
 		return data.length - position;
 	}
 
@@ -49,7 +50,7 @@ public class StaticArrayByteInput extends AbstractInput implements StoredReader,
 	}
 
 	@Override
-	public byte[] flushBytes() {
+	public byte[] toBytes() {
 		return data;
 	}
 

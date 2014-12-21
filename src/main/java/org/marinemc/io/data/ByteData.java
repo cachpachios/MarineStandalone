@@ -21,6 +21,7 @@ package org.marinemc.io.data;
 
 import org.marinemc.io.ByteCompressor;
 import org.marinemc.io.ByteCompressor.EncodingUseless;
+import org.marinemc.io.binary.Byteable;
 import org.marinemc.logging.Logging;
 import org.marinemc.util.Position;
 
