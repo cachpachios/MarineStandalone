@@ -25,6 +25,7 @@ import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
 import org.marinemc.player.Player;
 import org.marinemc.server.Marine;
+import org.marinemc.world.Difficulty;
 
 import java.io.IOException;
 /**
@@ -52,6 +53,7 @@ public class JoinGamePacket extends Packet {
         d.writeByte(p.getGamemode().getID()); // Gamemode
 
         d.writeByte(p.getWorld().getDimension().getID()); // Dimension
+        d.writeByte(Difficulty.EASY.getID()); // TODO: Generic Difficulty
         d.writeByte(p.getPlayerManager().getServer().getDefaultDifficulty().getID()); // Difficulty
 
         d.writeByte((byte) Marine.getMaxPlayers()); // MaxPlayers
