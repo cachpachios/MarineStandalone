@@ -19,13 +19,13 @@
 
 package org.marinemc.plugins;
 
-import org.marinemc.Logging;
 import org.marinemc.events.EventListener;
 import org.marinemc.events.EventManager;
 import org.marinemc.game.CommandManager;
 import org.marinemc.game.chat.ChatColor;
 import org.marinemc.game.command.Command;
 import org.marinemc.game.command.CommandProvider;
+import org.marinemc.logging.Logging;
 
 import java.io.File;
 import java.util.UUID;

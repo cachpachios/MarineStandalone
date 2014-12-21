@@ -19,7 +19,7 @@
 
 package org.marinemc.settings;
 
-import org.marinemc.Logging;
+import org.marinemc.logging.Logging;
 
 import java.io.BufferedReader;
 import java.io.File;

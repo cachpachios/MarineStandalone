@@ -19,7 +19,7 @@
 
 package org.marinemc.game.system;
 
-import org.marinemc.Logging;
+import org.marinemc.logging.Logging;
 import org.marinemc.plugins.Plugin;
 import org.marinemc.plugins.PluginClassLoader;
 import org.marinemc.util.annotations.Protected;

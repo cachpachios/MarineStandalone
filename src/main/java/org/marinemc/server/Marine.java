@@ -19,10 +19,10 @@
 
 package org.marinemc.server;
 
-import org.marinemc.Logging;
 import org.marinemc.game.chat.builder.Chat;
 import org.marinemc.game.scheduler.Scheduler;
 import org.marinemc.game.system.MarineSecurityManager;
+import org.marinemc.logging.Logging;
 import org.marinemc.player.Player;
 import org.marinemc.util.annotations.Protected;
 import org.marinemc.world.World;

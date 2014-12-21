@@ -19,10 +19,10 @@
 
 package org.marinemc.plugins;
 
-import org.marinemc.Logging;
 import org.marinemc.events.EventManager;
 import org.marinemc.events.standardevents.PluginEnableEvent;
 import org.marinemc.game.system.MarineSecurityManager;
+import org.marinemc.logging.Logging;
 import org.marinemc.server.Marine;
 import org.marinemc.util.FileUtils;
 import sun.misc.JarFilter;

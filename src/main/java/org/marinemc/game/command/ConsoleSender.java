@@ -19,10 +19,10 @@
 
 package org.marinemc.game.command;
 
-import org.marinemc.Logging;
 import org.marinemc.game.CommandManager;
 import org.marinemc.game.chat.ChatComponent;
 import org.marinemc.game.chat.ChatMessage;
+import org.marinemc.logging.Logging;
 import org.marinemc.util.Location;
 
 /**

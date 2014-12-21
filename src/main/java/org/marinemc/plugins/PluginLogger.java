@@ -19,7 +19,7 @@
 
 package org.marinemc.plugins;
 
-import org.marinemc.Logging;
+import org.marinemc.logging.Logging;
 
 /**
  * The logger used in plugins

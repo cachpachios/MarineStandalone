@@ -20,6 +20,7 @@
 package org.marinemc;
 
 import org.marinemc.game.system.MarineSecurityManager;
+import org.marinemc.logging.Logging;
 import org.marinemc.server.ServerProperties;
 import org.marinemc.server.StandaloneServer;
 import org.marinemc.settings.ServerSettings;

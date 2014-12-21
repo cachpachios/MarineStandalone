@@ -19,7 +19,6 @@
 
 package org.marinemc.server;
 
-import org.marinemc.Logging;
 import org.marinemc.events.Event;
 import org.marinemc.events.EventManager;
 import org.marinemc.game.PlayerManager;
@@ -28,6 +27,7 @@ import org.marinemc.game.command.CommandProvider;
 import org.marinemc.game.command.CommandSender;
 import org.marinemc.game.command.ConsoleSender;
 import org.marinemc.game.system.MarineSecurityManager;
+import org.marinemc.logging.Logging;
 import org.marinemc.player.Gamemode;
 import org.marinemc.player.Player;
 import org.marinemc.plugins.PluginLoader;

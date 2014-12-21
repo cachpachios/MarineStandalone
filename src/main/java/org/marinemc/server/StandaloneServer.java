@@ -20,7 +20,6 @@
 package org.marinemc.server;
 
 import org.marinemc.Bootstrap;
-import org.marinemc.Logging;
 import org.marinemc.events.EventManager;
 import org.marinemc.events.standardevents.ServerReadyEvent;
 import org.marinemc.game.CommandManager;
@@ -29,6 +28,7 @@ import org.marinemc.game.WorldManager;
 import org.marinemc.game.chat.ChatColor;
 import org.marinemc.game.commands.*;
 import org.marinemc.game.scheduler.Scheduler;
+import org.marinemc.logging.Logging;
 import org.marinemc.net.NetworkManager;
 import org.marinemc.net.play.clientbound.KickPacket;
 import org.marinemc.player.Player;

@@ -20,7 +20,7 @@
 package org.marinemc.events;
 
 import org.marinemc.Bootstrap;
-import org.marinemc.Logging;
+import org.marinemc.logging.Logging;
 import org.marinemc.plugins.Plugin;
 
 import java.util.*;
