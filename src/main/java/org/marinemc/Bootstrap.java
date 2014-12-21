@@ -177,8 +177,14 @@ public class Bootstrap {
         Logging.getLogger().logf("Starting MarineStandalone Server - Protocol Version §c§o{0}§0 (Minecraft §c§o{1}§0)",
                 ServerProperties.PROTOCOL_VERSION, ServerProperties.MINECRAFT_NAME);
         // Check if the build is stable
-        if (!ServerProperties.BUILD_STABLE)
-            Logging.getLogger().warn("You are running an unstable build");
+        if (!ServerProperties.BUILD_STABLE) {
+            Logging.getLogger().warn("-- You are running an unstable build");
+        }
+        if (ServerSettings.getInstance().offlineMode) {
+            Logging.getLogger().warn("-- You are running the server with §c§loffline§f mode");
+            Logging.getLogger().warn("-- Whilst this will allow you to play without internet access,");
+            Logging.getLogger().warn("-- it also gives hackers easy access to your server");
+        }
         try {
             new Server(settings);
         } catch (final Throwable e) {
