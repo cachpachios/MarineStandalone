@@ -49,7 +49,7 @@ public class LoginHandler {
 
     private LoginResponse preJoin(String preName, Client c) { // Returns null if login succeded, otherwise makes LoginInterceptor drop the client
         UUID uuid = UUIDHandler.getUUID(preName); //UUID.randomUUID();
-        String name = UUIDHandler.getName(uuid);
+        String name = preName; // UUIDHandler.getName(uuid);
 
 
         if (uuid == null) {

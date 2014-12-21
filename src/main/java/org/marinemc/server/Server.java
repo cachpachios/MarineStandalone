@@ -86,10 +86,10 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
         this.timer = new Timer("mainTimer", true);
         this.port = settings.port;
         this.tickRate = settings.tickrate;
-        this.networkManager = new NetworkManager(this, port, ServerSettings.getInstance().useHasing);
         this.worldManager = new WorldManager(this);
         this.playerManager = new PlayerManager(this);
         this.pluginLoader = new PluginLoader(new PluginManager());
+        this.networkManager = new NetworkManager(this, port, ServerSettings.getInstance().useHasing);
         this.pluginFolder = new File("./plugins");
         this.storageFolder = new File("./storage");
         this.settingsFolder = new File("./settings");

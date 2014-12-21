@@ -80,7 +80,7 @@ public class Test extends Command {
                 player.getClient().sendPacket(new GameStateChangePacket(GameStateChangePacket.Reason.DEMO_MESSAGES, 0f));
                 break;
             case "crafting":
-                player.openInventory(new CraftingInventory());
+                player.openInventory(new CraftingInventory(player.nextWindowID()));
                 break;
             case "display_name":
                 if (arguments.length > 1) {
