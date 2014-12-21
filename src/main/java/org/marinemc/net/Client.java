@@ -21,6 +21,7 @@ package org.marinemc.net;
 
 import org.marinemc.io.data.ByteData;
 import org.marinemc.io.data.ByteEncoder;
+import org.marinemc.server.Marine;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,8 +33,6 @@ import java.util.List;
  * @author Fozie
  */
 public class Client {
-
-    private final NetworkManager networkManager;
     private final Socket connection;
     private final PacketOutputStream output;
 
@@ -44,27 +43,35 @@ public class Client {
 
     // For indexing in IngameInterceptor
     // private String userName;
-    private short uid;
+    private Short uid; // Saved as Short not short for the ability to equal null
 
-    public Client(NetworkManager network, Socket s) throws IOException {
+    public Client(Socket s) throws IOException {
         this.state = States.HANDSHAKE;
-        this.networkManager = network;
         this.connection = s;
         this.input = s.getInputStream();
-        output = new PacketOutputStream(this, s.getOutputStream());
-        this.uid = -1;
+        output = new PacketOutputStream(s.getOutputStream());
+        this.uid = null;
     }
 
+    private boolean disconnected = false;;
+    
     public void sendPacket(Packet packet) { //TODO: PacketBuffer
         try {
             packet.writeToStream(output);
+            System.out.println(packet.getID());
         } catch (IOException e) {
-            networkManager.cleanUp(this);
+        	if(!disconnected)
+            if(this.uid == null)
+            	Marine.getServer().getNetworkManager().cleanUp(this);
+            else {
+            	disconnected = true;
+            	Marine.getServer().getPlayerManager().silent_disconnect(Marine.getServer().getPlayerManager().getPlayer(uid), "Connection closed.");
+            }
         }
     }
 
     public NetworkManager getNetwork() {
-        return networkManager;
+        return Marine.getServer().getNetworkManager();
     }
 
     public InetAddress getAdress() {

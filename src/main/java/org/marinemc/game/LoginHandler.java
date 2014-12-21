@@ -106,6 +106,8 @@ public class LoginHandler {
     public void passPlayer(IPlayer player) { //TODO: Encryption
         Player p = playerManager.passFromLogin(player);
 
+        p.getClient().setUID(p.getUID());
+        
         p.getClient().sendPacket(new LoginSucessPacket(p));
 
         p.getClient().setState(States.INGAME);

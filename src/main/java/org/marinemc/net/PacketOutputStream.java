@@ -30,10 +30,7 @@ public class PacketOutputStream { // Here we enable encryption and compression i
 
     private final OutputStream stream;
 
-    private final Client c;
-
-    public PacketOutputStream(Client c, OutputStream stream) {
-        this.c = c;
+    public PacketOutputStream(OutputStream stream) {
         this.stream = stream;
     }
 
@@ -50,7 +47,6 @@ public class PacketOutputStream { // Here we enable encryption and compression i
         data.writeVarInt(0, id);
 
         data.writePacketPrefix();
-
 
         stream.write(data.getBytes());
     }

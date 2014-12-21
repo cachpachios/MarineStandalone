@@ -2,9 +2,14 @@ package org.marinemc.io.binary;
 
 import java.nio.charset.Charset;
 
+/**
+ * ByteArray is a Stored reader with output and input functionality
+ * 
+ * @author Fozie
+ */
 public class ByteArray extends AbstractInput implements ByteOutput, StoredReader {
 
-	byte[] data;
+	protected byte[] data;
 	
 	int position = -1;
 	

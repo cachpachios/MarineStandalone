@@ -59,6 +59,7 @@ public class Player extends Entity implements IPlayer, CommandSender {
 
     // PlayerManager
     private final PlayerManager manager;
+    
     // Permissions
     private final Collection<String> permissions;
     // Unique ID

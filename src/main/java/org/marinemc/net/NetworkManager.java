@@ -19,18 +19,21 @@
 
 package org.marinemc.net;
 
-import org.marinemc.logging.Logging;
-import org.marinemc.server.MarineServer;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+
+import org.marinemc.logging.Logging;
+import org.marinemc.server.Marine;
 /**
  * @author Fozie
  */
 public class NetworkManager {
-    private final MarineServer marineServer;
     public PacketHandler packetHandler;
     public ServerSocket server;
     public ClientProcessor clientHandler;
@@ -39,9 +42,7 @@ public class NetworkManager {
 
     private ConnectionThread connector;
 
-    public NetworkManager(MarineServer marineServer, int port, boolean hashing) {
-        this.marineServer = marineServer;
-
+    public NetworkManager(int port, boolean hashing) {
         if (hashing)
             clientList = Collections.synchronizedSet(new HashSet<Client>());
         else
@@ -61,7 +62,7 @@ public class NetworkManager {
         }
         connector = new ConnectionThread(this);
 
-        packetHandler = new PacketHandler(marineServer);
+        packetHandler = new PacketHandler(Marine.getServer());
 
         clientHandler = new ClientProcessor(this);
     }
@@ -86,7 +87,7 @@ public class NetworkManager {
     public void connect(Socket accept) {
         Client c;
         try {
-            c = new Client(this, accept);
+            c = new Client(accept);
         } catch (IOException e) {
             return;
         }
@@ -112,13 +113,13 @@ public class NetworkManager {
                 Client.ConnectionStatus status = c.process();
                 if (status == Client.ConnectionStatus.CONNECTION_PROBLEMS)
                     if (c.getUID() != -1) {
-                        this.marineServer.getPlayerManager().disconnect(marineServer.getPlayerManager().getPlayerByClient(c), "Client Disconnected");
+                    	Marine.getServer().getPlayerManager().disconnect(Marine.getServer().getPlayerManager().getPlayerByClient(c), "Client Disconnected");
                     } else {
                         cleanUp(c);
                     }
                 else if (status == Client.ConnectionStatus.CLOSED) {
                     if (c.getUID() != -1) {
-                        this.marineServer.getPlayerManager().disconnect(marineServer.getPlayerManager().getPlayerByClient(c), "Client Disconnected");
+                    	Marine.getServer().getPlayerManager().disconnect(Marine.getServer().getPlayerManager().getPlayerByClient(c), "Client Disconnected");
                     } else
                         cleanUp(c);
                 }
@@ -140,7 +141,7 @@ public class NetworkManager {
     	synchronized(clientList) {
 		for (final Client c : clientList) {
 		    if (!c.isActive())
-		            marineServer.getPlayerManager().disconnect(marineServer.getPlayerManager().getPlayerByClient(c), "Connection Quit");
+		    	Marine.getServer().getPlayerManager().disconnect(Marine.getServer().getPlayerManager().getPlayerByClient(c), "Connection Quit");
 		}}
     }
 

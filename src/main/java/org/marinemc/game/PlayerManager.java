@@ -202,6 +202,12 @@ public class PlayerManager {
         cleanUp(p);
     }
 
+
+	public void silent_disconnect(Player player, String string) {
+		cleanUp(player);
+		player.disconnect();
+	}
+    
     public void disconnect_timeout(Player p, String reason) {
         if (p == null)
             return;
@@ -221,7 +227,9 @@ public class PlayerManager {
         timeout.addPlayerToManager(p);
 
         p.getClient().sendPacket(new JoinGamePacket(p));
-
+        
+        p.sendAbilites();
+        
         p.sendPosition();
         
         final List<Chunk> chunksToSend = p.getWorld().getChunks(0, 0, 2, 2);
@@ -232,8 +240,6 @@ public class PlayerManager {
         p.loadChunks(chunksToSend);
         
         p.sendMapData(chunksToSend);
-        
-        p.sendAbilites();
         
         p.sendPosition();
         
