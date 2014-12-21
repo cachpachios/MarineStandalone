@@ -19,7 +19,7 @@
 
 package org.marinemc.world.entity;
 
-import org.marinemc.Logging;
+import org.marinemc.logging.Logging;
 import org.marinemc.util.Location;
 import org.marinemc.util.Position;
 import org.marinemc.util.TrackedLocation;

@@ -21,6 +21,7 @@ package org.marinemc.world.chunk;
 
 import org.marinemc.io.data.ByteData;
 import org.marinemc.player.Player;
+import org.marinemc.server.Marine;
 import org.marinemc.util.Position;
 import org.marinemc.util.annotations.Cautious;
 import org.marinemc.util.annotations.Serverside;
@@ -86,7 +87,7 @@ public class Chunk {
 
     public void updateBlockChange(Position pos, BlockID type) {
         for (Short s : subscribingPlayers)
-            w.getServer().getPlayerManager().getPlayer(s).sendBlockUpdate(pos, type);
+            Marine.getPlayer(s).sendBlockUpdate(pos, type);
     }
 
     public void updateBlockChange(int x, int y, int z, BlockID type) {
@@ -285,8 +286,8 @@ public class Chunk {
 		
 		int i = -1;
 		for(final short s : subscribingPlayers)
-			pl[i] = w.getServer().getPlayerManager().getPlayer(s);
-		
-		return pl;
-	}
+            pl[i] = Marine.getPlayer(s);
+
+        return pl;
+    }
 }

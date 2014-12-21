@@ -20,6 +20,7 @@
 package org.marinemc.net.handshake;
 
 import org.json.simple.JSONArray;
+import org.marinemc.util.Base64Image;
 
 /**
  * Created 2014-12-02 for MarineStandalone
@@ -28,30 +29,10 @@ import org.json.simple.JSONArray;
  */
 public class ListResponse {
 
-    /**
-     * Message of the day
-     */
-    public final String MOTD;
-
-    /**
-     * Current player count
-     */
-    public final int CURRENT_PLAYERS;
-
-    /**
-     * Max player count
-     */
-    public final int MAX_PLAYERS;
-
-    /**
-     * A sample list of players (can be used for messages)
-     */
-    public JSONArray SAMPLE_PLAYERS;
-
-    /**
-     * Server favicon
-     */
-    public String FAVICON;
+    private String motd;
+    private Base64Image favicon;
+    private int maxPlayers, currentPlayers;
+    private JSONArray samplePlayers;
 
     /**
      * Create a new list response
@@ -62,12 +43,51 @@ public class ListResponse {
      * @param samplePlayers  Sample player list
      * @param favicon        Server icon
      */
-    public ListResponse(String motd, int currentPlayers, int maxPlayers, JSONArray samplePlayers, String favicon) {
-        this.MOTD = motd;
-        this.CURRENT_PLAYERS = currentPlayers;
-        this.MAX_PLAYERS = maxPlayers;
-        this.SAMPLE_PLAYERS = samplePlayers;
-        this.FAVICON = favicon;
+    public ListResponse(String motd, int currentPlayers, int maxPlayers, JSONArray samplePlayers, Base64Image favicon) {
+        this.motd = motd;
+        this.favicon = favicon;
+        this.maxPlayers = maxPlayers;
+        this.currentPlayers = currentPlayers;
+        this.samplePlayers = samplePlayers;
     }
 
+    public String getMOTD() {
+        return this.motd;
+    }
+
+    public Base64Image getFavicon() {
+        return this.favicon;
+    }
+
+    public void setFavicon(Base64Image favicon) {
+        this.favicon = favicon;
+    }
+
+    public int getMaxPlayers() {
+        return this.maxPlayers;
+    }
+
+    public void setMaxPlayers(int maxPlayers) {
+        this.maxPlayers = maxPlayers;
+    }
+
+    public int getCurrentPlayers() {
+        return this.currentPlayers;
+    }
+
+    public void setCurrentPlayers(int currentPlayers) {
+        this.currentPlayers = currentPlayers;
+    }
+
+    public JSONArray getSamplePlayers() {
+        return this.samplePlayers;
+    }
+
+    public void setSamplePlayers(JSONArray samplePlayers) {
+        this.samplePlayers = samplePlayers;
+    }
+
+    public void setMotd(String motd) {
+        this.motd = motd;
+    }
 }

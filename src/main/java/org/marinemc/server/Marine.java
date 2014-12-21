@@ -19,11 +19,10 @@
 
 package org.marinemc.server;
 
-import org.marinemc.Logging;
-import org.marinemc.StandaloneServer;
 import org.marinemc.game.chat.builder.Chat;
 import org.marinemc.game.scheduler.Scheduler;
 import org.marinemc.game.system.MarineSecurityManager;
+import org.marinemc.logging.Logging;
 import org.marinemc.player.Player;
 import org.marinemc.util.annotations.Protected;
 import org.marinemc.world.World;
@@ -48,6 +47,15 @@ public class Marine {
 
     protected static MarineServer server;
     protected static StandaloneServer standaloneServer;
+
+    /**
+     * Get the current motd
+     *
+     * @return Message Of the Day
+     */
+    public static String getMotd() {
+        return server.getMotd();
+    }
 
     /**
      * Get all players
@@ -89,15 +97,6 @@ public class Marine {
      */
     public static World getWorld(final String name) {
         return server.getWorld(name);
-    }
-
-    /**
-     * Get the current MOTD
-     *
-     * @return Current MOTD
-     */
-    public static String getMOTD() {
-        return server.getMOTD();
     }
 
     /**

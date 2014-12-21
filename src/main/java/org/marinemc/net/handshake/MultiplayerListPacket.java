@@ -21,47 +21,22 @@ package org.marinemc.net.handshake;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.marinemc.ServerProperties;
 import org.marinemc.events.standardevents.ListEvent;
 import org.marinemc.game.chat.ChatColor;
-import org.marinemc.io.Base64Encoding;
-import org.marinemc.io.BinaryFile;
 import org.marinemc.io.data.ByteData;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
 import org.marinemc.player.Player;
 import org.marinemc.server.Marine;
+import org.marinemc.server.ServerProperties;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 /**
  * @author Fozie
  */
 public class MultiplayerListPacket extends Packet {
-
-    private String img;
-
-    private String getImage() {
-        try {
-            if (img == null || img.equals("")) {
-                File file = new File("./res/favicon.png");
-                if (file.exists()) {
-                    BinaryFile f = new BinaryFile(file);
-                    f.readBinary();
-                    this.img = new String(Base64Encoding.encode(f.getData().getBytes()));
-                } else {
-                    this.img = "";
-                }
-                return img;
-            }
-        } catch (Throwable e) {
-            e.printStackTrace();
-            return "";
-        }
-        return img;
-    }
 
     @Override
     public int getID() {
@@ -77,6 +52,7 @@ public class MultiplayerListPacket extends Packet {
         if (Marine.getServer().getPlayerCount() == 0) {
             player.put("id", UUID.fromString("1-1-3-3-7").toString());
             player.put("name", ChatColor.red + "There is nobody online!");
+            samples.add(player);
         } else {
             for (Player p : Marine.getPlayers()) {
                 player = new JSONObject();
@@ -86,7 +62,7 @@ public class MultiplayerListPacket extends Packet {
             }
         }
 
-        ListResponse response = new ListResponse(Marine.getMOTD(), Marine.getPlayers().size(), Marine.getMaxPlayers(), samples, getImage());
+        ListResponse response = new ListResponse(Marine.getMotd(), Marine.getPlayers().size(), Marine.getMaxPlayers(), samples, Marine.getServer().getFavicon());
         ListEvent event = new ListEvent(response);
 
         Marine.getServer().callEvent(event);
@@ -118,17 +94,17 @@ public class MultiplayerListPacket extends Packet {
 
         JSONObject players = new JSONObject();
 
-        players.put("max", response.MAX_PLAYERS);
-        players.put("online", response.CURRENT_PLAYERS);
-        players.put("sample", response.SAMPLE_PLAYERS);
+        players.put("max", response.getMaxPlayers());
+        players.put("online", response.getCurrentPlayers());
+        players.put("sample", response.getSamplePlayers());
         json.put("players", players);
 
         JSONObject description = new JSONObject();
-        description.put("text", response.MOTD);
+        description.put("text", response.getMOTD());
         json.put("description", description);
 
-        if (response.FAVICON != null && response.FAVICON.length() > 0)
-            json.put("favicon", "data:image/png;base64," + response.FAVICON);
+        if (response.getFavicon() != null && response.getFavicon().toString().length() > 0)
+            json.put("favicon", "data:image/png;base64," + response.getFavicon());
 
         return json.toJSONString();
 

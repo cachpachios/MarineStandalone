@@ -40,7 +40,11 @@ public class Say extends Command {
 
     @Override
     public void execute(CommandSender sender, String[] arguments) {
-        arguments = replaceAll(arguments, sender);
-        Marine.broadcastMessage(ChatColor.transform('&', (StringUtils.join(Arrays.asList(arguments), " "))));
+        String message = ChatColor.transform('&', (StringUtils.join(Arrays.asList(replaceAll(arguments, sender)), " ")));
+        if (message.equals("")) {
+            sender.sendMessage("You cannot send an empty message");
+        } else {
+            Marine.broadcastMessage(message);
+        }
     }
 }

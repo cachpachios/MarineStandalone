@@ -19,8 +19,8 @@
 
 package org.marinemc.net;
 
-import org.marinemc.Logging;
-import org.marinemc.StandaloneServer;
+import org.marinemc.logging.Logging;
+import org.marinemc.server.StandaloneServer;
 
 import java.io.IOException;
 import java.net.ServerSocket;

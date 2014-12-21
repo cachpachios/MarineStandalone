@@ -30,11 +30,21 @@ public abstract class EventListener<T extends Event> {
 
     private final String listenTo;
     private final int accessor;
+    private final EventPriority priority;
     private Object y = null;
 
     public EventListener() {
+        this(EventPriority.MEDIUM);
+    }
+
+    public EventListener(final EventPriority priority) {
         this.listenTo = ((Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0]).getName();
         this.accessor = listenTo.hashCode();
+        this.priority = priority;
+    }
+
+    public EventPriority getPriority() {
+        return this.priority;
     }
 
     public abstract void listen(final T t);

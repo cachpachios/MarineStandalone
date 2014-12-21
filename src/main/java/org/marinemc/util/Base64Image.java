@@ -17,39 +17,49 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package org.marinemc.net;
+package org.marinemc.util;
 
-import org.marinemc.logging.Logging;
+import org.marinemc.io.Base64Encoding;
+import org.marinemc.io.BinaryFile;
 
+import java.io.File;
 import java.io.IOException;
-import java.net.Socket;
+
 /**
- * @author Fozie
+ * Created 2014-12-21 for MarineStandalone
+ *
+ * @author Citymonstret
  */
-public class ConnectionThread extends Thread {
-    private NetworkManager network;
+public class Base64Image {
 
-    //TODO: SOME KIND OF DDOS PROTECTION!
+    private final File file;
+    private final String string;
 
-    public ConnectionThread(NetworkManager manager) {
-        super("ServerConnector");
-        network = manager;
+    public Base64Image(final File file) {
+        if (file == null) {
+            this.file = null;
+            this.string = "";
+            return;
+        }
+        if (!file.exists()) {
+            throw new IllegalArgumentException("File cannot be null, and has to exist");
+        }
+        BinaryFile f = new BinaryFile(file);
+        try {
+            f.readBinary();
+        } catch (final IOException e) {
+            throw new RuntimeException("Unable to read in the binary data");
+        }
+        this.string = new String(Base64Encoding.encode(f.getData().getBytes()));
+        this.file = file;
     }
 
-    public void run() {
+    public File getFile() {
+        return this.file;
+    }
 
-        Logging.getLogger().log("Waiting for connection...");
-
-        while (true) { //TODO: Stopping and starting!
-            try {
-                Socket connection = network.server.accept();
-                network.connect(connection);
-                ConnectionThread.sleep(10);
-            } catch (InterruptedException e) {
-            } catch (IOException e) {
-                Logging.getLogger().error("Connetion problems with client.");
-            }
-
-        }
+    @Override
+    public String toString() {
+        return this.string;
     }
 }

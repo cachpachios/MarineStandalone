@@ -19,8 +19,8 @@
 
 package org.marinemc.player;
 
-import org.marinemc.StandaloneServer;
 import org.marinemc.net.Client;
+import org.marinemc.server.StandaloneServer;
 import org.marinemc.util.Location;
 import org.marinemc.util.Position;
 import org.marinemc.world.World;

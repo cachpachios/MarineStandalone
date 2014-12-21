@@ -38,6 +38,6 @@ public class Plugins extends Command {
 
     @Override
     public void execute(CommandSender sender, String[] arguments) {
-        sender.sendMessage("Plugins: " + StringUtils.join(Marine.getServer().getServer().getPluginLoader().getManager().getPlugins(), ", "));
+        sender.sendMessage("Plugins: " + StringUtils.join(Marine.getServer().getPluginLoader().getManager().getPlugins(), ", "));
     }
 }

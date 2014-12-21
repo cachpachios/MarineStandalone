@@ -19,7 +19,9 @@
 
 package org.marinemc.game;
 
+import org.marinemc.events.EventManager;
 import org.marinemc.events.standardevents.JoinEvent;
+import org.marinemc.events.standardevents.PreLoginEvent;
 import org.marinemc.game.async.ChatManager;
 import org.marinemc.net.Client;
 import org.marinemc.net.States;
@@ -68,7 +70,13 @@ public class LoginHandler {
             return new LoginResponse("IP Banned from the server");
         
         IPlayer p = new AbstractPlayer(playerManager.getServer(), playerManager.getServer().getWorldManager().getMainWorld(), new PlayerID(name, uuid), c, new PlayerAbilities(false, true, false, 0.2f, 0.2f), playerManager.getServer().getWorldManager().getMainWorld().getSpawnPoint().toLocation());
-        
+
+        PreLoginEvent event = new PreLoginEvent(p);
+        EventManager.getInstance().handle(event);
+        if (!event.isAllowed()) {
+            return new LoginResponse(event.getMessage());
+        }
+
         p.getLocation().setWorld(p.getWorld());
         
         short uid = UIDGenerator.instance().getUID(name);

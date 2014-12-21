@@ -19,19 +19,28 @@
 
 package org.marinemc.server;
 
-import com.google.common.eventbus.AsyncEventBus;
-import com.google.common.eventbus.EventBus;
-import org.marinemc.StandaloneServer;
 import org.marinemc.events.Event;
 import org.marinemc.events.EventManager;
+import org.marinemc.game.PlayerManager;
+import org.marinemc.game.chat.ChatColor;
+import org.marinemc.game.command.CommandProvider;
+import org.marinemc.game.command.CommandSender;
+import org.marinemc.game.command.ConsoleSender;
 import org.marinemc.game.system.MarineSecurityManager;
+import org.marinemc.logging.Logging;
+import org.marinemc.player.Gamemode;
 import org.marinemc.player.Player;
+import org.marinemc.plugins.PluginLoader;
+import org.marinemc.plugins.PluginManager;
+import org.marinemc.settings.ServerSettings;
+import org.marinemc.util.Base64Image;
+import org.marinemc.world.Difficulty;
 import org.marinemc.world.World;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.Executor;
 
 /**
  * Server implementation
@@ -39,29 +48,112 @@ import java.util.concurrent.Executor;
  * @author Citymonstret
  * @author Fozie
  */
-public class Server implements MarineServer {
+public class Server implements MarineServer, CommandProvider {
 
-    private final EventBus eventBus;
     private final StandaloneServer server;
-    private final AsyncEventBus asyncEventBus;
+    private final PluginLoader pluginLoader;
+    private final File pluginFolder;
+    private final CommandSender console;
+    private Base64Image image;
+    private Gamemode gamemode;
+    private Difficulty difficulty;
+    private String motd;
+    private int maxPlayers;
 
     public Server(final StandaloneServer server) {
         // Security Check Start
         System.getSecurityManager().checkPermission(MarineSecurityManager.MARINE_PERMISSION);
         // Security Check end
         this.server = server;
-        this.eventBus = new EventBus();
-        this.asyncEventBus = new AsyncEventBus(new Executor() {
-            @Override
-            public void execute(final Runnable command) {
-                command.run();
+        this.pluginLoader = new PluginLoader(new PluginManager());
+        this.pluginFolder = new File("./plugins");
+        this.console = new ConsoleSender();
+        this.gamemode = Gamemode.SURVIVAL;
+        this.difficulty = Difficulty.PEACEFUL;
+        this.motd = ChatColor.transform('&', ServerSettings.getInstance().motd);
+        this.maxPlayers = 999;
+    }
+
+    @Override
+    final public Gamemode getDefaultGamemode() {
+        return gamemode;
+    }
+
+    @Override
+    final public void setDefaultGamemode(Gamemode gamemode) {
+        this.gamemode = gamemode;
+    }
+
+    @Override
+    final public String getMotd() {
+        return this.motd;
+    }
+
+    @Override
+    final public void setMotd(String motd) {
+        this.motd = motd;
+    }
+
+    @Override
+    final public Difficulty getDefaultDifficulty() {
+        return difficulty;
+    }
+
+    @Override
+    final public void setDefaultDifficulty(Difficulty difficulty) {
+        this.difficulty = difficulty;
+    }
+
+    @Override
+    final public PlayerManager getPlayerManager() {
+        return server.players;
+    }
+
+    @Override
+    final public CommandSender getConsoleSender() {
+        return this.console;
+    }
+
+    @Override
+    final public File getPluginFolder() {
+        return this.pluginFolder;
+    }
+
+    @Override
+    final public void loadPlugins() {
+        Logging.getLogger().log("Plugin Folder: " + pluginFolder.getPath());
+        if (!pluginFolder.exists()) {
+            if (!pluginFolder.mkdir()) {
+                Logging.getLogger().error("Could not create the plugin folder");
+                return;
             }
-        });
+        }
+        Logging.getLogger().log("Loading Plugins...");
+        pluginLoader.loadAllPlugins(pluginFolder);
+        Logging.getLogger().log("Enabling Plugins...");
+        pluginLoader.enableAllPlugins();
+    }
+
+    @Override
+    final public Base64Image getFavicon() {
+        if (image == null) {
+            try {
+                File file = new File("./res/favicon.png");
+                if (file.exists()) {
+                    this.image = new Base64Image(file);
+                } else {
+                    this.image = new Base64Image(null);
+                }
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
+        }
+        return image;
     }
 
     @Override
     final public Player getPlayer(final short uid) {
-        return this.getServer().getPlayerManager().getPlayer(uid);
+        return this.getPlayerManager().getPlayer(uid);
     }
 
     @Override
@@ -71,7 +163,7 @@ public class Server implements MarineServer {
 
     @Override
     final public Collection<Player> getPlayers() {
-        return this.server.getPlayerManager().getPlayers();
+        return this.getPlayerManager().getPlayers();
     }
 
     @Override
@@ -91,17 +183,12 @@ public class Server implements MarineServer {
 
     @Override
     final public Player getPlayer(final UUID uuid) {
-        return this.server.getPlayerManager().getPlayer(uuid);
+        return this.getPlayerManager().getPlayer(uuid);
     }
 
     @Override
     final public Player getPlayer(final String username) {
-        return this.server.getPlayerManager().getPlayer(username);
-    }
-
-    @Override
-    final public String getMOTD() {
-        return this.server.getMOTD();
+        return this.getPlayerManager().getPlayer(username);
     }
 
     @Override
@@ -111,11 +198,26 @@ public class Server implements MarineServer {
 
     @Override
     final public int getMaxPlayers() {
-        return this.server.getMaxPlayers();
+        return this.maxPlayers;
     }
 
     @Override
     final public void setMaxPlayers(final int n) {
-        this.server.setMaxPlayers(n);
+        this.maxPlayers = n;
+    }
+
+    @Override
+    final public PluginLoader getPluginLoader() {
+        return this.pluginLoader;
+    }
+
+    @Override
+    final public String getProviderName() {
+        return "marine";
+    }
+
+    @Override
+    public byte getProviderPriority() {
+        return 0x00;
     }
 }

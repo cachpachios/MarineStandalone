@@ -17,39 +17,27 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package org.marinemc.net;
+package org.marinemc.server;
 
-import org.marinemc.logging.Logging;
+public class ServerProperties {
 
-import java.io.IOException;
-import java.net.Socket;
-/**
- * @author Fozie
- */
-public class ConnectionThread extends Thread {
-    private NetworkManager network;
+    //FINAL VALUES
+    public static final int PROTOCOL_VERSION = 47;
+    public static final int MAX_Y = 256;
 
-    //TODO: SOME KIND OF DDOS PROTECTION!
+    // BUILD INFO
+    public static String
+            BUILD_VERSION = "0.0.1-SNAPSHOT",
+            BUILD_TYPE = "Development",
+            BUILD_NAME = "WorldWideWorld",
+            MINECRAFT_NAME = "1.8";
 
-    public ConnectionThread(NetworkManager manager) {
-        super("ServerConnector");
-        network = manager;
+    public static boolean BUILD_STABLE = false;
+
+    private static long currentTick = 0l;
+
+    protected static void tick() {
+        ++currentTick;
     }
 
-    public void run() {
-
-        Logging.getLogger().log("Waiting for connection...");
-
-        while (true) { //TODO: Stopping and starting!
-            try {
-                Socket connection = network.server.accept();
-                network.connect(connection);
-                ConnectionThread.sleep(10);
-            } catch (InterruptedException e) {
-            } catch (IOException e) {
-                Logging.getLogger().error("Connetion problems with client.");
-            }
-
-        }
-    }
 }

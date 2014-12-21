@@ -17,39 +17,44 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package org.marinemc.net;
+package org.marinemc.events.standardevents;
 
-import org.marinemc.logging.Logging;
+import org.marinemc.events.Event;
+import org.marinemc.player.IPlayer;
 
-import java.io.IOException;
-import java.net.Socket;
 /**
- * @author Fozie
+ * Created 2014-12-20 for MarineStandalone
+ *
+ * @author Citymonstret
  */
-public class ConnectionThread extends Thread {
-    private NetworkManager network;
+public class PreLoginEvent extends Event {
 
-    //TODO: SOME KIND OF DDOS PROTECTION!
+    private IPlayer player;
+    private boolean allowed = true;
+    private String message = "";
 
-    public ConnectionThread(NetworkManager manager) {
-        super("ServerConnector");
-        network = manager;
+    public PreLoginEvent(IPlayer player) {
+        super("pre_join", true);
+        this.player = player;
     }
 
-    public void run() {
+    public boolean isAllowed() {
+        return this.allowed;
+    }
 
-        Logging.getLogger().log("Waiting for connection...");
+    public void setAllowed(boolean n) {
+        this.allowed = n;
+    }
 
-        while (true) { //TODO: Stopping and starting!
-            try {
-                Socket connection = network.server.accept();
-                network.connect(connection);
-                ConnectionThread.sleep(10);
-            } catch (InterruptedException e) {
-            } catch (IOException e) {
-                Logging.getLogger().error("Connetion problems with client.");
-            }
+    public String getMessage() {
+        return this.message;
+    }
 
-        }
+    public void setMessage(String s) {
+        this.message = s;
+    }
+
+    public IPlayer getPlayer() {
+        return this.player;
     }
 }

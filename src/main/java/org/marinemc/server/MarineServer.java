@@ -19,11 +19,17 @@
 
 package org.marinemc.server;
 
-import org.marinemc.StandaloneServer;
 import org.marinemc.events.Event;
+import org.marinemc.game.PlayerManager;
+import org.marinemc.game.command.CommandSender;
+import org.marinemc.player.Gamemode;
 import org.marinemc.player.Player;
+import org.marinemc.plugins.PluginLoader;
+import org.marinemc.util.Base64Image;
+import org.marinemc.world.Difficulty;
 import org.marinemc.world.World;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -35,6 +41,63 @@ import java.util.UUID;
  * @author Fozie
  */
 public interface MarineServer {
+
+    /**
+     * Get the default gamemode
+     *
+     * @return default gamemode
+     */
+    public Gamemode getDefaultGamemode();
+
+    public void setDefaultGamemode(Gamemode gamemode);
+
+    public Difficulty getDefaultDifficulty();
+
+    public void setDefaultDifficulty(Difficulty difficulty);
+
+    public String getMotd();
+
+    public void setMotd(String motd);
+
+    /**
+     * Get the player manager
+     *
+     * @return player manager
+     */
+    public PlayerManager getPlayerManager();
+
+    /**
+     * Get the console command sender
+     *
+     * @return internal command sender (console)
+     */
+    public CommandSender getConsoleSender();
+
+    /**
+     * Get the plugin folder
+     *
+     * @return Plugin Folder
+     */
+    public File getPluginFolder();
+
+    /**
+     * Load and enable all plugins in the plugins folder
+     */
+    public void loadPlugins();
+
+    /**
+     * Get the plugin loader (handler)
+     *
+     * @return Plugin Loader
+     */
+    public PluginLoader getPluginLoader();
+
+    /**
+     * Get the server favicon
+     *
+     * @return Server Favicon
+     */
+    public Base64Image getFavicon();
 
     /**
      * Get the StandaloneServer instance
@@ -102,13 +165,6 @@ public interface MarineServer {
      * @param event Event to call
      */
     public void callEvent(final Event event);
-
-    /**
-     * Get the current MOTD
-     *
-     * @return current MOTD
-     */
-    public String getMOTD();
 
     /**
      * Get the max player count

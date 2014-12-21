@@ -19,9 +19,9 @@
 
 package org.marinemc.io.data;
 
-import org.marinemc.Logging;
 import org.marinemc.io.ByteCompressor;
 import org.marinemc.io.ByteCompressor.EncodingUseless;
+import org.marinemc.logging.Logging;
 import org.marinemc.util.Position;
 
 import java.io.IOException;

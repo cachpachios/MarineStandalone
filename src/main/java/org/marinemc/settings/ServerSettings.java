@@ -19,7 +19,7 @@
 
 package org.marinemc.settings;
 
-import org.marinemc.Logging;
+import org.marinemc.logging.Logging;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -113,7 +113,7 @@ public class ServerSettings {
     @SuppressWarnings("rawtypes")
     public void verbose() {
         for (Map.Entry entry : config.entrySet()) {
-            Logging.getLogger().log("Key: " + entry.getKey() + " | Value: " + entry.getValue());
+            Logging.getLogger().debug("Key: " + entry.getKey() + " | Value: " + entry.getValue());
         }
     }
 

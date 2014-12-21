@@ -19,7 +19,6 @@
 
 package org.marinemc.game.commands;
 
-import org.marinemc.ServerProperties;
 import org.marinemc.game.chat.ChatColor;
 import org.marinemc.game.chat.builder.Chat;
 import org.marinemc.game.chat.builder.ClickEvent;
@@ -28,6 +27,7 @@ import org.marinemc.game.chat.builder.Part;
 import org.marinemc.game.command.Command;
 import org.marinemc.game.command.CommandSender;
 import org.marinemc.player.Player;
+import org.marinemc.server.ServerProperties;
 import org.marinemc.util.StringUtils;
 
 /**
