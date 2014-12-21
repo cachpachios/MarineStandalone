@@ -17,7 +17,7 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package org.marinemc.util;
+package org.marinemc.game.player;
 
 import java.util.IdentityHashMap;
 import java.util.Map;

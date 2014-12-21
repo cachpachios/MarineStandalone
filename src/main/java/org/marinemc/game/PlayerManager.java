@@ -1,268 +1,175 @@
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MarineStandalone is a minecraft server software and API.
-// Copyright (C) MarineMC (marinemc.org)
-//
-// This program is free software; you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation; either version 2 of the License, or
-// (at your option) any later version.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License along
-// with this program; if not, write to the Free Software Foundation, Inc.,
-// 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 package org.marinemc.game;
 
-import org.marinemc.game.async.ChatManager;
-import org.marinemc.game.async.TimeoutManager;
-import org.marinemc.net.Client;
-import org.marinemc.net.Packet;
-import org.marinemc.net.States;
-import org.marinemc.net.play.clientbound.JoinGamePacket;
-import org.marinemc.net.play.clientbound.KickPacket;
-import org.marinemc.player.AbstractPlayer;
-import org.marinemc.player.IPlayer;
-import org.marinemc.player.Player;
-import org.marinemc.server.MarineServer;
-import org.marinemc.world.chunk.Chunk;
-
-import java.util.*;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.marinemc.game.player.Player;
+import org.marinemc.game.player.UIDGenerator;
+import org.marinemc.net.Client;
+import org.marinemc.net.States;
+import org.marinemc.net.login.LoginPacket;
+import org.marinemc.net.login.LoginSucessPacket;
+import org.marinemc.net.play.clientbound.JoinGamePacket;
+import org.marinemc.server.Marine;
+import org.marinemc.util.Location;
+import org.marinemc.util.annotations.Cautious;
+import org.marinemc.util.annotations.Hacky;
+import org.marinemc.util.mojang.UUIDHandler;
+import org.marinemc.util.wrapper.StringWrapper;
+import org.marinemc.world.Gamemode;
+
 /**
+ * The place where players are saved and accessed.
+ * 
  * @author Fozie
  */
 public class PlayerManager {
-
-    private final MarineServer server;
-    // private Set<Player> allPlayers;
-    // private Map<UUID, Player> playerIDs;
-    private final Map<Short, Player> uids;
-    private final Map<String, Player> playerNames;
-
-    private LoginHandler loginManager;
-    private TimeoutManager timeout;
-
-    private MovementManager movement;
-    private ChatManager chat;
-
-    public PlayerManager(MarineServer server) {
-        this.server = server;
-        loginManager = new LoginHandler(this, this.server.getWorldManager().getMainWorld());
-        // allPlayers = Collections.synchronizedSet(new HashSet<Player>());
-        // playerIDs = Collections.synchronizedMap(new ConcurrentHashMap<UUID, Player>());
-        uids = Collections.synchronizedMap(new ConcurrentHashMap<Short, Player>());
-        playerNames = Collections.synchronizedMap(new ConcurrentHashMap<String, Player>());
-
-        timeout = new TimeoutManager(this);
-        chat = new ChatManager(this);
-        movement = new MovementManager(this);
-
-        // Will run it at a FIXED rater, rather than dynamic rate
-        new Timer("timeoutManager").scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                timeout.run();
-            }
-        }, 0, 1000);
-    }
-
-    public ChatManager getChat() {
-        return chat;
-    }
-
-    public void broadcastPacket(Packet packet) {
-        for (final Player p : uids.values())
-            p.getClient().sendPacket(packet);
-    }
-
-    public void updateThemAll() {
-        for (final Player p : uids.values()) {
-            p.update();
-            p.sendTime();
-        }
-    }
-
-    public MarineServer getServer() {
-        return server;
-    }
-
-    public boolean isPlayerOnline(String name) {
-        return playerNames.containsKey(name);
-    }
-
-    public boolean isPlayerOnline(UUID uid) {
-        for (final Player player : uids.values())
-            if (player.getUUID().equals(uid))
-                return true;
-        return false;
-    }
-
-    public boolean isPlayerOnline(short uid) {
-        return uids.containsKey(uid);
-    }
-
-    protected void putPlayer(Player p) {
-        if (uids.containsValue(p))
-            return;
-        uids.put(p.getUID(), p);
-        playerNames.put(p.getName(), p);
-    }
-
-    public Player getPlayer(UUID uuid) {
-        for (final Player player : uids.values())
-            if (player.getUUID().equals(uuid))
-                return player;
-        return null;
-    }
-
-    public Player getPlayer(short uid) {
-        if (uids.containsKey(uid))
-            return uids.get(uid);
-        return null;
-    }
-
-    public Player getPlayer(String displayName) {
-        if (!playerNames.containsKey(displayName))
-            return null;
-        return playerNames.get(displayName);
-
-    }
-
-    protected void removePlayer(Player p) {
-        {
-            synchronized (uids) {
-                synchronized (playerNames) {
-                    if (uids.containsValue(p)) {
-                        uids.remove(p.getUID());
-                        playerNames.remove(p.getName());
-                    }
-                }
-            }
-        } // Sync end
-    }
-
-    public void tickAllPlayers() {
-        synchronized (uids.values()) {
-            for (IPlayer p : uids.values())
-                if (p instanceof Player) {
-                    Player pl = (Player) p;
-                    pl.tick();
-                }
-        }
-    }
-
-    public LoginHandler getLoginManager() {
-        return loginManager;
-    }
-
-    public Collection<Player> getPlayers() {
-        return uids.values();
-    }
-
-    protected Player passFromLogin(IPlayer player) {
-        if (player instanceof Player) {
-            putPlayer((Player) player);
-            return (Player) player;
-        } else if (player instanceof AbstractPlayer) {
-            Player p = new Player((AbstractPlayer) player, server.getDefaultGamemode());
-            putPlayer(p);
-            return p;
-        }
-        return null; // This shoulnt happening if id does its wierd :S
-    }
-
-    public Player getPlayerByClient(Client c) {
-        for (Player player : getPlayers()) {
-            if (player.getClient() == c)
-                return player;
-        }
-        return null;
-    }
-
-    private void cleanUp(Player p) {
-        removePlayer(p);
-        timeout.cleanUp(p);
-        server.getNetworkManager().cleanUp(p.getClient());
-    }
-
-    public void disconnect(Player p, String reason) {
-        if (p == null)
-            return;
-        p.disconnect(reason);
-        p.getClient().sendPacket(new KickPacket(
-                (reason.length() > 0) ? reason : "Kicked"
-        ));
-        cleanUp(p);
-    }
-
-
-	public void silent_disconnect(Player player, String string) {
-		cleanUp(player);
-		player.disconnect();
+	private Map<Short, Player> players;
+	
+	private Map<String, Short> namePointers;
+	
+	public PlayerManager() {
+		players = new ConcurrentHashMap<Short, Player>();
+		namePointers = new ConcurrentHashMap<String, Short>();
 	}
-    
-    public void disconnect_timeout(Player p, String reason) {
-        if (p == null)
-            return;
-        p.timeoutDisconnect();
-        p.getClient().sendPacket(new KickPacket(
-                (reason.length() > 0) ? reason : "Timed out"
-        ));
-        cleanUp(p);
-    }
+	
+	/**
+	 * Called when the LoginPacket was intercepted
+	 * 
+	 * @param connected The client that are connecting
+	 */
+	public String login(final Client client, final LoginPacket packet) {
+		//TODO: Encryption and Compression
+		
+		UUID uuid;
+		String name;
+		if (Marine.getServer().isOfflineMode()) {
+			uuid = UUIDHandler.getUuidOfflineMode(new StringWrapper(packet.name));
+			name = packet.name;
+		} else {
+			uuid = UUIDHandler.getUUID(packet.name);
+			name = UUIDHandler.getName(uuid);
+		}
 
-    public void joinGame(Player p) {
-        if (p.getClient().getState() != States.INGAME) {
-            cleanUp(p);
-            return;
-        }
+		if (uuid == null) {
+			throw new RuntimeException("UUID == null == BAD!");
+		}
+	       
+		// TODO This add the encryption stuff etc.. And then separate the following code in to another methoud that is called when encryption response is intercepted.
+		
+		
+		Player p = new Player(
+				client,
+				UIDGenerator.instance().getUID(name),
+				uuid,
+				name, 
+				new Location(null,0,5,0), //TODO: Get an location from file or generate spawnpoint
+				Gamemode.SURVIVAL // TODO: Get from file or get standardgamemode
+		);
+		
+		client.sendPacket(new LoginSucessPacket(p)); // Send the LoginSuccessPacket
+		
+		// Begin the join game process
+		
+		client.setState(States.INGAME);
+		
+		p.getClient().sendPacket(new JoinGamePacket(p));
+		
+		
+		return null;
+	}
+	
+	
+	/**
+	 * Adds a player to the main player storage
+	 * @param p The player that should be added
+	 */
+	public void putPlayer(Player p) {
+		players.putIfAbsent(p.getUID(), p);
+		namePointers.putIfAbsent(p.getUserName(), p.getUID());
+	}
+	
+	/**
+	 * Get all UID's of player online
+	 * 
+	 * @return A set over all UID's online
+	 */
+	public Set<Short> getOnlineUIDs() {
+		return players.keySet();
+	}
+	/**
+	 * Get all players on the server
+	 * @return A collection of all players online
+	 */
+	public Collection<Player> getPlayers() {
+		return players.values();
+	}
+	/**
+	 * Removes a player from the main player storage!
+	 * Warning this should only be done if player has been disconnected
+	 * 
+	 * @param p The player that shall be removed
+	 */
+	protected void cleanUp(Player p) {
+		players.remove(p.getUID());
+		namePointers.remove(p.getUserName());
+	}
+	
+	/**
+	 * Ticks/Updates all existing players
+	 * Called in Server.java's main loop (Each tick(20hz) )
+	 */
+	public void tickAllPlayers() {
+		// TODO Do this :p
+	}
 
-        timeout.addPlayerToManager(p);
+	/**
+	 * To get a player by specified UID(short)
+	 * 
+	 * @param uid The uid of the object
+	 * @return The pointed player or null if non existance
+	 */
+	public Player getPlayer(short uid) {
+		return players.get(uid);
+	}
 
-        p.getClient().sendPacket(new JoinGamePacket(p));
-        
-        p.sendAbilites();
-        
-        p.sendPosition();
-        
-        final List<Chunk> chunksToSend = p.getWorld().getChunks(0, 0, 2, 2);
-        
-        for(final Chunk c : chunksToSend)
-        	c.subscribePlayer(p);
-        
-        p.loadChunks(chunksToSend);
-        
-        p.sendMapData(chunksToSend);
-        
-        p.sendPosition();
-        
-        p.sendTime();
-        
-        p.loginPopulation();
+	/**
+	 * Get the amount of players on the server,
+	 * This value however does not include clients. That info is avalible in NetworkManager
+	 * 
+	 * @return Amount of players stored here
+	 */
+	public int getPlayersConnected() {
+		return this.players.size();
+	}
 
-        movement.spawnPlayersLocally(p);
-        
-        movement.updatePlayerChunk(p);
-    }
+	/**
+	 * Used to get a player by its UUID
+	 * Highly not recommended!!!
+	 * 
+	 * @param uuid The given UUID
+	 * @return The given UUID or null if no such player is online
+	 */
+	@Hacky
+	@Cautious
+	public Player getPlayer(UUID uuid) {
+		for(Player p : this.getPlayers())
+			if(p.getUUID().toString().equals(uuid.toString()))
+				return p;
+		return null;
+	}
 
-    public void keepAlive(short uid, int ID) {
-        if (uid == -1)
-            return;
-        timeout.keepAlive(getPlayer(uid));
-    }
-
-    public MovementManager getMovementManager() {
-        return movement;
-    }
-
-    public boolean hasAnyPlayers() {
-        return uids.size() > 0;
-    }
+	/**
+	 * To get a online player by its username.
+	 * 
+	 * @param username The username of the player to get
+	 * @return Either the player or null if not online.
+	 */
+	public Player getPlayer(String username) {
+		return players.get(namePointers.get(username));
+	}
+	
 }

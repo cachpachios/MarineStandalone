@@ -26,7 +26,7 @@ import org.marinemc.game.chat.builder.HoverEvent;
 import org.marinemc.game.chat.builder.Part;
 import org.marinemc.game.command.Command;
 import org.marinemc.game.command.CommandSender;
-import org.marinemc.player.Player;
+import org.marinemc.game.player.Player;
 import org.marinemc.server.ServerProperties;
 import org.marinemc.util.StringUtils;
 

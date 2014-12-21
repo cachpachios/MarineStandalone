@@ -36,8 +36,8 @@ public class PacketHandler implements PacketInterceptor {
     public PacketHandler(MarineServer server) {
         handshake = new HandshakeInterceptor();
         status = new StatusInterceptor();
-        login = new LoginInterceptor(server);
-        ingame = new IngameInterceptor(server.getPlayerManager());
+        login = new LoginInterceptor();
+        ingame = new IngameInterceptor();
     }
 
     public boolean intercept(int id, ByteData data, Client c) {

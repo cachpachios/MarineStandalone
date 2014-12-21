@@ -19,6 +19,12 @@
 
 package org.marinemc.server;
 
+import java.io.File;
+import java.util.Collection;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.UUID;
+
 import org.json.JSONException;
 import org.marinemc.events.Event;
 import org.marinemc.events.EventManager;
@@ -31,14 +37,23 @@ import org.marinemc.game.command.Command;
 import org.marinemc.game.command.CommandSender;
 import org.marinemc.game.command.ConsoleSender;
 import org.marinemc.game.command.ServiceProvider;
-import org.marinemc.game.commands.*;
+import org.marinemc.game.commands.Help;
+import org.marinemc.game.commands.Info;
+import org.marinemc.game.commands.List;
+import org.marinemc.game.commands.Me;
+import org.marinemc.game.commands.Plugins;
+import org.marinemc.game.commands.Say;
+import org.marinemc.game.commands.SendAboveActionBarMessage;
+import org.marinemc.game.commands.Stop;
+import org.marinemc.game.commands.Teleport;
+import org.marinemc.game.commands.Tellraw;
+import org.marinemc.game.commands.Test;
+import org.marinemc.game.player.Player;
 import org.marinemc.game.scheduler.Scheduler;
 import org.marinemc.game.system.MarineSecurityManager;
 import org.marinemc.logging.Logging;
 import org.marinemc.net.NetworkManager;
 import org.marinemc.net.play.clientbound.KickPacket;
-import org.marinemc.player.Gamemode;
-import org.marinemc.player.Player;
 import org.marinemc.plugins.PluginLoader;
 import org.marinemc.plugins.PluginManager;
 import org.marinemc.settings.JSONFileHandler;
@@ -46,14 +61,9 @@ import org.marinemc.settings.ServerSettings;
 import org.marinemc.util.Base64Image;
 import org.marinemc.util.StartSettings;
 import org.marinemc.world.Difficulty;
+import org.marinemc.world.Gamemode;
 import org.marinemc.world.Identifiers;
 import org.marinemc.world.World;
-
-import java.io.File;
-import java.util.Collection;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.UUID;
 
 /**
  * Server implementation
@@ -89,7 +99,7 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
         this.port = settings.port;
         this.tickRate = settings.tickrate;
         this.worldManager = new WorldManager(this);
-        this.playerManager = new PlayerManager(this);
+        this.playerManager = new PlayerManager();
         this.pluginLoader = new PluginLoader(new PluginManager());
         this.networkManager = new NetworkManager(port, ServerSettings.getInstance().useHasing);
         this.pluginFolder = new File("./plugins");
@@ -126,7 +136,6 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
     @Override
     final public void run() {
         try {
-            playerManager.updateThemAll();
             networkManager.tryConnections();
             playerManager.tickAllPlayers();
             worldManager.tick();
@@ -240,7 +249,7 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
 
     @Override
     final public int getPlayerCount() {
-        return this.getPlayers().size();
+        return this.getPlayerManager().getPlayersConnected();
     }
 
     @Override

@@ -19,18 +19,18 @@
 
 package org.marinemc.game.command;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+
 import org.marinemc.game.CommandManager;
-import org.marinemc.player.Player;
+import org.marinemc.game.player.Player;
 import org.marinemc.server.Marine;
 import org.marinemc.util.Location;
 import org.marinemc.util.StringUtils;
 import org.marinemc.util.annotations.Protected;
 import org.marinemc.world.entity.Entity;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
 
 /**
  * Created 2014-12-01 for MarineStandalone

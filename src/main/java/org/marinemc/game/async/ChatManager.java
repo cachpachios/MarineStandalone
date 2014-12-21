@@ -21,9 +21,9 @@ package org.marinemc.game.async;
 
 import org.marinemc.events.standardevents.ChatEvent;
 import org.marinemc.game.PlayerManager;
+import org.marinemc.game.player.Player;
 import org.marinemc.logging.Logging;
 import org.marinemc.net.play.clientbound.ChatPacket;
-import org.marinemc.player.Player;
 import org.marinemc.server.Marine;
 
 public class ChatManager {

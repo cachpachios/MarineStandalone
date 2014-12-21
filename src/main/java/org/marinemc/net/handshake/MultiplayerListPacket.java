@@ -19,21 +19,21 @@
 
 package org.marinemc.net.handshake;
 
+import java.io.IOException;
+import java.util.UUID;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.marinemc.events.standardevents.ListEvent;
 import org.marinemc.game.chat.ChatColor;
+import org.marinemc.game.player.Player;
 import org.marinemc.io.data.ByteData;
 import org.marinemc.net.Client;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
-import org.marinemc.player.Player;
 import org.marinemc.server.Marine;
 import org.marinemc.server.ServerProperties;
-
-import java.io.IOException;
-import java.util.UUID;
 /**
  * @author Fozie
  */
@@ -64,7 +64,7 @@ public class MultiplayerListPacket extends Packet {
             for (Player p : Marine.getPlayers()) {
                 player = new JSONObject();
                 player.put("id", p.getUUID().toString());
-                player.put("name", p.getName());
+                player.put("name", p.getUserName());
                 samples.add(player);
             }
         }

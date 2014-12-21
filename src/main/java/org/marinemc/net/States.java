@@ -19,6 +19,8 @@
 
 package org.marinemc.net;
 /**
+ * Diffrent states the client are in.
+ * 
  * @author Fozie
  */
 public enum States {

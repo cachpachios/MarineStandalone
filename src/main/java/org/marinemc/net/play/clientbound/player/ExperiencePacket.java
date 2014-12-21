@@ -19,13 +19,13 @@
 
 package org.marinemc.net.play.clientbound.player;
 
+import java.io.IOException;
+
+import org.marinemc.game.player.Player;
 import org.marinemc.io.data.ByteData;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
-import org.marinemc.player.Player;
-
-import java.io.IOException;
 
 /**
  * Created 2014-12-07 for MarineStandalone

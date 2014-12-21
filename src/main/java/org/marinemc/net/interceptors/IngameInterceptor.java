@@ -29,58 +29,23 @@ import org.marinemc.net.play.serverbound.player.PlayerPositionPacket;
 import org.marinemc.net.play.serverbound.player.ServerboundPlayerLookPositionPacket;
 import org.marinemc.util.Location;
 /**
+ * Intercepts ingamepackets
+ * 
  * @author Fozie
  */
 public class IngameInterceptor implements PacketInterceptor {
 
-    PlayerManager players;
-
-    //int lastID; // Just for debugging
-
-    public IngameInterceptor(PlayerManager m) {
-        players = m;
+    public IngameInterceptor() {
     }
 
     @Override
     public boolean intercept(int id, ByteData data, Client c) {
-        if (id == 0x00) {
-            KeepAlivePacket p = new KeepAlivePacket();
-            p.readFromBytes(data);
-            players.keepAlive(c.getUID(), p.getID());
-        } else if (id == 0x01) {
-            IncomingChatPacket p = new IncomingChatPacket();
-            p.readFromBytes(data);
-            if (p.getMessage().startsWith("/")) {
-                String[] parts = p.getMessage().split(" ");
-                String[] args;
-                if (parts.length < 2) {
-                    args = new String[]{};
-                } else {
-                    args = new String[parts.length - 1];
-                    System.arraycopy(parts, 1, args, 0, parts.length - 1);
-                }
-                players.getPlayerByClient(c).executeCommand(parts[0], args);
-            } else {
-                // players.getChat().brodcastMessage(ChatManager.format(p.getMessage(), players.getPlayerByClient(c)));
-                players.getChat().sendChatMessage(players.getPlayerByClient(c), p.getMessage());
-            }
-        } else if (id == 0x06) {
-            ServerboundPlayerLookPositionPacket packet = new ServerboundPlayerLookPositionPacket();
-            packet.readFromBytes(data);
-            players.getMovementManager().registerMovement(players.getPlayerByClient(c), packet.getLocation());
-            return true;
-        } else if (id == 0x05) {
-            PlayerLookPacket packet = new PlayerLookPacket();
-            packet.readFromBytes(data);
-            players.getMovementManager().registerLook(players.getPlayerByClient(c), packet.getYaw(), packet.getPitch());
-            return true;
-        } else if (id == 0x04) {
-            PlayerPositionPacket packet = new PlayerPositionPacket();
-            packet.readFromBytes(data);
-            players.getMovementManager().registerMovement(players.getPlayerByClient(c), new Location(null, packet.X, packet.Y, packet.Z));
-            return true;
-        }
-        return false;
+    	switch(id) {
+    	case 0:
+    	case 1:
+    	
+    	
+    	default: return false;
+    	}
     }
-
 }

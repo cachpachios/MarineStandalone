@@ -19,22 +19,21 @@
 
 package org.marinemc.net.play.clientbound.player;
 
+import java.io.IOException;
+
 import org.marinemc.io.data.ByteData;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
-import org.marinemc.player.PlayerAbilities;
-
-import java.io.IOException;
 /**
  * @author Fozie
  */
 public class PlayerAbilitesPacket extends Packet {
 
-    final PlayerAbilities abilites;
+    final Player p;
 
-    public PlayerAbilitesPacket(PlayerAbilities abilites) {
-        this.abilites = abilites;
+    public PlayerAbilitesPacket(Player p) {
+        this.p = p;
     }
 
     @Override
@@ -46,10 +45,10 @@ public class PlayerAbilitesPacket extends Packet {
     public void writeToStream(PacketOutputStream stream) throws IOException {
         ByteData d = new ByteData();
 
-        byte flags = (byte) ((abilites.isInCreativeMode() ? 8 : 0) | (abilites.canFly() ? 4 : 0) | (abilites.isFlying() ? 2 : 0) | (abilites.isInCreativeMode() ? 1 : 0));
+        byte flags = (byte) ((p.isInCreativeMode() ? 8 : 0) | (p.canFly() ? 4 : 0) | (p.isFlying() ? 2 : 0) | (p.isInCreativeMode() ? 1 : 0));
         d.writeByte(flags);
-        d.writeFloat(abilites.getFlySpeed());
-        d.writeFloat(abilites.getWalkSpeed());
+        d.writeFloat(p.getFlySpeed());
+        d.writeFloat(p.getWalkSpeed());
 
         stream.write(getID(), d);
 

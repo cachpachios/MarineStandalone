@@ -19,50 +19,21 @@
 
 package org.marinemc.net.interceptors;
 
-import org.marinemc.game.LoginHandler;
 import org.marinemc.io.data.ByteData;
-import org.marinemc.logging.Logging;
 import org.marinemc.net.Client;
-import org.marinemc.net.login.DisconnectPacket;
-import org.marinemc.net.login.LoginPacket;
-import org.marinemc.server.MarineServer;
 
 /**
  * @author Fozie
  */
 public class LoginInterceptor implements PacketInterceptor {
 
-    final MarineServer server;
 
-    public LoginInterceptor(MarineServer server) {
-        this.server = server;
+    public LoginInterceptor() {
     }
 
     @Override
     public boolean intercept(int ID, ByteData data, Client c) {
-        if (ID == 0x00) {
-            LoginPacket packet = new LoginPacket();
-            packet.readFromBytes(data);
-
-            Logging.instance().info("Player: " + packet.name + " connected.");
-
-            LoginHandler.LoginResponse loginReturn = server.getPlayerManager().getLoginManager().login(packet.name, c);
-            if (!loginReturn.succeed()) {
-                DisconnectPacket nopePacket = new DisconnectPacket(loginReturn.response);
-                c.sendPacket(nopePacket);
-                server.getNetworkManager().cleanUp(c);
-                return true;
-            }
-
-            //TODO: Fix this
-            server.getPlayerManager().getLoginManager().passPlayer(loginReturn.player);
-
-            return true;
-        }
-
-        //TODO: Encryption Packets
-
-        return false;
+       return false;
     }
 
 }

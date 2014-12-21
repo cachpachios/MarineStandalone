@@ -19,19 +19,10 @@
 
 package org.marinemc.gui;
 
-import org.marinemc.Bootstrap;
-import org.marinemc.game.CommandManager;
-import org.marinemc.game.chat.ChatColor;
-import org.marinemc.game.command.Command;
-import org.marinemc.logging.Logging;
-import org.marinemc.player.Player;
-import org.marinemc.server.Marine;
-import org.marinemc.server.ServerProperties;
-import org.marinemc.util.StringUtils;
-
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -41,6 +32,29 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import javax.swing.AbstractAction;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextPane;
+import javax.swing.WindowConstants;
+import javax.swing.table.DefaultTableModel;
+
+import org.marinemc.Bootstrap;
+import org.marinemc.game.CommandManager;
+import org.marinemc.game.chat.ChatColor;
+import org.marinemc.game.command.Command;
+import org.marinemc.game.player.Player;
+import org.marinemc.logging.Logging;
+import org.marinemc.server.Marine;
+import org.marinemc.server.ServerProperties;
+import org.marinemc.util.StringUtils;
 
 public class ConsoleWindow extends OutputStream {
     private final int maxLines;
@@ -155,8 +169,8 @@ public class ConsoleWindow extends OutputStream {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         String s = JOptionPane.showInputDialog(jFrame, "Enter a kick message", "Kick Message", JOptionPane.QUESTION_MESSAGE);
-                        for (Player player : Marine.getPlayers())
-                            player.kick(ChatColor.transform('&', s));
+//                        for (Player player : Marine.getPlayers()) TODO
+//                            player.kick(ChatColor.transform('&', s));
                     }
                 });
         authors.setEnabled(true);

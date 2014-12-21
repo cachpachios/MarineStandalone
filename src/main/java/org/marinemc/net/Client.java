@@ -52,21 +52,13 @@ public class Client {
         output = new PacketOutputStream(s.getOutputStream());
         this.uid = null;
     }
-
-    private boolean disconnected = false;;
     
     public void sendPacket(Packet packet) { //TODO: PacketBuffer
         try {
             packet.writeToStream(output);
             System.out.println(packet.getID());
         } catch (IOException e) {
-        	if(!disconnected)
-            if(this.uid == null)
-            	Marine.getServer().getNetworkManager().cleanUp(this);
-            else {
-            	disconnected = true;
-            	Marine.getServer().getPlayerManager().silent_disconnect(Marine.getServer().getPlayerManager().getPlayer(uid), "Connection closed.");
-            }
+        	//TODO: 
         }
     }
 
