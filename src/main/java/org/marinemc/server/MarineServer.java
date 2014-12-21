@@ -46,6 +46,10 @@ import java.util.UUID;
 @SuppressWarnings("unused")
 public interface MarineServer {
 
+    public boolean isOfflineMode();
+
+    public void setOfflineMode(boolean n);
+
     /**
      * Get the settings folder
      *

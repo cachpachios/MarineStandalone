@@ -78,6 +78,7 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
     private Difficulty difficulty;
     private String motd;
     private int maxPlayers;
+    private boolean offlineMode;
 
     public Server(final StartSettings settings) {
         // Security Check Start
@@ -100,6 +101,7 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
         this.difficulty = Difficulty.valueOf(ServerSettings.getInstance().difficulty.toUpperCase());
         this.motd = ChatColor.transform('&', ServerSettings.getInstance().motd);
         this.maxPlayers = ServerSettings.getInstance().maxPlayers;
+        this.offlineMode = ServerSettings.getInstance().offlineMode;
         // INIT :D
         init();
     }
@@ -339,5 +341,15 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
     @Override
     final public File getSettingsFolder() {
         return settingsFolder;
+    }
+
+    @Override
+    final public boolean isOfflineMode() {
+        return this.offlineMode;
+    }
+
+    @Override
+    final public void setOfflineMode(boolean n) {
+        this.offlineMode = n;
     }
 }

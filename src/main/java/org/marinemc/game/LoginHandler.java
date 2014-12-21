@@ -49,11 +49,18 @@ public class LoginHandler {
     }
 
     private LoginResponse preJoin(String preName, Client c) { // Returns null if login succeded, otherwise makes LoginInterceptor drop the client
-        UUID uuid = UUIDHandler.getUuidOfflineMode(new StringWrapper(preName)); // TODO Fix back, temporary "offline mode" workaround // UUIDHandler.getUUID(preName); //UUID.randomUUID();
-        String name = preName; // TODO Fix back, temporary "offline mode" workaround // UUIDHandler.getName(uuid);
+        UUID uuid;
+        String name;
+        if (Marine.getServer().isOfflineMode()) {
+            uuid = UUIDHandler.getUuidOfflineMode(new StringWrapper(preName));
+            name = preName;
+        } else {
+            uuid = UUIDHandler.getUUID(preName);
+            name = UUIDHandler.getName(uuid);
+        }
 
         if (uuid == null) {
-            uuid = UUID.randomUUID();
+            throw new RuntimeException("UUID == null == BAD!");
         }
 
         if (playerManager.isPlayerOnline(name))
