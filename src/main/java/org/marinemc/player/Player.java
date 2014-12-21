@@ -40,10 +40,7 @@ import org.marinemc.net.play.clientbound.player.ExperiencePacket;
 import org.marinemc.net.play.clientbound.player.PlayerLookPacket;
 import org.marinemc.net.play.clientbound.world.*;
 import org.marinemc.server.Marine;
-import org.marinemc.util.Location;
-import org.marinemc.util.Position;
-import org.marinemc.util.StringUtils;
-import org.marinemc.util.TrackedLocation;
+import org.marinemc.util.*;
 import org.marinemc.world.BlockID;
 import org.marinemc.world.World;
 import org.marinemc.world.chunk.Chunk;
@@ -226,7 +223,18 @@ public class Player extends Entity implements IPlayer, CommandSender {
     public void executeCommand(String command, String[] arguments) {
         Command c = CommandManager.getInstance().getCommand(command.toLowerCase().substring(1));
         if (c == null) {
-            sendMessage("There is no such command");
+            String didYouMean;
+            try {
+                StringComparison comparison = new StringComparison(command.toLowerCase().substring(1), CommandManager.getInstance().getCommands().toArray());
+                if (((double) comparison.getBestMatchAdvanced()[0]) > .25) {
+                    didYouMean = " Did you mean: /" + comparison.getBestMatch() + "?";
+                } else {
+                    didYouMean = "";
+                }
+            } catch (Exception e) {
+                didYouMean = "";
+            }
+            sendMessage("There is no such command." + didYouMean);
         } else {
             this.executeCommand(c, arguments);
         }
