@@ -19,8 +19,8 @@
 
 package org.marinemc.world;
 
-import org.marinemc.StandaloneServer;
 import org.marinemc.game.WorldManager;
+import org.marinemc.server.StandaloneServer;
 import org.marinemc.util.Position;
 import org.marinemc.world.chunk.Chunk;
 import org.marinemc.world.chunk.ChunkPos;

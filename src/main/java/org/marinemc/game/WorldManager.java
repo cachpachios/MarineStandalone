@@ -19,14 +19,14 @@
 
 package org.marinemc.game;
 
+import org.marinemc.server.StandaloneServer;
+import org.marinemc.world.World;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
-import org.marinemc.StandaloneServer;
-import org.marinemc.world.World;
 
 /**
  * @author Fozie

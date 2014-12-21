@@ -17,27 +17,27 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package org.marinemc.game.commands;
+package org.marinemc.server;
 
-import org.marinemc.game.command.Command;
-import org.marinemc.game.command.CommandSender;
-import org.marinemc.server.Marine;
-import org.marinemc.util.StringUtils;
+public class ServerProperties {
 
-/**
- * Created 2014-12-10 for MarineStandalone
- *
- * @author Citymonstret
- */
-public class Plugins extends Command {
+    //FINAL VALUES
+    public static final int PROTOCOL_VERSION = 47;
+    public static final int MAX_Y = 256;
 
+    // BUILD INFO
+    public static String
+            BUILD_VERSION = "0.0.1-SNAPSHOT",
+            BUILD_TYPE = "Development",
+            BUILD_NAME = "WorldWideWorld",
+            MINECRAFT_NAME = "1.8";
 
-    public Plugins() {
-        super("plugins", "marine.plugins", "Show a list of the plugins running on this server", "pl", "addons", "scripts");
+    public static boolean BUILD_STABLE = false;
+
+    private static long currentTick = 0l;
+
+    protected static void tick() {
+        ++currentTick;
     }
 
-    @Override
-    public void execute(CommandSender sender, String[] arguments) {
-        sender.sendMessage("Plugins: " + StringUtils.join(Marine.getServer().getPluginLoader().getManager().getPlugins(), ", "));
-    }
 }

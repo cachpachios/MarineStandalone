@@ -21,12 +21,12 @@ package org.marinemc.gui;
 
 import org.marinemc.Bootstrap;
 import org.marinemc.Logging;
-import org.marinemc.ServerProperties;
 import org.marinemc.game.CommandManager;
 import org.marinemc.game.chat.ChatColor;
 import org.marinemc.game.command.Command;
 import org.marinemc.player.Player;
 import org.marinemc.server.Marine;
+import org.marinemc.server.ServerProperties;
 import org.marinemc.util.StringUtils;
 
 import javax.swing.*;

@@ -20,6 +20,7 @@
 package org.marinemc.net.handshake;
 
 import org.json.simple.JSONArray;
+import org.marinemc.util.Base64Image;
 
 /**
  * Created 2014-12-02 for MarineStandalone
@@ -28,7 +29,8 @@ import org.json.simple.JSONArray;
  */
 public class ListResponse {
 
-    private String motd, favicon;
+    private String motd;
+    private Base64Image favicon;
     private int maxPlayers, currentPlayers;
     private JSONArray samplePlayers;
 
@@ -41,7 +43,7 @@ public class ListResponse {
      * @param samplePlayers  Sample player list
      * @param favicon        Server icon
      */
-    public ListResponse(String motd, int currentPlayers, int maxPlayers, JSONArray samplePlayers, String favicon) {
+    public ListResponse(String motd, int currentPlayers, int maxPlayers, JSONArray samplePlayers, Base64Image favicon) {
         this.motd = motd;
         this.favicon = favicon;
         this.maxPlayers = maxPlayers;
@@ -53,11 +55,11 @@ public class ListResponse {
         return this.motd;
     }
 
-    public String getFavicon() {
+    public Base64Image getFavicon() {
         return this.favicon;
     }
 
-    public void setFavicon(String favicon) {
+    public void setFavicon(Base64Image favicon) {
         this.favicon = favicon;
     }
 

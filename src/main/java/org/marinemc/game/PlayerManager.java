@@ -19,7 +19,6 @@
 
 package org.marinemc.game;
 
-import org.marinemc.StandaloneServer;
 import org.marinemc.game.async.ChatManager;
 import org.marinemc.game.async.TimeoutManager;
 import org.marinemc.net.Client;
@@ -30,6 +29,7 @@ import org.marinemc.net.play.clientbound.KickPacket;
 import org.marinemc.player.AbstractPlayer;
 import org.marinemc.player.IPlayer;
 import org.marinemc.player.Player;
+import org.marinemc.server.StandaloneServer;
 import org.marinemc.world.chunk.Chunk;
 
 import java.util.*;
@@ -171,7 +171,7 @@ public class PlayerManager {
             putPlayer((Player) player);
             return (Player) player;
         } else if (player instanceof AbstractPlayer) {
-            Player p = new Player((AbstractPlayer) player, server.getGamemode());
+            Player p = new Player((AbstractPlayer) player, server.getServer().getDefaultGamemode());
             putPlayer(p);
             return p;
         }

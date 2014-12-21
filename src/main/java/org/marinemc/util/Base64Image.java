@@ -17,27 +17,49 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package org.marinemc;
+package org.marinemc.util;
 
-public class ServerProperties {
+import org.marinemc.io.Base64Encoding;
+import org.marinemc.io.BinaryFile;
 
-    //FINAL VALUES
-    public static final int PROTOCOL_VERSION = 47;
-    public static final int MAX_Y = 256;
+import java.io.File;
+import java.io.IOException;
 
-    // BUILD INFO
-    public static String
-            BUILD_VERSION = "0.0.1-SNAPSHOT",
-            BUILD_TYPE = "Development",
-            BUILD_NAME = "WorldWideWorld",
-            MINECRAFT_NAME = "1.8";
+/**
+ * Created 2014-12-21 for MarineStandalone
+ *
+ * @author Citymonstret
+ */
+public class Base64Image {
 
-    public static boolean BUILD_STABLE = false;
+    private final File file;
+    private final String string;
 
-    private static long currentTick = 0l;
-
-    protected static void tick() {
-        ++currentTick;
+    public Base64Image(final File file) {
+        if (file == null) {
+            this.file = null;
+            this.string = "";
+            return;
+        }
+        if (!file.exists()) {
+            throw new IllegalArgumentException("File cannot be null, and has to exist");
+        }
+        BinaryFile f = new BinaryFile(file);
+        try {
+            f.readBinary();
+        } catch (final IOException e) {
+            throw new RuntimeException("Unable to read in the binary data");
+        }
+        this.string = new String(Base64Encoding.encode(f.getData().getBytes()));
+        this.file = file;
     }
 
+    public File getFile() {
+        return this.file;
+    }
+
+    @Override
+    public String toString() {
+        return this.string;
+    }
 }

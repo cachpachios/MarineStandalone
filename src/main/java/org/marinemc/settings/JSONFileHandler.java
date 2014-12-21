@@ -21,7 +21,7 @@ package org.marinemc.settings;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.marinemc.StandaloneServer;
+import org.marinemc.server.StandaloneServer;
 
 import java.io.File;
 

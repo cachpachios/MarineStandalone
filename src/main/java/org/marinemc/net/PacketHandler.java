@@ -19,9 +19,9 @@
 
 package org.marinemc.net;
 
-import org.marinemc.StandaloneServer;
 import org.marinemc.io.data.ByteData;
 import org.marinemc.net.interceptors.*;
+import org.marinemc.server.StandaloneServer;
 
 /**
  * @author Fozie
