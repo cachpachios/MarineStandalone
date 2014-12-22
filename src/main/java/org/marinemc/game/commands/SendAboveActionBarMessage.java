@@ -19,13 +19,13 @@
 
 package org.marinemc.game.commands;
 
+import java.util.Arrays;
+
 import org.marinemc.game.chat.ChatColor;
 import org.marinemc.game.command.Command;
 import org.marinemc.game.command.CommandSender;
-import org.marinemc.player.Player;
+import org.marinemc.game.player.Player;
 import org.marinemc.util.StringUtils;
-
-import java.util.Arrays;
 
 /**
  * Created 2014-12-10 for MarineStandalone

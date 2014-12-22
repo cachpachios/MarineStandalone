@@ -2,11 +2,11 @@ package org.marinemc.net.play.clientbound.player;
 
 import java.io.IOException;
 
+import org.marinemc.game.player.Player;
 import org.marinemc.io.data.ByteData;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
-import org.marinemc.player.Player;
 
 /*
  * 
@@ -45,7 +45,7 @@ public class SpawnPlayerPacket extends Packet {
 		d.writeByte((byte) (((p.getLocation().getPitch() % 360) / 360) * 256));
 		
 		// WARNING FOLLOWING CANT BE -1 IT WILL CRASH THE CLIENT
-		d.writeShort((short) 0); // TODO : In hand item like p.getInHand(); 
+		d.writeShort((short) 1); // TODO : In hand item like p.getInHand(); 
 		
 		d.writeByte((byte) 127); // TODO: Entity Metadata :p
 		

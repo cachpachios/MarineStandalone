@@ -19,15 +19,16 @@
 
 package org.marinemc.util.mojang;
 
-import com.google.common.base.Charsets;
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
-import org.marinemc.player.Player;
+import java.util.HashMap;
+import java.util.UUID;
+
+import org.marinemc.game.player.Player;
 import org.marinemc.server.Marine;
 import org.marinemc.util.wrapper.StringWrapper;
 
-import java.util.HashMap;
-import java.util.UUID;
+import com.google.common.base.Charsets;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 
 /**
  * UUID Handler - Undocumented!
@@ -167,7 +168,7 @@ public class UUIDHandler {
         if ((player == null) || !player.isOnline()) {
             return null;
         }
-        final String name = player.getName();
+        final String name = player.getUserName();
         add(new StringWrapper(name), uuid);
         return name;
     }

@@ -21,7 +21,7 @@ package org.marinemc.game.commands;
 
 import org.marinemc.game.command.Command;
 import org.marinemc.game.command.CommandSender;
-import org.marinemc.player.Player;
+import org.marinemc.game.player.Player;
 import org.marinemc.util.Location;
 
 /**

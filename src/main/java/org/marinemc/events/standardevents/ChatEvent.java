@@ -21,7 +21,7 @@ package org.marinemc.events.standardevents;
 
 import org.marinemc.events.Cancellable;
 import org.marinemc.events.PlayerEvent;
-import org.marinemc.player.Player;
+import org.marinemc.game.player.Player;
 
 /**
  * Created 2014-12-07 for MarineStandalone

@@ -19,18 +19,18 @@
 
 package org.marinemc.game.commands;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import org.marinemc.game.TablistManager;
 import org.marinemc.game.chat.ChatColor;
 import org.marinemc.game.command.Command;
 import org.marinemc.game.command.CommandSender;
 import org.marinemc.game.inventory.CraftingInventory;
 import org.marinemc.game.inventory.PlayerInventory;
+import org.marinemc.game.player.Player;
 import org.marinemc.net.play.clientbound.GameStateChangePacket;
-import org.marinemc.player.Player;
 import org.marinemc.util.StringUtils;
-
-import java.util.Arrays;
-import java.util.Collection;
 
 /**
  * Created 2014-12-06 for MarineStandalone
@@ -78,7 +78,7 @@ public class Test extends Command {
                 break;
             case "credits":
                 player.getClient().sendPacket(new GameStateChangePacket(GameStateChangePacket.Reason.DEMO_MESSAGES, 0f));
-                break;
+                break;	
             case "crafting":
                 player.openInventory(new CraftingInventory(player.nextWindowID()));
                 break;
@@ -87,12 +87,12 @@ public class Test extends Command {
                     player.setDisplayName(arguments[1]);
                     TablistManager.getInstance().setDisplayName(player);
                 } else {
-                    player.setDisplayName(player.getName());
+                    player.setDisplayName(player.getUserName());
                     TablistManager.getInstance().setDisplayName(player);
                 }
                 break;
-            case "exp":
-                player.setExp((float) Math.random());
+  	        case "exp":
+                player.setXP((float) Math.random());
                 player.setLevels((int) (Math.ceil(Math.random() * 255)));
                 break;
             case "tab":

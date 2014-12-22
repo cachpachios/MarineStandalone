@@ -20,7 +20,7 @@
 package org.marinemc.events.standardevents;
 
 import org.marinemc.events.Event;
-import org.marinemc.player.IPlayer;
+import org.marinemc.game.player.IPlayer;
 
 /**
  * Created 2014-12-20 for MarineStandalone

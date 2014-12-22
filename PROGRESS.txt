@@ -1,0 +1,10 @@
+Places to disconnect:
+	- Client.java (if sendPacket() gives error)
+	- ConsoleWindow.java (line 172)
+	- NetworkManager
+
+Places to do stuff:
+	- Marine.java (155, 167,179)
+
+Places to get properties
+	Join

@@ -25,7 +25,11 @@ import org.marinemc.game.player.Player;
 import org.marinemc.logging.Logging;
 import org.marinemc.net.play.clientbound.ChatPacket;
 import org.marinemc.server.Marine;
-
+/**
+ * A chat manager :)
+ * 
+ * @author Citymonstret
+ */
 public class ChatManager {
 
     public static String CHAT_FORMAT = "<%plr> %msg",
@@ -78,10 +82,12 @@ public class ChatManager {
     }
 
     public void sendChatMessage(Player player, String message) {
-        if (player.insertMessage()) {
-            player.kick("Spam!");
-            return;
-        }
+//        if (player.insertMessage()) {
+//            player.kick("Spam!");
+//            return;
+//        }
+    	// TODO Fix that plz ^^
+    	
         ChatEvent event = new ChatEvent(player, message);
         Marine.getServer().callEvent(event);
         if (!event.isCancelled()) {

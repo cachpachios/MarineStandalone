@@ -22,7 +22,7 @@ package org.marinemc.game.commands;
 import org.marinemc.game.chat.ChatColor;
 import org.marinemc.game.command.Command;
 import org.marinemc.game.command.CommandSender;
-import org.marinemc.player.Player;
+import org.marinemc.game.player.Player;
 import org.marinemc.server.Marine;
 import org.marinemc.util.StringUtils;
 
@@ -41,7 +41,7 @@ public class Me extends Command {
         Marine.broadcastMessage(
                 String.format(
                         ChatColor.GRAY + "* %s %s",
-                        ((sender instanceof Player) ? ((Player) sender).getName() : "Console"),
+                        ((sender instanceof Player) ? ((Player) sender).getUserName() : "Console"),
                         StringUtils.join(replaceAll(args, sender), " "))
         );
     }

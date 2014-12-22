@@ -27,6 +27,8 @@ import org.marinemc.util.vectors.Vector3d;
 import org.marinemc.util.vectors.Vector3i;
 import org.marinemc.world.World;
 /**
+ * Standard entity object
+ * 
  * @author Fozie
  */
 public abstract class Entity {
@@ -38,18 +40,17 @@ public abstract class Entity {
     
     private TrackedLocation position;
     
-    
     private int ticksLived;
 
-    public Entity(final EntityType type, final int ID, final TrackedLocation pos) {
+    public Entity(final EntityType type, final int ID, TrackedLocation pos) {
         this(type, ID, pos.getWorld(), pos);
     }
     
-    public Entity(final EntityType type, final int ID, final Location pos) {
+    public Entity(final EntityType type, final int ID,  Location pos) {
         this(type, ID, pos.getWorld(), new TrackedLocation(pos));
     }
-
-    public Entity(final EntityType type, final int ID, final World world, final TrackedLocation pos) {
+    
+    public Entity(final EntityType type, final int ID, final World world, TrackedLocation pos) {
         this.entityID = ID;
         this.world = pos.getWorld();
         this.position = pos;
@@ -114,11 +115,15 @@ public abstract class Entity {
         return position;
     }
 
-    public Location getPosition() {
+    public Vector3d getPosition() {
         return position;
     }
-
-    public TrackedLocation getTrackedPosition() {
+    
+    public Location getLocation() {
+    	return position;
+    }
+    
+    public TrackedLocation getTrackedLocation() {
         return position;
     }
 

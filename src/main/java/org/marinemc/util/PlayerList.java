@@ -19,17 +19,17 @@
 
 package org.marinemc.util;
 
-import org.marinemc.events.EventListener;
-import org.marinemc.events.EventManager;
-import org.marinemc.events.standardevents.LeaveEvent;
-import org.marinemc.player.Player;
-import org.marinemc.server.Marine;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.UUID;
+
+import org.marinemc.events.EventListener;
+import org.marinemc.events.EventManager;
+import org.marinemc.events.standardevents.LeaveEvent;
+import org.marinemc.game.player.Player;
+import org.marinemc.server.Marine;
 
 /**
  * Created 2014-12-12 for MarineStandalone

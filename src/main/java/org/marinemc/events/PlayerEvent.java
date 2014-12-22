@@ -19,7 +19,7 @@
 
 package org.marinemc.events;
 
-import org.marinemc.player.Player;
+import org.marinemc.game.player.Player;
 
 /**
  * Player Event - For events focusing on players

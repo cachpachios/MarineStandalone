@@ -19,8 +19,8 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * Too help developing and show warnings :)
- *
+ * Contains diffrent annotations to help guide a devloper whats unsafe/laggy etc.
+ * 
  * @author Fozie
  *
  */

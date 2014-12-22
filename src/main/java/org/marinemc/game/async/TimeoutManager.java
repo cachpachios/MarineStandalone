@@ -19,13 +19,13 @@
 
 package org.marinemc.game.async;
 
-import org.marinemc.game.PlayerManager;
-import org.marinemc.net.play.KeepAlivePacket;
-import org.marinemc.player.Player;
-
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import org.marinemc.game.PlayerManager;
+import org.marinemc.game.player.Player;
+import org.marinemc.net.play.KeepAlivePacket;
 
 public class TimeoutManager {
 
@@ -73,7 +73,6 @@ public class TimeoutManager {
 
     private void disconnect(final Player p) {
         // players.disconnect(p, "Connection Timed Out");
-        players.disconnect_timeout(p, "Connection Timed Out");
         cleanUp(p);
     }
     

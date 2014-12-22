@@ -31,16 +31,16 @@ public class EntityLookMovePacket extends Packet {
 		
 		data.writeVarInt(e.getEntityID());
 		
-		final Vector3<Byte> sub = e.getTrackedPosition().getDifferentialFixed32();
+		final Vector3<Byte> sub = e.getTrackedLocation().getDifferentialFixed32();
 		
 		data.writeByte(sub.x);
 		data.writeByte(sub.y);
 		data.writeByte(sub.z);
 
-		data.writeByte((byte) (((e.getPosition().getYaw() % 360) / 360) * 256));
-		data.writeByte((byte) (((e.getPosition().getPitch() % 360) / 360) * 256));
+		data.writeByte((byte) (((e.getLocation().getYaw() % 360) / 360) * 256));
+		data.writeByte((byte) (((e.getLocation().getPitch() % 360) / 360) * 256));
 		
-		data.writeBoolean(e.getPosition().isOnGround());
+		data.writeBoolean(e.getLocation().isOnGround());
 		
 		stream.write(getID(), data);
 	}

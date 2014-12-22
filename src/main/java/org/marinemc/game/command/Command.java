@@ -139,9 +139,9 @@ public abstract class Command {
         Player closestPlayer = getClosestPlayer(sender), randomPlayer = getRandomPlayer();
         Entity closestEntity = getClosestEntity(sender);
         // Make strings
-        String cPlr = closestPlayer == null ? "none" : closestPlayer.getName();
+        String cPlr = closestPlayer == null ? "none" : closestPlayer.getUserName();
         String cEnt = closestEntity == null ? "none" : closestEntity.toString();
-        String rPlr = randomPlayer == null ? "none" : randomPlayer.getName();
+        String rPlr = randomPlayer == null ? "none" : randomPlayer.getUserName();
         String aPlr = getAllPlayers();
         // Loop through the args
         for (int x = 0; x < args.length; x++) {

@@ -19,16 +19,16 @@
 
 package org.marinemc.game.commands;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.marinemc.game.chat.ChatColor;
 import org.marinemc.game.command.Command;
 import org.marinemc.game.command.CommandSender;
-import org.marinemc.player.Player;
+import org.marinemc.game.player.Player;
 import org.marinemc.server.Marine;
-
-import java.util.Arrays;
-import java.util.Collection;
 
 /**
  * Created 2014-12-14 for MarineStandalone

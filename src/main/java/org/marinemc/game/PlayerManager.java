@@ -1,17 +1,20 @@
 package org.marinemc.game;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.marinemc.game.inventory.PlayerInventory;
 import org.marinemc.game.player.Player;
 import org.marinemc.game.player.UIDGenerator;
 import org.marinemc.net.Client;
 import org.marinemc.net.States;
 import org.marinemc.net.login.LoginPacket;
 import org.marinemc.net.login.LoginSucessPacket;
+import org.marinemc.net.play.clientbound.ChatPacket;
 import org.marinemc.net.play.clientbound.JoinGamePacket;
 import org.marinemc.server.Marine;
 import org.marinemc.util.Location;
@@ -20,6 +23,8 @@ import org.marinemc.util.annotations.Hacky;
 import org.marinemc.util.mojang.UUIDHandler;
 import org.marinemc.util.wrapper.StringWrapper;
 import org.marinemc.world.Gamemode;
+import org.marinemc.world.entity.Entity;
+import org.marinemc.world.entity.EntityType;
 
 /**
  * The place where players are saved and accessed.
@@ -59,15 +64,24 @@ public class PlayerManager {
 		}
 	       
 		// TODO This add the encryption stuff etc.. And then separate the following code in to another methoud that is called when encryption response is intercepted.
-		
-		
+
 		Player p = new Player(
-				client,
+				EntityType.PLAYER,
+				Entity.generateEntityID(),
+				new Location(null,0,5,0), //TODO: Get an location from file or generate spawnpoint
 				UIDGenerator.instance().getUID(name),
 				uuid,
 				name, 
-				new Location(null,0,5,0), //TODO: Get an location from file or generate spawnpoint
-				Gamemode.SURVIVAL // TODO: Get from file or get standardgamemode
+				0f,
+				0,
+				Gamemode.SURVIVAL,// TODO: Get from file or get standardgamemode
+				2,
+				2,
+				true,
+				false,
+				true,
+				new PlayerInventory((byte) 0),
+				client
 		);
 		
 		client.sendPacket(new LoginSucessPacket(p)); // Send the LoginSuccessPacket
@@ -170,6 +184,27 @@ public class PlayerManager {
 	 */
 	public Player getPlayer(String username) {
 		return players.get(namePointers.get(username));
+	}
+	
+	/**
+	 * Checks if player is online
+	 * 
+	 * @param uid The UID of the player
+	 * @return An boolean if the player is online
+	 */
+	public boolean isPlayerOnline(short uid) {
+		return players.containsKey(uid);
+	}
+
+	/**
+	 * Send packet to each online player,
+	 * Differs from networkmanager in that way that only ingame players gets this packet,
+	 * Not perhaps people logingin/pinging
+	 * @param Packet
+	 */
+	public void broadcastPacket(ChatPacket packet) {
+		for(Player p : this.players.values())
+			p.getClient().sendPacket(packet);
 	}
 	
 }
