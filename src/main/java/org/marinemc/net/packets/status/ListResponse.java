@@ -17,14 +17,14 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package org.marinemc.net.handshake;
+package org.marinemc.net.packets.status;
+
+import java.util.UUID;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.marinemc.game.chat.ChatColor;
 import org.marinemc.util.Base64Image;
-
-import java.util.UUID;
 
 /**
  * List Response

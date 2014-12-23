@@ -26,16 +26,15 @@ import java.util.Map;
  * Used to generator a unique uid for players represented by a (unsigned) short
  *
  * @author Fozie
- * @author Citymonstret
  */
 public class UIDGenerator {
 
     private static UIDGenerator instance;
     private final Map<Integer, Short> UIDMap;
-    private short nextUnassigned = Short.MIN_VALUE;
+    private short nextUnassigned;
 
     private UIDGenerator() {
-        UIDMap = new IdentityHashMap<>();
+        UIDMap = new IdentityHashMap<>(Short.MAX_VALUE);
         nextUnassigned = Short.MIN_VALUE;
     }
 
@@ -60,14 +59,20 @@ public class UIDGenerator {
         if (UIDMap.containsKey(username.hashCode()))
             return UIDMap.get(username.hashCode());
         short uid = nextUnassigned;
-        try {
-            for (; ; ) {
-                if (!UIDMap.containsValue(++uid))
-                    break;
-            }
-        } catch (Exception e) {
-            return Short.MIN_VALUE; // Error code
+        
+        if(uid == -1)
+        	uid = ++nextUnassigned;
+        
+        if(UIDMap.containsValue(uid)) {
+        	while(true) {
+        		uid = ++nextUnassigned;
+        		if(uid == -1) continue;
+        		
+        		if(!UIDMap.containsValue(uid))
+        			return uid;
+        	}
         }
-        return uid;
+        else
+        	return uid;
     }
 }

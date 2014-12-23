@@ -51,6 +51,7 @@ public class Client {
         this.input = s.getInputStream();
         output = new PacketOutputStream(s.getOutputStream());
         this.uid = -1;
+        isActive = true;
     }
     
     public void sendPacket(Packet packet) { //TODO: PacketBuffer
@@ -103,11 +104,21 @@ public class Client {
         }
     }
 
-
+    
+    private boolean isActive;
+    
     public boolean isActive() {
+    	return isActive;
+    }
+    
+    
+    private final static byte[] NULL_BYTE = new byte[] {0};
+    
+    boolean tryConnection() {
         try { // Write a 0 bit to check if available
-            getConnection().getOutputStream().write(ByteEncoder.writeBoolean(false));
+            getConnection().getOutputStream().write(NULL_BYTE);
         } catch (IOException e1) {
+        	isActive = false;
             return false;
         }
         return true;

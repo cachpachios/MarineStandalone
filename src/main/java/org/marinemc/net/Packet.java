@@ -19,9 +19,9 @@
 
 package org.marinemc.net;
 
-import org.marinemc.io.data.ByteData;
-
 import java.io.IOException;
+
+import org.marinemc.io.data.ByteData;
 /**
  * @author Fozie
  */
@@ -32,11 +32,9 @@ public abstract class Packet {
 
             States s = state;
 
-            ByteData data = new ByteData(inputdata);
-
             @Override
             public void writeToStream(PacketOutputStream stream) throws IOException {
-                stream.write(ID, data);
+                stream.write(ID, inputdata);
             }
 
             @Override

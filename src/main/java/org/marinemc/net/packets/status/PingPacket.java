@@ -17,38 +17,38 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package org.marinemc.net.login;
+package org.marinemc.net.packets.status;
 
 import org.marinemc.io.data.ByteData;
+import org.marinemc.io.data.ByteEncoder;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
 
 import java.io.IOException;
-/**
- * @author Fozie
- */
-public class LoginPacket extends Packet {
 
-    public String name;
+public class PingPacket extends Packet {
+
+    protected long TIME;
 
     @Override
     public int getID() {
-        return 0x00;
+        return 0x01;
     }
 
     @Override
     public void writeToStream(PacketOutputStream stream) throws IOException {
-        // SERVERBOUND PACKET
+        stream.write(getID(), ByteEncoder.writeLong(TIME));
     }
 
     @Override
     public void readFromBytes(ByteData input) {
-        name = input.readUTF8();
+        TIME = input.readLong();
     }
 
     @Override
     public States getPacketState() {
-        return States.LOGIN;
+        return States.INTRODUCE;
     }
+
 }

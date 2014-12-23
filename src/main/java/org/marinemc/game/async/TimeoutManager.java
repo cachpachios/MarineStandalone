@@ -26,15 +26,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.marinemc.game.PlayerManager;
 import org.marinemc.game.player.Player;
 import org.marinemc.net.play.KeepAlivePacket;
+import org.marinemc.server.Marine;
 
 public class TimeoutManager {
-
-    private final PlayerManager players;
     private final Map<Short, Integer> lastReceived; // Contains last recived in seconds
     private final Map<Short, Integer> lastSent; // Contains last sent KeepAlivePacketID
 
-    public TimeoutManager(final PlayerManager manager) {
-        this.players = manager;
+    public TimeoutManager() {
         this.lastReceived = Collections.synchronizedMap(new ConcurrentHashMap<Short, Integer>());
         this.lastSent = Collections.synchronizedMap(new ConcurrentHashMap<Short, Integer>());
     }
@@ -52,10 +50,8 @@ public class TimeoutManager {
     }
 
     private void update(final Player p) {
-        // Don't use randoms, plz
         final int id = randomInt(32);
         p.getClient().sendPacket(new KeepAlivePacket(id));
-        // Removed by default
         lastSent.put(p.getUID(), id);
     }
 
@@ -72,18 +68,17 @@ public class TimeoutManager {
     }
 
     private void disconnect(final Player p) {
-        // players.disconnect(p, "Connection Timed Out");
-        cleanUp(p);
+        Marine.getServer().getPlayerManager().disconnect(p);
     }
     
     public void run() { // Will update each second :D
         int time = (int) getMiliTime();
         for (final Short uid : lastReceived.keySet()) 
-        	if(!players.isPlayerOnline(uid))
+        	if(!Marine.getServer().getPlayerManager().isPlayerOnline(uid))
         		clean(uid);
         	else
             if (lastReceived.get(uid) - time >= 10) {
-                Player plr = players.getPlayer(uid);
+                Player plr = Marine.getServer().getPlayerManager().getPlayer(uid);
                 disconnect(plr);
             }
     }

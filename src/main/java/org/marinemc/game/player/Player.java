@@ -80,7 +80,7 @@ public class Player extends LivingEntity implements IPlayer, CommandSender {
 			String name, float exp, int levels, Gamemode currentGameMode,
 			float walkSpeed, float flySpeed, boolean isOp,
 			boolean isFlying, boolean canFly,
-			PlayerInventory inventory, Client client) {
+			PlayerInventory inventory, final Client client) {
 		super(type, ID, pos);
 		this.uid = uid;
 		this.uuid = uuid;
@@ -164,7 +164,7 @@ public class Player extends LivingEntity implements IPlayer, CommandSender {
 	}
 
 	@Cautious
-	public Client getClient() {
+	public final Client getClient() {
 		return client;
 	}
 

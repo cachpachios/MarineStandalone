@@ -6,21 +6,20 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.marinemc.game.async.TimeoutManager;
 import org.marinemc.game.inventory.PlayerInventory;
 import org.marinemc.game.player.Player;
 import org.marinemc.game.player.UIDGenerator;
 import org.marinemc.net.Client;
 import org.marinemc.net.States;
-import org.marinemc.net.login.LoginPacket;
-import org.marinemc.net.login.LoginSucessPacket;
+import org.marinemc.net.packets.login.LoginPacket;
+import org.marinemc.net.packets.login.LoginSucessPacket;
 import org.marinemc.net.play.clientbound.ChatPacket;
 import org.marinemc.net.play.clientbound.JoinGamePacket;
 import org.marinemc.server.Marine;
 import org.marinemc.util.Location;
 import org.marinemc.util.annotations.Cautious;
 import org.marinemc.util.annotations.Hacky;
-import org.marinemc.util.mojang.UUIDHandler;
-import org.marinemc.util.wrapper.StringWrapper;
 import org.marinemc.world.Gamemode;
 import org.marinemc.world.entity.Entity;
 import org.marinemc.world.entity.EntityType;
@@ -29,16 +28,18 @@ import org.marinemc.world.entity.EntityType;
  * The place where players are saved and accessed.
  * 
  * @author Fozie
- * @param <synchoronized>
  */
-public class PlayerManager<synchoronized> {
+public class PlayerManager {
 	private Map<Short, Player> players;
 	
 	private Map<String, Short> namePointers;
 	
+	private TimeoutManager timeout;
+	
 	public PlayerManager() {
 		players = new ConcurrentHashMap<Short, Player>();
 		namePointers = new ConcurrentHashMap<String, Short>();
+		timeout = new TimeoutManager();
 	}
 	
 	/**
@@ -223,7 +224,7 @@ public class PlayerManager<synchoronized> {
 	}}
 
 	public Player getPlayerByClient(final Client c) {
-		if(c.getUID() == Short.MIN_VALUE)
+		if(c.getUID() == -1)
 			return null;
 		else
 			return this.getPlayer(c.getUID());

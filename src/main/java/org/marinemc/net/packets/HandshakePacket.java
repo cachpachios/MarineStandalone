@@ -33,10 +33,10 @@ import java.io.IOException;
  */
 public class HandshakePacket extends Packet {
 
-    protected int protocolVersion;
-    protected String serverAddress;
-    protected int port;
-    protected int nextState;
+    public int protocolVersion;
+    public String serverAddress;
+    public int port;
+    public int nextState;
 
     @Override
     public int getID() {
@@ -45,7 +45,11 @@ public class HandshakePacket extends Packet {
 
     @Override
     public void writeToStream(PacketOutputStream stream) throws IOException {
-        // Non clientbound packet!
+        ByteData d = new ByteData();
+        d.writeVarInt(protocolVersion);
+        d.writeUTF8(serverAddress);
+        d.writeShort((short) port);
+        d.writeVarInt(nextState);
     }
 
     @Override
@@ -57,7 +61,7 @@ public class HandshakePacket extends Packet {
     }
 
     public String toString() {
-        return protocolVersion + " at " + serverAddress + " : " + port + " target state " + nextState;
+        return "Protocol: " + protocolVersion + " connected to " + serverAddress + " : " + port + " target state " + nextState;
     }
 
     public int getProtocolVersion() {

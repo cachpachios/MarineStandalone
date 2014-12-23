@@ -17,38 +17,50 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package org.marinemc.net.handshake;
-
-import org.marinemc.io.data.ByteData;
-import org.marinemc.io.data.ByteEncoder;
-import org.marinemc.net.Packet;
-import org.marinemc.net.PacketOutputStream;
-import org.marinemc.net.States;
+package org.marinemc.net.packets.login;
 
 import java.io.IOException;
 
-public class PingPacket extends Packet {
+import org.marinemc.game.chat.ChatColor;
+import org.marinemc.game.chat.ChatMessage;
+import org.marinemc.io.data.ByteData;
+import org.marinemc.net.Packet;
+import org.marinemc.net.PacketOutputStream;
+import org.marinemc.net.States;
+/**
+ * @author Fozie
+ */
+public class DisconnectPacket extends Packet {
 
-    protected long TIME;
+	ChatMessage msg;
+
+    public DisconnectPacket(String msg) {
+        this.msg = new ChatMessage(msg).format(ChatColor.BOLD).color(ChatColor.WHITE);
+    }
+    
+    public DisconnectPacket(ChatMessage msg) {
+    	this.msg = msg;
+    }
 
     @Override
     public int getID() {
-        return 0x01;
+        return 0x00;
     }
 
     @Override
     public void writeToStream(PacketOutputStream stream) throws IOException {
-        stream.write(getID(), ByteEncoder.writeLong(TIME));
+        ByteData data = new ByteData();
+        data.writeUTF8(msg.toString());
+
+        stream.write(getID(), data);
     }
 
     @Override
     public void readFromBytes(ByteData input) {
-        TIME = input.readLong();
     }
 
     @Override
     public States getPacketState() {
-        return States.INTRODUCE;
+        return States.LOGIN;
     }
-
 }

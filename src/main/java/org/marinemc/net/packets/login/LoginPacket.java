@@ -17,30 +17,20 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package org.marinemc.net.login;
+package org.marinemc.net.packets.login;
 
-import java.io.IOException;
-
-import org.marinemc.game.chat.ChatColor;
-import org.marinemc.game.chat.ChatMessage;
 import org.marinemc.io.data.ByteData;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
+
+import java.io.IOException;
 /**
  * @author Fozie
  */
-public class DisconnectPacket extends Packet {
+public class LoginPacket extends Packet {
 
-	ChatMessage msg;
-
-    public DisconnectPacket(String msg) {
-        this.msg = new ChatMessage(msg).format(ChatColor.BOLD).color(ChatColor.WHITE);
-    }
-    
-    public DisconnectPacket(ChatMessage msg) {
-    	this.msg = msg;
-    }
+    public String name;
 
     @Override
     public int getID() {
@@ -49,14 +39,13 @@ public class DisconnectPacket extends Packet {
 
     @Override
     public void writeToStream(PacketOutputStream stream) throws IOException {
-        ByteData data = new ByteData();
-        data.writeUTF8(msg.toString());
-
-        stream.write(getID(), data);
+        // SERVERBOUND PACKET
     }
 
     @Override
-    public void readFromBytes(ByteData input) {}
+    public void readFromBytes(ByteData input) {
+        name = input.readUTF8();
+    }
 
     @Override
     public States getPacketState() {

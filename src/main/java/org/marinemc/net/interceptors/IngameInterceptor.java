@@ -39,7 +39,7 @@ public class IngameInterceptor implements PacketInterceptor {
     }
 
     @Override
-    public boolean intercept(int id, ByteData data, Client c) {
+    public boolean intercept(int id, ByteData data, final Client c) {
     	switch(id) {
     	case 0:
     	case 1:

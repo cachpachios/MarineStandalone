@@ -45,7 +45,7 @@ public final class PacketHandler implements PacketInterceptor {
         ingame = new IngameInterceptor();
     }
 
-    public boolean intercept(int id, ByteData data, Client c) {
+    public boolean intercept(int id, ByteData data, final Client c) {
         switch (c.getState()) {
             case HANDSHAKE:
                 return handshake.intercept(id, data, c);

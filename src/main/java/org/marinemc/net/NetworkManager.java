@@ -20,17 +20,16 @@
 package org.marinemc.net;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.marinemc.logging.Logging;
 import org.marinemc.server.Marine;
-import org.marinemc.util.MathUtils;
 /**
  * @author Fozie
  */
@@ -39,14 +38,11 @@ public class NetworkManager {
     public ServerSocket server;
     public ClientProcessor clientHandler;
     private List<Client> clientList;
-    private List<Client> cleanUpList;
-
+    
     private ConnectionThread connector;
 
-    public NetworkManager(int port, int initCap) {
-        clientList = Collections.synchronizedList(new ArrayList<Client>(initCap));
-
-        cleanUpList = new ArrayList<Client>(MathUtils.trim(initCap/100, 5, 2));
+    public NetworkManager(int port) {
+        clientList = new CopyOnWriteArrayList<Client>();
         
         try {
             server = new ServerSocket(port, 100); //Port and num "queued" connections
@@ -75,16 +71,19 @@ public class NetworkManager {
         return clientList;
     }
 
-
+    public boolean isEmpty() {
+    	return clientList.isEmpty();
+    }
+    
     public void broadcastPacket(Packet p) {
         synchronized (clientList) {
-            for (Client c : clientList)
+            for (final Client c : clientList)
                 c.sendPacket(p);
         }
     }
 
     public void connect(Socket accept) {
-        Client c;
+    	final Client c;
         try {
             c = new Client(accept);
         } catch (IOException e) {
@@ -93,17 +92,25 @@ public class NetworkManager {
         clientList.add(c);
     }
 
-    public void cleanUp(Client c) {
-        if (!cleanUpList.contains(c))
-            cleanUpList.add(c);
+    public void cleanUp(final Client c) {
+        synchronized (clientList) {
+        	terminate(c);
+        }
     }
 
     private void terminate(Client client) {
+        synchronized (clientList) {
         if (client.getState() != States.INGAME)
             Logging.getLogger().info("Client Ping Terminated At: " + client.getAdress().getHostAddress() + ":" + client.getConnection().getPort());
         clientList.remove(client);
         client.terminate();
-    }
+        
+        client = null;
+        
+//        WeakReference<Client> r = new WeakReference<Client>(client);
+//        while(r.get() != null)
+//        	System.gc();
+    }}
 
     public boolean processAll() {
         synchronized (clientList) {
@@ -125,9 +132,6 @@ public class NetworkManager {
                 if (status == Client.ConnectionStatus.PROCESSED)
                     didProccessSomething = true;
             }
-            for (Client c : cleanUpList)
-                terminate(c);
-            cleanUpList.clear();
             return didProccessSomething;
         }
     }
@@ -136,11 +140,14 @@ public class NetworkManager {
         return clientList.size() > 0;
     }
 
-    public void tryConnections() {
-    	synchronized(clientList) {
+    public void tryConnections()  {
+        synchronized (clientList) {
 		for (final Client c : clientList) {
-		    if (!c.isActive())
-		    	Marine.getServer().getPlayerManager().disconnect(Marine.getServer().getPlayerManager().getPlayerByClient(c));
+		    if (!c.tryConnection())
+		    	if(c.getUID() != -1)
+		    		Marine.getServer().getPlayerManager().disconnect(Marine.getServer().getPlayerManager().getPlayerByClient(c));
+		    	else
+		    		cleanUp(c);
 		}}
     }
 
@@ -156,18 +163,17 @@ public class NetworkManager {
         }
 
         public void run() {
-            while (true)
-                if (!host.processAll())
-                    if (host.hasClientsConnected())
-                        try {
-                            ClientProcessor.sleep(50);
-                        } catch (InterruptedException e) {
-                        }
-                    else
-                        try {
-                            ClientProcessor.sleep(0, 500);
-                        } catch (InterruptedException e) {
-                        }
+            while (true) {
+            	if(host.isEmpty()) {
+					try {
+						ClientProcessor.sleep(0, 1000);
+					} catch (InterruptedException e) {}
+					
+					continue;
+					
+            	}
+            	host.processAll();
+            }
         }
     }
 } 

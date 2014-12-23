@@ -17,7 +17,7 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package org.marinemc.net.login;
+package org.marinemc.net.packets.login;
 
 import java.io.IOException;
 import java.util.UUID;

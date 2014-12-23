@@ -17,13 +17,15 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package org.marinemc.net.handshake;
+package org.marinemc.net.packets.status;
 
 import java.io.IOException;
 import java.util.UUID;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.marinemc.events.standardevents.ListEvent;
 import org.marinemc.game.chat.ChatColor;
 import org.marinemc.game.player.Player;
@@ -70,7 +72,7 @@ public class MultiplayerListPacket extends Packet {
         }
 
         ListResponse response = new ListResponse(Marine.getMotd(), Marine.getPlayers().size(), Marine.getMaxPlayers(), samples, Marine.getServer().getFavicon());
-        ListEvent event = new ListEvent(c, response);
+        ListEvent event = new ListEvent(response);
 
         Marine.getServer().callEvent(event);
 
@@ -81,7 +83,7 @@ public class MultiplayerListPacket extends Packet {
 
     @Override
     public void readFromBytes(ByteData input) {
-
+    	//TODO
     }
 
     @Override
