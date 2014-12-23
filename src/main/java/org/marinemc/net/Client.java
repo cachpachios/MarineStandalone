@@ -43,14 +43,14 @@ public class Client {
 
     // For indexing in IngameInterceptor
     // private String userName;
-    private Short uid; // Saved as Short not short for the ability to equal null
+    private short uid; // Saved as Short not short for the ability to equal null
 
     public Client(Socket s) throws IOException {
         this.state = States.HANDSHAKE;
         this.connection = s;
         this.input = s.getInputStream();
         output = new PacketOutputStream(s.getOutputStream());
-        this.uid = null;
+        this.uid = -1;
     }
     
     public void sendPacket(Packet packet) { //TODO: PacketBuffer

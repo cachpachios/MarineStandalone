@@ -30,15 +30,9 @@ import org.marinemc.server.Marine;
  */
 public class LoginInterceptor implements PacketInterceptor {
 
-
-    public LoginInterceptor() {
-    }
-
     @Override
-    public boolean intercept(int ID, ByteData data, Client c) {
-       switch(ID) {
-       
-       case 0: {
+    public boolean intercept(int id, ByteData data, Client c) {
+    	if(id == 0) {
     	   LoginPacket packet = new LoginPacket();
     	   packet.readFromBytes(data);
 		   
@@ -50,10 +44,7 @@ public class LoginInterceptor implements PacketInterceptor {
     		   DisconnectPacket disc = new DisconnectPacket(s);
     		   c.sendPacket(disc);
     	   }
-       }
-       	
-       default: return false;
-       }
+    	}
+       return false;
     }
-
 }

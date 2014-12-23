@@ -6,6 +6,8 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.RandomAccess;
 
+import org.marinemc.net.Client;
+
 /**
  * 
  * A resizeable array,
@@ -20,6 +22,12 @@ public class DynamicArray<T extends Object> implements RandomAccess,Serializable
 	/**
 	 * The buffer where the data is stored
 	 */
+	
+	public DynamicArray(int presize) {
+		objects = new Object[presize];
+		size = 0;
+	}
+	
 	private Object[] objects;
 	
 	/**
@@ -138,5 +146,39 @@ public class DynamicArray<T extends Object> implements RandomAccess,Serializable
 			return get(++pos);
 		}
 		
+	}
+
+	public boolean isEmpty() {
+		return size == 0;
+	}
+
+	public void clear() {
+        for (int i = 0; i < size; i++)
+            objects[i] = null;
+
+        size = 0;
+        trim(10);
+	}
+
+    public int indexOf(Object obj) {
+            for (int i = 0; i < size; i++)
+                if (obj.equals(objects[i]))
+                    return i;
+        return -1;
+    }
+	
+    public void remove(int index) {
+        int numMoved = size - index - 1;
+        if (numMoved > 0)
+            System.arraycopy(objects, index+1, objects, index,
+                             numMoved);
+        objects[--size] = null;
+
+    }
+    
+	public void remove(Object obj) {
+		int i = indexOf(obj);
+		if(i != -1)
+			remove(i);
 	}
 }

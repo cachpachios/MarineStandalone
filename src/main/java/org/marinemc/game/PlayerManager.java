@@ -221,4 +221,19 @@ public class PlayerManager<synchoronized> {
 		for(Player p : this.players.values())
 			p.getClient().sendPacket(packet);
 	}}
+
+	public Player getPlayerByClient(final Client c) {
+		if(c.getUID() == Short.MIN_VALUE)
+			return null;
+		else
+			return this.getPlayer(c.getUID());
+	}
+
+	public void disconnect(final Player p) {
+		if(p == null) return;
+		cleanUp(p);
+		if(p.getClient() != null)
+			Marine.getServer().getNetworkManager().cleanUp(p.getClient());
+		
+	}
 }
