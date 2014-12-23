@@ -230,11 +230,10 @@ public class PlayerManager {
 			return this.getPlayer(c.getUID());
 	}
 
-	public void disconnect(final Player p) {
+	public void disconnect(Player p) {
 		if(p == null) return;
 		cleanUp(p);
-		if(p.getClient() != null)
-			Marine.getServer().getNetworkManager().cleanUp(p.getClient());
-		
+		Marine.getServer().getNetworkManager().cleanUp(p.getClient());
+		p = null;
 	}
 }

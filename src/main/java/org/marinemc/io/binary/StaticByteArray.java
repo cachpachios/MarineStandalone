@@ -1,12 +1,12 @@
 package org.marinemc.io.binary;
 
-public class StaticArrayByteInput extends AbstractInput implements StoredReader, Byteable {
+public class StaticByteArray extends AbstractInput implements StoredReader, Byteable {
 
 	final byte[] data;
 
 	int position;
 	
-	public StaticArrayByteInput(final byte[] data) {
+	public StaticByteArray(final byte[] data) {
 		position = -1;
 		this.data = data;
 	}

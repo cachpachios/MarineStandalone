@@ -76,10 +76,8 @@ public class NetworkManager {
     }
     
     public void broadcastPacket(Packet p) {
-        synchronized (clientList) {
-            for (final Client c : clientList)
-                c.sendPacket(p);
-        }
+    	for (final Client c : clientList)
+    		c.sendPacket(p);
     }
 
     public void connect(Socket accept) {
@@ -93,13 +91,10 @@ public class NetworkManager {
     }
 
     public void cleanUp(final Client c) {
-        synchronized (clientList) {
-        	terminate(c);
-        }
+    	terminate(c);
     }
 
     private void terminate(Client client) {
-        synchronized (clientList) {
         if (client.getState() != States.INGAME)
             Logging.getLogger().info("Client Ping Terminated At: " + client.getAdress().getHostAddress() + ":" + client.getConnection().getPort());
         clientList.remove(client);
@@ -110,10 +105,9 @@ public class NetworkManager {
 //        WeakReference<Client> r = new WeakReference<Client>(client);
 //        while(r.get() != null)
 //        	System.gc();
-    }}
+    }
 
     public boolean processAll() {
-        synchronized (clientList) {
             boolean didProccessSomething = false;
             for (final Client c : clientList) {
                 Client.ConnectionStatus status = c.process();
@@ -133,7 +127,6 @@ public class NetworkManager {
                     didProccessSomething = true;
             }
             return didProccessSomething;
-        }
     }
 
     public boolean hasClientsConnected() {
@@ -141,14 +134,13 @@ public class NetworkManager {
     }
 
     public void tryConnections()  {
-        synchronized (clientList) {
 		for (final Client c : clientList) {
 		    if (!c.tryConnection())
 		    	if(c.getUID() != -1)
 		    		Marine.getServer().getPlayerManager().disconnect(Marine.getServer().getPlayerManager().getPlayerByClient(c));
 		    	else
 		    		cleanUp(c);
-		}}
+		}
     }
 
     // Client processing thread
@@ -166,7 +158,7 @@ public class NetworkManager {
             while (true) {
             	if(host.isEmpty()) {
 					try {
-						ClientProcessor.sleep(0, 1000);
+						ClientProcessor.sleep(500);
 					} catch (InterruptedException e) {}
 					
 					continue;
