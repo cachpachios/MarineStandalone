@@ -19,30 +19,90 @@
 
 package org.marinemc.game.chat;
 
-import org.json.simple.JSONObject;
+import org.marinemc.game.chat.builder.Event;
+import org.marinemc.game.chat.builder.Part;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
+/**
+ * Chat Message
+ *
+ * @author Citymonstret
+ */
 public class ChatMessage {
-    public List<ChatComponent> components;
 
-    public ChatMessage() {
-        components = Collections.synchronizedList(new ArrayList<ChatComponent>());
+    public List<Event> events = new ArrayList<>();
+    public List<Part> with = new ArrayList<>();
+    private String text;
+    private ChatColor color = ChatColor.WHITE;
+    private List<ChatColor> formats = new ArrayList<>();
+
+    public ChatMessage(String text) {
+        this.text = text;
     }
 
-    @SuppressWarnings("unchecked")
+    public ChatMessage color(ChatColor color) {
+        this.color = color;
+        return this;
+    }
+
+    public ChatMessage with(Part part) {
+        with.add(part);
+        return this;
+    }
+
+    public ChatMessage event(Event event) {
+        events.add(event);
+        return this;
+    }
+
+    public ChatMessage format(ChatColor color) {
+        if (!color.isFormat())
+            throw new RuntimeException(color.getDataString() + " is not a color");
+        if (formats.contains(color))
+            formats.remove(color);
+        else
+            formats.add(color);
+        return this;
+    }
+
+    @Override
     public String toString() {
-        JSONObject obj = new JSONObject();
-
-		/*int i = 0;
-        for(ChatComponent c : components) {
-			i++;	
-			obj.put(("Text" + i), c.JSON);
-		}*/
-
-
-        return obj.toJSONString();
+        String format = "{\"text\":\"%s\",\"color\":\"%s\"%s%s%s}";
+        format = format.replaceFirst("%s", text);
+        format = format.replaceFirst("%s", color.getDataString());
+        StringBuilder w = new StringBuilder("");
+        if (with != null && !with.isEmpty()) {
+            Iterator<Part> iterator = with.iterator();
+            w.append(",\"extra\":[");
+            while (iterator.hasNext()) {
+                w.append(iterator.next());
+                if (iterator.hasNext())
+                    w.append(",");
+            }
+            w.append("]");
+        }
+        format = format.replaceFirst("%s", w.toString());
+        w = new StringBuilder();
+        if (events.isEmpty()) {
+            format = format.replaceFirst("%s", "");
+        } else {
+            for (Event event : events) {
+                w.append(",").append(event);
+            }
+            format = format.replaceFirst("%s", w.toString());
+        }
+        w = new StringBuilder();
+        if (formats.isEmpty()) {
+            format = format.replaceFirst("%s", "");
+        } else {
+            for (ChatColor f : formats) {
+                w.append(",\"").append(f.getDataString()).append("\":\"true\"");
+            }
+            format = format.replaceFirst("%s", w.toString());
+        }
+        return format;
     }
 }

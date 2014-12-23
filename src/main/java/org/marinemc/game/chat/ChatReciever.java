@@ -19,14 +19,16 @@
 
 package org.marinemc.game.chat;
 
+
 public interface ChatReciever {
 
     /**
      * @param message
      */
     public void sendMessage(String message);
-
+    
+    /**
+     * @param message
+     */
     public void sendMessage(ChatMessage message);
-
-    public void sendMessage(ChatComponent message);
 }

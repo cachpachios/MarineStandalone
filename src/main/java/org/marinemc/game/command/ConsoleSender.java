@@ -20,7 +20,6 @@
 package org.marinemc.game.command;
 
 import org.marinemc.game.CommandManager;
-import org.marinemc.game.chat.ChatComponent;
 import org.marinemc.game.chat.ChatMessage;
 import org.marinemc.logging.Logging;
 import org.marinemc.util.Location;
@@ -70,10 +69,5 @@ public class ConsoleSender implements CommandSender {
     @Override
     public void sendMessage(ChatMessage message) {
         sendMessage(this.toString());
-    }
-
-    @Override
-    public void sendMessage(ChatComponent message) {
-        sendMessage(message.getJsonObject().get("text").toString());
     }
 }

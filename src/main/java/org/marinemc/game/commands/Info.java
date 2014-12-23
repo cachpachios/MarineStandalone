@@ -20,7 +20,7 @@
 package org.marinemc.game.commands;
 
 import org.marinemc.game.chat.ChatColor;
-import org.marinemc.game.chat.builder.Chat;
+import org.marinemc.game.chat.ChatMessage;
 import org.marinemc.game.chat.builder.ClickEvent;
 import org.marinemc.game.chat.builder.HoverEvent;
 import org.marinemc.game.chat.builder.Part;
@@ -50,7 +50,7 @@ public class Info extends Command {
                                     "Server Info - Software: {0}, Version: {1}, Protocol: {2}, Minecraft: {3}",
                                     "MarineStandalone", ServerProperties.BUILD_VERSION, ServerProperties.PROTOCOL_VERSION, ServerProperties.MINECRAFT_NAME));
         } else {
-            ((Player) sender).sendMessage(new Chat("Server Info\n")
+            ((Player) sender).sendMessage(new ChatMessage("Server Info\n")
                             .color(ChatColor.RED)
                             .format(ChatColor.BOLD)
                             .with(new Part("  Software: ", ChatColor.RED))

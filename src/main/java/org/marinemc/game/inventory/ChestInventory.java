@@ -19,7 +19,7 @@
 
 package org.marinemc.game.inventory;
 
-import org.marinemc.game.chat.ChatComponent;
+import org.marinemc.game.chat.ChatMessage;
 
 /**
  * Created 2014-12-04 for MarineStandalone
@@ -50,8 +50,8 @@ public class ChestInventory extends Inventory {
     }
 
     @Override
-    public ChatComponent getTitle() {
-        return new ChatComponent(title);
+    public ChatMessage getTitle() {
+        return new ChatMessage(title);
     }
 
     @Override

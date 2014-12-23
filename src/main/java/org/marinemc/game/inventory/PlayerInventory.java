@@ -19,7 +19,7 @@
 
 package org.marinemc.game.inventory;
 
-import org.marinemc.game.chat.ChatComponent;
+import org.marinemc.game.chat.ChatMessage;
 
 public final class PlayerInventory extends Inventory {
 
@@ -44,8 +44,8 @@ public final class PlayerInventory extends Inventory {
     }
 
     @Override
-    public ChatComponent getTitle() {
-        return new ChatComponent("Inventory");
+    public ChatMessage getTitle() {
+        return new ChatMessage("Inventory");
     }
 
 }

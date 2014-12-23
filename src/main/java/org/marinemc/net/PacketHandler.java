@@ -20,20 +20,25 @@
 package org.marinemc.net;
 
 import org.marinemc.io.data.ByteData;
-import org.marinemc.net.interceptors.*;
-import org.marinemc.server.MarineServer;
+import org.marinemc.net.interceptors.HandshakeInterceptor;
+import org.marinemc.net.interceptors.IngameInterceptor;
+import org.marinemc.net.interceptors.LoginInterceptor;
+import org.marinemc.net.interceptors.PacketInterceptor;
+import org.marinemc.net.interceptors.StatusInterceptor;
 
 /**
+ * Points the packets to diffrent interceptors depending on the client state
+ * 
  * @author Fozie
  */
-public class PacketHandler implements PacketInterceptor {
+public final class PacketHandler implements PacketInterceptor {
 
     HandshakeInterceptor handshake;
     StatusInterceptor status;
     LoginInterceptor login;
     IngameInterceptor ingame;
 
-    public PacketHandler(MarineServer server) {
+    public PacketHandler() {
         handshake = new HandshakeInterceptor();
         status = new StatusInterceptor();
         login = new LoginInterceptor();

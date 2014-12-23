@@ -1,35 +1,86 @@
 package org.marinemc.io.binary;
 
 import java.nio.charset.Charset;
+import java.util.Iterator;
 
 /**
  * ByteArray is a Stored reader with output and input functionality
  * 
+ * Is able to expand automaticly!
+ * But needs to be trimed to minimize.
+ * 
  * @author Fozie
  */
-public class ByteArray extends AbstractInput implements ByteOutput, StoredReader {
+public class ByteArray extends AbstractInput implements ByteOutput, StoredReader, Iterable<Byte> {
 
-	protected byte[] data;
+	private int size;
 	
-	int position = -1;
+	private byte[] data;
+	
+	private int position = -1;
 	
 	public ByteArray(byte[] data) {
 		this.data = data;
+		size = data.length;
+	}
+	
+	public ByteArray() {
+		this.data = new byte[10];
+		size = 0;
+	}
+	
+	public ByteArray(int size) {
+		this.data = new byte[size];
+		size = 0;
 	}
 	
 	@Override
 	public byte readByte() {
+		if(hasAnotherByte())
+			return data[++position];
+		else
+			return 0;
+	}
+
+	public boolean hasAnotherByte() {
+		return (position + 1) < size;
+	}
+	
+	public int getPosition() {
+		if(position != 0)
+			return position;
 		return 0;
 	}
-
+	
+	public void ensureSpace(final int amount) {
+		if(extraAllocation() < amount)
+			data = ByteUtils.extendArray(data, amount - extraAllocation());
+	}
+	
+	public void allocateAnotherByte() {
+		data = ByteUtils.extendArray(data, 1);
+	}
+	
+	public void trim() {
+		trim(1);
+	}
+	
+	public void trim(final int offset) {
+		data = ByteUtils.resize(data, size+offset);
+	}
+	
+	public int extraAllocation() {
+		return data.length - size;
+	}
+	
 	@Override
 	public void writeByte(byte v) {
-		write(new byte[] {v});
+		ensureSpace(size+1);
+		data[++size] = v;
 	}
 
-	
 	public void write(byte... v) {
-		data = ByteUtils.writeEnd(data, v);
+		data = ByteUtils.insert(data, v);
 	}
 	
 	@Override
@@ -141,7 +192,25 @@ public class ByteArray extends AbstractInput implements ByteOutput, StoredReader
 	public void skipNextByte() {
 		++position;
 	}
-
-
 	
+	@Override
+	public Iterator<Byte> iterator() {
+		return new ByteIterator();
+	}
+	
+	private final class ByteIterator implements Iterator<Byte> {
+
+		private int pos;
+		
+		@Override
+		public boolean hasNext() {
+			return pos != size;
+		}
+
+		@Override
+		public Byte next() {
+			return data[++pos];
+		}
+		
+	}
 }

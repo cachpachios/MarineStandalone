@@ -21,6 +21,9 @@ package org.marinemc.net.interceptors;
 
 import org.marinemc.io.data.ByteData;
 import org.marinemc.net.Client;
+import org.marinemc.net.login.DisconnectPacket;
+import org.marinemc.net.login.LoginPacket;
+import org.marinemc.server.Marine;
 
 /**
  * @author Fozie
@@ -33,7 +36,24 @@ public class LoginInterceptor implements PacketInterceptor {
 
     @Override
     public boolean intercept(int ID, ByteData data, Client c) {
-       return false;
+       switch(ID) {
+       
+       case 0: {
+    	   LoginPacket packet = new LoginPacket();
+    	   packet.readFromBytes(data);
+		   
+    	   final String s = Marine.getServer().getPlayerManager().login(c, packet);
+		   System.out.println("Gg");
+    	   if(s == null)
+    		   return true; // End the interception with a positive interception
+    	   else {
+    		   DisconnectPacket disc = new DisconnectPacket(s);
+    		   c.sendPacket(disc);
+    	   }
+       }
+       	
+       default: return false;
+       }
     }
 
 }

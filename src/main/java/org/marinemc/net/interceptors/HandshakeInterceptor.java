@@ -21,7 +21,7 @@ package org.marinemc.net.interceptors;
 
 import org.marinemc.io.data.ByteData;
 import org.marinemc.net.Client;
-import org.marinemc.net.handshake.ClientHandshake;
+import org.marinemc.net.packets.HandshakePacket;
 /**
  * @author Fozie
  */
@@ -30,7 +30,7 @@ public class HandshakeInterceptor implements PacketInterceptor {
     @Override
     public boolean intercept(int id, ByteData data, Client c) {
         if (id == 0x00) {
-            ClientHandshake packet = new ClientHandshake();
+            HandshakePacket packet = new HandshakePacket();
             packet.readFromBytes(data);
             c.setState(packet.getState());
             return true;

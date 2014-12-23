@@ -19,8 +19,12 @@
 
 package org.marinemc.world.chunk;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import org.marinemc.game.player.Player;
 import org.marinemc.io.data.ByteData;
-import org.marinemc.player.Player;
 import org.marinemc.server.Marine;
 import org.marinemc.util.Position;
 import org.marinemc.util.annotations.Cautious;
@@ -29,10 +33,6 @@ import org.marinemc.util.annotations.Unsafe;
 import org.marinemc.world.BiomeID;
 import org.marinemc.world.BlockID;
 import org.marinemc.world.World;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 /**
  * Storage unit for ingame chunks

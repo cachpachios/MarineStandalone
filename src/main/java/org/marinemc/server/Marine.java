@@ -23,7 +23,7 @@ import java.net.InetAddress;
 import java.util.Collection;
 import java.util.UUID;
 
-import org.marinemc.game.chat.builder.Chat;
+import org.marinemc.game.chat.ChatMessage;
 import org.marinemc.game.player.Player;
 import org.marinemc.game.scheduler.Scheduler;
 import org.marinemc.game.system.MarineSecurityManager;
@@ -174,7 +174,7 @@ public class Marine {
      *
      * @param chat message
      */
-    public static void broadcastMessage(final Chat chat) {
+    public static void broadcastMessage(final ChatMessage chat) {
         for (final Player player : getPlayers()) {
 //         TODO   player.sendMessage(chat);
         }
@@ -210,4 +210,12 @@ public class Marine {
     public static boolean isBanned(final InetAddress address) {
         return false;
     }
+    
+    /**
+     * Gives the main world of the server
+     * @return The main world, or the spawn world
+     */
+	public static World getMainWorld() {
+		return getServer().getWorldManager().getMainWorld();
+	}
 }

@@ -30,6 +30,7 @@ import java.util.List;
 
 import org.marinemc.logging.Logging;
 import org.marinemc.server.Marine;
+import org.marinemc.util.MathUtils;
 /**
  * @author Fozie
  */
@@ -37,18 +38,16 @@ public class NetworkManager {
     public PacketHandler packetHandler;
     public ServerSocket server;
     public ClientProcessor clientHandler;
-    private Collection<Client> clientList;
+    private List<Client> clientList;
     private List<Client> cleanUpList;
 
     private ConnectionThread connector;
 
-    public NetworkManager(int port, boolean hashing) {
-        if (hashing)
-            clientList = Collections.synchronizedSet(new HashSet<Client>());
-        else
-            clientList = Collections.synchronizedList(new ArrayList<Client>());
+    public NetworkManager(int port, int initCap) {
+        clientList = Collections.synchronizedList(new ArrayList<Client>(initCap));
 
-        cleanUpList = new ArrayList<Client>();
+        cleanUpList = new ArrayList<Client>(MathUtils.trim(initCap/100, 5, 2));
+        
         try {
             server = new ServerSocket(port, 100); //Port and num "queued" connections
         } catch (IOException e) {
@@ -62,7 +61,7 @@ public class NetworkManager {
         }
         connector = new ConnectionThread(this);
 
-        packetHandler = new PacketHandler(Marine.getServer());
+        packetHandler = new PacketHandler();
 
         clientHandler = new ClientProcessor(this);
     }

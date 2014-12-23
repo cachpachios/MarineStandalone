@@ -17,7 +17,7 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package org.marinemc.net.handshake;
+package org.marinemc.net.packets;
 
 import org.marinemc.io.data.ByteData;
 import org.marinemc.net.Packet;
@@ -26,9 +26,12 @@ import org.marinemc.net.States;
 
 import java.io.IOException;
 /**
+ * Sent by the client to introduce the client to the server,
+ * All new connections should begin with this packet
+ * 
  * @author Fozie
  */
-public class ClientHandshake extends Packet {
+public class HandshakePacket extends Packet {
 
     protected int protocolVersion;
     protected String serverAddress;

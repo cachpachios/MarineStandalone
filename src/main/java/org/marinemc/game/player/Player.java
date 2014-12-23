@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.marinemc.game.chat.ChatComponent;
 import org.marinemc.game.chat.ChatMessage;
-import org.marinemc.game.chat.builder.Chat;
 import org.marinemc.game.command.Command;
 import org.marinemc.game.command.CommandSender;
 import org.marinemc.game.inventory.Inventory;
@@ -20,12 +18,15 @@ import org.marinemc.net.play.clientbound.player.ExperiencePacket;
 import org.marinemc.net.play.clientbound.player.PlayerAbilitesPacket;
 import org.marinemc.net.play.clientbound.player.PlayerLookPacket;
 import org.marinemc.net.play.clientbound.world.BlockChangePacket;
+import org.marinemc.net.play.clientbound.world.MapChunkPacket;
 import org.marinemc.net.play.clientbound.world.SpawnPointPacket;
 import org.marinemc.util.Location;
 import org.marinemc.util.Position;
 import org.marinemc.util.annotations.Cautious;
 import org.marinemc.world.BlockID;
 import org.marinemc.world.Gamemode;
+import org.marinemc.world.World;
+import org.marinemc.world.chunk.Chunk;
 import org.marinemc.world.entity.EntityType;
 import org.marinemc.world.entity.LivingEntity;
 
@@ -236,11 +237,6 @@ public class Player extends LivingEntity implements IPlayer, CommandSender {
 	}
 
 	@Override
-	public void sendMessage(ChatComponent message) {
-		client.sendPacket(new ChatPacket(message.toString()));
-	}
-
-	@Override
 	public void executeCommand(String command) {
 		//TODO :I
 	}
@@ -262,10 +258,6 @@ public class Player extends LivingEntity implements IPlayer, CommandSender {
 
 	public void sendAboveActionbarMessage(String message) {
         getClient().sendPacket(new ChatPacket(message, 2)); // TODO Event
-	}
-
-	public void sendMessage(Chat chat) {
-        getClient().sendPacket(new ChatPacket(chat));
 	}
 
 	public void teleport(Location relative) {
@@ -332,5 +324,12 @@ public class Player extends LivingEntity implements IPlayer, CommandSender {
 
 	public void sendBlockUpdate(Position pos, BlockID type) {
         getClient().sendPacket(new BlockChangePacket(pos, type));
+	}
+	/**
+	 * Send the chunks in a MapBulk packet
+	 * @param chunks
+	 */
+	public void sendMapBulk(final World w, final List<Chunk> chunks) {
+		client.sendPacket(new MapChunkPacket(w, chunks));
 	}
 }

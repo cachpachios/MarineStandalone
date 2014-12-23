@@ -56,7 +56,7 @@ public class Client {
     public void sendPacket(Packet packet) { //TODO: PacketBuffer
         try {
             packet.writeToStream(output);
-            System.out.println(packet.getID());
+            System.out.println("Sent packet: "+packet.getID()+ ", State: " + state.name());
         } catch (IOException e) {
         	//TODO: 
         }
@@ -152,7 +152,9 @@ public class Client {
         }
 
         for (ByteData p : packages) {
-            getNetwork().packetHandler.intercept(p.readVarInt(), p, this);
+        	final int id  = p.readVarInt();
+            System.out.println("Intercepted packet: "+ id + ", State: " + state.name());
+            getNetwork().packetHandler.intercept(id, p, this);
         }
 
         return ConnectionStatus.PROCESSED;

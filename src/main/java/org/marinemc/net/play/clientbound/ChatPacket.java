@@ -19,15 +19,14 @@
 
 package org.marinemc.net.play.clientbound;
 
+import java.io.IOException;
+
 import org.json.simple.JSONObject;
 import org.marinemc.game.chat.ChatMessage;
-import org.marinemc.game.chat.builder.Chat;
 import org.marinemc.io.data.ByteData;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
-
-import java.io.IOException;
 
 /**
  * Created 2014-12-04 for MarineStandalone
@@ -52,19 +51,14 @@ public class ChatPacket extends Packet {
             throw new UnsupportedOperationException("JSON Testing isn't implemented yet");
     }
 
-    public ChatPacket(final Chat chat) {
+    public ChatPacket(final ChatMessage chat) {
         this.message = chat.toString();
         this.position = 0;
     }
 
-    public ChatPacket(final Chat chat, final int position) {
+    public ChatPacket(final ChatMessage chat, final int position) {
         this.message = chat.toString();
         this.position = position;
-    }
-
-    public ChatPacket(final ChatMessage message) {
-        this.message = message.toString();
-        this.position = 0;
     }
 
     @SuppressWarnings("unchecked")

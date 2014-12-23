@@ -27,6 +27,9 @@ import java.util.ArrayList;
  * Chat colors used all over the application.
  * <p/>
  * Can be used to port from/to hexa as well
+ * 
+ * @author Fozie
+ * @author Citymonstret
  */
 public enum ChatColor {
     BLACK("black", "0", true, "000000", Color.BLACK),

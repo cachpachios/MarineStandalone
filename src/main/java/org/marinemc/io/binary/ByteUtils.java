@@ -28,12 +28,19 @@ public class ByteUtils {
         return result;
     }
     
-    public static byte[] writeEnd(final byte[] input, final byte[] data) {
-    	final byte[] r = new byte[input.length + data.length];
-    	
-    	System.arraycopy(input, 0, r, 0, input.length);
-    	System.arraycopy(data, 0, r, input.length, data.length);
-    	
+    public static byte[] insert(final byte[] input, final byte[] data) {
+    	byte[] r = extendArray(input, input.length + data.length);
+    	System.arraycopy(data, 0, r, input.length, r.length);
+    	return r;
+    }
+    
+    public static byte[] extendArray(final byte[] input, final int offset) {
+    	return resize(input, input.length + offset);
+    }
+    
+    public static byte[] resize(final byte[] input, final int length) {
+    	byte[] r = new byte[length];
+    	System.arraycopy(input, 0, r, 0, length);
     	return r;
     }
 }

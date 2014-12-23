@@ -19,7 +19,7 @@
 
 package org.marinemc.game.inventory;
 
-import org.marinemc.game.chat.ChatComponent;
+import org.marinemc.game.chat.ChatMessage;
 import org.marinemc.game.item.Item;
 import org.marinemc.game.item.ItemID;
 import org.marinemc.game.item.ItemSlot;
@@ -61,7 +61,7 @@ public abstract class Inventory {
             slots[i] = new ItemSlot(new Item(ItemID.EMPTY));
     }
 
-    public abstract ChatComponent getTitle();
+    public abstract ChatMessage getTitle();
 
     public abstract byte getNumberOfSlots();
 

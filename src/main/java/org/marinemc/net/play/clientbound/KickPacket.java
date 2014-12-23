@@ -19,13 +19,13 @@
 
 package org.marinemc.net.play.clientbound;
 
-import org.marinemc.game.chat.ChatComponent;
+import java.io.IOException;
+
+import org.marinemc.game.chat.ChatMessage;
 import org.marinemc.io.data.ByteData;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
-
-import java.io.IOException;
 /**
  * @author Fozie
  */
@@ -45,7 +45,7 @@ public class KickPacket extends Packet {
     @Override
     public void writeToStream(PacketOutputStream stream) throws IOException {
         ByteData d = new ByteData();
-        d.writeUTF8(new ChatComponent(msg).toString());
+        d.writeUTF8(new ChatMessage(msg).toString());
         stream.write(getID(), d);
     }
 
