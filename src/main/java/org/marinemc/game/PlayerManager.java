@@ -49,19 +49,19 @@ public class PlayerManager<synchoronized> {
 	public String login(final Client client, final LoginPacket packet) {
 		//TODO: Encryption and Compression
 		
-		UUID uuid;
-		String name;
-		if (Marine.getServer().isOfflineMode()) {
-			uuid = UUIDHandler.getUuidOfflineMode(new StringWrapper(packet.name));
-			name = packet.name;
-		} else {
-			uuid = UUIDHandler.getUUID(packet.name);
-			name = UUIDHandler.getName(uuid);
-		}
-
-		if (uuid == null) {
-			uuid = UUID.randomUUID();
-		}
+		UUID uuid = UUID.randomUUID();
+		String name = packet.name;
+//		if (Marine.getServer().isOfflineMode()) {
+//			uuid = UUIDHandler.getUuidOfflineMode(new StringWrapper(packet.name));
+//			name = packet.name;
+//		} else {
+//			uuid = UUIDHandler.getUUID(packet.name);
+//			name = UUIDHandler.getName(uuid);
+//		}
+//
+//		if (uuid == null) {
+//			uuid = UUID.randomUUID();
+//		}
 	       
 		// TODO This add the encryption stuff etc.. And then separate the following code in to another methoud that is called when encryption response is intercepted.
 
