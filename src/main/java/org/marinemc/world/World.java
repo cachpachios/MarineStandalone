@@ -52,7 +52,7 @@ public class World { // TODO Save and unload chunks...
     private Position spawnPoint;
 
     private long age;
-    private int time;
+    private long time;
 
     private WorldGenerator generator;
 
@@ -140,13 +140,13 @@ public class World { // TODO Save and unload chunks...
 
     public void tick() {
         if (time < 24000)
-            time++;
+            time += 100;
         else
             time = 0;
         age++;
     }
 
-    public int getTime() {
+    public long getTime() {
         return time;
     }
 

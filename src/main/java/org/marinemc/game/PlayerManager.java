@@ -128,8 +128,6 @@ public class PlayerManager {
 		
 		client.setState(States.INGAME);
 		
-		putPlayer(p);
-		
 		p.getClient().sendPacket(new JoinGamePacket(p));
 		
 		p.updateAbilites();
@@ -142,6 +140,8 @@ public class PlayerManager {
 		
 		p.sendPositionAndLook();
 		
+		p.sendTime();
+		
 		JoinEvent event = new JoinEvent(p, ChatManager.JOIN_MESSAGE);
 		Marine.getServer().callEvent(event);
 
@@ -151,7 +151,8 @@ public class PlayerManager {
 
 
 		ChatManager.getInstance().sendJoinMessage(p, event.getJoinMessage());
-		
+
+		putPlayer(p);
 		return null; // To indicate that the player was successfully created and joined
 	}
 	
@@ -190,8 +191,8 @@ public class PlayerManager {
 	 * Called in Server.java's main loop (Each tick(20hz) )
 	 */
 	public void tickAllPlayers() {
-		//for(final Player p : players.values())
-		//	p.sendTime();
+		for(final Player p : players.values())
+			p.sendTime();
 	}
 
 	/**
