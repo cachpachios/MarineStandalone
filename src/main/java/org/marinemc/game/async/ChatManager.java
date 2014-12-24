@@ -52,7 +52,7 @@ public class ChatManager {
     private static String translate(String s, Object... strs) {
         for (Object object : strs) {
             if (object instanceof Player) {
-                s = s.replace("%plr", ((Player) object).getDisplayName());
+                s = s.replace("%plr", ((Player) object).getUserName());
             } else if (object instanceof String) {
                 s = s.replace("%msg", object.toString());
             }

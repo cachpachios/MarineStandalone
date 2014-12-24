@@ -27,6 +27,7 @@ import org.marinemc.world.Block;
 import org.marinemc.world.BlockID;
 
 public class BlockManager {
+
     private final PlayerManager players;
     private final WorldManager worlds;
 
@@ -35,13 +36,11 @@ public class BlockManager {
         this.worlds = w;
     }
 
-
-    public void changeBlock(Block b, BlockID target) { // TODO EVENT
+    public void changeBlock(Block b, BlockID target) {
         BlockChangeEvent event = new BlockChangeEvent(b.getGlobalPos(), b.getType(), target);
         Marine.getServer().callEvent(event);
         if (event.isCancelled())
             return;
-
         b.getChunk().getWorld().setTypeAt(b.getGlobalPos(), target, true);
     }
 

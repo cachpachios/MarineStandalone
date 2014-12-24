@@ -21,6 +21,7 @@ package org.marinemc.game.command;
 
 import org.marinemc.game.CommandManager;
 import org.marinemc.game.chat.ChatMessage;
+import org.marinemc.game.permission.Permission;
 import org.marinemc.logging.Logging;
 import org.marinemc.server.Marine;
 import org.marinemc.util.Location;
@@ -59,6 +60,11 @@ public class ConsoleSender implements CommandSender {
 
     @Override
     public boolean hasPermission(String permission) {
+        return true;
+    }
+
+    @Override
+    public boolean hasPermission(Permission permission) {
         return true;
     }
 
