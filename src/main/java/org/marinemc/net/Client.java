@@ -58,6 +58,7 @@ public class Client {
         try {
             packet.writeToStream(output);
             System.out.println("Sent packet: "+packet.getID()+ ", State: " + state.name());
+            connection.getOutputStream().flush();
         } catch (IOException e) {
         	//TODO: 
         }

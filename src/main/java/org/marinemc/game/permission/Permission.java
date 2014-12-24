@@ -31,4 +31,9 @@ public class Permission {
     public Permission(final String perm) {
         this.perm = perm.toLowerCase().replace(' ', '.');
     }
+    
+    @Override
+    public int hashCode() {
+    	return perm.hashCode();
+    }
 }
