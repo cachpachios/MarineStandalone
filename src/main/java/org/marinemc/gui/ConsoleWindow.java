@@ -19,6 +19,7 @@
 
 package org.marinemc.gui;
 
+import org.marinemc.Bootstrap;
 import org.marinemc.game.CommandManager;
 import org.marinemc.game.chat.ChatColor;
 import org.marinemc.game.command.Command;
@@ -189,7 +190,7 @@ public class ConsoleWindow extends OutputStream {
     }
 
     private String format(String string) {
-        if (/* TODO: Fix */ true) {
+        if (Bootstrap.instance().arguments.contains("nocolors")) {
             string = string.replace("§0", "§f");
             string = "<font face='MarineStandalone'>" + string;
             for (ChatColor color : ChatColor.values()) {

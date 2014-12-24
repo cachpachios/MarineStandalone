@@ -145,11 +145,10 @@ public class Bootstrap {
     }
 
     private void start(final String[] args) {
+        arguments = Arrays.asList(args);
         systemChecks();
         systemSettings();
         chargeUp();
-        // Get the arguments
-        arguments = Arrays.asList(args);
         // Init. ServerSettings
         ServerSettings.getInstance();
         // Create a new StartSetting instance
