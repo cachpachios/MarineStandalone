@@ -33,10 +33,9 @@ import org.marinemc.world.World;
  */
 public abstract class Entity {
 
-    private static int nextEntityID = Integer.MIN_VALUE;
     private final int entityID;
     private final EntityType type;
-    private World world;
+    private final World world;
     
     private TrackedLocation position;
     
@@ -56,10 +55,6 @@ public abstract class Entity {
         this.position = pos;
         this.ticksLived = 0;
         this.type = type;
-    }
-
-    public static int generateEntityID() {
-        return ++nextEntityID;
     }
 
     public EntityType getType() {

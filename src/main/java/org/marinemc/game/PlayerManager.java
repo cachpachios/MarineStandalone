@@ -31,6 +31,7 @@ import org.marinemc.game.async.ChatManager;
 import org.marinemc.game.async.TimeoutManager;
 import org.marinemc.game.inventory.PlayerInventory;
 import org.marinemc.game.player.Player;
+import org.marinemc.game.player.PlayerEntityHandler;
 import org.marinemc.game.player.UIDGenerator;
 import org.marinemc.net.Client;
 import org.marinemc.net.States;
@@ -44,7 +45,6 @@ import org.marinemc.util.annotations.Cautious;
 import org.marinemc.util.annotations.Hacky;
 import org.marinemc.util.mojang.UUIDHandler;
 import org.marinemc.util.wrapper.StringWrapper;
-import org.marinemc.world.chunk.Chunk;
 import org.marinemc.world.entity.Entity;
 import org.marinemc.world.entity.EntityType;
 
@@ -60,9 +60,12 @@ public class PlayerManager {
 	private volatile Map<String, Short> namePointers;
 	
 	private TimeoutManager timeout;
+
+	private PlayerEntityHandler localEntityHandler;
 	
 	public PlayerManager() {
 		players = new HashMap<Short, Player>();
+		localEntityHandler = new PlayerEntityHandler();
 		namePointers = new HashMap<String, Short>();
 		timeout = new TimeoutManager();
 	}
@@ -290,5 +293,9 @@ public class PlayerManager {
 		.broadcastMessage(ChatManager.format(ChatManager.LEAVE_MESSAGE, p));
 		
 		removePlayer(p.getUID());
+	}
+
+	public PlayerEntityHandler getEntitySpawner() {
+		return localEntityHandler;
 	}
 }

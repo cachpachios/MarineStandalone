@@ -24,6 +24,7 @@ import org.marinemc.server.MarineServer;
 import org.marinemc.util.Position;
 import org.marinemc.world.chunk.Chunk;
 import org.marinemc.world.chunk.ChunkPos;
+import org.marinemc.world.entity.EntityHandler;
 import org.marinemc.world.gen.LevelType;
 import org.marinemc.world.gen.WorldGenerator;
 import org.marinemc.world.gen.generators.TotalFlatGrassGenerator;
@@ -50,6 +51,8 @@ public class World { // TODO Save and unload chunks...
     //Data:
     private Map<Long, Chunk> loadedChunks;
     private Position spawnPoint;
+    
+    private EntityHandler entities;
 
     private long age;
     private long time;
@@ -67,6 +70,7 @@ public class World { // TODO Save and unload chunks...
         this.dimension = Dimension.OVERWORLD;
         this.time = 0;
         this.age = 0;
+        entities = new EntityHandler(this);
     }
 
     public World(MarineServer server, final String name, WorldGenerator generator) { //TODO Make it able to load world
@@ -140,7 +144,7 @@ public class World { // TODO Save and unload chunks...
 
     public void tick() {
         if (time < 24000)
-            time += 100;
+            ++time;
         else
             time = 0;
         age++;
@@ -181,4 +185,9 @@ public class World { // TODO Save and unload chunks...
     public MarineServer getServer() {
         return this.server;
     }
+
+	public EntityHandler getEntityHandler() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
