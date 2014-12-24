@@ -29,6 +29,7 @@ import org.marinemc.util.StringUtils;
 import org.marinemc.util.SystemUtils;
 import org.marinemc.util.annotations.Protected;
 
+import java.lang.management.ManagementFactory;
 import java.util.Arrays;
 import java.util.List;
 
@@ -131,6 +132,10 @@ public class Bootstrap {
             } else {
                 Logging.getLogger().warn("Unable to retrieve computer arch, either you're running a 128bit computer (impressive) or it's blocked.");
             }
+        }
+        String args = StringUtils.join(ManagementFactory.getRuntimeMXBean().getInputArguments(), "");
+        if (!args.contains("-Xmx")) {
+            Logging.getLogger().warn("You haven't changed the JVM Memory Allocation Yet - It is recommended to increase the available memory through \"-Xmx[amount of ram]M\"!");
         }
     }
 
