@@ -46,7 +46,7 @@ public class ClientboundPlayerLookPositionPacket extends Packet { //TODO Relativ
 
     public ClientboundPlayerLookPositionPacket(Position p, Location l) {
         super(0x08, States.INGAME);
-        this.l = null;
+        this.l = l;
         this.p = p;
     }
 
