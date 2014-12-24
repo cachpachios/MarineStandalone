@@ -21,8 +21,11 @@ package org.marinemc.game.async;
 
 import org.marinemc.events.standardevents.ChatEvent;
 import org.marinemc.game.player.Player;
+import org.marinemc.io.data.ByteData;
 import org.marinemc.logging.Logging;
+import org.marinemc.net.Client;
 import org.marinemc.net.play.clientbound.ChatPacket;
+import org.marinemc.net.play.serverbound.IncomingChatPacket;
 import org.marinemc.server.Marine;
 /**
  * A chat manager :)
@@ -97,5 +100,22 @@ public class ChatManager {
             }
         }
     }
-
+    
+    public void interceptChatPacket(ByteData data, Client c) {
+        IncomingChatPacket p = new IncomingChatPacket();
+        p.readFromBytes(data);
+        if (p.getMessage().startsWith("/")) {
+            String[] parts = p.getMessage().split(" ");
+            String[] args;
+            if (parts.length < 2) {
+                args = new String[]{};
+            } else {
+                args = new String[parts.length - 1];
+                System.arraycopy(parts, 1, args, 0, parts.length - 1);
+            }
+            Marine.getServer().getPlayerManager().getPlayerByClient(c).executeCommand(parts[0], args);
+        } else {
+            broadcastMessage(ChatManager.format(p.getMessage(), Marine.getServer().getPlayerManager().getPlayerByClient(c)));
+        }
+    }
 }

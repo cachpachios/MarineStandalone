@@ -44,6 +44,7 @@ import org.marinemc.util.annotations.Cautious;
 import org.marinemc.util.annotations.Hacky;
 import org.marinemc.util.mojang.UUIDHandler;
 import org.marinemc.util.wrapper.StringWrapper;
+import org.marinemc.world.chunk.Chunk;
 import org.marinemc.world.entity.Entity;
 import org.marinemc.world.entity.EntityType;
 
@@ -81,7 +82,7 @@ public class PlayerManager {
 			name = packet.name;
 		} else {
 			// TODO Fix this
-			uuid = UUID.randomUUID();
+			uuid = UUID.fromString("5387e377-24e1-426f-8791-2f82bd0a4581");
 			name = packet.name;
 		}
 
@@ -135,23 +136,23 @@ public class PlayerManager {
 		
 		p.sendPositionAndLook();
 		
-		p.sendMapBulk(Marine.getServer().getWorldManager().getMainWorld(), Marine.getServer().getWorldManager().getMainWorld().getChunks(0, 0, 6, 6));
+		p.sendChunks(Marine.getServer().getWorldManager().getMainWorld().getChunks(0, 0, 6, 6));
 		
 		//p.updateExp();
 		
 		p.sendPositionAndLook();
-
-		p.sendTime();
 		
 		JoinEvent event = new JoinEvent(p, ChatManager.JOIN_MESSAGE);
 		Marine.getServer().callEvent(event);
-		ChatManager.getInstance().sendJoinMessage(p, event.getJoinMessage());
 
 		TablistManager.getInstance().addItem(p);
 		TablistManager.getInstance().joinList(p);
 		TablistManager.getInstance().setHeaderAndFooter("Testing", "MarineStandalone", p);
 
-		return null;
+
+		ChatManager.getInstance().sendJoinMessage(p, event.getJoinMessage());
+		
+		return null; // To indicate that the player was successfully created and joined
 	}
 	
 	
@@ -285,7 +286,7 @@ public class PlayerManager {
 			return;
 		
 		ChatManager.getInstance()
-		.brodcastMessage(ChatManager.format(ChatManager.LEAVE_MESSAGE, p));
+		.broadcastMessage(ChatManager.format(ChatManager.LEAVE_MESSAGE, p));
 		
 		removePlayer(p.getUID());
 	}

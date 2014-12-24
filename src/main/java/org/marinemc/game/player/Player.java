@@ -19,6 +19,11 @@
 
 package org.marinemc.game.player;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
+
 import org.marinemc.game.CommandManager;
 import org.marinemc.game.chat.ChatMessage;
 import org.marinemc.game.command.Command;
@@ -38,24 +43,21 @@ import org.marinemc.net.play.clientbound.player.ExperiencePacket;
 import org.marinemc.net.play.clientbound.player.PlayerAbilitesPacket;
 import org.marinemc.net.play.clientbound.player.PlayerLookPacket;
 import org.marinemc.net.play.clientbound.world.BlockChangePacket;
+import org.marinemc.net.play.clientbound.world.ChunkPacket;
 import org.marinemc.net.play.clientbound.world.MapChunkPacket;
 import org.marinemc.net.play.clientbound.world.SpawnPointPacket;
 import org.marinemc.net.play.clientbound.world.TimeUpdatePacket;
+import org.marinemc.net.play.clientbound.world.UnloadChunkPacket;
 import org.marinemc.util.Location;
 import org.marinemc.util.Position;
 import org.marinemc.util.StringComparison;
 import org.marinemc.util.annotations.Cautious;
 import org.marinemc.world.BlockID;
 import org.marinemc.world.Gamemode;
-import org.marinemc.world.World;
 import org.marinemc.world.chunk.Chunk;
+import org.marinemc.world.chunk.ChunkPos;
 import org.marinemc.world.entity.EntityType;
 import org.marinemc.world.entity.LivingEntity;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
 
 /**
  * The online ingame Player instance object
@@ -100,7 +102,19 @@ public class Player extends LivingEntity implements IPlayer, CommandSender {
 	//TODO: Sneaking
 	private PlayerInventory inventory;
 	private byte nextWindowID; // Generates a new byte for a new ID, cant be 0 when that is the standard inventory
-
+	
+	/**
+	 * An list of entities spawned localy
+	 * Its represented by the Entity UID
+	 */
+	private List<Integer> 	spawnedEntities;
+	/**
+	 * An list of chunks sent to the client
+	 * Its represented by the ChunksPos encoded form
+	 * (Half long is X integer, secound half is the Y Integer)
+	 */
+	private List<Long> 		loadedChunks;
+	
 	public Player(EntityType type, int ID, Location pos, short uid, UUID uuid,
 			String name, float exp, int levels, Gamemode currentGameMode,
 			float walkSpeed, float flySpeed, boolean isOp,
@@ -117,6 +131,8 @@ public class Player extends LivingEntity implements IPlayer, CommandSender {
 		this.flySpeed = flySpeed;
 		this.permissions = new ArrayList<>(); // TODO Load this from somewhere
 		this.group = Groups.ADMIN;
+		this.spawnedEntities = new ArrayList<>(); // Could be an set but for integers linear search quicker than Hashing
+		this.loadedChunks = new ArrayList<>();
 		this.isFlying = isFlying;
 		this.canFly = canFly;
 		this.inventory = inventory;
@@ -382,14 +398,7 @@ public class Player extends LivingEntity implements IPlayer, CommandSender {
 
 	public void sendBlockUpdate(Position pos, BlockID type) {
         getClient().sendPacket(new BlockChangePacket(pos, type));
-	}
-	/**
-	 * Send the chunks in a MapBulk packet
-	 * @param chunks
-	 */
-	public void sendMapBulk(final World w, final List<Chunk> chunks) {
-		client.sendPacket(new MapChunkPacket(w, chunks));
-	}
+	} 
 
 	public boolean checkForSpam() {
 		if ((System.currentTimeMillis() - lastChatReset) >= 5000) {
@@ -402,4 +411,48 @@ public class Player extends LivingEntity implements IPlayer, CommandSender {
 	public void sendTime() {
 		getClient().sendPacket(new TimeUpdatePacket(this.getWorld()));
 	}
+	
+	/**
+	 * Tracking of local changes:
+	 */
+	
+	public void unloadChunk(final ChunkPos c) {
+		if(loadedChunks.contains(c.encode())) {
+			getClient().sendPacket(new UnloadChunkPacket(c));
+			loadedChunks.remove(c.encode());
+		}
+	}
+	
+	public boolean sendChunk(final Chunk c) {
+		if(loadedChunks.contains(c.getPos().encode()))
+			return false;
+		
+		loadedChunks.add(c.getPos().encode());
+	
+		getClient().sendPacket(new ChunkPacket(c));	
+		
+		return true;
+	}
+	
+	public boolean sendChunks(List<Chunk> chunks) {
+		for(final Chunk c : chunks)
+			if(loadedChunks.contains(c.getPos().encode()))
+				chunks.remove(c);
+			else {
+				loadedChunks.add(c.getPos().encode());
+			}
+		if(chunks.isEmpty())
+			return false;
+		
+		getClient().sendPacket(new MapChunkPacket(getWorld(), chunks));
+		
+		chunks = null; // GC the list
+		
+		return true;
+	}
+	
+	public int getNumChunksLoaded() {
+		return loadedChunks.size();
+	}
+	
 }

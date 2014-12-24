@@ -52,7 +52,7 @@ public class KeepAlivePacket extends Packet {
 
     @Override
     public void readFromBytes(ByteData input) {
-
+    	aliveID = input.readVarInt();
     }
 
 }

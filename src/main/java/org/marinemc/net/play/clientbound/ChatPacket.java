@@ -88,7 +88,7 @@ public class ChatPacket extends Packet {
 
         ByteData data = new ByteData();
 
-        if (message.length() < 32767)
+        if (message.length() < Short.MAX_VALUE)
             data.writeUTF8(message);
         else
             data.writeUTF8(message.substring(0, 32766));
