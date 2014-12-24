@@ -19,14 +19,23 @@
 
 package org.marinemc.net;
 
-import java.io.IOException;
-
 import org.marinemc.io.data.ByteData;
+
+import java.io.IOException;
 /**
  * @author Fozie
  */
 public abstract class Packet {
 
+    private final States state;
+    private final int id;
+
+    public Packet(final int id, final States state) {
+        this.id = id;
+        this.state = state;
+    }
+
+    /*
     public static Packet createSimplePacket(final byte ID, final byte[] inputdata, final States state) {
         Packet p = new Packet() {
 
@@ -54,13 +63,22 @@ public abstract class Packet {
         };
         return p;
     }
+    */
 
-    public abstract int getID();
+    final public int getID() {
+        return this.id;
+    }
 
-    public abstract void writeToStream(PacketOutputStream stream) throws IOException;
+    final public States getPacketState() {
+        return this.state;
+    }
 
-    public abstract void readFromBytes(ByteData input);
+    public void writeToStream(PacketOutputStream stream) throws IOException {
 
-    public abstract States getPacketState();
+    }
+
+    public void readFromBytes(ByteData input) {
+
+    }
 
 }

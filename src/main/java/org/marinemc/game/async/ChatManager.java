@@ -79,7 +79,7 @@ public class ChatManager {
         Marine.broadcastMessage(translate(LEAVE_MESSAGE, player));
     }
 
-    public void brodcastMessage(String msg) {
+    public void broadcastMessage(String msg) {
         Marine.getServer().getPlayerManager().broadcastPacket(new ChatPacket(msg));
         Logging.getLogger().log(msg);
     }

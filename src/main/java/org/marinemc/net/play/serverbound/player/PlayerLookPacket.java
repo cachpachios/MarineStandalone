@@ -33,6 +33,10 @@ public class PlayerLookPacket extends Packet {
     private float yaw, pitch;
     private boolean onGround;
 
+    public PlayerLookPacket() {
+        super(0x05, States.INGAME);
+    }
+
     public float getYaw() {
         return yaw;
     }
@@ -46,11 +50,6 @@ public class PlayerLookPacket extends Packet {
     }
 
     @Override
-    public int getID() {
-        return 0x05;
-    }
-
-    @Override
     public void writeToStream(PacketOutputStream stream) throws IOException {
     }
 
@@ -59,11 +58,6 @@ public class PlayerLookPacket extends Packet {
         yaw = input.readFloat();
         pitch = input.readFloat();
         onGround = input.readBoolean();
-    }
-
-    @Override
-    public States getPacketState() {
-        return States.INGAME;
     }
 
 }

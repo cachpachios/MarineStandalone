@@ -35,12 +35,8 @@ public class InventoryOpenPacket extends Packet {
     private final Inventory inventory;
 
     public InventoryOpenPacket(Inventory inventory) {
+        super(0x2d, States.INGAME);
         this.inventory = inventory;
-    }
-
-    @Override
-    public int getID() {
-        return 0x2D;
     }
 
     @Override
@@ -56,10 +52,5 @@ public class InventoryOpenPacket extends Packet {
     @Override
     public void readFromBytes(ByteData input) {
 
-    }
-
-    @Override
-    public States getPacketState() {
-        return null;
     }
 }

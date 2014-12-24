@@ -19,14 +19,14 @@
 
 package org.marinemc.net.play.clientbound;
 
-import java.io.IOException;
-
 import org.marinemc.game.player.Player;
 import org.marinemc.io.data.ByteData;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
 import org.marinemc.server.Marine;
+
+import java.io.IOException;
 /**
  * @author Fozie
  */
@@ -35,12 +35,8 @@ public class JoinGamePacket extends Packet {
     final Player p;
 
     public JoinGamePacket(final Player p) {
+        super(0x01, States.INGAME);
         this.p = p;
-    }
-
-    @Override
-    public int getID() {
-        return 0x01;
     }
 
     @Override
@@ -61,12 +57,4 @@ public class JoinGamePacket extends Packet {
         stream.write(getID(), d);
     }
 
-    @Override
-    public void readFromBytes(ByteData input) {
-    } //Client Side Only
-
-    @Override
-    public States getPacketState() {
-        return States.INGAME;
-    }
 }

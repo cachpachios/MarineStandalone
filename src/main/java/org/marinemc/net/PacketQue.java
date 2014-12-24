@@ -17,40 +17,23 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package org.marinemc.net.play.clientbound.player;
+package org.marinemc.net;
 
-import org.marinemc.io.data.ByteData;
-import org.marinemc.net.Packet;
-import org.marinemc.net.PacketOutputStream;
-import org.marinemc.net.States;
-import org.marinemc.util.Location;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 
-import java.io.IOException;
 /**
- * @author Fozie
+ * Created 2014-12-24 for MarineStandalone
+ *
+ * @author Citymonstret
  */
-public class PlayerLookPacket extends Packet {
+public class PacketQue {
 
-    private final Location loc;
+    private Multimap<Integer, Packet> que;
 
-    public PlayerLookPacket(Location l) {
-        super(0x05, States.INGAME);
-        loc = l;
+    public PacketQue() {
+        this.que = ArrayListMultimap.create();
     }
 
-    @Override
-    public void writeToStream(PacketOutputStream stream) throws IOException {
-        ByteData data = new ByteData();
-
-        data.writeFloat(loc.getYaw());
-        data.writeFloat(loc.getPitch());
-        data.writeBoolean(loc.isOnGround());
-
-        stream.write(getID(), data);
-    }
-
-    @Override
-    public void readFromBytes(ByteData input) {
-    }
 
 }

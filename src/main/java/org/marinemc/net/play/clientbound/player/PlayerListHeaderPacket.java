@@ -38,6 +38,8 @@ public class PlayerListHeaderPacket extends Packet {
     private final String header, footer;
 
     public PlayerListHeaderPacket(final String header, final String footer) {
+        super(0x047, States.INGAME);
+
         JSONObject headerObject = new JSONObject();
         headerObject.put("text", ChatColor.transform('&', header));
         this.header = headerObject.toJSONString();
@@ -45,11 +47,6 @@ public class PlayerListHeaderPacket extends Packet {
         JSONObject footerObject = new JSONObject();
         footerObject.put("text", ChatColor.transform('&', footer));
         this.footer = footerObject.toJSONString();
-    }
-
-    @Override
-    public int getID() {
-        return 0x47;
     }
 
     @Override
@@ -63,10 +60,5 @@ public class PlayerListHeaderPacket extends Packet {
     @Override
     public void readFromBytes(ByteData input) {
 
-    }
-
-    @Override
-    public States getPacketState() {
-        return null;
     }
 }

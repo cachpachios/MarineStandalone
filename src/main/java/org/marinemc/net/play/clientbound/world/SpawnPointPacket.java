@@ -34,12 +34,8 @@ public class SpawnPointPacket extends Packet { // Only used to make the client k
     final Position spawnPoint;
 
     public SpawnPointPacket(Position spawnPoint) {
+        super(0x05, States.INGAME);
         this.spawnPoint = spawnPoint;
-    }
-
-    @Override
-    public int getID() {
-        return 0x05;
     }
 
     @Override
@@ -55,8 +51,4 @@ public class SpawnPointPacket extends Packet { // Only used to make the client k
     public void readFromBytes(ByteData input) {
     } // Clientbound only
 
-    @Override
-    public States getPacketState() {
-        return States.INGAME;
-    }
 }

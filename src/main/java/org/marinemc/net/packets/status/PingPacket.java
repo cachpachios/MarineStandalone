@@ -31,9 +31,8 @@ public class PingPacket extends Packet {
 
     protected long TIME;
 
-    @Override
-    public int getID() {
-        return 0x01;
+    public PingPacket() {
+        super(0x01, States.INTRODUCE);
     }
 
     @Override
@@ -44,11 +43,6 @@ public class PingPacket extends Packet {
     @Override
     public void readFromBytes(ByteData input) {
         TIME = input.readLong();
-    }
-
-    @Override
-    public States getPacketState() {
-        return States.INTRODUCE;
     }
 
 }

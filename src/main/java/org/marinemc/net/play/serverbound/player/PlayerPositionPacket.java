@@ -33,9 +33,8 @@ public class PlayerPositionPacket extends Packet {
     public double X, Y, Z; // Absolute Position (Y is feets, head = Y+1.62)
     public boolean onGround; // Inverted isAirborn
 
-    @Override
-    public int getID() {
-        return 0x04;
+    public PlayerPositionPacket() {
+        super(0x04, States.INGAME);
     }
 
     @Override
@@ -49,11 +48,6 @@ public class PlayerPositionPacket extends Packet {
         Z = input.readDouble();
 
         onGround = input.readBoolean();
-    }
-
-    @Override
-    public States getPacketState() {
-        return States.INGAME;
     }
 
 }

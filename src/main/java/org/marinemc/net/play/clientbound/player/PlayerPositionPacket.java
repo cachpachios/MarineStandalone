@@ -34,12 +34,8 @@ public class PlayerPositionPacket extends Packet {
     final Location l;
 
     public PlayerPositionPacket(Location l) {
+        super(0x04, States.INGAME);
         this.l = l;
-    }
-
-    @Override
-    public int getID() {
-        return 0x04;
     }
 
     @Override
@@ -56,15 +52,5 @@ public class PlayerPositionPacket extends Packet {
 
         stream.write(getID(), d);
     }
-
-    @Override
-    public void readFromBytes(ByteData input) {
-    }
-
-    @Override
-    public States getPacketState() {
-        return States.INGAME;
-    }
-
 
 }

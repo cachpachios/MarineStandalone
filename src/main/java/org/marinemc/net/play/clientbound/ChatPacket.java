@@ -19,14 +19,14 @@
 
 package org.marinemc.net.play.clientbound;
 
-import java.io.IOException;
-
 import org.json.simple.JSONObject;
 import org.marinemc.game.chat.ChatMessage;
 import org.marinemc.io.data.ByteData;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
+
+import java.io.IOException;
 
 /**
  * Created 2014-12-04 for MarineStandalone
@@ -45,6 +45,7 @@ public class ChatPacket extends Packet {
     }
 
     public ChatPacket(final String message, final boolean test) {
+        super(0x02, States.INGAME);
         this.message = message;
         this.position = 0;
         if (test)
@@ -52,17 +53,20 @@ public class ChatPacket extends Packet {
     }
 
     public ChatPacket(final ChatMessage chat) {
+        super(0x02, States.INGAME);
         this.message = chat.toString();
         this.position = 0;
     }
 
     public ChatPacket(final ChatMessage chat, final int position) {
+        super(0x02, States.INGAME);
         this.message = chat.toString();
         this.position = position;
     }
 
     @SuppressWarnings("unchecked")
     public ChatPacket(final String message, final int position) {
+        super(0x02, States.INGAME);
         if (message.startsWith("{\"")) {
             this.message = message;
         } else {
@@ -75,11 +79,6 @@ public class ChatPacket extends Packet {
             }
         }
         this.position = position;
-    }
-
-    @Override
-    public int getID() {
-        return 0x02;
     }
 
     @Override
@@ -99,12 +98,4 @@ public class ChatPacket extends Packet {
         stream.write(getID(), data);
     }
 
-    @Override
-    public void readFromBytes(ByteData input) {
-    }
-
-    @Override
-    public States getPacketState() {
-        return States.INGAME;
-    }
 }

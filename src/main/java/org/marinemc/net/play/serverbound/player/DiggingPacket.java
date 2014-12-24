@@ -32,14 +32,11 @@ import java.io.IOException;
 public class DiggingPacket extends Packet {
 
     private Status status;
-
     private Position blockPos;
-
     private byte blockFace;
 
-    @Override
-    public int getID() {
-        return 0;
+    public DiggingPacket() {
+        super(0, States.INGAME);
     }
 
     @Override
@@ -74,11 +71,6 @@ public class DiggingPacket extends Packet {
 
     public byte getBlockFace() {
         return blockFace;
-    }
-
-    @Override
-    public States getPacketState() {
-        return States.INGAME;
     }
 
     public enum Status {

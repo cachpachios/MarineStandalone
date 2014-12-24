@@ -19,13 +19,13 @@
 
 package org.marinemc.net.play.clientbound;
 
-import java.io.IOException;
-
 import org.marinemc.game.chat.ChatMessage;
 import org.marinemc.io.data.ByteData;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
+
+import java.io.IOException;
 /**
  * @author Fozie
  */
@@ -34,12 +34,8 @@ public class KickPacket extends Packet {
     private final String msg;
 
     public KickPacket(final String msg) {
+        super(0x40, States.INGAME);
         this.msg = msg;
-    }
-
-    @Override
-    public int getID() {
-        return 0x40;
     }
 
     @Override
@@ -53,11 +49,6 @@ public class KickPacket extends Packet {
     @Override
     public void readFromBytes(ByteData input) {
         // Non Client to Server Packet :)
-    }
-
-    @Override
-    public States getPacketState() {
-        return States.INGAME;
     }
 
 }

@@ -37,12 +37,8 @@ public class InventoryContentPacket extends Packet {
     final Inventory inv;
 
     public InventoryContentPacket(Inventory inventory) {
+        super(0x30, States.INGAME);
         this.inv = inventory;
-    }
-
-    @Override
-    public int getID() {
-        return 0x30;
     }
 
     @Override
@@ -64,11 +60,6 @@ public class InventoryContentPacket extends Packet {
 
     @Override
     public void readFromBytes(ByteData input) {
-    }
-
-    @Override
-    public States getPacketState() {
-        return States.INGAME;
     }
 
 }

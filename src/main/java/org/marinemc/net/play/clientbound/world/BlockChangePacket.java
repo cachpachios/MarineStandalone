@@ -40,17 +40,13 @@ public class BlockChangePacket extends Packet {
     }
 
     public BlockChangePacket(Position pos, int b) {
+        super(0x23, States.INGAME);
         this.pos = pos;
         this.newBlock = b;
     }
 
     public BlockChangePacket(Position p, BlockID b) {
         this(p, b.getID());
-    }
-
-    @Override
-    public int getID() {
-        return 0x23;
     }
 
     @Override
@@ -65,13 +61,4 @@ public class BlockChangePacket extends Packet {
 
     }
 
-    @Override
-    public void readFromBytes(ByteData input) {
-        // Serversent packet :)
-    }
-
-    @Override
-    public States getPacketState() {
-        return States.INGAME;
-    }
 }

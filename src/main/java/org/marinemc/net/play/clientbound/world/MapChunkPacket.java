@@ -39,13 +39,9 @@ public class MapChunkPacket extends Packet {
     World world;
 
     public MapChunkPacket(World w, List<Chunk> chunks) {
+        super(0x26, States.INGAME);
         this.chunks = chunks;
         world = w;
-    }
-
-    @Override
-    public int getID() {
-        return 0x26;
     }
 
     @Override
@@ -72,11 +68,6 @@ public class MapChunkPacket extends Packet {
 
     @Override
     public void readFromBytes(ByteData input) {
-    }
-
-    @Override
-    public States getPacketState() {
-        return States.INGAME;
     }
 
 }

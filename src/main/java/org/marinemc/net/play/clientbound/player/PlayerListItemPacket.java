@@ -19,14 +19,14 @@
 
 package org.marinemc.net.play.clientbound.player;
 
-import java.io.IOException;
-
 import org.marinemc.game.chat.ChatComponent;
 import org.marinemc.game.player.Player;
 import org.marinemc.io.data.ByteData;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
+
+import java.io.IOException;
 
 /**
  * Created 2014-12-05 for MarineStandalone
@@ -40,21 +40,14 @@ public class PlayerListItemPacket extends Packet {
     private final String s;
 
     public PlayerListItemPacket(Action action, Player player) {
-        this.action = action;
-        this.player = player;
-        this.s = "";
+        this(action, player, "");
     }
 
     public PlayerListItemPacket(Action action, Player player, String s) {
+        super(0x38, States.INGAME);
         this.action = action;
         this.player = player;
         this.s = s;
-    }
-
-
-    @Override
-    public int getID() {
-        return 0x38;
     }
 
     @Override
@@ -99,12 +92,6 @@ public class PlayerListItemPacket extends Packet {
     public void readFromBytes(ByteData input) {
 
     }
-
-    @Override
-    public States getPacketState() {
-        return States.INGAME;
-    }
-
 
     public static enum Action {
         ADD_PLAYER(0),

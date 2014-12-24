@@ -37,13 +37,9 @@ public class GameStateChangePacket extends Packet {
     private final float value;
 
     public GameStateChangePacket(Reason reason, float value) {
+        super(0x2B, States.INGAME);
         this.reason = reason;
         this.value = value;
-    }
-
-    @Override
-    public int getID() {
-        return 0x2B;
     }
 
     @Override
@@ -58,11 +54,6 @@ public class GameStateChangePacket extends Packet {
     @Override
     public void readFromBytes(ByteData input) {
 
-    }
-
-    @Override
-    public States getPacketState() {
-        return States.INGAME;
     }
 
     public static enum Reason {

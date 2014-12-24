@@ -35,12 +35,8 @@ public class ChunkPacket extends Packet {
     final Chunk c;
 
     public ChunkPacket(Chunk c) {
+        super(0x21, States.INGAME);
         this.c = c;
-    }
-
-    @Override
-    public int getID() {
-        return 0x21;
     }
 
     @Override
@@ -62,11 +58,6 @@ public class ChunkPacket extends Packet {
 
     @Override
     public void readFromBytes(ByteData input) {
-    }
-
-    @Override
-    public States getPacketState() {
-        return States.INGAME;
     }
 
 }

@@ -32,9 +32,8 @@ public class LoginPacket extends Packet {
 
     public String name;
 
-    @Override
-    public int getID() {
-        return 0x00;
+    public LoginPacket() {
+        super(0x00, States.LOGIN);
     }
 
     @Override
@@ -47,8 +46,4 @@ public class LoginPacket extends Packet {
         name = input.readUTF8();
     }
 
-    @Override
-    public States getPacketState() {
-        return States.LOGIN;
-    }
 }

@@ -35,9 +35,8 @@ public class IncomingChatPacket extends Packet {
 
     private String msg;
 
-    @Override
-    public int getID() {
-        return 0x01;
+    public IncomingChatPacket() {
+        super(0x01, States.INGAME);
     }
 
     @Override
@@ -53,11 +52,5 @@ public class IncomingChatPacket extends Packet {
     public String getMessage() {
         return msg;
     }
-
-    @Override
-    public States getPacketState() {
-        return States.INGAME;
-    }
-
 
 }

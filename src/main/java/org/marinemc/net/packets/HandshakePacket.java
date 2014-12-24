@@ -38,9 +38,8 @@ public class HandshakePacket extends Packet {
     public int port;
     public int nextState;
 
-    @Override
-    public int getID() {
-        return 0x00;
+    public HandshakePacket() {
+        super(0x00, States.HANDSHAKE);
     }
 
     @Override
@@ -78,11 +77,6 @@ public class HandshakePacket extends Packet {
 
     public int getState() {
         return nextState;
-    }
-
-    @Override
-    public States getPacketState() {
-        return States.HANDSHAKE;
     }
 
 }

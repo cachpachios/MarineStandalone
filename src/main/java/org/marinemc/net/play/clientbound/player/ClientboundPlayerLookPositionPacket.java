@@ -37,22 +37,21 @@ public class ClientboundPlayerLookPositionPacket extends Packet { //TODO Relativ
     final Position p;
 
     public ClientboundPlayerLookPositionPacket(Location l) {
-        this.l = l;
-        p = null;
+        this(null, l);
     }
 
     public ClientboundPlayerLookPositionPacket(Position p) {
+        this(p, null);
+    }
+
+    public ClientboundPlayerLookPositionPacket(Position p, Location l) {
+        super(0x08, States.INGAME);
         this.l = null;
         this.p = p;
     }
 
     public ClientboundPlayerLookPositionPacket(ServerboundPlayerLookPositionPacket l) {
         this(l.getLocation());
-    }
-
-    @Override
-    public int getID() {
-        return 0x08;
     }
 
     @Override
@@ -84,8 +83,4 @@ public class ClientboundPlayerLookPositionPacket extends Packet { //TODO Relativ
 
     }
 
-    @Override
-    public States getPacketState() {
-        return States.INGAME;
-    }
 }

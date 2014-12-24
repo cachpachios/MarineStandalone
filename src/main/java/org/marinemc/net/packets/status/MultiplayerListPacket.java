@@ -19,13 +19,8 @@
 
 package org.marinemc.net.packets.status;
 
-import java.io.IOException;
-import java.util.UUID;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.marinemc.events.standardevents.ListEvent;
 import org.marinemc.game.chat.ChatColor;
 import org.marinemc.game.player.Player;
@@ -36,6 +31,9 @@ import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
 import org.marinemc.server.Marine;
 import org.marinemc.server.ServerProperties;
+
+import java.io.IOException;
+import java.util.UUID;
 /**
  * @author Fozie
  */
@@ -44,12 +42,8 @@ public class MultiplayerListPacket extends Packet {
     private final Client c;
 
     public MultiplayerListPacket(final Client c) {
+        super(0x00, States.INTRODUCE);
         this.c = c;
-    }
-
-    @Override
-    public int getID() {
-        return 0x00;
     }
 
     @SuppressWarnings("unchecked")
@@ -85,12 +79,6 @@ public class MultiplayerListPacket extends Packet {
     public void readFromBytes(ByteData input) {
     	//TODO
     }
-
-    @Override
-    public States getPacketState() {
-        return States.INTRODUCE;
-    }
-
 
     @SuppressWarnings("unchecked")
     public String encode(ListResponse response) {

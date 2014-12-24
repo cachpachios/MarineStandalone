@@ -33,16 +33,12 @@ public class KeepAlivePacket extends Packet {
     int aliveID;
 
     public KeepAlivePacket(int id) {
+        super(0x00, States.INGAME);
         this.aliveID = id;
     }
 
     public KeepAlivePacket() {
-        this.aliveID = -1;
-    }
-
-    @Override
-    public int getID() {
-        return 0x00;
+        this(-1);
     }
 
     @Override
@@ -57,11 +53,6 @@ public class KeepAlivePacket extends Packet {
     @Override
     public void readFromBytes(ByteData input) {
 
-    }
-
-    @Override
-    public States getPacketState() {
-        return States.INGAME;
     }
 
 }

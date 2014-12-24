@@ -35,11 +35,7 @@ public class ServerboundPlayerLookPositionPacket extends Packet { //TODO Relativ
     private Location l;
 
     public ServerboundPlayerLookPositionPacket() {
-    }
-
-    @Override
-    public int getID() {
-        return 0x06;
+        super(0x06, States.INGAME);
     }
 
     @Override
@@ -62,11 +58,6 @@ public class ServerboundPlayerLookPositionPacket extends Packet { //TODO Relativ
 
     public Location getLocation() {
         return l;
-    }
-
-    @Override
-    public States getPacketState() {
-        return States.INGAME;
     }
 
     public ClientboundPlayerLookPositionPacket getClientBound() {

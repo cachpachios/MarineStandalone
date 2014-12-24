@@ -19,14 +19,14 @@
 
 package org.marinemc.net.packets.login;
 
-import java.io.IOException;
-
 import org.marinemc.game.chat.ChatColor;
 import org.marinemc.game.chat.ChatMessage;
 import org.marinemc.io.data.ByteData;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
+
+import java.io.IOException;
 /**
  * @author Fozie
  */
@@ -35,16 +35,12 @@ public class DisconnectPacket extends Packet {
 	ChatMessage msg;
 
     public DisconnectPacket(String msg) {
-        this.msg = new ChatMessage(msg).format(ChatColor.BOLD).color(ChatColor.WHITE);
+        this(new ChatMessage(msg).format(ChatColor.BOLD).color(ChatColor.WHITE));
     }
     
     public DisconnectPacket(ChatMessage msg) {
-    	this.msg = msg;
-    }
-
-    @Override
-    public int getID() {
-        return 0x00;
+        super(0x00, States.LOGIN);
+        this.msg = msg;
     }
 
     @Override
@@ -57,10 +53,5 @@ public class DisconnectPacket extends Packet {
 
     @Override
     public void readFromBytes(ByteData input) {
-    }
-
-    @Override
-    public States getPacketState() {
-        return States.LOGIN;
     }
 }

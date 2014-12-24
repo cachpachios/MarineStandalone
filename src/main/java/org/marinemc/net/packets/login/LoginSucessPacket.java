@@ -19,14 +19,13 @@
 
 package org.marinemc.net.packets.login;
 
-import java.io.IOException;
-import java.util.UUID;
-
 import org.marinemc.game.player.Player;
 import org.marinemc.io.data.ByteData;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
+
+import java.io.IOException;
 /**
  * @author Fozie
  */
@@ -35,12 +34,8 @@ public class LoginSucessPacket extends Packet {
     public final Player p;
 
     public LoginSucessPacket(final Player p) {
+        super(0x02, States.LOGIN);
         this.p = p;
-    }
-
-    @Override
-    public int getID() {
-        return 0x02;
     }
 
     @Override
@@ -60,9 +55,4 @@ public class LoginSucessPacket extends Packet {
 
     }
 
-    @Override
-    public States getPacketState() {
-        // TODO Auto-generated method stub
-        return States.LOGIN;
-    }
 }

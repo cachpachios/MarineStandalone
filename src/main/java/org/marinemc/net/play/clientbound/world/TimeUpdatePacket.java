@@ -30,22 +30,18 @@ import java.io.IOException;
  * @author Fozie
  */
 public class TimeUpdatePacket extends Packet {
+
     final long worldTime;
     final long worldAge;
 
     public TimeUpdatePacket(long worldTime, long worldAge) {
-        super();
+        super(0x03, States.INGAME);
         this.worldTime = worldTime;
         this.worldAge = worldAge;
     }
 
     public TimeUpdatePacket(World w) {
         this(w.getTime(), w.getWorldAge());
-    }
-
-    @Override
-    public int getID() {
-        return 0x03;
     }
 
     @Override
@@ -56,16 +52,6 @@ public class TimeUpdatePacket extends Packet {
         d.writeLong(worldTime);
 
         stream.write(getID(), d);
-    }
-
-    @Override
-    public void readFromBytes(ByteData input) {
-    }
-
-    @Override
-    public States getPacketState() {
-        // TODO Auto-generated method stub
-        return null;
     }
 
 }
