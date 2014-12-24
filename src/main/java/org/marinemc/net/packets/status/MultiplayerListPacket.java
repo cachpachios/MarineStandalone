@@ -24,7 +24,7 @@ import org.json.simple.JSONObject;
 import org.marinemc.events.standardevents.ListEvent;
 import org.marinemc.game.chat.ChatColor;
 import org.marinemc.game.player.Player;
-import org.marinemc.io.data.ByteData;
+import org.marinemc.io.binary.ByteData;
 import org.marinemc.net.Client;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;

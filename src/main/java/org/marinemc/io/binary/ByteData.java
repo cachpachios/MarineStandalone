@@ -17,11 +17,11 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package org.marinemc.io.data;
+package org.marinemc.io.binary;
 
 import org.marinemc.io.ByteCompressor;
 import org.marinemc.io.ByteCompressor.EncodingUseless;
-import org.marinemc.io.binary.Byteable;
+import org.marinemc.io.data.ByteEncoder;
 import org.marinemc.logging.Logging;
 import org.marinemc.util.Position;
 

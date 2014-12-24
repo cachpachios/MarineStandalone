@@ -19,7 +19,7 @@
 
 package org.marinemc.game.item;
 
-import org.marinemc.io.data.ByteData;
+import org.marinemc.io.binary.ByteData;
 import org.marinemc.util.wrapper.PacketWrapper;
 
 public class ItemSlot extends PacketWrapper<Item> {

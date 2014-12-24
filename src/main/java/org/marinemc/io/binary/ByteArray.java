@@ -22,6 +22,8 @@ package org.marinemc.io.binary;
 import java.nio.charset.Charset;
 import java.util.Iterator;
 
+import org.marinemc.io.data.ByteUtils;
+
 /**
  * ByteArray is a Stored reader with output and input functionality
  * 
@@ -48,15 +50,16 @@ public class ByteArray extends AbstractInput implements ByteOutput, StoredReader
 		size = 0;
 	}
 	
-	public ByteArray(int size) {
+	public ByteArray(final int size) {
 		this.data = new byte[size];
-		size = 0;
+		this.size = 0;
 	}
 	
 	@Override
 	public byte readByte() {
-		if(hasAnotherByte())
+		if(hasAnotherByte()) {
 			return data[++position];
+		}
 		else
 			return 0;
 	}
@@ -95,7 +98,7 @@ public class ByteArray extends AbstractInput implements ByteOutput, StoredReader
 	@Override
 	public void writeByte(byte v) {
 		ensureSpace(size+1);
-		data[++size] = v;
+		data[size++] = v;
 	}
 
 	public void write(byte... v) {
@@ -168,6 +171,7 @@ public class ByteArray extends AbstractInput implements ByteOutput, StoredReader
             }
         }
 	}
+	
 
 	@Override
 	public void writeString(final String s, final Charset charset) {
@@ -181,8 +185,15 @@ public class ByteArray extends AbstractInput implements ByteOutput, StoredReader
 		else
 			writeByte((byte) 0x00);
 	}
-
-	@Override
+	
+    public void remove(int index) {
+        int numMoved = size - index - 1;
+        if (numMoved > 0)
+          	System.arraycopy(data, index+1, data, index, numMoved);
+        data[--size] = 0;
+    }
+	
+    @Override
 	public int getReaderPosition() {
 		return position;
 	}
@@ -233,7 +244,7 @@ public class ByteArray extends AbstractInput implements ByteOutput, StoredReader
 
 		@Override
 		public void remove() {
-			// TODO Implement
+			ByteArray.this.remove(pos);
 		}
 
 	}

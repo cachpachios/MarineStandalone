@@ -19,7 +19,7 @@
 
 package org.marinemc.io;
 
-import org.marinemc.io.data.ByteData;
+import org.marinemc.io.binary.ByteData;
 
 import java.io.*;
 import java.util.zip.GZIPInputStream;

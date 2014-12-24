@@ -19,7 +19,7 @@
 
 package org.marinemc.io.nbt;
 
-import org.marinemc.io.data.ByteData;
+import org.marinemc.io.binary.ByteData;
 /**
  * @author Fozie
  */

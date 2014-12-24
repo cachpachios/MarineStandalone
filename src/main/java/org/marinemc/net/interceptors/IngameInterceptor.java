@@ -20,7 +20,7 @@
 package org.marinemc.net.interceptors;
 
 import org.marinemc.game.async.ChatManager;
-import org.marinemc.io.data.ByteData;
+import org.marinemc.io.binary.ByteData;
 import org.marinemc.net.Client;
 /**
  * Intercepts ingamepackets

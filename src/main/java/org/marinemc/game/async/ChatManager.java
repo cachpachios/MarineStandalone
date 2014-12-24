@@ -21,7 +21,7 @@ package org.marinemc.game.async;
 
 import org.marinemc.events.standardevents.ChatEvent;
 import org.marinemc.game.player.Player;
-import org.marinemc.io.data.ByteData;
+import org.marinemc.io.binary.ByteData;
 import org.marinemc.logging.Logging;
 import org.marinemc.net.Client;
 import org.marinemc.net.play.clientbound.ChatPacket;

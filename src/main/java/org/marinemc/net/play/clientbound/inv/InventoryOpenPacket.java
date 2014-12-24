@@ -20,7 +20,7 @@
 package org.marinemc.net.play.clientbound.inv;
 
 import org.marinemc.game.inventory.Inventory;
-import org.marinemc.io.data.ByteData;
+import org.marinemc.io.binary.ByteData;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;

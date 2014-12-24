@@ -19,7 +19,7 @@
 
 package org.marinemc.net;
 
-import org.marinemc.io.data.ByteData;
+import org.marinemc.io.binary.ByteData;
 import org.marinemc.server.Marine;
 
 import java.io.IOException;

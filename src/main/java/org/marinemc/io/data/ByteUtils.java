@@ -1,5 +1,11 @@
-package org.marinemc.io.binary;
-
+package org.marinemc.io.data;
+/**
+ * 
+ * Diffrent utils for array manipulation of byte arrays
+ * 
+ * @author Fozie
+ *
+ */
 public class ByteUtils {
 	public final static Byte[] wrap(final byte[] array) {
         if (array == null)
@@ -13,7 +19,39 @@ public class ByteUtils {
         }
         return result;
     }
+	
+	public static byte[] merge(byte[]... data) {
+		int size = 0;
+		for(byte[] a : data) 
+			size += a.length;
+		
+		byte[] r = new byte[size];
 
+		for(byte[] a : data)
+			combine(r,a);
+	
+		return r;
+	}
+	
+    public static byte[] combine(byte[] array1, byte[] array2) {
+        if (array1 == null) {
+            return copy(array2);
+        } else if (array2 == null) {
+            return copy(array1);
+        }
+        byte[] joinedArray = new byte[array1.length + array2.length];
+        System.arraycopy(array1, 0, joinedArray, 0, array1.length);
+        System.arraycopy(array2, 0, joinedArray, array1.length, array2.length);
+        return joinedArray;
+    }
+   
+    public static byte[] copy(byte[] array) {
+        if (array == null) {
+            return null;
+        }
+        return (byte[]) array.clone();
+    }
+    
     public static byte[] unwrap(final Byte[] array) {
         if (array == null)
             return null;

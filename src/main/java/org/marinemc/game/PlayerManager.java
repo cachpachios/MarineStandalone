@@ -39,6 +39,7 @@ import org.marinemc.net.packets.login.LoginPacket;
 import org.marinemc.net.packets.login.LoginSucessPacket;
 import org.marinemc.net.play.clientbound.ChatPacket;
 import org.marinemc.net.play.clientbound.JoinGamePacket;
+import org.marinemc.net.play.clientbound.player.SpawnPlayerPacket;
 import org.marinemc.server.Marine;
 import org.marinemc.util.Location;
 import org.marinemc.util.annotations.Cautious;
@@ -75,6 +76,7 @@ public class PlayerManager {
 	 * 
 	 * @param connected The client that are connecting
 	 */
+	
 	public String login(Client client, final LoginPacket packet) {
 		//TODO: Encryption and Compression
 
@@ -93,7 +95,7 @@ public class PlayerManager {
 
 		Player p = new Player(
 				EntityType.PLAYER,
-				Entity.generateEntityID(),
+				1,
 				new Location(Marine.getMainWorld(),0,5,0), //TODO: Get an location from file or generate spawnpoint
 				UIDGenerator.instance().getUID(name),
 				uuid,
@@ -156,6 +158,26 @@ public class PlayerManager {
 		ChatManager.getInstance().sendJoinMessage(p, event.getJoinMessage());
 
 		putPlayer(p);
+		//Send them the herobrine :>
+		p.getClient().sendPacket(new SpawnPlayerPacket(new Player(
+				EntityType.PLAYER,
+				5,
+				new Location(Marine.getMainWorld(),3,5,3), //TODO: Get an location from file or generate spawnpoint
+				UIDGenerator.instance().getUID("Herobrine"),
+				UUID.fromString("f84c6a79-0a4e-45e0-879b-cd49ebd4c4e2"),
+				"Herobrine", 
+				0f,
+				0,
+				Marine.getServer().getDefaultGamemode(),
+				2,
+				2,
+				true,
+				false,
+				true,
+				new PlayerInventory((byte) 0),
+				null
+		)));
+		
 		return null; // To indicate that the player was successfully created and joined
 	}
 	

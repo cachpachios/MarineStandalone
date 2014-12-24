@@ -6,5 +6,10 @@ package org.marinemc.game.player;
  * @author Fozie
  */
 public class PlayerEntityHandler {
+
+	public void unloadLocaly(int id) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

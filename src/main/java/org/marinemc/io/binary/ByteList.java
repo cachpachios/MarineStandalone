@@ -6,6 +6,8 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import org.marinemc.io.data.ByteUtils;
+
 
 public class ByteList extends AbstractInput implements SortedByteOutput, Byteable, StoredReader, Iterable<Byte> {
 	final List<Byte> data;

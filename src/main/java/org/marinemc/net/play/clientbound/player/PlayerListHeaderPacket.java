@@ -21,7 +21,7 @@ package org.marinemc.net.play.clientbound.player;
 
 import org.json.simple.JSONObject;
 import org.marinemc.game.chat.ChatColor;
-import org.marinemc.io.data.ByteData;
+import org.marinemc.io.binary.ByteData;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;

@@ -22,6 +22,8 @@ package org.marinemc.io.data;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.marinemc.io.binary.ByteData;
 /**
  * @author Fozie
  */

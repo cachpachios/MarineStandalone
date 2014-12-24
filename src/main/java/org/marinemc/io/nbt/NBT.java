@@ -20,7 +20,7 @@
 package org.marinemc.io.nbt;
 
 import org.marinemc.io.BinaryFile;
-import org.marinemc.io.data.ByteData;
+import org.marinemc.io.binary.ByteData;
 
 import java.io.File;
 import java.io.IOException;

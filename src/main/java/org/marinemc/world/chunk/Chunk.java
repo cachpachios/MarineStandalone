@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Random;
 
 import org.marinemc.game.player.Player;
-import org.marinemc.io.data.ByteData;
+import org.marinemc.io.binary.ByteData;
 import org.marinemc.server.Marine;
 import org.marinemc.util.Position;
 import org.marinemc.util.annotations.Cautious;

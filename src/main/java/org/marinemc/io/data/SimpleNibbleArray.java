@@ -19,6 +19,7 @@
 
 package org.marinemc.io.data;
 
+import org.marinemc.io.binary.ByteData;
 import org.marinemc.util.annotations.Hacky;
 
 import java.util.ArrayList;

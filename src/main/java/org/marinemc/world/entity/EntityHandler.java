@@ -16,12 +16,12 @@ public class EntityHandler {
     
     private final World world;
     
-    private volatile Map<Integer, Entity> entities;
+    private volatile Map<Integer, Entity> loadedEntities;
     
     public EntityHandler(World w) {
     	this.world = w;
     	nextEntityID = Integer.MIN_VALUE;
-    	entities = new HashMap<>();
+    	loadedEntities = new HashMap<>();
     }
     
     public int generateID() {
@@ -32,7 +32,8 @@ public class EntityHandler {
     	return world;
     }
     
-    public void removeEntity(int ID) {
-    	Marine.getServer().getPlayerManager().getEntitySpawner();
+    public void removeEntity(int id) {
+    	
+    	Marine.getServer().getPlayerManager().getEntitySpawner().unloadLocaly(id);
     }
 }

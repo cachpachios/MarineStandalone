@@ -19,7 +19,7 @@
 
 package org.marinemc.util.wrapper;
 
-import org.marinemc.io.data.ByteData;
+import org.marinemc.io.binary.ByteData;
 
 /**
  * Packet Wrapper used to wrap object when sent in packets

@@ -19,7 +19,7 @@
 
 package org.marinemc.net.interceptors;
 
-import org.marinemc.io.data.ByteData;
+import org.marinemc.io.binary.ByteData;
 import org.marinemc.net.Client;
 import org.marinemc.net.packets.HandshakePacket;
 /**

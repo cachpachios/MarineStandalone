@@ -19,7 +19,7 @@
 
 package org.marinemc.world.chunk;
 
-import org.marinemc.io.data.ByteData;
+import org.marinemc.io.binary.ByteData;
 import org.marinemc.util.Position;
 import org.marinemc.util.annotations.Hacky;
 import org.marinemc.util.annotations.Unsafe;
