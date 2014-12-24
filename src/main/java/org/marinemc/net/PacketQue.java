@@ -29,11 +29,25 @@ import com.google.common.collect.Multimap;
  */
 public class PacketQue {
 
-    private Multimap<Integer, Packet> que;
+    private final Multimap<Integer, Packet> que;
+    private final Client c;
 
-    public PacketQue() {
+    public PacketQue(final Client c) {
         this.que = ArrayListMultimap.create();
+        this.c = c;
     }
 
+    public synchronized void add(final Packet packet) {
+        add(packet, 3);
+    }
 
+    public synchronized void add(final Packet packet, final int priority) {
+        que.put(priority, packet);
+    }
+
+    public synchronized void executePackets() {
+        for (int key : que.keys()) {
+            c.sendPackets(que.get(key));
+        }
+    }
 }

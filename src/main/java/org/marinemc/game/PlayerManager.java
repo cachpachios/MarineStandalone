@@ -139,6 +139,11 @@ public class PlayerManager {
 		JoinEvent event = new JoinEvent(p, ChatManager.JOIN_MESSAGE);
 		Marine.getServer().callEvent(event);
 		ChatManager.getInstance().sendJoinMessage(p, event.getJoinMessage());
+
+		TablistManager.getInstance().addItem(p);
+		TablistManager.getInstance().joinList(p);
+		TablistManager.getInstance().setHeaderAndFooter("Testing", "MarineStandalone", p);
+
 		return null;
 	}
 	

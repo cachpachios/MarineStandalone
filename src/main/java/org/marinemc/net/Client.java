@@ -20,7 +20,6 @@
 package org.marinemc.net;
 
 import org.marinemc.io.data.ByteData;
-import org.marinemc.io.data.ByteEncoder;
 import org.marinemc.server.Marine;
 
 import java.io.IOException;
@@ -28,22 +27,24 @@ import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 /**
  * @author Fozie
  */
 public class Client {
+    private final static byte[] NULL_BYTE = new byte[]{0};
     private final Socket connection;
     private final PacketOutputStream output;
-
+    private final PacketQue que;
     private InputStream input;
-
     private States state;
     private int compressionThreshold = -1;
-
     // For indexing in IngameInterceptor
     // private String userName;
     private short uid; // Saved as Short not short for the ability to equal null
+    private boolean sending = false, waiting = false;
+    private boolean isActive;
 
     public Client(Socket s) throws IOException {
         this.state = States.HANDSHAKE;
@@ -52,15 +53,44 @@ public class Client {
         output = new PacketOutputStream(s.getOutputStream());
         this.uid = -1;
         isActive = true;
+        this.que = new PacketQue(this);
     }
-    
-    public void sendPacket(Packet packet) { //TODO: PacketBuffer
+
+    public void sendPacket(Packet packet) {
+        if (sending) {
+            que.add(packet);
+            if (!waiting) {
+                waiting = true;
+                for (; ; ) {
+                    if (!sending) {
+                        que.executePackets();
+                    }
+                    waiting = false;
+                }
+            }
+            return;
+        }
+        sending = true;
+        //TODO: PacketBuffer
         try {
             packet.writeToStream(output);
             System.out.println("Sent packet: "+packet.getID()+ ", State: " + state.name());
             connection.getOutputStream().flush();
         } catch (IOException e) {
-        	//TODO: 
+            //TODO:
+        }
+        sending = false;
+    }
+
+    public synchronized void sendPackets(final Collection<Packet> packets) { //TODO: PacketBuffer
+        for (final Packet packet : packets) {
+            try {
+                packet.writeToStream(output);
+                System.out.println("(QUE) Sent packet: " + packet.getID() + ", State" + state.name());
+                connection.getOutputStream().flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -104,16 +134,10 @@ public class Client {
         } catch (IOException e) {
         }
     }
-
-    
-    private boolean isActive;
     
     public boolean isActive() {
     	return isActive;
     }
-    
-    
-    private final static byte[] NULL_BYTE = new byte[] {0};
     
     boolean tryConnection() {
         try { // Write a 0 bit to check if available
