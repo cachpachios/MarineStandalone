@@ -37,7 +37,7 @@ public class NetworkManager {
     public PacketHandler packetHandler;
     public ServerSocket server;
     public ClientProcessor clientHandler;
-    private List<Client> clientList;
+    private volatile List<Client> clientList;
     
     private ConnectionThread connector;
 
@@ -90,17 +90,23 @@ public class NetworkManager {
         clientList.add(c);
     }
 
-    public void cleanUp(final Client c) {
+    public void cleanUp(Client c) {
     	terminate(c);
     }
 
     private void terminate(Client client) {
         if (client.getState() != States.INGAME)
             Logging.getLogger().info("Client Ping Terminated At: " + client.getAdress().getHostAddress() + ":" + client.getConnection().getPort());
+        else {
+        	if(client.getUID() != -1)
+        		Marine.getServer().getPlayerManager().removePlayer(client.getUID());
+        }
         clientList.remove(client);
         client.terminate();
         
         client = null;
+        
+        System.out.println(":" + clientList.size());
         
 //        WeakReference<Client> r = new WeakReference<Client>(client);
 //        while(r.get() != null)
@@ -111,18 +117,11 @@ public class NetworkManager {
             boolean didProccessSomething = false;
             for (final Client c : clientList) {
                 Client.ConnectionStatus status = c.process();
-                if (status == Client.ConnectionStatus.CONNECTION_PROBLEMS)
-                    if (c.getUID() != -1) {
-                    	Marine.getServer().getPlayerManager().disconnect(Marine.getServer().getPlayerManager().getPlayerByClient(c));
-                    } else {
+                if (status == Client.ConnectionStatus.CONNECTION_PROBLEMS)   
                         cleanUp(c);
-                    }
-                else if (status == Client.ConnectionStatus.CLOSED) {
-                    if (c.getUID() != -1) {
-                    	Marine.getServer().getPlayerManager().disconnect(Marine.getServer().getPlayerManager().getPlayerByClient(c));
-                    } else
+                else if (status == Client.ConnectionStatus.CLOSED) 
                         cleanUp(c);
-                }
+                
                 if (status == Client.ConnectionStatus.PROCESSED)
                     didProccessSomething = true;
             }
@@ -136,9 +135,6 @@ public class NetworkManager {
     public void tryConnections()  {
 		for (final Client c : clientList) {
 		    if (!c.tryConnection())
-		    	if(c.getUID() != -1)
-		    		Marine.getServer().getPlayerManager().disconnect(Marine.getServer().getPlayerManager().getPlayerByClient(c));
-		    	else
 		    		cleanUp(c);
 		}
     }
@@ -158,7 +154,7 @@ public class NetworkManager {
             while (true) {
             	if(host.isEmpty()) {
 					try {
-						ClientProcessor.sleep(500);
+						ClientProcessor.sleep(20);
 					} catch (InterruptedException e) {}
 					
 					continue;

@@ -40,6 +40,7 @@ import org.marinemc.net.play.clientbound.player.PlayerLookPacket;
 import org.marinemc.net.play.clientbound.world.BlockChangePacket;
 import org.marinemc.net.play.clientbound.world.MapChunkPacket;
 import org.marinemc.net.play.clientbound.world.SpawnPointPacket;
+import org.marinemc.net.play.clientbound.world.TimeUpdatePacket;
 import org.marinemc.util.Location;
 import org.marinemc.util.Position;
 import org.marinemc.util.StringComparison;
@@ -396,5 +397,9 @@ public class Player extends LivingEntity implements IPlayer, CommandSender {
 			messagesSent = 0;
 		}
 		return ++messagesSent >= 10;
+	}
+
+	public void sendTime() {
+		getClient().sendPacket(new TimeUpdatePacket(this.getWorld()));
 	}
 }

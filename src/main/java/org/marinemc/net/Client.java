@@ -189,7 +189,6 @@ public class Client {
 
         for (ByteData p : packages) {
         	final int id  = p.readVarInt();
-            System.out.println("Intercepted packet: "+ id + ", State: " + state.name());
             getNetwork().packetHandler.intercept(id, p, this);
         }
 

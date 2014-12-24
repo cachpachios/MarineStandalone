@@ -19,15 +19,8 @@
 
 package org.marinemc.net.interceptors;
 
-import org.marinemc.game.PlayerManager;
 import org.marinemc.io.data.ByteData;
 import org.marinemc.net.Client;
-import org.marinemc.net.play.KeepAlivePacket;
-import org.marinemc.net.play.serverbound.IncomingChatPacket;
-import org.marinemc.net.play.serverbound.player.PlayerLookPacket;
-import org.marinemc.net.play.serverbound.player.PlayerPositionPacket;
-import org.marinemc.net.play.serverbound.player.ServerboundPlayerLookPositionPacket;
-import org.marinemc.util.Location;
 /**
  * Intercepts ingamepackets
  * 
@@ -41,8 +34,8 @@ public class IngameInterceptor implements PacketInterceptor {
     @Override
     public boolean intercept(int id, ByteData data, final Client c) {
     	switch(id) {
-    	case 0:
-    	case 1:
+    	case 0:	System.out.println("Keepem alive ;O");
+    	case 1: System.out.println("Packet 1");
     	
     	
     	default: return false;

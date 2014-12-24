@@ -58,7 +58,7 @@ public class UIDGenerator {
     public short getUID(final String username) {
         if (UIDMap.containsKey(username.hashCode()))
             return UIDMap.get(username.hashCode());
-        short uid = nextUnassigned;
+        short uid = ++nextUnassigned;
         
         if(uid == -1)
         	uid = ++nextUnassigned;

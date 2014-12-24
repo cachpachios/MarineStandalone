@@ -19,6 +19,12 @@
 
 package org.marinemc.game;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+
 import org.marinemc.events.standardevents.JoinEvent;
 import org.marinemc.events.standardevents.PreLoginEvent;
 import org.marinemc.game.async.ChatManager;
@@ -41,11 +47,6 @@ import org.marinemc.util.wrapper.StringWrapper;
 import org.marinemc.world.entity.Entity;
 import org.marinemc.world.entity.EntityType;
 
-import java.util.Collection;
-import java.util.Set;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-
 /**
  * The place where players are saved and accessed.
  * 
@@ -53,15 +54,15 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Citymonstret
  */
 public class PlayerManager {
-	private ConcurrentHashMap<Short, Player> players;
+	private volatile  Map<Short, Player> players;
 
-	private ConcurrentHashMap<String, Short> namePointers;
+	private volatile Map<String, Short> namePointers;
 	
 	private TimeoutManager timeout;
 	
 	public PlayerManager() {
-		players = new ConcurrentHashMap<Short, Player>();
-		namePointers = new ConcurrentHashMap<String, Short>();
+		players = new HashMap<Short, Player>();
+		namePointers = new HashMap<String, Short>();
 		timeout = new TimeoutManager();
 	}
 	
@@ -70,7 +71,7 @@ public class PlayerManager {
 	 * 
 	 * @param connected The client that are connecting
 	 */
-	public String login(final Client client, final LoginPacket packet) {
+	public String login(Client client, final LoginPacket packet) {
 		//TODO: Encryption and Compression
 
 		UUID uuid;
@@ -104,6 +105,8 @@ public class PlayerManager {
 				new PlayerInventory((byte) 0),
 				client
 		);
+		
+		client.setUID(p.getUID());
 
 
 		PreLoginEvent preEvent = new PreLoginEvent(p);
@@ -124,6 +127,8 @@ public class PlayerManager {
 		
 		client.setState(States.INGAME);
 		
+		putPlayer(p);
+		
 		p.getClient().sendPacket(new JoinGamePacket(p));
 		
 		p.updateAbilites();
@@ -132,10 +137,12 @@ public class PlayerManager {
 		
 		p.sendMapBulk(Marine.getServer().getWorldManager().getMainWorld(), Marine.getServer().getWorldManager().getMainWorld().getChunks(0, 0, 6, 6));
 		
-		p.updateExp();
+		//p.updateExp();
 		
 		p.sendPositionAndLook();
 
+		p.sendTime();
+		
 		JoinEvent event = new JoinEvent(p, ChatManager.JOIN_MESSAGE);
 		Marine.getServer().callEvent(event);
 		ChatManager.getInstance().sendJoinMessage(p, event.getJoinMessage());
@@ -157,6 +164,8 @@ public class PlayerManager {
 			synchronized (namePointers) {
 		players.putIfAbsent(p.getUID(), p);
 		namePointers.putIfAbsent(p.getUserName(), p.getUID());
+		
+		System.out.println(players.size());
 	}}}
 	
 	/**
@@ -174,23 +183,14 @@ public class PlayerManager {
 	public Collection<Player> getPlayers() {
 		return players.values();
 	}
-	/**
-	 * Removes a player from the main player storage!
-	 * Warning this should only be done if player has been disconnected
-	 * 
-	 * @param p The player that shall be removed
-	 */
-	protected void cleanUp(Player p) {synchronized(players) { synchronized(namePointers) { 
-		players.remove(p.getUID());
-		namePointers.remove(p.getUserName());
-	}}}
-	
+
 	/**
 	 * Ticks/Updates all existing players
 	 * Called in Server.java's main loop (Each tick(20hz) )
 	 */
 	public void tickAllPlayers() {
-		// TODO Do this :p
+		//for(final Player p : players.values())
+		//	p.sendTime();
 	}
 
 	/**
@@ -251,7 +251,7 @@ public class PlayerManager {
 	public boolean isPlayerOnline(short uid) {synchronized(players) { 
 		return players.containsKey(uid);
 	}}
-
+	
 	/**
 	 * Send packet to each online player,
 	 * Differs from networkmanager in that way that only ingame players gets this packet,
@@ -263,18 +263,30 @@ public class PlayerManager {
 		for(Player p : this.players.values())
 			p.getClient().sendPacket(packet);
 	}}
-
+	
 	public Player getPlayerByClient(final Client c) {
 		if(c.getUID() == -1)
 			return null;
 		else
 			return this.getPlayer(c.getUID());
 	}
+	
+	public void removePlayer(short uid) {
+		if(players.containsKey(uid))  {
+			if(namePointers.containsKey(players.get(uid).getUserName()))
+				namePointers.remove(players.get(uid).getUserName());
+			players.remove(uid);
+		}
+		System.out.println(players.size());
+	}
 
 	public void disconnect(Player p) {
-		if(p == null) return;
-		cleanUp(p);
-		Marine.getServer().getNetworkManager().cleanUp(p.getClient());
-		p = null;
+		if(!this.players.containsKey(p.getUID()))
+			return;
+		
+		ChatManager.getInstance()
+		.brodcastMessage(ChatManager.format(ChatManager.LEAVE_MESSAGE, p));
+		
+		removePlayer(p.getUID());
 	}
 }
