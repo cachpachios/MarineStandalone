@@ -1,3 +1,22 @@
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// MarineStandalone is a minecraft server software and API.
+// Copyright (C) MarineMC (marinemc.org)
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 2 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License along
+// with this program; if not, write to the Free Software Foundation, Inc.,
+// 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 package org.marinemc.util;
 
 import java.io.Serializable;
@@ -5,8 +24,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.RandomAccess;
-
-import org.marinemc.net.Client;
 
 /**
  * 
@@ -18,22 +35,20 @@ import org.marinemc.net.Client;
  */
 public class DynamicArray<T extends Object> implements RandomAccess,Serializable, Iterable<T> {
 	private static final long serialVersionUID = 8961846873731105803L;
-
-	/**
-	 * The buffer where the data is stored
-	 */
-	
-	public DynamicArray(int presize) {
-		objects = new Object[presize];
-		size = 0;
-	}
-	
 	private Object[] objects;
-	
 	/**
 	 * The real size of the dynamic array (Non null objects inside)
 	 */
 	private int size;
+	
+	/**
+	 * The buffer where the data is stored
+	 */
+
+	public DynamicArray(int presize) {
+		objects = new Object[presize];
+		size = 0;
+	}
 	
 	@SuppressWarnings("unchecked")
 	public T[] toArray() {
@@ -131,22 +146,6 @@ public class DynamicArray<T extends Object> implements RandomAccess,Serializable
 	public Iterator<T> iterator() {
 		return new DynamicIterator();
 	}
-	
-	private final class DynamicIterator implements Iterator<T> {
-
-		private int pos;
-		
-		@Override
-		public boolean hasNext() {
-			return pos != size;
-		}
-
-		@Override
-		public T next() {
-			return get(++pos);
-		}
-		
-	}
 
 	public boolean isEmpty() {
 		return size == 0;
@@ -166,7 +165,7 @@ public class DynamicArray<T extends Object> implements RandomAccess,Serializable
                     return i;
         return -1;
     }
-	
+
     public void remove(int index) {
         int numMoved = size - index - 1;
         if (numMoved > 0)
@@ -175,10 +174,31 @@ public class DynamicArray<T extends Object> implements RandomAccess,Serializable
         objects[--size] = null;
 
     }
-    
+
 	public void remove(Object obj) {
 		int i = indexOf(obj);
 		if(i != -1)
 			remove(i);
+	}
+
+	private final class DynamicIterator implements Iterator<T> {
+
+		private int pos;
+
+		@Override
+		public boolean hasNext() {
+			return pos != size;
+		}
+
+		@Override
+		public T next() {
+			return get(++pos);
+		}
+
+		@Override
+		public void remove() {
+			// TODO Implement
+		}
+
 	}
 }

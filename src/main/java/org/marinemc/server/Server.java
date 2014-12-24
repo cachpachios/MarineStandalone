@@ -92,7 +92,7 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
         this.worldManager = new WorldManager(this);
         this.playerManager = new PlayerManager();
         this.pluginLoader = new PluginLoader(new PluginManager());
-        this.networkManager = new NetworkManager(port); //TODO: Non predeclared stuff :p
+        this.networkManager = new NetworkManager(port); //TODO: Non predeclared stuff :p - City: What? It's fetches from settings.properties...?
         this.pluginFolder = new File("./plugins");
         this.storageFolder = new File("./storage");
         this.settingsFolder = new File("./settings");
