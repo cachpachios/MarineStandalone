@@ -25,6 +25,10 @@ import org.marinemc.game.command.Command;
 import org.marinemc.game.command.CommandSender;
 import org.marinemc.game.inventory.Inventory;
 import org.marinemc.game.inventory.PlayerInventory;
+import org.marinemc.game.permission.Group;
+import org.marinemc.game.permission.Groups;
+import org.marinemc.game.permission.Permission;
+import org.marinemc.game.permission.PermissionManager;
 import org.marinemc.net.Client;
 import org.marinemc.net.play.clientbound.ChatPacket;
 import org.marinemc.net.play.clientbound.inv.InventoryContentPacket;
@@ -80,8 +84,8 @@ public class Player extends LivingEntity implements IPlayer, CommandSender {
 	private Gamemode currentGameMode;
 	private float walkSpeed;
 	private float flySpeed;
-	private boolean isOp;
-	private List<String> permissions;
+	private Group group;
+	private Collection<Permission> permissions;
 	/**
 	 * Chat Stuff
 	 */
@@ -110,8 +114,8 @@ public class Player extends LivingEntity implements IPlayer, CommandSender {
 		this.currentGameMode = currentGameMode;
 		this.walkSpeed = walkSpeed;
 		this.flySpeed = flySpeed;
-		this.isOp = isOp;
-		this.permissions = new ArrayList<String>();
+		this.permissions = new ArrayList<>(); // TODO Load this from somewhere
+		this.group = Groups.ADMIN;
 		this.isFlying = isFlying;
 		this.canFly = canFly;
 		this.inventory = inventory;
@@ -299,11 +303,24 @@ public class Player extends LivingEntity implements IPlayer, CommandSender {
 
 	@Override
 	public boolean hasPermission(String permission) {
-		return isOp || permission.contains(permission.toLowerCase());
+		return PermissionManager.instance().hasPermission(this, permission);
+	}
+
+	@Override
+	public boolean hasPermission(Permission permission) {
+		return PermissionManager.instance().hasPermission(this, permission);
 	}
 
 	public void sendAboveActionbarMessage(String message) {
         getClient().sendPacket(new ChatPacket(message, 2)); // TODO Event
+	}
+
+	public Collection<Permission> getPermissions() {
+		return this.permissions;
+	}
+
+	public Group getGroup() {
+		return this.group;
 	}
 
 	public void teleport(Location relative) {

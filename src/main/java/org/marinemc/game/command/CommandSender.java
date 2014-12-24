@@ -21,6 +21,7 @@ package org.marinemc.game.command;
 
 import org.marinemc.game.chat.ChatMessage;
 import org.marinemc.game.chat.ChatReciever;
+import org.marinemc.game.permission.Permission;
 import org.marinemc.util.Location;
 
 
@@ -72,4 +73,12 @@ public interface CommandSender extends ChatReciever {
      * @return has permission?
      */
     public boolean hasPermission(String permission);
+
+    /**
+     * Check if the sender has the given permission
+     *
+     * @param permission Permission
+     * @return has permission?
+     */
+    public boolean hasPermission(Permission permission);
 }
