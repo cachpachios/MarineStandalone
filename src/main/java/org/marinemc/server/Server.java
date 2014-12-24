@@ -19,12 +19,6 @@
 
 package org.marinemc.server;
 
-import java.io.File;
-import java.util.Collection;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.UUID;
-
 import org.json.JSONException;
 import org.marinemc.events.Event;
 import org.marinemc.events.EventManager;
@@ -37,17 +31,7 @@ import org.marinemc.game.command.Command;
 import org.marinemc.game.command.CommandSender;
 import org.marinemc.game.command.ConsoleSender;
 import org.marinemc.game.command.ServiceProvider;
-import org.marinemc.game.commands.Help;
-import org.marinemc.game.commands.Info;
-import org.marinemc.game.commands.List;
-import org.marinemc.game.commands.Me;
-import org.marinemc.game.commands.Plugins;
-import org.marinemc.game.commands.Say;
-import org.marinemc.game.commands.SendAboveActionBarMessage;
-import org.marinemc.game.commands.Stop;
-import org.marinemc.game.commands.Teleport;
-import org.marinemc.game.commands.Tellraw;
-import org.marinemc.game.commands.Test;
+import org.marinemc.game.commands.*;
 import org.marinemc.game.player.Player;
 import org.marinemc.game.scheduler.Scheduler;
 import org.marinemc.game.system.MarineSecurityManager;
@@ -59,11 +43,18 @@ import org.marinemc.plugins.PluginManager;
 import org.marinemc.settings.JSONFileHandler;
 import org.marinemc.settings.ServerSettings;
 import org.marinemc.util.Base64Image;
+import org.marinemc.util.Location;
 import org.marinemc.util.StartSettings;
 import org.marinemc.world.Difficulty;
 import org.marinemc.world.Gamemode;
 import org.marinemc.world.Identifiers;
 import org.marinemc.world.World;
+
+import java.io.File;
+import java.util.Collection;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.UUID;
 
 /**
  * Server implementation
@@ -81,9 +72,9 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
     private final PlayerManager playerManager;
     private final WorldManager worldManager;
     private final Scheduler scheduler;
-    private JSONFileHandler jsonFileHandler;
     private final Timer timer;
     private final int tickRate;
+    private JSONFileHandler jsonFileHandler;
     private Base64Image image;
     private Gamemode gamemode;
     private Difficulty difficulty;
@@ -300,6 +291,11 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
     @Override
     final public String getProviderName() {
         return "marine";
+    }
+
+    @Override
+    final public Location getSpawnLocation() {
+        return worldManager.getMainWorld().getSpawnPoint().toLocation();
     }
 
     @Override

@@ -19,11 +19,6 @@
 
 package org.marinemc.server;
 
-import java.io.File;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
-
 import org.marinemc.events.Event;
 import org.marinemc.game.PlayerManager;
 import org.marinemc.game.WorldManager;
@@ -33,9 +28,15 @@ import org.marinemc.game.scheduler.Scheduler;
 import org.marinemc.net.NetworkManager;
 import org.marinemc.plugins.PluginLoader;
 import org.marinemc.util.Base64Image;
+import org.marinemc.util.Location;
 import org.marinemc.world.Difficulty;
 import org.marinemc.world.Gamemode;
 import org.marinemc.world.World;
+
+import java.io.File;
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * MarineServer interface
@@ -77,6 +78,7 @@ public interface MarineServer {
      * @param gamemode Default Gamemode
      */
     public void setDefaultGamemode(Gamemode gamemode);
+
 
     /**
      * Get the default difficulty
@@ -126,6 +128,8 @@ public interface MarineServer {
      * @return Plugin Folder
      */
     public File getPluginFolder();
+
+    public Location getSpawnLocation();
 
     /**
      * Load and enable all plugins in the plugins folder

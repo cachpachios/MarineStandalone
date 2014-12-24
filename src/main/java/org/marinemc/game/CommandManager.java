@@ -86,7 +86,6 @@ public class CommandManager {
                 commands.add(command);
         }
         return commands;
-        // return stringMap.values();
     }
 
 }

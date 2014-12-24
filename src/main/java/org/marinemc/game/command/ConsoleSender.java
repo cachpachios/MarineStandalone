@@ -22,6 +22,7 @@ package org.marinemc.game.command;
 import org.marinemc.game.CommandManager;
 import org.marinemc.game.chat.ChatMessage;
 import org.marinemc.logging.Logging;
+import org.marinemc.server.Marine;
 import org.marinemc.util.Location;
 
 /**
@@ -53,7 +54,7 @@ public class ConsoleSender implements CommandSender {
 
     @Override
     public Location getLocation() {
-        return null;
+        return Marine.getServer().getSpawnLocation();
     }
 
     @Override
