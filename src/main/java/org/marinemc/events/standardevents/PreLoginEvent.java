@@ -20,7 +20,7 @@
 package org.marinemc.events.standardevents;
 
 import org.marinemc.events.Event;
-import org.marinemc.game.player.IPlayer;
+import org.marinemc.game.player.Player;
 
 /**
  * Created 2014-12-20 for MarineStandalone
@@ -29,11 +29,11 @@ import org.marinemc.game.player.IPlayer;
  */
 public class PreLoginEvent extends Event {
 
-    private IPlayer player;
+    private Player player;
     private boolean allowed = true;
     private String message = "";
 
-    public PreLoginEvent(IPlayer player) {
+    public PreLoginEvent(Player player) {
         super("pre_join", true);
         this.player = player;
     }
@@ -54,7 +54,7 @@ public class PreLoginEvent extends Event {
         this.message = s;
     }
 
-    public IPlayer getPlayer() {
+    public Player getPlayer() {
         return this.player;
     }
 }

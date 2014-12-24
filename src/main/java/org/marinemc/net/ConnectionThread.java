@@ -37,17 +37,16 @@ public class ConnectionThread extends Thread {
     }
 
     public void run() {
-
         Logging.getLogger().log("Waiting for connection...");
-
-        while (true) { //TODO: Stopping and starting!
+        // for(;;) is faster than while(true)
+        for (; ; ) { //TODO: Stopping and starting!
             try {
                 Socket connection = network.server.accept();
                 network.connect(connection);
                 ConnectionThread.sleep(10);
-            } catch (InterruptedException e) {
+            } catch (InterruptedException ignored) {
             } catch (IOException e) {
-                Logging.getLogger().error("Connetion problems with client.");
+                Logging.getLogger().error("Connection problems with client.");
             }
 
         }

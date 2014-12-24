@@ -1,11 +1,27 @@
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// MarineStandalone is a minecraft server software and API.
+// Copyright (C) MarineMC (marinemc.org)
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 2 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License along
+// with this program; if not, write to the Free Software Foundation, Inc.,
+// 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 package org.marinemc.game;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-
+import org.marinemc.events.standardevents.JoinEvent;
+import org.marinemc.events.standardevents.PreLoginEvent;
+import org.marinemc.game.async.ChatManager;
 import org.marinemc.game.async.TimeoutManager;
 import org.marinemc.game.inventory.PlayerInventory;
 import org.marinemc.game.player.Player;
@@ -20,19 +36,26 @@ import org.marinemc.server.Marine;
 import org.marinemc.util.Location;
 import org.marinemc.util.annotations.Cautious;
 import org.marinemc.util.annotations.Hacky;
-import org.marinemc.world.Gamemode;
+import org.marinemc.util.mojang.UUIDHandler;
+import org.marinemc.util.wrapper.StringWrapper;
 import org.marinemc.world.entity.Entity;
 import org.marinemc.world.entity.EntityType;
+
+import java.util.Collection;
+import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * The place where players are saved and accessed.
  * 
  * @author Fozie
+ * @author Citymonstret
  */
 public class PlayerManager {
-	private Map<Short, Player> players;
-	
-	private Map<String, Short> namePointers;
+	private ConcurrentHashMap<Short, Player> players;
+
+	private ConcurrentHashMap<String, Short> namePointers;
 	
 	private TimeoutManager timeout;
 	
@@ -49,21 +72,18 @@ public class PlayerManager {
 	 */
 	public String login(final Client client, final LoginPacket packet) {
 		//TODO: Encryption and Compression
-		
-		UUID uuid = UUID.randomUUID();
-		String name = packet.name;
-//		if (Marine.getServer().isOfflineMode()) {
-//			uuid = UUIDHandler.getUuidOfflineMode(new StringWrapper(packet.name));
-//			name = packet.name;
-//		} else {
-//			uuid = UUIDHandler.getUUID(packet.name);
-//			name = UUIDHandler.getName(uuid);
-//		}
-//
-//		if (uuid == null) {
-//			uuid = UUID.randomUUID();
-//		}
-	       
+
+		UUID uuid;
+		String name;
+		if (Marine.getServer().isOfflineMode()) {
+			uuid = UUIDHandler.getUuidOfflineMode(new StringWrapper(packet.name));
+			name = packet.name;
+		} else {
+			// TODO Fix this
+			uuid = UUID.randomUUID();
+			name = packet.name;
+		}
+
 		// TODO This add the encryption stuff etc.. And then separate the following code in to another methoud that is called when encryption response is intercepted.
 
 		Player p = new Player(
@@ -75,7 +95,7 @@ public class PlayerManager {
 				name, 
 				0f,
 				0,
-				Gamemode.SURVIVAL,// TODO: Get from file or get standardgamemode
+				Marine.getServer().getDefaultGamemode(),
 				2,
 				2,
 				true,
@@ -84,8 +104,19 @@ public class PlayerManager {
 				new PlayerInventory((byte) 0),
 				client
 		);
-		
-		//TODO : Some banned/other stuff check :p
+
+
+		PreLoginEvent preEvent = new PreLoginEvent(p);
+		Marine.getServer().callEvent(preEvent);
+		if (!preEvent.isAllowed()) {
+			return preEvent.getMessage(); // Is banned or something xD
+		}
+		if (Marine.isBanned(client.getAdress())) {
+			return "Your IP is banned from the server";
+		}
+		if (Marine.isBanned(uuid)) {
+			return "You are banned from the server";
+		}
 		
 		client.sendPacket(new LoginSucessPacket(p)); // Send the LoginSuccessPacket
 		
@@ -104,7 +135,10 @@ public class PlayerManager {
 		p.updateExp();
 		
 		p.sendPositionAndLook();
-		
+
+		JoinEvent event = new JoinEvent(p, ChatManager.JOIN_MESSAGE);
+		Marine.getServer().callEvent(event);
+		ChatManager.getInstance().sendJoinMessage(p, event.getJoinMessage());
 		return null;
 	}
 	
@@ -113,7 +147,9 @@ public class PlayerManager {
 	 * Adds a player to the main player storage
 	 * @param p The player that should be added
 	 */
-	public void putPlayer(Player p) {synchronized(players) { synchronized(namePointers) { 
+	public void putPlayer(Player p) {
+		synchronized (players) {
+			synchronized (namePointers) {
 		players.putIfAbsent(p.getUID(), p);
 		namePointers.putIfAbsent(p.getUserName(), p.getUID());
 	}}}
@@ -215,7 +251,7 @@ public class PlayerManager {
 	 * Send packet to each online player,
 	 * Differs from networkmanager in that way that only ingame players gets this packet,
 	 * Not perhaps people logingin/pinging
-	 * @param Packet
+	 * @param packet
 	 */
 	public void broadcastPacket(ChatPacket packet) {
 		synchronized(players) { 

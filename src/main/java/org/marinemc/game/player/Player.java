@@ -1,9 +1,25 @@
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// MarineStandalone is a minecraft server software and API.
+// Copyright (C) MarineMC (marinemc.org)
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 2 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License along
+// with this program; if not, write to the Free Software Foundation, Inc.,
+// 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 package org.marinemc.game.player;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
+import org.marinemc.game.CommandManager;
 import org.marinemc.game.chat.ChatMessage;
 import org.marinemc.game.command.Command;
 import org.marinemc.game.command.CommandSender;
@@ -22,6 +38,7 @@ import org.marinemc.net.play.clientbound.world.MapChunkPacket;
 import org.marinemc.net.play.clientbound.world.SpawnPointPacket;
 import org.marinemc.util.Location;
 import org.marinemc.util.Position;
+import org.marinemc.util.StringComparison;
 import org.marinemc.util.annotations.Cautious;
 import org.marinemc.world.BlockID;
 import org.marinemc.world.Gamemode;
@@ -29,6 +46,11 @@ import org.marinemc.world.World;
 import org.marinemc.world.chunk.Chunk;
 import org.marinemc.world.entity.EntityType;
 import org.marinemc.world.entity.LivingEntity;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * The online ingame Player instance object
@@ -43,24 +65,28 @@ public class Player extends LivingEntity implements IPlayer, CommandSender {
 	private final short 	uid;
 	private final UUID 		uuid;
 	private final String	name;
-	
+	/**
+	 * Network variables
+	 */
+	private final Client client;
 	/**
 	 * Experience variables:
 	 */
 	private float exp;
 	private int levels;
-	
 	/**
 	 * Abilities variables:
 	 */
 	private Gamemode currentGameMode;
-	
 	private float walkSpeed;
 	private float flySpeed;
-	
 	private boolean isOp;
 	private List<String> permissions;
-	
+	/**
+	 * Chat Stuff
+	 */
+	private long lastChatReset;
+	private int messagesSent;
 	/**
 	 * Game variables:
 	 */
@@ -68,13 +94,7 @@ public class Player extends LivingEntity implements IPlayer, CommandSender {
 	private boolean canFly;
 	//TODO: Sneaking
 	private PlayerInventory inventory;
-	
-	/**
-	 * Network variables
-	 */
-	private final Client client;
-	
-	private byte nextWindowID; // Generates a new byte for a new ID, cant be 0 when that is the standard inventory	
+	private byte nextWindowID; // Generates a new byte for a new ID, cant be 0 when that is the standard inventory
 
 	public Player(EntityType type, int ID, Location pos, short uid, UUID uuid,
 			String name, float exp, int levels, Gamemode currentGameMode,
@@ -97,6 +117,8 @@ public class Player extends LivingEntity implements IPlayer, CommandSender {
 		this.inventory = inventory;
 		this.client = client;
 		this.nextWindowID = Byte.MIN_VALUE;
+		this.lastChatReset = System.currentTimeMillis();
+		this.messagesSent = 0;
 	}
 	
 	/**
@@ -179,7 +201,14 @@ public class Player extends LivingEntity implements IPlayer, CommandSender {
 	public int getLevels() {
 		return levels;
 	}
-	
+
+	public void setLevels(int levels) {
+		levels = Math.min(levels, 255);
+		levels = Math.max(levels, 0);
+		this.levels = levels;
+		this.updateExp();
+	}
+
 	public float getWalkSpeed() {
 		return walkSpeed;
 	}
@@ -218,7 +247,7 @@ public class Player extends LivingEntity implements IPlayer, CommandSender {
 
 	/**
 	 * Just wrapps the client.isAcitve()
-	 * 
+	 *
 	 * @return If an client is connected
 	 */
 	@Cautious
@@ -238,22 +267,39 @@ public class Player extends LivingEntity implements IPlayer, CommandSender {
 
 	@Override
 	public void executeCommand(String command) {
-		//TODO :I
+		executeCommand(command, new String[] {});
 	}
 
 	@Override
 	public void executeCommand(String command, String[] arguments) {
-		//TODO :I
+		final Command cmd = CommandManager.getInstance().getCommand(command);
+		if (cmd == null) {
+			final Collection<Command> commands = CommandManager.getInstance().getCommands();
+			String extra;
+			try {
+				StringComparison cm = new StringComparison(command, commands.toArray());
+				if (((double) cm.getBestMatchAdvanced()[0]) < .25) {
+					extra = "";
+				} else {
+					extra = " Did you mean " + cm.getBestMatch();
+				}
+			} catch (final Throwable e) {
+				extra = "";
+			}
+			sendMessage("There is no such command." + extra);
+		} else {
+			executeCommand(cmd, arguments);
+		}
 	}
 
 	@Override
 	public void executeCommand(Command command, String[] arguments) {
-		//TODO :I	
+		command.execute(this, arguments);
 	}
 
 	@Override
 	public boolean hasPermission(String permission) {
-		return permission.contains(permission.toLowerCase());
+		return isOp || permission.contains(permission.toLowerCase());
 	}
 
 	public void sendAboveActionbarMessage(String message) {
@@ -263,27 +309,21 @@ public class Player extends LivingEntity implements IPlayer, CommandSender {
 	public void teleport(Location relative) {
 		// TODO THIS
 	}
-
+	
 	public void sendMessageRaw(String msg) {
         getClient().sendPacket(new ChatPacket(msg, false));
 	}
-	
+
     public void openInventory(final Inventory inventory) {
         client.sendPacket(new InventoryOpenPacket(inventory));
     }
+	
 	public void setXP(float xp) {
         xp = Math.min(xp, 1.0f);
         xp = Math.max(xp, 0.0f);
         this.exp = xp;
         this.updateExp();
 	}
-	
-    public void setLevels(int levels) {
-        levels = Math.min(levels, 255);
-        levels = Math.max(levels, 0);
-        this.levels = levels;
-        this.updateExp();
-    }
 
 	public PlayerInventory getInventory() {
 		return inventory;
@@ -331,5 +371,13 @@ public class Player extends LivingEntity implements IPlayer, CommandSender {
 	 */
 	public void sendMapBulk(final World w, final List<Chunk> chunks) {
 		client.sendPacket(new MapChunkPacket(w, chunks));
+	}
+
+	public boolean checkForSpam() {
+		if ((System.currentTimeMillis() - lastChatReset) >= 5000) {
+			lastChatReset = System.currentTimeMillis();
+			messagesSent = 0;
+		}
+		return ++messagesSent >= 10;
 	}
 }

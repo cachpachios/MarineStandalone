@@ -20,7 +20,6 @@
 package org.marinemc.game.async;
 
 import org.marinemc.events.standardevents.ChatEvent;
-import org.marinemc.game.PlayerManager;
 import org.marinemc.game.player.Player;
 import org.marinemc.logging.Logging;
 import org.marinemc.net.play.clientbound.ChatPacket;
@@ -36,10 +35,14 @@ public class ChatManager {
             JOIN_MESSAGE = "%plr joined the game",
             LEAVE_MESSAGE = "%plr left the game",
             WELCOME_MESSAGE = "Welcome online §l%plr";
-    private final PlayerManager manager;
 
-    public ChatManager(PlayerManager players) {
-        this.manager = players;
+    private static ChatManager instance;
+
+    public static ChatManager getInstance() {
+        if (instance == null) {
+            instance = new ChatManager();
+        }
+        return instance;
     }
 
     public static String format(String s, Player p) {
@@ -77,23 +80,21 @@ public class ChatManager {
     }
 
     public void brodcastMessage(String msg) {
-        manager.broadcastPacket(new ChatPacket(msg));
+        Marine.getServer().getPlayerManager().broadcastPacket(new ChatPacket(msg));
         Logging.getLogger().log(msg);
     }
 
     public void sendChatMessage(Player player, String message) {
-//        if (player.insertMessage()) {
-//            player.kick("Spam!");
-//            return;
-//        }
-    	// TODO Fix that plz ^^
-    	
-        ChatEvent event = new ChatEvent(player, message);
-        Marine.getServer().callEvent(event);
-        if (!event.isCancelled()) {
-            Marine.broadcastMessage(
-                    translate(CHAT_FORMAT, player, event.getMessage())
-            );
+        if (player.checkForSpam()) {
+            player.kick("Do not spam");
+        } else {
+            ChatEvent event = new ChatEvent(player, message);
+            Marine.getServer().callEvent(event);
+            if (!event.isCancelled()) {
+                Marine.broadcastMessage(
+                        translate(CHAT_FORMAT, player, event.getMessage())
+                );
+            }
         }
     }
 

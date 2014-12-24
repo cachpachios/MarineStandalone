@@ -19,6 +19,7 @@
 
 package org.marinemc.game.command;
 
+import org.marinemc.game.chat.ChatMessage;
 import org.marinemc.game.chat.ChatReciever;
 import org.marinemc.util.Location;
 
@@ -29,6 +30,10 @@ import org.marinemc.util.Location;
  * @author Citymonstret
  */
 public interface CommandSender extends ChatReciever {
+
+    public void sendMessage(String message);
+
+    public void sendMessage(ChatMessage message);
 
     /**
      * Execute a command without any arguments
