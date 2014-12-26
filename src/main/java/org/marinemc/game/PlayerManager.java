@@ -147,25 +147,25 @@ public class PlayerManager {
 		ChatManager.getInstance().sendJoinMessage(p, event.getJoinMessage());
 
 		putPlayer(p);
-		//Send them the herobrine :>
-		p.getClient().sendPacket(new SpawnPlayerPacket(new Player(
-				EntityType.PLAYER,
-				5,
-				new Location(Marine.getMainWorld(),3,5,3), //TODO: Get an location from file or generate spawnpoint
-				UIDGenerator.instance().getUID("Herobrine"),
-				UUID.fromString("f84c6a79-0a4e-45e0-879b-cd49ebd4c4e2"),
-				"Herobrine", 
-				0f,
-				0,
-				Marine.getServer().getDefaultGamemode(),
-				2,
-				2,
-				true,
-				false,
-				true,
-				new PlayerInventory((byte) 0),
-				null
-		)));
+//		//Send them the herobrine :>
+//		p.getClient().sendPacket(new SpawnPlayerPacket(new Player(
+//				EntityType.PLAYER,
+//				5,
+//				new Location(Marine.getMainWorld(),3,5,3), //TODO: Get an location from file or generate spawnpoint
+//				UIDGenerator.instance().getUID("Herobrine"),
+//				UUID.fromString("f84c6a79-0a4e-45e0-879b-cd49ebd4c4e2"),
+//				"Herobrine", 
+//				0f,
+//				0,
+//				Marine.getServer().getDefaultGamemode(),
+//				2,
+//				2,
+//				true,
+//				false,
+//				true,
+//				new PlayerInventory((byte) 0),
+//				null
+//		)));
 		
 		return null; // To indicate that the player was successfully created and joined
 	}
