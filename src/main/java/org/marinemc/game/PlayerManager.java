@@ -33,7 +33,6 @@ import org.marinemc.net.packets.login.LoginPacket;
 import org.marinemc.net.packets.login.LoginSucessPacket;
 import org.marinemc.net.play.clientbound.ChatPacket;
 import org.marinemc.net.play.clientbound.JoinGamePacket;
-import org.marinemc.net.play.clientbound.player.SpawnPlayerPacket;
 import org.marinemc.server.Marine;
 import org.marinemc.util.Location;
 import org.marinemc.util.annotations.Cautious;

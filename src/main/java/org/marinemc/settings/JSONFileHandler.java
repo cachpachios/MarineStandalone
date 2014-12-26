@@ -21,6 +21,7 @@ package org.marinemc.settings;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.marinemc.settings.files.BanFile;
 
 import java.io.File;
 
@@ -38,7 +39,8 @@ public class JSONFileHandler {
         this.settingsPath = settingsPath;
         this.storagePath = storagePath;
         this.administrators = new StorageConfig(storagePath, "administrators");
-        this.banned = new StorageConfig(storagePath, "banned");
+        // this.banned = new StorageConfig(storagePath, "banned");
+        this.banned = new BanFile(storagePath);
         this.whitelist = new StorageConfig(storagePath, "whitelist");
     }
 
@@ -68,26 +70,4 @@ public class JSONFileHandler {
         return this.storagePath;
     }
 
-    private class StorageConfig extends JSONConfig {
-
-        public StorageConfig(File file) {
-            super(file);
-        }
-
-        public StorageConfig(File parent, String file) throws JSONException {
-            super(parent, file);
-        }
-
-       /*@Override
-        public Map<String, Object> defaultValues() {
-            Map<String, Object> defaultUUIDS = new HashMap<>();
-            try {
-                defaultUUIDS.put("uuid", new JSONArray(new String[]{UUIDHandler.getUUID("notch").toString()}));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return defaultUUIDS;
-        }*/
-
-    }
 }

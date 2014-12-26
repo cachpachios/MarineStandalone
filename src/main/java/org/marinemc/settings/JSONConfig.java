@@ -116,4 +116,12 @@ public class JSONConfig {
             throw new JSONConfigException(name, "Could not be saved", e);
         }
     }
+
+    public <T> T get(String key) {
+        return (T) map.get(key);
+    }
+
+    public <T> boolean contains(T t) {
+        return !map.isNull(t.toString());
+    }
 }
