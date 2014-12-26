@@ -187,7 +187,6 @@ public class World { // TODO Save and unload chunks...
     }
 
 	public EntityHandler getEntityHandler() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+        return entities;
+    }
 }

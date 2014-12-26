@@ -19,12 +19,6 @@
 
 package org.marinemc.game;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-
 import org.marinemc.events.standardevents.JoinEvent;
 import org.marinemc.events.standardevents.PreLoginEvent;
 import org.marinemc.game.async.ChatManager;
@@ -46,8 +40,9 @@ import org.marinemc.util.annotations.Cautious;
 import org.marinemc.util.annotations.Hacky;
 import org.marinemc.util.mojang.UUIDHandler;
 import org.marinemc.util.wrapper.StringWrapper;
-import org.marinemc.world.entity.Entity;
 import org.marinemc.world.entity.EntityType;
+
+import java.util.*;
 
 /**
  * The place where players are saved and accessed.
@@ -70,13 +65,7 @@ public class PlayerManager {
 		namePointers = new HashMap<String, Short>();
 		timeout = new TimeoutManager();
 	}
-	
-	/**
-	 * Called when the LoginPacket was intercepted
-	 * 
-	 * @param connected The client that are connecting
-	 */
-	
+
 	public String login(Client client, final LoginPacket packet) {
 		//TODO: Encryption and Compression
 
@@ -189,8 +178,8 @@ public class PlayerManager {
 	public void putPlayer(Player p) {
 		synchronized (players) {
 			synchronized (namePointers) {
-		players.putIfAbsent(p.getUID(), p);
-		namePointers.putIfAbsent(p.getUserName(), p.getUID());
+				players.put(p.getUID(), p);
+				namePointers.put(p.getUserName(), p.getUID());
 		
 		System.out.println(players.size());
 	}}}

@@ -19,10 +19,6 @@
 
 package org.marinemc.server;
 
-import java.net.InetAddress;
-import java.util.Collection;
-import java.util.UUID;
-
 import org.marinemc.game.chat.ChatMessage;
 import org.marinemc.game.player.Player;
 import org.marinemc.game.scheduler.Scheduler;
@@ -30,6 +26,10 @@ import org.marinemc.game.system.MarineSecurityManager;
 import org.marinemc.logging.Logging;
 import org.marinemc.util.annotations.Protected;
 import org.marinemc.world.World;
+
+import java.net.InetAddress;
+import java.util.Collection;
+import java.util.UUID;
 
 /**
  * Static API Class - Fun stuff in here
@@ -152,7 +152,7 @@ public class Marine {
      */
     public static void broadcastMessage(final String string) {
         for (final Player player : getPlayers()) {
-//            TODO player.sendMessage(string);
+            player.sendMessage(string);
         }
         Logging.getLogger().log(string);
     }
@@ -164,7 +164,7 @@ public class Marine {
      */
     public static void broadcastMessageRaw(final String string) {
         for (final Player player : getPlayers()) {
-//           TODO player.sendMessageRaw(string);
+            player.sendMessageRaw(string);
         }
         Logging.getLogger().log("Raw JSON Sent: " + string);
     }
@@ -176,7 +176,7 @@ public class Marine {
      */
     public static void broadcastMessage(final ChatMessage chat) {
         for (final Player player : getPlayers()) {
-//         TODO   player.sendMessage(chat);
+            player.sendMessage(chat);
         }
         Logging.getLogger().log("Raw Chat Sent: " + chat.toString());
     }

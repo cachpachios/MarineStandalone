@@ -19,6 +19,7 @@
 
 package org.marinemc.net;
 
+import org.marinemc.game.player.Player;
 import org.marinemc.io.binary.ByteData;
 import org.marinemc.server.Marine;
 
@@ -86,7 +87,7 @@ public class Client {
         for (final Packet packet : packets) {
             try {
                 packet.writeToStream(output);
-                System.out.println("(QUE) Sent packet: " + packet.getID() + ", State" + state.name());
+                System.out.println("(QUE) Sent packet: " + packet.getID() + ", State: " + state.name());
                 connection.getOutputStream().flush();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -147,6 +148,10 @@ public class Client {
             return false;
         }
         return true;
+    }
+
+    public Player getPlayer() {
+        return Marine.getPlayer(uid);
     }
 
     public ConnectionStatus process() { // Returns true if connection is closed.

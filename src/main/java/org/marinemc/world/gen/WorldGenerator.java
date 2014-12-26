@@ -62,7 +62,7 @@ public abstract class WorldGenerator {
         return r;
     }
 
-    public abstract Dimension getDimension(); //TODO Enum for dimensions
+    public abstract Dimension getDimension();
 
     public void populateChunk(Chunk c) {
     	if(populators == null)

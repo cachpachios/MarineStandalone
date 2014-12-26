@@ -190,7 +190,7 @@ public class ConsoleWindow extends OutputStream {
     }
 
     private String format(String string) {
-        if (Bootstrap.instance().arguments.contains("nocolors")) {
+        if (!Bootstrap.instance().arguments.contains("nocolors")) {
             string = string.replace("§0", "§f");
             string = "<font face='MarineStandalone'>" + string;
             for (ChatColor color : ChatColor.values()) {
