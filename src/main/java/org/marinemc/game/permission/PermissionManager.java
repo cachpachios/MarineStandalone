@@ -62,6 +62,10 @@ public class PermissionManager {
         return permissionMap.get(name);
     }
 
+    public void addPermission(final Permission permission) {
+        this.permissionMap.put(permission.toString(), permission);
+    }
+
     public Group getGroup(String name) {
         return groupMap.get(name);
     }

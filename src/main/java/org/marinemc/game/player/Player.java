@@ -19,11 +19,6 @@
 
 package org.marinemc.game.player;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
-
 import org.marinemc.game.CommandManager;
 import org.marinemc.game.chat.ChatMessage;
 import org.marinemc.game.command.Command;
@@ -42,12 +37,7 @@ import org.marinemc.net.play.clientbound.player.ClientboundPlayerLookPositionPac
 import org.marinemc.net.play.clientbound.player.ExperiencePacket;
 import org.marinemc.net.play.clientbound.player.PlayerAbilitesPacket;
 import org.marinemc.net.play.clientbound.player.PlayerLookPacket;
-import org.marinemc.net.play.clientbound.world.BlockChangePacket;
-import org.marinemc.net.play.clientbound.world.ChunkPacket;
-import org.marinemc.net.play.clientbound.world.MapChunkPacket;
-import org.marinemc.net.play.clientbound.world.SpawnPointPacket;
-import org.marinemc.net.play.clientbound.world.TimeUpdatePacket;
-import org.marinemc.net.play.clientbound.world.UnloadChunkPacket;
+import org.marinemc.net.play.clientbound.world.*;
 import org.marinemc.util.Location;
 import org.marinemc.util.Position;
 import org.marinemc.util.StringComparison;
@@ -58,6 +48,11 @@ import org.marinemc.world.chunk.Chunk;
 import org.marinemc.world.chunk.ChunkPos;
 import org.marinemc.world.entity.EntityType;
 import org.marinemc.world.entity.LivingEntity;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * The online ingame Player instance object
@@ -340,40 +335,45 @@ public class Player extends LivingEntity implements IPlayer, CommandSender {
 		return this.group;
 	}
 
+	public void setGroup(Group group) {
+		this.group = group;
+	}
+	
 	public void teleport(Location relative) {
 		// TODO THIS
 	}
-	
+
 	public void sendMessageRaw(String msg) {
         getClient().sendPacket(new ChatPacket(msg, false));
 	}
 
-    public void openInventory(final Inventory inventory) {
+	public void openInventory(final Inventory inventory) {
         client.sendPacket(new InventoryOpenPacket(inventory));
     }
-	
+
 	public void setXP(float xp) {
         xp = Math.min(xp, 1.0f);
         xp = Math.max(xp, 0.0f);
         this.exp = xp;
         this.updateExp();
 	}
-
-	public PlayerInventory getInventory() {
-		return inventory;
-	}
 	
 	
 	/**
 	 * Clientside update methods:
 	 */
-	
+
+	public PlayerInventory getInventory() {
+		return inventory;
+	}
+
 	/**
 	 * Sends a Experience update packet to the client with the current experience
 	 */
 	public void updateExp() {
 		getClient().sendPacket(new ExperiencePacket(this));
 	}
+
 	/**
 	 * Sends a PlayerAbilites Packet
 	 */
@@ -384,10 +384,11 @@ public class Player extends LivingEntity implements IPlayer, CommandSender {
     public void sendCompassTarget(Position pos) {
         this.getClient().sendPacket(new SpawnPointPacket(pos));
     }
-    
+
     public void sendInventory() {
         this.getClient().sendPacket(new InventoryContentPacket(getInventory()));
     }
+
     public void sendPositionAndLook() {
         this.getClient().sendPacket(new ClientboundPlayerLookPositionPacket(getLocation()));
     }
@@ -398,7 +399,7 @@ public class Player extends LivingEntity implements IPlayer, CommandSender {
 
 	public void sendBlockUpdate(Position pos, BlockID type) {
         getClient().sendPacket(new BlockChangePacket(pos, type));
-	} 
+	}
 
 	public boolean checkForSpam() {
 		if ((System.currentTimeMillis() - lastChatReset) >= 5000) {
@@ -415,7 +416,7 @@ public class Player extends LivingEntity implements IPlayer, CommandSender {
 	/**
 	 * Tracking of local changes:
 	 */
-	
+
 	public void unloadChunk(final ChunkPos c) {
 		if(loadedChunks.contains(c.encode())) {
 			getClient().sendPacket(new UnloadChunkPacket(c));
@@ -426,11 +427,11 @@ public class Player extends LivingEntity implements IPlayer, CommandSender {
 	public boolean sendChunk(final Chunk c) {
 		if(loadedChunks.contains(c.getPos().encode()))
 			return false;
-		
+
 		loadedChunks.add(c.getPos().encode());
-	
-		getClient().sendPacket(new ChunkPacket(c));	
-		
+
+		getClient().sendPacket(new ChunkPacket(c));
+
 		return true;
 	}
 	
@@ -443,16 +444,20 @@ public class Player extends LivingEntity implements IPlayer, CommandSender {
 			}
 		if(chunks.isEmpty())
 			return false;
-		
+
 		getClient().sendPacket(new MapChunkPacket(getWorld(), chunks));
-		
+
 		chunks = null; // GC the list
-		
+
 		return true;
 	}
-	
+
 	public int getNumChunksLoaded() {
 		return loadedChunks.size();
 	}
-	
+
+	@Override
+	final public String toString() {
+		return this.name;
+	}
 }
