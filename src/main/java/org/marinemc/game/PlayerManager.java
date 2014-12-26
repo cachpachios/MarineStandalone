@@ -175,7 +175,7 @@ public class PlayerManager {
 	 * Adds a player to the main player storage
 	 * @param p The player that should be added
 	 */
-	public void putPlayer(Player p) {
+	public synchronized void putPlayer(Player p) {
 		synchronized (players) {
 			synchronized (namePointers) {
 				players.put(p.getUID(), p);
@@ -189,14 +189,14 @@ public class PlayerManager {
 	 * 
 	 * @return A set over all UID's online
 	 */
-	public Set<Short> getOnlineUIDs() {
+	public synchronized Set<Short> getOnlineUIDs() {
 		return players.keySet();
 	}
 	/**
 	 * Get all players on the server
 	 * @return A collection of all players online
 	 */
-	public Collection<Player> getPlayers() {
+	public synchronized Collection<Player> getPlayers() {
 		return players.values();
 	}
 
@@ -204,7 +204,7 @@ public class PlayerManager {
 	 * Ticks/Updates all existing players
 	 * Called in Server.java's main loop (Each tick(20hz) )
 	 */
-	public void tickAllPlayers() {
+	public synchronized void tickAllPlayers() {
 		for(final Player p : players.values())
 			p.sendTime();
 	}
@@ -215,7 +215,7 @@ public class PlayerManager {
 	 * @param uid The uid of the object
 	 * @return The pointed player or null if non existance
 	 */
-	public Player getPlayer(short uid) {synchronized(players) {
+	public synchronized Player getPlayer(short uid) {synchronized(players) {
 		return players.get(uid);
 	}}
 
@@ -225,7 +225,7 @@ public class PlayerManager {
 	 * 
 	 * @return Amount of players stored here
 	 */
-	public int getPlayersConnected() {
+	public synchronized int getPlayersConnected() {
 		return this.players.size();
 	}
 
@@ -238,12 +238,12 @@ public class PlayerManager {
 	 */
 	@Hacky
 	@Cautious
-	public Player getPlayer(UUID uuid) {synchronized(players) { synchronized(namePointers) { 
+	public synchronized Player getPlayer(UUID uuid) {
 		for(Player p : this.getPlayers())
 			if(p.getUUID().toString().equals(uuid.toString()))
 				return p;
 		return null;
-	}}}
+	}
 
 	/**
 	 * To get a online player by its username.
@@ -251,7 +251,7 @@ public class PlayerManager {
 	 * @param username The username of the player to get
 	 * @return Either the player or null if not online.
 	 */
-	public Player getPlayer(String username) {
+	public synchronized Player getPlayer(String username) {
 		if(namePointers.containsKey(username))
 			return players.get(namePointers.get(username));
 		else
@@ -264,7 +264,7 @@ public class PlayerManager {
 	 * @param uid The UID of the player
 	 * @return An boolean if the player is online
 	 */
-	public boolean isPlayerOnline(short uid) {synchronized(players) { 
+	public synchronized boolean isPlayerOnline(short uid) {synchronized(players) { 
 		return players.containsKey(uid);
 	}}
 	

@@ -209,6 +209,9 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
         pluginLoader.loadAllPlugins(pluginFolder);
         Logging.getLogger().log("Enabling Plugins...");
         pluginLoader.enableAllPlugins();
+        
+        Logging.getLogger().log("Generating the World");
+        this.worldManager.getMainWorld().getChunks(0, 0, 8, 8);
     }
 
     @Override

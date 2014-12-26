@@ -23,7 +23,7 @@ import org.marinemc.world.BlockID;
 import org.marinemc.world.chunk.Chunk;
 import org.marinemc.world.gen.ChunkPopulator;
 
-public class TallGrassPop implements ChunkPopulator {
+public class NaturePop implements ChunkPopulator {
 
 	@Override
 	public void populate(Chunk c) {

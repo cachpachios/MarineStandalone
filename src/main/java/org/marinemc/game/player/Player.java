@@ -108,7 +108,7 @@ public class Player extends LivingEntity implements IPlayer, CommandSender {
 	 * Its represented by the ChunksPos encoded form
 	 * (Half long is X integer, secound half is the Y Integer)
 	 */
-	private List<Long> 		loadedChunks;
+	private List<Long> loadedChunks;
 	
 	public Player(EntityType type, int ID, Location pos, short uid, UUID uuid,
 			String name, float exp, int levels, Gamemode currentGameMode,
@@ -126,8 +126,8 @@ public class Player extends LivingEntity implements IPlayer, CommandSender {
 		this.flySpeed = flySpeed;
 		this.permissions = new ArrayList<>(); // TODO Load this from somewhere
 		this.group = Groups.ADMIN;
-		this.spawnedEntities = new ArrayList<>(); // Could be an set but for integers linear search quicker than Hashing
-		this.loadedChunks = new ArrayList<>();
+		this.spawnedEntities = new ArrayList<Integer>(); // Could be an set but for integers linear search quicker than Hashing
+		this.loadedChunks = new ArrayList<Long>();
 		this.isFlying = isFlying;
 		this.canFly = canFly;
 		this.inventory = inventory;
@@ -436,15 +436,19 @@ public class Player extends LivingEntity implements IPlayer, CommandSender {
 	}
 	
 	public boolean sendChunks(List<Chunk> chunks) {
+		if(chunks == null) return false;
+		if(chunks.isEmpty()) return false;
+		
 		for(final Chunk c : chunks)
 			if(loadedChunks.contains(c.getPos().encode()))
 				chunks.remove(c);
 			else {
 				loadedChunks.add(c.getPos().encode());
 			}
+		
 		if(chunks.isEmpty())
 			return false;
-
+		
 		getClient().sendPacket(new MapChunkPacket(getWorld(), chunks));
 
 		chunks = null; // GC the list

@@ -27,7 +27,7 @@ import org.marinemc.world.chunk.ChunkPos;
 import org.marinemc.world.gen.ChunkPopulator;
 import org.marinemc.world.gen.LevelType;
 import org.marinemc.world.gen.WorldGenerator;
-import org.marinemc.world.gen.pop.TallGrassPop;
+import org.marinemc.world.gen.pop.NaturePop;
 /**
  * @author Fozie
  */
@@ -35,7 +35,7 @@ public final class TotalFlatGrassGenerator extends WorldGenerator {
 
 
     public TotalFlatGrassGenerator() {
-    	super(new ChunkPopulator[]{new TallGrassPop()});
+    	super(new ChunkPopulator[]{new NaturePop()});
     }
 
     @Override

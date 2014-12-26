@@ -27,6 +27,7 @@ import org.marinemc.world.chunk.ChunkSection;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * Static class to index map data values
@@ -38,6 +39,8 @@ import java.util.Map;
 @Hacky
 public final class Identifiers {
 
+	private static int blockSize;
+	
     private static Map<Byte, BlockID> block_id;
     private static Map<Character, BlockID> block_encode;
 
@@ -59,6 +62,17 @@ public final class Identifiers {
             return BlockID.AIR;
     }
     
+    
+    public static BlockID randomBlock() {
+        if (block_id == null) init();
+        byte r = (byte) (Math.random() * blockSize);
+        
+        if(r < 0)
+        	return BlockID.AIR;
+        else
+        	return block_id.get(r);
+    }
+    
     @Unsafe
     @Cautious
     public static void init() {
@@ -69,5 +83,8 @@ public final class Identifiers {
             block_id.put(b.getID(), b);
             block_encode.put(ChunkSection.EncodeType(b), b);
         }
+        
+        blockSize = block_id.size();
+        
     }
 }

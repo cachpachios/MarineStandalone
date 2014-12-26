@@ -37,7 +37,10 @@ public abstract class WorldGenerator {
     private ChunkPopulator[] populators;
 
     public WorldGenerator(final ChunkPopulator[] populators) {
-    	this.populators = populators;
+    	if(populators != null)
+    		this.populators = populators;
+    	else
+    		this.populators = NO_POPULATION.clone();
     }
     
     public void setGenerationWorld(World w) {
