@@ -37,9 +37,15 @@ public class PermissionFilter extends FilteredOperation<Player> {
         this.operation = operation;
     }
 
+    public PermissionFilter(final Permission permission) {
+        this(permission, null);
+    }
+
     @Override
     public void perform(Player player) {
-        operation.accept(player);
+        if (operation != null) {
+            operation.accept(player);
+        }
     }
 
     @Override
