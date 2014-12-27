@@ -19,18 +19,15 @@
 
 package org.marinemc.util.operations;
 
+import org.marinemc.game.player.Player;
+
 /**
- * Alike Java 8's Consumer class but rewritten for java 7/6 users by Fozie
+ * Created 2014-12-27 for MarineStandalone
  *
- * @author Fozie
+ * @author Citymonstret
  */
-public interface ArgumentOperation<T> {
+public abstract class PlayerOperation implements ArgumentOperation<Player> {
 
-    /**
-     * Perform this action for on object
-     *
-     * @param t object to perform the action on
-     */
-    public void accept(T t);
-
+    @Override
+    public abstract void accept(Player player);
 }

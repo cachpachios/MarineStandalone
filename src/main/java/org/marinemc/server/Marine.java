@@ -20,11 +20,15 @@
 package org.marinemc.server;
 
 import org.marinemc.game.chat.ChatMessage;
+import org.marinemc.game.permission.Permission;
 import org.marinemc.game.player.Player;
 import org.marinemc.game.scheduler.Scheduler;
 import org.marinemc.game.system.MarineSecurityManager;
 import org.marinemc.logging.Logging;
 import org.marinemc.util.annotations.Protected;
+import org.marinemc.util.operations.ArgumentOperation;
+import org.marinemc.util.operations.PermissionFilter;
+import org.marinemc.util.operations.PlayerOperation;
 import org.marinemc.world.World;
 
 import java.net.InetAddress;
@@ -181,6 +185,15 @@ public class Marine {
         Logging.getLogger().log("Raw Chat Sent: " + chat.toString());
     }
 
+    public static void broadcast(final Permission permission, final String message) {
+        foreach(new PermissionFilter(permission, new PlayerOperation() {
+            @Override
+            public void accept(Player player) {
+                player.sendMessage(message);
+            }
+        }));
+    }
+
     /**
      * Get a player based on its uid
      *
@@ -218,4 +231,11 @@ public class Marine {
 	public static World getMainWorld() {
 		return getServer().getWorldManager().getMainWorld();
 	}
+
+    public static void foreach(final ArgumentOperation<Player> o) {
+        for (final Player player : getPlayers()) {
+            o.accept(player);
+        }
+    }
+
 }
