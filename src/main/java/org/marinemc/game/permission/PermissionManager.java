@@ -19,9 +19,14 @@
 
 package org.marinemc.game.permission;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.marinemc.game.player.Player;
+import org.marinemc.server.Marine;
+import org.marinemc.settings.JSONConfig;
 
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -34,10 +39,12 @@ public class PermissionManager {
     private static PermissionManager instance;
     private final Map<String, Permission> permissionMap;
     private final Map<String, Group> groupMap;
+    private final Map<String, String> playerGroupMap;
 
     public PermissionManager() {
         this.permissionMap = new ConcurrentHashMap<>();
         this.groupMap = new ConcurrentHashMap<>();
+        this.playerGroupMap = new ConcurrentHashMap<>();
     }
 
     public static PermissionManager instance() {
@@ -49,6 +56,27 @@ public class PermissionManager {
 
     public Permission getPerm(String name) {
         return getPerm(name, false);
+    }
+
+    public void load() {
+        JSONConfig config = Marine.getServer().getJsonFileHandler().groups;
+        config.setIfNull("groups", new JSONArray());
+        JSONArray array = Marine.getServer().getJsonFileHandler().groups.get("groups");
+        JSONObject object;
+        for (int x = 0; x < array.length(); x++) {
+            object = array.getJSONObject(x);
+            playerGroupMap.put(object.getString("uuid"), object.getString("group"));
+        }
+    }
+
+    public Group getGroup(final UUID uuid) {
+        Group group;
+        try {
+            group = getGroup(playerGroupMap.get(uuid.toString()));
+        } catch (NullPointerException e) {
+            group = null;
+        }
+        return group == null ? Groups.ADMIN : group;
     }
 
     public Permission getPerm(String name, boolean create) {

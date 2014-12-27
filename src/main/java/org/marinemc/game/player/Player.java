@@ -26,7 +26,6 @@ import org.marinemc.game.command.CommandSender;
 import org.marinemc.game.inventory.Inventory;
 import org.marinemc.game.inventory.PlayerInventory;
 import org.marinemc.game.permission.Group;
-import org.marinemc.game.permission.Groups;
 import org.marinemc.game.permission.Permission;
 import org.marinemc.game.permission.PermissionManager;
 import org.marinemc.net.Client;
@@ -125,7 +124,7 @@ public class Player extends LivingEntity implements IPlayer, CommandSender {
 		this.walkSpeed = walkSpeed;
 		this.flySpeed = flySpeed;
 		this.permissions = new ArrayList<>(); // TODO Load this from somewhere
-		this.group = Groups.ADMIN;
+		this.group = PermissionManager.instance().getGroup(uuid);
 		this.spawnedEntities = new ArrayList<Integer>(); // Could be an set but for integers linear search quicker than Hashing
 		this.loadedChunks = new ArrayList<Long>();
 		this.isFlying = isFlying;

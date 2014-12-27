@@ -32,6 +32,7 @@ import org.marinemc.game.command.CommandSender;
 import org.marinemc.game.command.ConsoleSender;
 import org.marinemc.game.command.ServiceProvider;
 import org.marinemc.game.commands.*;
+import org.marinemc.game.permission.PermissionManager;
 import org.marinemc.game.player.Player;
 import org.marinemc.game.scheduler.Scheduler;
 import org.marinemc.game.system.MarineSecurityManager;
@@ -122,6 +123,7 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
         EventManager.getInstance().bake();
         callEvent(new ServerReadyEvent());
         this.timer.scheduleAtFixedRate(this, 0l, (1000 / tickRate));
+        PermissionManager.instance().load();
     }
 
     @Override
@@ -149,6 +151,11 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
         for (final Command command : defaults) {
             commandManager.registerCommand(this, command);
         }
+    }
+
+    @Override
+    final public JSONFileHandler getJsonFileHandler() {
+        return this.jsonFileHandler;
     }
 
     @Override

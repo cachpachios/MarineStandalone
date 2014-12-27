@@ -27,6 +27,7 @@ import org.marinemc.game.player.Player;
 import org.marinemc.game.scheduler.Scheduler;
 import org.marinemc.net.NetworkManager;
 import org.marinemc.plugins.PluginLoader;
+import org.marinemc.settings.JSONFileHandler;
 import org.marinemc.util.Base64Image;
 import org.marinemc.util.Location;
 import org.marinemc.world.Difficulty;
@@ -50,6 +51,8 @@ public interface MarineServer {
     public boolean isOfflineMode();
 
     public void setOfflineMode(boolean n);
+
+    public JSONFileHandler getJsonFileHandler();
 
     /**
      * Get the settings folder

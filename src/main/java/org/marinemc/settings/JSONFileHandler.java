@@ -22,6 +22,8 @@ package org.marinemc.settings;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.marinemc.settings.files.BanFile;
+import org.marinemc.settings.files.PermissionFile;
+import org.marinemc.settings.files.WhitelistFile;
 
 import java.io.File;
 
@@ -32,26 +34,25 @@ import java.io.File;
  */
 public class JSONFileHandler {
 
-    private final JSONConfig administrators, banned, whitelist;
+    public final JSONConfig groups, banned, whitelist;
     private final File settingsPath, storagePath;
 
     public JSONFileHandler(final File settingsPath, final File storagePath) throws JSONException {
         this.settingsPath = settingsPath;
         this.storagePath = storagePath;
-        this.administrators = new StorageConfig(storagePath, "administrators");
-        // this.banned = new StorageConfig(storagePath, "banned");
         this.banned = new BanFile(storagePath);
-        this.whitelist = new StorageConfig(storagePath, "whitelist");
+        this.whitelist = new WhitelistFile(storagePath);
+        this.groups = new PermissionFile(storagePath);
     }
 
     public void saveAll() {
-        this.administrators.saveFile();
+        this.groups.saveFile();
         this.banned.saveFile();
         this.whitelist.saveFile();
     }
 
     public JSONObject getAdministratorJSONObject() {
-        return this.administrators.map;
+        return this.groups.map;
     }
 
     public JSONObject getBannedJSONObject() {
