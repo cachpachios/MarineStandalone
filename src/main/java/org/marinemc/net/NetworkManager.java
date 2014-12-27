@@ -19,17 +19,16 @@
 
 package org.marinemc.net;
 
+import org.marinemc.logging.Logging;
+import org.marinemc.server.Marine;
+
 import java.io.IOException;
-import java.lang.ref.WeakReference;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-
-import org.marinemc.logging.Logging;
-import org.marinemc.server.Marine;
 /**
  * @author Fozie
  */
@@ -41,16 +40,16 @@ public class NetworkManager {
     
     private ConnectionThread connector;
 
-    public NetworkManager(int port) {
+    public NetworkManager(int port, InetAddress bind) {
         clientList = new CopyOnWriteArrayList<Client>();
         
         try {
-            server = new ServerSocket(port, 100); //Port and num "queued" connections
+            server = new ServerSocket(port, 100, bind); //Port and num "queued" connections
         } catch (IOException e) {
             Logging.getLogger().fatal("Port binding failed, perhaps already in use");
             System.exit(1);
         }
-        Logging.getLogger().log("Binding to port: §c" + port);
+        Logging.getLogger().logf("Binding to {0}:{1}", bind.getHostName(), port);
         if (port != 25565) {
             Logging.getLogger().warn(
                     "You are not running on the default port (§c25565§0)");

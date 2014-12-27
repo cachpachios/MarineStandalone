@@ -104,7 +104,7 @@ public class Logging extends PrintStream {
     }
 
     public void debug(final String s) {
-        c.write(format('1', "DEBUG", s));
+        c.write(format('2', "DEBUG", s));
         String l = format("DEBUG", s);
         System.out.println(l);
         list.add(l);

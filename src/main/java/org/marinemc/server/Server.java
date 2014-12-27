@@ -54,6 +54,7 @@ import org.marinemc.world.Identifiers;
 import org.marinemc.world.World;
 
 import java.io.File;
+import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.util.Collection;
 import java.util.Timer;
@@ -78,6 +79,7 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
     private final Scheduler scheduler;
     private final Timer timer;
     private final int tickRate;
+    private InetAddress address;
     private JSONFileHandler jsonFileHandler;
     private Base64Image image;
     private Gamemode gamemode;
@@ -91,6 +93,7 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
         // Security Check Start
         System.getSecurityManager().checkPermission(MarineSecurityManager.MARINE_PERMISSION);
         // Security Check end
+        this.address = getAddress();
         this.stopping = false;
         this.timer = new Timer("mainTimer", true);
         this.port = settings.port;
@@ -98,7 +101,7 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
         this.worldManager = new WorldManager(this);
         this.playerManager = new PlayerManager();
         this.pluginLoader = new PluginLoader(new PluginManager());
-        this.networkManager = new NetworkManager(port);
+        this.networkManager = new NetworkManager(port, address);
         this.pluginFolder = new File("./plugins");
         this.storageFolder = new File("./storage");
         this.settingsFolder = new File("./settings");
@@ -116,6 +119,32 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
         this.offlineMode = ServerSettings.getInstance().offlineMode;
         // INIT :D
         init();
+    }
+
+    final public InetAddress getAddress() {
+        if (this.address == null) {
+            String addr = null;
+            try {
+                addr = ServerSettings.getInstance().host;
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
+            if (addr == null || addr.length() == 0) {
+                try {
+                    return Inet4Address.getLocalHost();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+            try {
+                return InetAddress.getByName(addr);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+        return this.address;
     }
 
     private void init() {

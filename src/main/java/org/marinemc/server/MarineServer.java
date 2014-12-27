@@ -275,6 +275,8 @@ public interface MarineServer {
 
     public boolean isBanned(InetAddress address);
 
+    public InetAddress getAddress();
+
     public void setBanned(UUID uuid, boolean b);
 
     public void setBanned(InetAddress address, boolean b);

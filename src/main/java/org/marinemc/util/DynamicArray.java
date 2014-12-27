@@ -181,6 +181,10 @@ public class DynamicArray<T extends Object> implements RandomAccess,Serializable
 			remove(i);
 	}
 
+	public void delete(final int x) {
+		remove(x);
+	}
+
 	private final class DynamicIterator implements Iterator<T> {
 
 		private int pos;
@@ -197,7 +201,7 @@ public class DynamicArray<T extends Object> implements RandomAccess,Serializable
 
 		@Override
 		public void remove() {
-			// TODO Implement
+			delete(pos);
 		}
 
 	}

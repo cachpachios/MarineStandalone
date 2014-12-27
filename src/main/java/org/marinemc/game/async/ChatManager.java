@@ -27,6 +27,8 @@ import org.marinemc.net.Client;
 import org.marinemc.net.play.clientbound.ChatPacket;
 import org.marinemc.net.play.serverbound.IncomingChatPacket;
 import org.marinemc.server.Marine;
+import org.marinemc.util.StringUtils;
+
 /**
  * A chat manager :)
  * 
@@ -49,7 +51,7 @@ public class ChatManager {
     }
 
     public static String format(String s, Player p) {
-        return translate(CHAT_FORMAT, p, s);
+        return translate(CHAT_FORMAT, p, StringUtils.chatFix(s));
     }
 
     private static String translate(String s, Object... strs) {
