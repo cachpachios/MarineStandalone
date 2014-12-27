@@ -38,10 +38,10 @@ import org.marinemc.util.Location;
 import org.marinemc.util.annotations.Cautious;
 import org.marinemc.util.annotations.Hacky;
 import org.marinemc.util.mojang.UUIDHandler;
-import org.marinemc.util.wrapper.StringWrapper;
 import org.marinemc.world.entity.EntityType;
 
 import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * The place where players are saved and accessed.
@@ -50,36 +50,35 @@ import java.util.*;
  * @author Citymonstret
  */
 public class PlayerManager {
+	private final Pattern validName;
 	private volatile  Map<Short, Player> players;
-
 	private volatile Map<String, Short> namePointers;
-	
 	private TimeoutManager timeout;
-
 	private PlayerEntityHandler localEntityHandler;
-	
+
 	public PlayerManager() {
 		players = new HashMap<Short, Player>();
 		localEntityHandler = new PlayerEntityHandler();
 		namePointers = new HashMap<String, Short>();
 		timeout = new TimeoutManager();
+		validName = Pattern.compile("^[a-zA-Z0-9_]{2,16}$");
 	}
 
 	public String login(Client client, final LoginPacket packet) {
-		//TODO: Encryption and Compression
+		// TODO: Encryption and Compression
+		// TODO Proper authentication
 
-		UUID uuid;
-		String name;
-		if (Marine.getServer().isOfflineMode()) {
-			uuid = UUIDHandler.getUuidOfflineMode(new StringWrapper(packet.name));
-			name = packet.name;
-		} else {
-			// TODO Fix this
-			uuid = UUID.fromString("5387e377-24e1-426f-8791-2f82bd0a4581");
-			name = packet.name;
+		String name = packet.name;
+		UUID uuid = UUIDHandler.instance().getUUID(name);
+
+		if (uuid == null) {
+			return "Invalid UUID";
+		}
+		if (!validName.matcher(name).matches()) {
+			return "Invalid Username";
 		}
 
-		// TODO This add the encryption stuff etc.. And then separate the following code in to another methoud that is called when encryption response is intercepted.
+		// TODO This add the encryption stuff etc.. And then separate the following code in to another method that is called when encryption response is intercepted.
 
 		Player p = new Player(
 				EntityType.PLAYER,

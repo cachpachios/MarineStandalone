@@ -19,16 +19,25 @@
 
 package org.marinemc.util.mojang;
 
-import java.util.HashMap;
-import java.util.UUID;
-
-import org.marinemc.game.player.Player;
-import org.marinemc.server.Marine;
-import org.marinemc.util.wrapper.StringWrapper;
-
 import com.google.common.base.Charsets;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.marinemc.game.player.Player;
+import org.marinemc.server.Marine;
+import org.marinemc.settings.JSONConfig;
+import org.marinemc.util.StringUtils;
+
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * UUID Handler - Undocumented!
@@ -38,110 +47,104 @@ import com.google.common.collect.HashBiMap;
 @SuppressWarnings({"unused", "javadoc"})
 public class UUIDHandler {
 
-    private final static boolean online = true;
+    private static UUIDHandler instance;
+    private final BiMap<String, String> uuidMap;
+    private final boolean online;
+    private final JSONParser parser;
+    private final JSONConfig file;
 
-    private final static BiMap<StringWrapper, UUID> uuidMap = HashBiMap.create(new HashMap<StringWrapper, UUID>());
+    public UUIDHandler() {
+        uuidMap = HashBiMap.create();
+        online = !Marine.getServer().isOfflineMode();
+        parser = new JSONParser();
+        file = new JSONConfig(Marine.getServer().getStorageFolder(), "uuids");
 
-    private static UUIDSaver uuidSaver;
-
-    protected static UUIDSaver uuidHandler() {
-        if (uuidSaver == null)
-            uuidSaver = new MarineUUIDSaver();
-        return uuidSaver;
+        Set keys = file.map.keySet();
+        String name, uuid;
+        for (Object o : keys) {
+            try {
+                uuid = o.toString();
+                name = file.map.getString(uuid);
+                add(name, UUID.fromString(uuid));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
-    public static BiMap<StringWrapper, UUID> getUuidMap() {
+    public static UUIDHandler instance() {
+        if (instance == null) {
+            instance = new UUIDHandler();
+        }
+        return instance;
+    }
+
+    public void save() {
+        for (Map.Entry<String, String> entries : uuidMap.entrySet()) {
+            file.setIfNull(entries.getValue(), entries.getKey());
+        }
+        file.saveFile();
+    }
+
+    public Map<String, String> getMap() {
         return uuidMap;
     }
 
-    public static boolean uuidExists(final UUID uuid) {
-        return uuidMap.containsValue(uuid);
+    private void add(final String name, final UUID uuid) {
+        if (!uuidMap.containsKey(name) && !uuidMap.inverse().containsKey(uuid.toString())) {
+            uuidMap.put(name, uuid.toString());
+        }
     }
 
-    public static boolean nameExists(final StringWrapper name) {
+    public boolean uuidExists(final UUID uuid) {
+        return uuidMap.inverse().containsKey(uuid.toString());
+    }
+
+    public boolean nameExist(final String name) {
         return uuidMap.containsKey(name);
     }
 
-    public static void add(final StringWrapper name, final UUID uuid) {
-        if (!uuidMap.containsKey(name) && !uuidMap.inverse().containsKey(uuid)) {
-            uuidMap.put(name, uuid);
+    public UUID getUUID(final String name) {
+        if (nameExist(name)) {
+            return UUID.fromString(uuidMap.get(name));
         }
-    }
-
-    /**
-     * @param name to use as key
-     * @return uuid
-     */
-    public static UUID getUUID(final String name) {
-        final StringWrapper nameWrap = new StringWrapper(name);
-        if (uuidMap.containsKey(nameWrap)) {
-            return uuidMap.get(nameWrap);
-        }
-        @SuppressWarnings("deprecation")
         final Player player = Marine.getPlayer(name);
         if (player != null) {
             final UUID uuid = player.getUUID();
-            add(nameWrap, uuid);
+            add(name, uuid);
             return uuid;
         }
-        UUID uuid;
         if (online) {
-            if ((uuid = getUuidOnlinePlayer(nameWrap)) != null) {
-                return uuid;
-            }
             try {
-                return uuidHandler().mojangUUID(name);
-
-            } catch (final Exception e) {
-                /*try {
-                    final UUIDFetcher fetcher = new UUIDFetcher(Arrays.asList(name));
-                    uuid = fetcher.call().get(name);
-                    add(nameWrap, uuid);
-                } catch (final Exception ex) {
-                    ex.printStackTrace();
-                }*/
+                UUID uuid = getMojangUUID(name);
+                add(name, uuid);
+                return uuid;
+            } catch (Throwable e) {
+                e.printStackTrace();
             }
         } else {
-            return getUuidOfflineMode(nameWrap);
+            return getUuidOfflineMode(name);
         }
         return null;
     }
 
-    /**
-     * @param uuid to use as key
-     * @return name (cache)
-     */
-    private static StringWrapper loopSearch(final UUID uuid) {
-        return uuidMap.inverse().get(uuid);
-    }
-
-    /**
-     * @param uuid to use as key
-     * @return Name
-     */
-    public static String getName(final UUID uuid) {
+    public String getName(final UUID uuid) {
         if (uuidExists(uuid)) {
-            return loopSearch(uuid).value;
+            return uuidMap.inverse().get(uuid.toString());
         }
-        String name;
-        if ((name = getNameOnlinePlayer(uuid)) != null) {
+        final Player player = Marine.getPlayer(uuid);
+        if (player != null) {
+            final String name = player.getUserName();
+            add(name, uuid);
             return name;
         }
-       /* if ((name = getNameOfflinePlayer(uuid)) != null) {
-            return name;
-        }*/
         if (online) {
             try {
-                return uuidHandler().mojangName(uuid);
-            } catch (final Exception e) {
-                /*try {
-                    final NameFetcher fetcher = new NameFetcher(Arrays.asList(uuid));
-                    name = fetcher.call().get(uuid);
-                    add(new StringWrapper(name), uuid);
-                    return name;
-                } catch (final Exception ex) {
-                    ex.printStackTrace();
-                }*/
+                String name = getMojangName(uuid);
+                add(name, uuid);
+                return name;
+            } catch (Throwable e) {
+                e.printStackTrace();
             }
         } else {
             return "unknown";
@@ -153,51 +156,46 @@ public class UUIDHandler {
      * @param name to use as key
      * @return UUID (name hash)
      */
-    public static UUID getUuidOfflineMode(final StringWrapper name) {
+    public UUID getUuidOfflineMode(final String name) {
         final UUID uuid = UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes(Charsets.UTF_8));
         add(name, uuid);
         return uuid;
     }
 
-    /**
-     * @param uuid to use as key
-     * @return String - name
-     */
-    private static String getNameOnlinePlayer(final UUID uuid) {
-        final Player player = Marine.getPlayer(uuid);
-        if ((player == null) || !player.isOnline()) {
-            return null;
+    private String getMojangName(UUID uuid) throws Throwable {
+        HttpURLConnection connection = (HttpURLConnection) new URL("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid.toString().replace("-", "")).openConnection();
+        JSONObject response = (JSONObject) parser.parse(new InputStreamReader(connection.getInputStream()));
+        if (response.get("cause") != null) {
+            throw new IllegalStateException(response.get("errorMessage").toString());
         }
-        final String name = player.getUserName();
-        add(new StringWrapper(name), uuid);
+        String name = response.get("name").toString();
+        connection.disconnect();
         return name;
     }
 
-    /*
-    private static String getNameOfflinePlayer(final UUID uuid) {
-        final OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
-        if ((player == null) || !player.hasPlayedBefore()) {
-            return null;
+    private UUID getMojangUUID(String name) throws Throwable {
+        HttpURLConnection connection = (HttpURLConnection) (new URL("https://api.mojang.com/profiles/minecraft").openConnection());
+        connection.setRequestMethod("POST");
+        connection.setRequestProperty("Content-Type", "application/json");
+        connection.setUseCaches(false);
+        connection.setDoInput(true);
+        connection.setDoOutput(true);
+        String request = JSONArray.toJSONString(Arrays.asList(name));
+        {
+            final OutputStream stream = connection.getOutputStream();
+            stream.write(request.getBytes());
+            stream.flush();
+            stream.close();
         }
-        final String name = player.getName();
-        add(new StringWrapper(name), uuid);
-        return name;
-    }*/
-
-
-    /**
-     * @param name to use as key
-     * @return UUID
-     */
-    private static UUID getUuidOnlinePlayer(final StringWrapper name) {
-        @SuppressWarnings("deprecation")
-        final Player player = Marine.getPlayer(name.value);
-        if (player == null) {
-            return null;
+        final JSONArray array = (JSONArray) parser.parse(new InputStreamReader(connection.getInputStream()));
+        UUID uuid = null;
+        for (Object o : array) {
+            uuid = UUID.fromString(StringUtils.fixUUID(((JSONObject) o).get("id").toString()));
         }
-        final UUID uuid = player.getUUID();
-        add(name, uuid);
+        connection.disconnect();
+        if (uuid == null) {
+            throw new NullPointerException("Couldn't fetch the uuid");
+        }
         return uuid;
     }
-
 }

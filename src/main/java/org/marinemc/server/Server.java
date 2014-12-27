@@ -47,6 +47,7 @@ import org.marinemc.settings.ServerSettings;
 import org.marinemc.util.Base64Image;
 import org.marinemc.util.Location;
 import org.marinemc.util.StartSettings;
+import org.marinemc.util.mojang.UUIDHandler;
 import org.marinemc.world.Difficulty;
 import org.marinemc.world.Gamemode;
 import org.marinemc.world.Identifiers;
@@ -128,6 +129,7 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
         callEvent(new ServerReadyEvent());
         this.timer.scheduleAtFixedRate(this, 0l, (1000 / tickRate));
         PermissionManager.instance().load();
+        UUIDHandler.instance(); // Make sure to init.
     }
 
     @Override
@@ -333,6 +335,9 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
                     player.getClient().sendPacket(new KickPacket(ChatColor.red + ChatColor.bold + "Server stopped"));
                 }
                 Logging.getLogger().info("Plugin Handler Shutting Down");
+                // Cache UUIDs
+                Logging.getLogger().info("Caching UUIDs");
+                UUIDHandler.instance().save();
                 // Disable all plugins
                 pluginLoader.disableAllPlugins();
                 // Should not run, smart stuff

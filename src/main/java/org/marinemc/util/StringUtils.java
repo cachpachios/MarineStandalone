@@ -109,4 +109,33 @@ public class StringUtils {
         return s;
     }
 
+    public static String[] toStringArray(Object... objects) {
+        String[] r = new String[objects.length];
+        for (int x = 0; x < objects.length; x++) {
+            r[x] = objects[x].toString();
+        }
+        return r;
+    }
+
+    public static String chatFix(String message) {
+        message = message.substring(0, 119);
+        if (message.length() > 65) {
+            message = message.substring(0, 65) + "\n" + message.substring(65);
+        }
+        return message;
+    }
+
+    public static String fixUUID(String uuid) {
+        uuid = uuid.replace("-", "");
+        return
+                uuid.substring(0, 8)
+                        + "-"
+                        + uuid.substring(8, 12)
+                        + "-"
+                        + uuid.substring(12, 16)
+                        + "-"
+                        + uuid.substring(16, 20)
+                        + "-"
+                        + uuid.substring(20, 32);
+    }
 }
