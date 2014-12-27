@@ -20,12 +20,10 @@
 package org.marinemc.settings.files;
 
 import org.json.JSONArray;
-import org.marinemc.game.player.Player;
 import org.marinemc.settings.StorageConfig;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.net.InetAddress;
 import java.util.UUID;
 
 /**
@@ -35,23 +33,67 @@ import java.util.UUID;
  */
 public class BanFile extends StorageConfig {
 
+    private JSONArray players, ips;
+
     public BanFile(File file) {
         super(file, "banned");
+        setIfNull("players", new JSONArray());
+        setIfNull("ips", new JSONArray());
+        players = get("players");
+        ips = get("ips");
     }
 
-    public boolean contains(Player player) {
-        return contains(player.getUUID());
+    @Override
+    public void saveFile() {
+        set("players", players);
+        super.saveFile();
     }
 
-    public Collection<UUID> getBannedUUIDs() {
-        JSONArray array = get("players");
-        Collection<UUID> c = new ArrayList<>();
-        Object o;
-        for (int x = 0; x < array.length(); x++) {
-            if ((o = array.get(x)) instanceof String) {
-                c.add(UUID.fromString(o.toString()));
+    public void setBanned(UUID uuid, boolean b) {
+        for (int x = 0; x < players.length(); x++) {
+            if (players.getString(x).equals(uuid.toString())) {
+                if (!b)
+                    players.remove(x);
+                return;
             }
         }
-        return c;
+        if (b) {
+            players.put(uuid.toString());
+        } else {
+            throw new UnsupportedOperationException("You cannot unban a player unless it's banned");
+        }
+    }
+
+    public void setBanned(InetAddress address, boolean b) {
+        for (int x = 0; x < ips.length(); x++) {
+            if (ips.getString(x).equals(address.getHostAddress())) {
+                if (!b) {
+                    ips.remove(x);
+                }
+                return;
+            }
+        }
+        if (b) {
+            ips.put(address.getHostAddress());
+        } else {
+            throw new UnsupportedOperationException("You cannot unban an address unless it's banned!");
+        }
+    }
+
+    public boolean isBanned(InetAddress address) {
+        for (int x = 0; x < ips.length(); x++) {
+            if (ips.getString(x).equals(address.getHostAddress())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isBanned(UUID uuid) {
+        for (int x = 0; x < players.length(); x++) {
+            if (players.getString(x).equals(uuid.toString()))
+                return true;
+        }
+        return false;
     }
 }

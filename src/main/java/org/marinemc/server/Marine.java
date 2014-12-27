@@ -198,7 +198,7 @@ public class Marine {
      * @return boolean (banned)
      */
     public static boolean isBanned(final UUID uuid) {
-        return false;
+        return server.isBanned(uuid);
     }
 
     /**
@@ -208,7 +208,7 @@ public class Marine {
      * @return boolean (banned)
      */
     public static boolean isBanned(final InetAddress address) {
-        return false;
+        return server.isBanned(address);
     }
     
     /**

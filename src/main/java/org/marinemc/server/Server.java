@@ -53,6 +53,7 @@ import org.marinemc.world.Identifiers;
 import org.marinemc.world.World;
 
 import java.io.File;
+import java.net.InetAddress;
 import java.util.Collection;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -345,6 +346,26 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
                 System.exit(0);
             }
         });
+    }
+
+    @Override
+    final public boolean isBanned(final UUID uuid) {
+        return jsonFileHandler.banned.isBanned(uuid);
+    }
+
+    @Override
+    final public boolean isBanned(final InetAddress address) {
+        return jsonFileHandler.banned.isBanned(address);
+    }
+
+    @Override
+    final public void setBanned(InetAddress address, boolean b) {
+        jsonFileHandler.banned.setBanned(address, b);
+    }
+
+    @Override
+    final public void setBanned(UUID uuid, boolean b) {
+        jsonFileHandler.banned.setBanned(uuid, b);
     }
 
     @Override

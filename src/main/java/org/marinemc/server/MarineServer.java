@@ -35,6 +35,7 @@ import org.marinemc.world.Gamemode;
 import org.marinemc.world.World;
 
 import java.io.File;
+import java.net.InetAddress;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -269,4 +270,12 @@ public interface MarineServer {
     public void stop();
 
     public boolean isStopping();
+
+    public boolean isBanned(UUID u);
+
+    public boolean isBanned(InetAddress address);
+
+    public void setBanned(UUID uuid, boolean b);
+
+    public void setBanned(InetAddress address, boolean b);
 }
