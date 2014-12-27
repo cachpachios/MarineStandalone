@@ -43,7 +43,7 @@ public class ServerSettings {
     public String host = "0.0.0.0";
     public String motd = "&cNo MOTD";
     public String gamemode = "survival";
-    public boolean useHasing, offlineMode;
+    public boolean useHasing, offlineMode, whitelist;
     public String difficulty = "peaceful";
     private Properties config;
 
@@ -71,6 +71,7 @@ public class ServerSettings {
                     put("difficulty", "peaceful");
                     put("maxPlayers", "20");
                     put("offlineMode", "false");
+                    put("whitelist", "false");
                 }
             };
 
@@ -95,6 +96,7 @@ public class ServerSettings {
             this.difficulty = config.getProperty("difficulty");
             this.maxPlayers = getInt(config.getProperty("maxPlayers"));
             this.offlineMode = getBoolean(config.getProperty("offlineMode"));
+            this.whitelist = getBoolean(config.getProperty("whitelist"));
             reader.close();
         } catch (Exception e) {
             e.printStackTrace();

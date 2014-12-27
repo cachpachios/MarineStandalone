@@ -349,6 +349,16 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
     }
 
     @Override
+    final public boolean usingWhitelist() {
+        return ServerSettings.getInstance().whitelist;
+    }
+
+    @Override
+    final public boolean isWhitelisted(final Player player) {
+        return false; // TODO Implement
+    }
+
+    @Override
     final public boolean isBanned(final UUID uuid) {
         return jsonFileHandler.banned.isBanned(uuid);
     }

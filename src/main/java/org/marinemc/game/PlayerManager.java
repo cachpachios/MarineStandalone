@@ -108,6 +108,9 @@ public class PlayerManager {
 		if (!preEvent.isAllowed()) {
 			return preEvent.getMessage(); // Is banned or something xD
 		}
+		if (Marine.getServer().usingWhitelist() && !Marine.getServer().isWhitelisted(p)) {
+			return "You are not whitelisted";
+		}
 		if (Marine.isBanned(client.getAdress())) {
 			return "Your IP is banned from the server";
 		}

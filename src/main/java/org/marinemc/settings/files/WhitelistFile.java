@@ -30,7 +30,10 @@ import java.io.File;
  */
 public class WhitelistFile extends StorageConfig {
 
+
     public WhitelistFile(File file) {
         super(file, "whitelist");
     }
+
+
 }
