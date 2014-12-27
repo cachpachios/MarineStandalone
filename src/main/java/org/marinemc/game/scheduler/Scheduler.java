@@ -130,7 +130,7 @@ public class Scheduler {
     /**
      * Do not use this, unless you're a singleton server...
      */
-    final public void tickSync() {
+    final synchronized public void tickSync() {
         for (final long n : syncRunnables.keySet()) {
             syncRunnables.get(n).tick(this, n);
         }

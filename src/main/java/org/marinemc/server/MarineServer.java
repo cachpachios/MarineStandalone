@@ -267,4 +267,6 @@ public interface MarineServer {
      * Stop the server
      */
     public void stop();
+
+    public boolean isStopping();
 }

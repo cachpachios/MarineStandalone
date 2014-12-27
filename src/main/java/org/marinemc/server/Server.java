@@ -34,6 +34,7 @@ import org.marinemc.game.command.ServiceProvider;
 import org.marinemc.game.commands.*;
 import org.marinemc.game.permission.PermissionManager;
 import org.marinemc.game.player.Player;
+import org.marinemc.game.scheduler.MarineRunnable;
 import org.marinemc.game.scheduler.Scheduler;
 import org.marinemc.game.system.MarineSecurityManager;
 import org.marinemc.logging.Logging;
@@ -82,11 +83,13 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
     private String motd;
     private int maxPlayers;
     private boolean offlineMode;
+    private boolean stopping;
 
     public Server(final StartSettings settings) {
         // Security Check Start
         System.getSecurityManager().checkPermission(MarineSecurityManager.MARINE_PERMISSION);
         // Security Check end
+        this.stopping = false;
         this.timer = new Timer("mainTimer", true);
         this.port = settings.port;
         this.tickRate = settings.tickrate;
@@ -124,6 +127,11 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
         callEvent(new ServerReadyEvent());
         this.timer.scheduleAtFixedRate(this, 0l, (1000 / tickRate));
         PermissionManager.instance().load();
+    }
+
+    @Override
+    final public boolean isStopping() {
+        return this.stopping;
     }
 
     @Override
@@ -315,22 +323,28 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
 
     @Override
     final public void stop() {
-        Logging.getLogger().info("Shutting down...");
-        for (final Player player : getPlayers()) {
-            player.getClient().sendPacket(new KickPacket(ChatColor.red + ChatColor.bold + "Server stopped"));
-        }
-        Logging.getLogger().info("Plugin Handler Shutting Down");
-        // Disable all plugins
-        pluginLoader.disableAllPlugins();
-        // Should not run, smart stuff
-        timer.cancel();
-        // Save all json configs
-        Logging.getLogger().info("Saving JSON Files");
-        jsonFileHandler.saveAll();
-        // Logging stop
-        Logging.getLogger().saveLog();
-        // When finished
-        System.exit(0);
+        stopping = true;
+        scheduler.createSyncTask(new MarineRunnable(this, 5, 1) {
+            @Override
+            public void run() {
+                Logging.getLogger().info("Shutting down...");
+                for (final Player player : getPlayers()) {
+                    player.getClient().sendPacket(new KickPacket(ChatColor.red + ChatColor.bold + "Server stopped"));
+                }
+                Logging.getLogger().info("Plugin Handler Shutting Down");
+                // Disable all plugins
+                pluginLoader.disableAllPlugins();
+                // Should not run, smart stuff
+                timer.cancel();
+                // Save all json configs
+                Logging.getLogger().info("Saving JSON Files");
+                jsonFileHandler.saveAll();
+                // Logging stop
+                Logging.getLogger().saveLog();
+                // When finished
+                System.exit(0);
+            }
+        });
     }
 
     @Override
