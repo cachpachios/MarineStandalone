@@ -19,6 +19,7 @@
 
 package org.marinemc.net;
 
+import org.marinemc.Bootstrap;
 import org.marinemc.logging.Logging;
 import org.marinemc.server.Marine;
 
@@ -94,8 +95,8 @@ public class NetworkManager {
     }
 
     private void terminate(Client client) {
-        if (client.getState() != States.INGAME)
-            Logging.getLogger().info("Client Ping Terminated At: " + client.getAdress().getHostAddress() + ":" + client.getConnection().getPort());
+        if (client.getState() != States.INGAME && Bootstrap.debug())
+            Logging.getLogger().debug("Client Ping Terminated At: " + client.getAdress().getHostAddress() + ":" + client.getConnection().getPort());
         else {
         	if(client.getUID() != -1)
         		Marine.getServer().getPlayerManager().removePlayer(client.getUID());
