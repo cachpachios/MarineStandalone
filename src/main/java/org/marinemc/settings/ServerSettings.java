@@ -40,6 +40,7 @@ public class ServerSettings {
     public int port = 25565;
     public int tickrate = 20;
     public int maxPlayers = 20;
+    public int cacheHours = 720;
     public String host = "0.0.0.0";
     public String motd = "&cNo MOTD";
     public String gamemode = "survival";
@@ -71,6 +72,7 @@ public class ServerSettings {
                     put("difficulty", "peaceful");
                     put("maxPlayers", "20");
                     put("offlineMode", "false");
+                    put("cacheHours", "720");
                     put("whitelist", "false");
                 }
             };
@@ -97,6 +99,7 @@ public class ServerSettings {
             this.maxPlayers = getInt(config.getProperty("maxPlayers"));
             this.offlineMode = getBoolean(config.getProperty("offlineMode"));
             this.whitelist = getBoolean(config.getProperty("whitelist"));
+            this.cacheHours = getInt(config.getProperty("cacheHours"));
             reader.close();
         } catch (Exception e) {
             e.printStackTrace();

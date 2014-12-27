@@ -30,6 +30,7 @@ import org.marinemc.game.player.Player;
 import org.marinemc.logging.Logging;
 import org.marinemc.server.Marine;
 import org.marinemc.settings.JSONConfig;
+import org.marinemc.settings.ServerSettings;
 import org.marinemc.util.StringUtils;
 
 import java.io.InputStreamReader;
@@ -65,13 +66,14 @@ public class UUIDHandler {
         String name, uuid;
         double since;
         org.json.JSONObject object;
+        int hours = ServerSettings.getInstance().cacheHours;
         for (Object o : keys) {
             try {
                 uuid = o.toString();
                 object = file.get(uuid);
                 name = object.getString("name");
                 since = hoursSince(object.getLong("time"));
-                if (since < 720 /* 30 days */) {
+                if (since < hours) {
                     if (Bootstrap.debug()) {
                         Logging.getLogger().debug(
                                 StringUtils.format("Cache - UUID: {0}, Username: {1}, Time since {2}", uuid, name, since)
@@ -81,7 +83,7 @@ public class UUIDHandler {
                 } else {
                     if (Bootstrap.debug()) {
                         Logging.getLogger().debug(
-                                StringUtils.format("Cache - UUID {0} (username: {1}) is older than 30 days, removing from cache", uuid, name)
+                                StringUtils.format("Cache - UUID {0} (username: {1}) is older than {2} hours, removing from cache", uuid, name, hours)
                         );
                         file.map.remove(uuid);
                     }
