@@ -282,4 +282,6 @@ public interface MarineServer {
     public boolean usingWhitelist();
 
     public boolean isWhitelisted(Player player);
+
+    public void setWhitelisted(UUID uuid, boolean b);
 }

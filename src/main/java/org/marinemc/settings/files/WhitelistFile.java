@@ -19,9 +19,11 @@
 
 package org.marinemc.settings.files;
 
+import org.json.JSONArray;
 import org.marinemc.settings.StorageConfig;
 
 import java.io.File;
+import java.util.UUID;
 
 /**
  * Created 2014-12-27 for MarineStandalone
@@ -30,10 +32,42 @@ import java.io.File;
  */
 public class WhitelistFile extends StorageConfig {
 
+    private JSONArray array;
 
     public WhitelistFile(File file) {
         super(file, "whitelist");
+        setIfNull("players", new JSONArray());
+        array = get("players");
     }
 
+    @Override
+    public void saveFile() {
+        set("players", array);
+        super.saveFile();
+    }
 
+    public void setWhitelisted(UUID uuid, boolean b) {
+        for (int x = 0; x < array.length(); x++) {
+            if (array.getString(x).equals(uuid.toString())) {
+                if (!b) {
+                    array.remove(x);
+                }
+                return;
+            }
+        }
+        if (b) {
+            array.put(uuid.toString());
+        } else {
+            throw new UnsupportedOperationException("You cannot remove someone from the whitelist, unless they're added");
+        }
+    }
+
+    public boolean isWhitelisted(UUID uuid) {
+        for (int x = 0; x < array.length(); x++) {
+            if (array.getString(x).equals(uuid.toString())) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

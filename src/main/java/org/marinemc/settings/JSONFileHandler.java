@@ -34,7 +34,8 @@ import java.io.File;
  */
 public class JSONFileHandler {
 
-    public final JSONConfig groups, whitelist;
+    public final JSONConfig groups;
+    public final WhitelistFile whitelist;
     public final BanFile banned;
     private final File settingsPath, storagePath;
 
