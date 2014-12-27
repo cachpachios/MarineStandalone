@@ -25,7 +25,9 @@ import com.google.common.collect.HashBiMap;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.marinemc.Bootstrap;
 import org.marinemc.game.player.Player;
+import org.marinemc.logging.Logging;
 import org.marinemc.server.Marine;
 import org.marinemc.settings.JSONConfig;
 import org.marinemc.util.StringUtils;
@@ -61,11 +63,29 @@ public class UUIDHandler {
 
         Set keys = file.map.keySet();
         String name, uuid;
+        double since;
+        org.json.JSONObject object;
         for (Object o : keys) {
             try {
                 uuid = o.toString();
-                name = file.map.getString(uuid);
-                add(name, UUID.fromString(uuid));
+                object = file.get(uuid);
+                name = object.getString("name");
+                since = hoursSince(object.getLong("time"));
+                if (since < 720 /* 30 days */) {
+                    if (Bootstrap.debug()) {
+                        Logging.getLogger().debug(
+                                StringUtils.format("Cache - UUID: {0}, Username: {1}, Time since {2}", uuid, name, since)
+                        );
+                    }
+                    add(name, UUID.fromString(uuid));
+                } else {
+                    if (Bootstrap.debug()) {
+                        Logging.getLogger().debug(
+                                StringUtils.format("Cache - UUID {0} (username: {1}) is older than 30 days, removing from cache", uuid, name)
+                        );
+                        file.map.remove(uuid);
+                    }
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -79,9 +99,18 @@ public class UUIDHandler {
         return instance;
     }
 
+    public double hoursSince(long time) {
+        long difference = System.currentTimeMillis() - time;
+        return (double) (difference / 1000 / 3600);
+    }
+
     public void save() {
+        org.json.JSONObject o;
         for (Map.Entry<String, String> entries : uuidMap.entrySet()) {
-            file.setIfNull(entries.getValue(), entries.getKey());
+            o = new org.json.JSONObject();
+            o.put("name", entries.getKey());
+            o.put("time", System.currentTimeMillis());
+            file.setIfNull(entries.getValue(), o);
         }
         file.saveFile();
     }
