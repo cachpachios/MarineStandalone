@@ -17,7 +17,7 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package org.marinemc.util;
+package org.marinemc.util.operations;
 
 /**
  * Alike Java 8's Consumer class but rewritten for java 7/6 users by Fozie

@@ -17,14 +17,15 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package org.marinemc.util;
+package org.marinemc.util.operations;
 
 /**
- * Operation Class
+ * A filtered ArgumentOperation
  *
  * @author Citymonstret
  */
-public interface Operation {
+public interface Filter<T> {
 
-    public void action();
+    public boolean filter(T t);
+
 }
