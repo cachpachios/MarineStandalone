@@ -62,12 +62,34 @@ public class UUIDHandler {
         parser = new JSONParser();
         file = new JSONConfig(Marine.getServer().getStorageFolder(), "uuids");
 
+        if (!file.contains("information")) {
+            org.json.JSONObject info = new org.json.JSONObject();
+            info.put("mode", online);
+            file.map.put("information", info);
+        }
+
+        org.json.JSONObject info = file.get("information");
+
+        boolean remove = false;
+        if (info.getBoolean("mode") != online) {
+            Logging.getLogger().info("Clearing the UUID cache -> Server Modes not matching");
+            remove = true;
+            info.put("mode", online);
+        }
+
         Set keys = file.map.keySet();
         String name, uuid;
         double since;
         org.json.JSONObject object;
         int hours = ServerSettings.getInstance().cacheHours;
         for (Object o : keys) {
+            if (o.toString().equals("information")) {
+                continue;
+            }
+            if (remove) {
+                file.map.remove(o.toString());
+                continue;
+            }
             try {
                 uuid = o.toString();
                 object = file.get(uuid);
