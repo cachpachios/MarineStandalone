@@ -19,47 +19,50 @@
 
 package org.marinemc.util;
 
-import org.marinemc.io.Base64Encoding;
-import org.marinemc.io.BinaryFile;
-
-import java.io.File;
-import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Map;
 
 /**
- * Created 2014-12-21 for MarineStandalone
+ * Created 2014-12-28 for MarineStandalone
  *
  * @author Citymonstret
  */
-public class Base64Image {
+public class Assert {
 
-    private final File file;
-    private final String string;
-
-    public Base64Image(final File file) {
-        if (file == null) {
-            this.file = null;
-            this.string = "";
-            return;
+    public static <T> void notNull(T t) {
+        if (t == null || (t instanceof String && t.equals(""))) {
+            throw new NullPointerException("Unsupported null");
         }
-        if (!file.exists()) {
-            throw new IllegalArgumentException("File cannot be null, and has to exist");
-        }
-        BinaryFile f = new BinaryFile(file);
-        try {
-            f.readBinary();
-        } catch (final IOException e) {
-            throw new RuntimeException("Unable to read in the binary data", e);
-        }
-        this.string = new String(Base64Encoding.encode(f.getData().getBytes()));
-        this.file = file;
     }
 
-    public File getFile() {
-        return this.file;
+    public static <T> void compare(T t, T w) {
+        if (!t.equals(w)) {
+            throw new AssertionError("t != w");
+        }
     }
 
-    @Override
-    public String toString() {
-        return this.string;
+    public static void notNull(Object... objects) {
+        for (Object o : objects) {
+            notNull(o);
+        }
+    }
+
+    public static void contains(Object[] t, Object o) {
+        contains(Arrays.asList(t), o);
+    }
+
+    public static <T> void contains(T t, Object o) {
+        boolean c = false;
+        if (t instanceof Map) {
+            c = ((Map) t).containsKey(o);
+        } else if (t instanceof Collection) {
+            c = ((Collection) t).contains(o);
+        } else {
+            throw new IllegalArgumentException("T is not a collection or a map");
+        }
+        if (!c) {
+            throw new AssertionError("t doesn't contain o");
+        }
     }
 }

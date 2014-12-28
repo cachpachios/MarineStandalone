@@ -26,6 +26,7 @@ import org.marinemc.game.chat.ChatColor;
 import org.marinemc.game.command.Command;
 import org.marinemc.game.command.ServiceProvider;
 import org.marinemc.logging.Logging;
+import org.marinemc.util.Assert;
 
 import java.io.File;
 import java.util.UUID;
@@ -65,6 +66,7 @@ public class Plugin implements ServiceProvider {
     }
 
     final public void create(final PluginFile desc, final File data, final PluginClassLoader classLoader) {
+        Assert.notNull(desc, data, classLoader);
         if (this.desc != null)
             throw new RuntimeException("Plugin already created: " + desc.name);
         this.desc = desc;
@@ -200,7 +202,7 @@ public class Plugin implements ServiceProvider {
     }
 
     @Override
-    public boolean equals(Object object) {
+    public boolean equals(final Object object) {
         return object instanceof Plugin && ((Plugin) object).getUUID().equals(getUUID());
     }
 
@@ -221,7 +223,7 @@ public class Plugin implements ServiceProvider {
 
     @Override
     final public byte getProviderPriority() {
-        return (byte) 0x01;
+        return 0x01;
     }
 
     /**
@@ -230,7 +232,8 @@ public class Plugin implements ServiceProvider {
      *
      * @param command Command
      */
-    final public void addCommand(Command command) {
+    final public void addCommand(final Command command) {
+        Assert.notNull(command);
         CommandManager.getInstance().registerCommand(this, command);
     }
 
@@ -240,7 +243,8 @@ public class Plugin implements ServiceProvider {
      *
      * @param listener Listener to register
      */
-    public void registerListener(final EventListener listener) {
+    final public void registerListener(final EventListener listener) {
+        Assert.notNull(listener);
         listener.setIDENTIFIERObject__DO_NOT_USE__(this);
         EventManager.getInstance().addListener(listener);
     }

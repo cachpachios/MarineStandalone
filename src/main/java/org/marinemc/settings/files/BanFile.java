@@ -21,6 +21,7 @@ package org.marinemc.settings.files;
 
 import org.json.JSONArray;
 import org.marinemc.settings.StorageConfig;
+import org.marinemc.util.Assert;
 
 import java.io.File;
 import java.net.InetAddress;
@@ -50,6 +51,7 @@ public class BanFile extends StorageConfig {
     }
 
     public void setBanned(UUID uuid, boolean b) {
+        Assert.notNull(uuid);
         for (int x = 0; x < players.length(); x++) {
             if (players.getString(x).equals(uuid.toString())) {
                 if (!b)
@@ -65,6 +67,7 @@ public class BanFile extends StorageConfig {
     }
 
     public void setBanned(InetAddress address, boolean b) {
+        Assert.notNull(address);
         for (int x = 0; x < ips.length(); x++) {
             if (ips.getString(x).equals(address.getHostAddress())) {
                 if (!b) {

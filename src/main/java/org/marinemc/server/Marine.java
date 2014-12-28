@@ -112,9 +112,8 @@ public class Marine {
         return server;
     }
 
-    // IGNORE
     @Protected
-    public static void setServer(final MarineServer marine) {
+    protected static void setServer(final MarineServer marine) {
         // Security Check Start
         System.getSecurityManager().checkPermission(MarineSecurityManager.MARINE_PERMISSION);
         // Security Check end
@@ -185,6 +184,12 @@ public class Marine {
         Logging.getLogger().log("Raw Chat Sent: " + chat.toString());
     }
 
+    /**
+     * Broadcast a message to all players with the specified permission
+     *
+     * @param permission Required Permission
+     * @param message    Message To Send
+     */
     public static void broadcast(final Permission permission, final String message) {
         foreach(new PermissionFilter(permission, new PlayerOperation() {
             @Override
@@ -230,8 +235,13 @@ public class Marine {
      */
 	public static World getMainWorld() {
 		return getServer().getWorldManager().getMainWorld();
-	}
+    }
 
+    /**
+     * Perform an action for each online player
+     *
+     * @param o Operation to perform
+     */
     public static void foreach(final ArgumentOperation<Player> o) {
         for (final Player player : getPlayers()) {
             o.accept(player);

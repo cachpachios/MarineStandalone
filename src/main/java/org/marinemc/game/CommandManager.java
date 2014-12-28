@@ -44,12 +44,13 @@ public class CommandManager {
     }
 
     public static CommandManager getInstance() {
-        if (instance == null)
+        if (instance == null) {
             instance = new CommandManager();
+        }
         return instance;
     }
 
-    public Command getCommand(String cmd) {
+    public Command getCommand(final String cmd) {
         try {
             return stringMap.get(cmd);
         } catch (NullPointerException e) {

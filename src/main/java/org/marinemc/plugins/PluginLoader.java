@@ -96,7 +96,7 @@ public class PluginLoader {
     public void checkIllegal(final PluginFile desc) {
         final String main = desc.mainClass;
         for (final String blocked : BLOCKED_NAMES)
-            if (main.contains(blocked))
+            if (main.toLowerCase().contains(blocked))
                 throw new PluginHandlerException(this, "Plugin " + desc.name + " contains illegal main class path");
     }
 
@@ -121,15 +121,15 @@ public class PluginLoader {
                 manager.addPlugin(loader.plugin);
                 if (new File(loader.getData(), "lib").exists()) {
                     File[] fs = new File(loader.getData(), "lib").listFiles(new JarFilter());
-                    for (File f : fs) {
+                    for (final File f : fs) {
                         try {
                             loader.loadJar(f);
-                        } catch (Exception e) {
+                        } catch (final Exception e) {
                             new PluginHandlerException(this, "Could not load in lib " + f.getName(), e).printStackTrace();
                         }
                     }
                 }
-            } catch (PluginHandlerException e) {
+            } catch (final PluginHandlerException e) {
                 Logging.getLogger().log("Could not load in plugin: " + file.getName());
                 e.printStackTrace();
             }
@@ -149,10 +149,10 @@ public class PluginLoader {
      * Disable all plugins
      */
     public void disableAllPlugins() {
-        for (Plugin plugin : manager.getPlugins()) {
+        for (final Plugin plugin : manager.getPlugins()) {
             try {
                 disablePlugin(plugin);
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 new PluginHandlerException(this, "Could not properly disable " + plugin.getName(), e).printStackTrace();
             }
         }
@@ -180,7 +180,7 @@ public class PluginLoader {
         PluginClassLoader loader;
         try {
             loader = new PluginClassLoader(this, desc, file);
-        } catch (MalformedURLException e) {
+        } catch (final MalformedURLException e) {
             throw new PluginHandlerException(this, "Could not get the PluginClassLoader", e);
         }
         loaders.put(desc.name, loader);
@@ -198,12 +198,12 @@ public class PluginLoader {
             return classes.get(name);
         Class clazz;
         PluginClassLoader loader;
-        for (String current : loaders.keySet()) {
+        for (final String current : loaders.keySet()) {
             loader = loaders.get(current);
             try {
                 if ((clazz = loader.findClass(name, false)) != null)
                     return clazz;
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 e.printStackTrace();
             }
         }
@@ -239,12 +239,12 @@ public class PluginLoader {
      */
     public void enablePlugin(final Plugin plugin) {
         if (!plugin.isEnabled()) {
-            String name = plugin.getName();
+            final String name = plugin.getName();
             if (!loaders.containsKey(name))
                 loaders.put(name, plugin.getClassLoader());
             manager.enablePlugin(plugin);
             plugin.getLogger().log(plugin.getName() + " is enabled");
-            PluginEnableEvent loadEvent = new PluginEnableEvent(plugin);
+            final PluginEnableEvent loadEvent = new PluginEnableEvent(plugin);
             Marine.getServer().callEvent(loadEvent);
         }
     }
@@ -259,12 +259,13 @@ public class PluginLoader {
         if (plugin.isEnabled()) {
             manager.disablePlugin(plugin);
             loaders.remove(plugin.getName());
-            PluginClassLoader loader = plugin.getClassLoader();
+            final PluginClassLoader loader = plugin.getClassLoader();
             for (final String name : loader.getClasses()) {
                 removeClass(name);
             }
             EventManager.getInstance().removeAll(plugin);
             Marine.getServer().getScheduler().removeAll(plugin);
+            Logging.getLogger().info("Disabled " + plugin);
         } else {
             throw new UnsupportedOperationException("Cannot disable an already disabled plugin");
         }
@@ -278,14 +279,14 @@ public class PluginLoader {
      * @param destination Destination Folder
      * @throws PluginHandlerException If jar file cannot be loaded
      */
-    private void copyConfigIfExists(File file, File destination) throws PluginHandlerException {
+    private void copyConfigIfExists(final File file, final File destination) throws PluginHandlerException {
         JarFile jar;
         try {
             jar = new JarFile(file);
         } catch (IOException ioe) {
             throw new PluginHandlerException(this, "Could not load in " + file.getName(), ioe);
         }
-        Enumeration<JarEntry> entries = jar.entries();
+        final Enumeration<JarEntry> entries = jar.entries();
         JarEntry entry;
         List<JarEntry> entryList = new ArrayList<>();
         while (entries.hasMoreElements()) {
@@ -295,7 +296,7 @@ public class PluginLoader {
                 entryList.add(entry);
             }
         }
-        for (JarEntry e : entryList) {
+        for (final JarEntry e : entryList) {
             if (!e.getName().endsWith(".jar")) {
                 if (new File(destination, e.getName()).exists())
                     continue;
@@ -306,7 +307,7 @@ public class PluginLoader {
                     new PluginHandlerException(this, "Could not load in entry...", exz).printStackTrace();
                 }
             } else {
-                File lib = new File(destination, "lib");
+                final File lib = new File(destination, "lib");
                 if (!lib.exists()) {
                     if (!lib.mkdir()) {
                         Logging.getLogger().error("Could not create " + lib.getPath());
@@ -342,7 +343,7 @@ public class PluginLoader {
         } catch (IOException ioe) {
             throw new PluginHandlerException(this, "Could not load in " + file.getName(), ioe);
         }
-        JarEntry desc = jar.getJarEntry("desc.json");
+        final JarEntry desc = jar.getJarEntry("desc.json");
         if (desc == null)
             throw new PluginHandlerException(this, "Could not find desc.json in file: " + file.getName());
         InputStream stream;

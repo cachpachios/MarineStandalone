@@ -49,10 +49,25 @@ import java.util.UUID;
 @SuppressWarnings("unused")
 public interface MarineServer {
 
+    /**
+     * See if the server is offline
+     *
+     * @return true if offline
+     */
     public boolean isOfflineMode();
 
+    /**
+     * Set the offline moed
+     *
+     * @param n new Mode
+     */
     public void setOfflineMode(boolean n);
 
+    /**
+     * Get the json file handler
+     *
+     * @return file handler
+     */
     public JSONFileHandler getJsonFileHandler();
 
     /**
@@ -153,6 +168,13 @@ public interface MarineServer {
      * @return Server Favicon
      */
     public Base64Image getFavicon();
+
+    /**
+     * Set the server favicon
+     *
+     * @param image New Favicon (Cannot be null)
+     */
+    public void setFavicon(final Base64Image image);
 
     /**
      * Get all online players
@@ -269,21 +291,71 @@ public interface MarineServer {
      */
     public void stop();
 
+    /**
+     * @deprecated
+     */
+    @Deprecated
     public boolean isStopping();
 
+    /**
+     * Check if a player is banned
+     *
+     * @param u Player to check for
+     * @return true if the player is banned
+     */
     public boolean isBanned(UUID u);
 
+    /**
+     * Check if an address is banned
+     *
+     * @param address Address to check for
+     * @return true of the address is banned
+     */
     public boolean isBanned(InetAddress address);
 
+    /**
+     * Get the binding address
+     *
+     * @return binding address, will default to localhost
+     */
     public InetAddress getAddress();
 
+    /**
+     * Set the ban status of a player
+     *
+     * @param uuid Affected UUID
+     * @param b    true to add, false to remove
+     */
     public void setBanned(UUID uuid, boolean b);
 
+    /**
+     * Set the ban status of a network address
+     *
+     * @param address Affected Address
+     * @param b true to add, false to remove
+     */
     public void setBanned(InetAddress address, boolean b);
 
+    /**
+     * Check if the server is using a whitelist
+     *
+     * @return true if the server is using a whitelist
+     */
     public boolean usingWhitelist();
 
+    /**
+     * Check if a player is whitelisted
+     *
+     * @param player Player
+     * @return true if the player is whitelisted
+     */
     public boolean isWhitelisted(Player player);
 
+    /**
+     * Set the whitelist mode of a player
+     *
+     * @param uuid UUID
+     * @param b True to add, false to remove
+     */
     public void setWhitelisted(UUID uuid, boolean b);
 }

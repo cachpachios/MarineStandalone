@@ -44,11 +44,11 @@ import java.util.List;
 public class ConsoleWindow extends OutputStream {
     private final int maxLines;
     private final boolean showHTML;
+    private final List<String> console;
     private JFrame jFrame;
     private JTextPane text;
     @SuppressWarnings("unused")
     private JTextPane input;
-    private List<String> console;
     private String s;
     private java.util.List<Character> validChars;
 
@@ -225,14 +225,14 @@ public class ConsoleWindow extends OutputStream {
     }
 
     @Override
-    public void write(int b) throws IOException {
+    public void write(final int b) throws IOException {
         if (validChars == null) {
             validChars = new ArrayList<>();
             for (char c : " \t\\\r/abcdefghjiklmnopqrstuvwxyzABCDEFGHJIKLMNOPQRSTUVWXYZ0123456789._,:;[](){}><-+\"$@#£€&=".toCharArray()) {
                 validChars.add(c);
             }
         }
-        char c = (char) b;
+        final char c = (char) b;
         if (c == '\n') {
             //write(s);
             Logging.getLogger().error(s);

@@ -109,6 +109,12 @@ public class StringUtils {
         return s;
     }
 
+    /**
+     * Turn an object array into a string array
+     *
+     * @param objects Array
+     * @return Converted Array
+     */
     public static String[] toStringArray(Object... objects) {
         String[] r = new String[objects.length];
         for (int x = 0; x < objects.length; x++) {
@@ -117,6 +123,12 @@ public class StringUtils {
         return r;
     }
 
+    /**
+     * Make a message fit for chat
+     *
+     * @param message Message to fix
+     * @return fixed message (I've gotten fixed to this fix thing)
+     */
     public static String chatFix(String message) {
         message = message.substring(0, 119);
         if (message.length() > 65) {
@@ -125,6 +137,12 @@ public class StringUtils {
         return message;
     }
 
+    /**
+     * Get a Java UUID (with dashes)
+     *
+     * @param uuid To fix
+     * @return Fixed UUID String
+     */
     public static String fixUUID(String uuid) {
         uuid = uuid.replace("-", "");
         return

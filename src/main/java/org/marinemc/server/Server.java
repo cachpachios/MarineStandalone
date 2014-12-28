@@ -44,6 +44,7 @@ import org.marinemc.plugins.PluginLoader;
 import org.marinemc.plugins.PluginManager;
 import org.marinemc.settings.JSONFileHandler;
 import org.marinemc.settings.ServerSettings;
+import org.marinemc.util.Assert;
 import org.marinemc.util.Base64Image;
 import org.marinemc.util.Location;
 import org.marinemc.util.StartSettings;
@@ -121,6 +122,7 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
         init();
     }
 
+    @Override
     final public InetAddress getAddress() {
         if (this.address == null) {
             String addr = null;
@@ -154,6 +156,8 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
         Identifiers.init();
         this.networkManager.openConnection();
         loadPlugins();
+        Logging.getLogger().log("Generating the World");
+        this.worldManager.getMainWorld().getChunks(0, 0, 8, 8);
         EventManager.getInstance().bake();
         callEvent(new ServerReadyEvent());
         this.timer.scheduleAtFixedRate(this, 0l, (1000 / tickRate));
@@ -205,6 +209,7 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
 
     @Override
     final public void setDefaultGamemode(final Gamemode gamemode) {
+        Assert.notNull(gamemode);
         this.gamemode = gamemode;
     }
 
@@ -215,6 +220,7 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
 
     @Override
     final public void setMotd(String motd) {
+        Assert.notNull(motd);
         this.motd = motd;
     }
 
@@ -224,7 +230,8 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
     }
 
     @Override
-    final public void setDefaultDifficulty(Difficulty difficulty) {
+    final public void setDefaultDifficulty(final Difficulty difficulty) {
+        Assert.notNull(difficulty);
         this.difficulty = difficulty;
     }
 
@@ -256,9 +263,6 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
         pluginLoader.loadAllPlugins(pluginFolder);
         Logging.getLogger().log("Enabling Plugins...");
         pluginLoader.enableAllPlugins();
-        
-        Logging.getLogger().log("Generating the World");
-        this.worldManager.getMainWorld().getChunks(0, 0, 8, 8);
     }
 
     @Override
@@ -276,6 +280,12 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
             }
         }
         return image;
+    }
+
+    @Override
+    final public void setFavicon(final Base64Image image) {
+        Assert.notNull(image);
+        this.image = image;
     }
 
     @Override
@@ -315,6 +325,7 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
 
     @Override
     final public void callEvent(final Event event) {
+        Assert.notNull(event);
         EventManager.getInstance().handle(event);
     }
 
@@ -325,6 +336,7 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
 
     @Override
     final public void setMaxPlayers(final int n) {
+        Assert.notNull(n);
         this.maxPlayers = n;
     }
 
@@ -403,17 +415,17 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
     }
 
     @Override
-    final public void setWhitelisted(final UUID uuid, boolean b) {
+    final public void setWhitelisted(final UUID uuid, final boolean b) {
         jsonFileHandler.whitelist.setWhitelisted(uuid, b);
     }
 
     @Override
-    final public void setBanned(InetAddress address, boolean b) {
+    final public void setBanned(final InetAddress address, final boolean b) {
         jsonFileHandler.banned.setBanned(address, b);
     }
 
     @Override
-    final public void setBanned(UUID uuid, boolean b) {
+    final public void setBanned(final UUID uuid, final boolean b) {
         jsonFileHandler.banned.setBanned(uuid, b);
     }
 
@@ -453,7 +465,8 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
     }
 
     @Override
-    final public void setOfflineMode(boolean n) {
-        this.offlineMode = n;
+    final public void setOfflineMode(final boolean offlineMode) {
+        Assert.notNull(offlineMode);
+        this.offlineMode = offlineMode;
     }
 }

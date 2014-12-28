@@ -114,7 +114,7 @@ public class ServerSettings {
     }
 
     public boolean getBoolean(String value) {
-        return value.equalsIgnoreCase("true") || value.equalsIgnoreCase("on") || value.equalsIgnoreCase("yes");
+        return value.equalsIgnoreCase("true") || value.equals("1") || value.equalsIgnoreCase("on") || value.equalsIgnoreCase("yes");
     }
 
     public int getInt(String value) {

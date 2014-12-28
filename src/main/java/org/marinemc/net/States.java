@@ -24,32 +24,28 @@ package org.marinemc.net;
  * @author Fozie
  */
 public enum States {
-    HANDSHAKE(0),
-    INTRODUCE(1),
-    LOGIN(2),
-    INGAME(3);
-
-    private final int id;
-
-    private States(int id) {
-        this.id = id;
-    }
+    HANDSHAKE,
+    INTRODUCE,
+    LOGIN,
+    INGAME;
 
     public static final States getFromID(int id) {
-        if (id == 0)
-            return HANDSHAKE;
-        else if (id == 1)
-            return INTRODUCE;
-        else if (id == 2)
-            return LOGIN;
-        else if (id == 3)
-            return INGAME;
+        switch (id) {
+            case 0:
+                return HANDSHAKE;
+            case 1:
+                return INTRODUCE;
+            case 2:
+                return LOGIN;
+            case 3:
+                return INGAME;
+        }
         return HANDSHAKE;
 
     }
 
     public int getID() {
-        return id;
+        return this.ordinal();
     }
 }
 

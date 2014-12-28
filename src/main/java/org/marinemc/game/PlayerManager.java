@@ -34,6 +34,7 @@ import org.marinemc.net.packets.login.LoginSucessPacket;
 import org.marinemc.net.play.clientbound.ChatPacket;
 import org.marinemc.net.play.clientbound.JoinGamePacket;
 import org.marinemc.server.Marine;
+import org.marinemc.util.Assert;
 import org.marinemc.util.Location;
 import org.marinemc.util.annotations.Cautious;
 import org.marinemc.util.annotations.Hacky;
@@ -51,10 +52,10 @@ import java.util.regex.Pattern;
  */
 public class PlayerManager {
 	private final Pattern validName;
-	private volatile  Map<Short, Player> players;
+	private final TimeoutManager timeout;
+	private final PlayerEntityHandler localEntityHandler;
+	private volatile Map<Short, Player> players;
 	private volatile Map<String, Short> namePointers;
-	private TimeoutManager timeout;
-	private PlayerEntityHandler localEntityHandler;
 
 	public PlayerManager() {
 		players = new HashMap<Short, Player>();
@@ -253,19 +254,18 @@ public class PlayerManager {
 	public synchronized Player getPlayer(String username) {
 		if(namePointers.containsKey(username))
 			return players.get(namePointers.get(username));
-		else
-			return null;
+		return null;
 	}
-	
+
 	/**
 	 * Checks if player is online
 	 * 
 	 * @param uid The UID of the player
 	 * @return An boolean if the player is online
 	 */
-	public synchronized boolean isPlayerOnline(short uid) {synchronized(players) { 
+	public synchronized boolean isPlayerOnline(short uid) {
 		return players.containsKey(uid);
-	}}
+	}
 	
 	/**
 	 * Send packet to each online player,
@@ -280,10 +280,7 @@ public class PlayerManager {
 	}}
 	
 	public Player getPlayerByClient(final Client c) {
-		if(c.getUID() == -1)
-			return null;
-		else
-			return this.getPlayer(c.getUID());
+		return c.getUID() != -1 ? getPlayer(c.getUID()) : null;
 	}
 	
 	public void removePlayer(short uid) {
@@ -292,16 +289,16 @@ public class PlayerManager {
 				namePointers.remove(players.get(uid).getUserName());
 			players.remove(uid);
 		}
-		System.out.println(players.size());
 	}
 
 	public void disconnect(Player p) {
-		if(!this.players.containsKey(p.getUID()))
-			return;
-		
-		ChatManager.getInstance()
-		.broadcastMessage(ChatManager.format(ChatManager.LEAVE_MESSAGE, p));
-		
+		// if(!this.players.containsKey(p.getUID())) {
+		// 	return;
+		// }
+		Assert.contains(this.players, p.getUID());
+		ChatManager
+				.getInstance()
+				.broadcastMessage(ChatManager.format(ChatManager.LEAVE_MESSAGE, p));
 		removePlayer(p.getUID());
 	}
 

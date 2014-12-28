@@ -29,6 +29,7 @@ import org.marinemc.util.StringUtils;
 import org.marinemc.util.SystemUtils;
 import org.marinemc.util.annotations.Protected;
 
+import java.awt.*;
 import java.lang.management.ManagementFactory;
 import java.util.Arrays;
 import java.util.List;
@@ -174,7 +175,7 @@ public class Bootstrap {
         if (debug()) {
             ServerSettings.getInstance().verbose();
         }
-        if (!arguments.contains("nogui")) {// Check if GUI shouldn't be shown (Yes lazy implementation...)
+        if (!GraphicsEnvironment.isHeadless() && !arguments.contains("nogui")) {// Check if GUI shouldn't be shown (Yes lazy implementation...)
             Logging.getLogger().createConsoleWindow(); // Create the simplest gui you will ever see :)
             System.setErr(Logging.getLogger());
         }

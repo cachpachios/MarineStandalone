@@ -155,7 +155,6 @@ public class Client {
     }
 
     public ConnectionStatus process() { // Returns true if connection is closed.
-
         int a = 0;
         try {
             a = input.available();
@@ -163,9 +162,7 @@ public class Client {
             return ConnectionStatus.CONNECTION_PROBLEMS;
         }
 
-
         if (a == 0) return ConnectionStatus.EMPTY;
-
 
         byte[] allData = new byte[a];
 
@@ -178,7 +175,6 @@ public class Client {
         ByteData data = new ByteData(allData);
 
         List<ByteData> packages = new ArrayList<ByteData>();
-
 
         while (data.remainingBytes() > 0) {
             int l = data.readVarInt();

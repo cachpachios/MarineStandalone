@@ -48,6 +48,12 @@ public class PluginLogger {
         Logging.getLogger().log(constructMessage(message));
     }
 
+    /**
+     * Construct a plugin message
+     *
+     * @param message Message
+     * @return Constructed message
+     */
     private PluginMessage constructMessage(String message) {
         return new PluginMessage(String.format("[%s] %s", plugin.getName(), message), this);
     }

@@ -70,8 +70,7 @@ public class HexDigest {
         for (int x = p.length - 1; x >= 0; x--) {
             p[x] = (byte) ~p[x];
             if (carry) {
-                carry = p[x] == 0xFF;
-                p[x]++;
+                carry = p[x]++ == 0xFF;
             }
         }
         return p;
