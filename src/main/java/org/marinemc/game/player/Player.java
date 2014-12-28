@@ -39,6 +39,7 @@ import org.marinemc.net.play.clientbound.player.ExperiencePacket;
 import org.marinemc.net.play.clientbound.player.PlayerAbilitesPacket;
 import org.marinemc.net.play.clientbound.player.PlayerLookPacket;
 import org.marinemc.net.play.clientbound.world.*;
+import org.marinemc.util.Assert;
 import org.marinemc.util.Location;
 import org.marinemc.util.Position;
 import org.marinemc.util.StringComparison;
@@ -62,22 +63,22 @@ import java.util.UUID;
  */
 
 public class Player extends LivingEntity implements IPlayer, CommandSender {
-	/**
+	/*
 	 * Identifier variables:
 	 */
 	private final short 	uid;
 	private final UUID 		uuid;
 	private final String	name;
-	/**
+	/*
 	 * Network variables
 	 */
 	private final Client client;
-	/**
+	/*
 	 * Experience variables:
 	 */
 	private float exp;
 	private int levels;
-	/**
+	/*
 	 * Abilities variables:
 	 */
 	private Gamemode currentGameMode;
@@ -85,17 +86,18 @@ public class Player extends LivingEntity implements IPlayer, CommandSender {
 	private float flySpeed;
 	private Group group;
 	private Collection<Permission> permissions;
-	/**
+	/*
 	 * Chat Stuff
 	 */
 	private long lastChatReset;
 	private int messagesSent;
-	/**
+	/*
 	 * Game variables:
 	 */
 	private boolean isFlying;
 	private boolean canFly;
-	//TODO: Sneaking
+	private boolean isSneaking;
+
 	private PlayerInventory inventory;
 	private byte nextWindowID; // Generates a new byte for a new ID, cant be 0 when that is the standard inventory
 	
@@ -103,7 +105,8 @@ public class Player extends LivingEntity implements IPlayer, CommandSender {
 	 * An list of entities spawned localy
 	 * Its represented by the Entity UID
 	 */
-	private List<Integer> 	spawnedEntities;
+	private List<Integer> spawnedEntities;
+
 	/**
 	 * An list of chunks sent to the client
 	 * Its represented by the ChunksPos encoded form
@@ -136,23 +139,18 @@ public class Player extends LivingEntity implements IPlayer, CommandSender {
 		this.nextWindowID = Byte.MIN_VALUE;
 		this.lastChatReset = System.currentTimeMillis();
 		this.messagesSent = 0;
+		this.isSneaking = false;
 	}
 	
 	/**
-	 * Generates a new Window id to use
+	 * Generates a new window id to use
+	 *
 	 * @return A new window id (Never equal to 0)
 	 */
 	public byte nextWindowID() {
-		byte x = ++nextWindowID;
-		if(x != 0)
-			return x;
-		else
-			return ++nextWindowID;
+		return (++nextWindowID != 0) ? nextWindowID : ++nextWindowID;
 	}
-	
-	/**
-	 * Overriden methods:
-	 */
+
 	@Override
 	public short getUID() {
 		return uid;
@@ -168,6 +166,11 @@ public class Player extends LivingEntity implements IPlayer, CommandSender {
 		return name;
 	}
 
+	/**
+	 * Kick a player with a specified reason
+	 *
+	 * @param reason Reason (shown to player)
+	 */
 	public void kick(String reason) {
 		//TODO
 	}
@@ -181,23 +184,25 @@ public class Player extends LivingEntity implements IPlayer, CommandSender {
 	public void update() {
 		//TODO
 	}
-	
-	/**
-	 * Diffrent setters/getters:
-	 */
-	
+
 	/**
 	 * Set the gamemode and update it with the client
+
 	 * @param gm The target gamemode
 	 */
 	public void updateGamemode(Gamemode gm) {
+		Assert.notNull(gm);
 		if(this.currentGameMode != gm) {
 			//TODO: Send packet to client
-			
 			currentGameMode = gm;
 		}
 	}
-	
+
+	/**
+	 * Get the players gamemode
+	 *
+	 * @return current gamemode
+	 */
 	public Gamemode getGamemode() {
 		return currentGameMode;
 	}
@@ -311,12 +316,13 @@ public class Player extends LivingEntity implements IPlayer, CommandSender {
 
 	@Override
 	public void executeCommand(Command command, String[] arguments) {
+		Assert.notNull(command, arguments);
 		if (hasPermission(command.getPermission())) {
 			try {
 				command.execute(this, arguments);
 			} catch (final Throwable e) {
 				sendMessage(ChatColor.RED + "Something went wrong when executing the command...");
-				Logging.getLogger().error("Something whent wrong when executing command /" + command.toString(), e);
+				Logging.getLogger().error("Something went wrong when executing command /" + command.toString(), e);
 			}
 		} else {
 			sendMessage("You are not permitted to use that command");
@@ -345,7 +351,8 @@ public class Player extends LivingEntity implements IPlayer, CommandSender {
 		return this.group;
 	}
 
-	public void setGroup(Group group) {
+	public void setGroup(final Group group) {
+		Assert.notNull(group);
 		this.group = group;
 	}
 	
@@ -358,7 +365,8 @@ public class Player extends LivingEntity implements IPlayer, CommandSender {
 	}
 
 	public void openInventory(final Inventory inventory) {
-        client.sendPacket(new InventoryOpenPacket(inventory));
+		Assert.notNull(inventory);
+		client.sendPacket(new InventoryOpenPacket(inventory));
     }
 
 	public void setXP(float xp) {
@@ -389,10 +397,11 @@ public class Player extends LivingEntity implements IPlayer, CommandSender {
 	 */
     public void updateAbilites() {
         this.getClient().sendPacket(new PlayerAbilitesPacket(this));
-    }
-    
-    public void sendCompassTarget(Position pos) {
-        this.getClient().sendPacket(new SpawnPointPacket(pos));
+	}
+
+	public void sendCompassTarget(final Position pos) {
+		Assert.notNull(pos);
+		this.getClient().sendPacket(new SpawnPointPacket(pos));
     }
 
     public void sendInventory() {
@@ -405,10 +414,11 @@ public class Player extends LivingEntity implements IPlayer, CommandSender {
 
     public void sendLook() {
         this.getClient().sendPacket(new PlayerLookPacket(getLocation()));
-    }
+	}
 
-	public void sendBlockUpdate(Position pos, BlockID type) {
-        getClient().sendPacket(new BlockChangePacket(pos, type));
+	public void sendBlockUpdate(final Position pos, final BlockID type) {
+		Assert.notNull(pos, type);
+		getClient().sendPacket(new BlockChangePacket(pos, type));
 	}
 
 	public boolean checkForSpam() {
@@ -422,10 +432,6 @@ public class Player extends LivingEntity implements IPlayer, CommandSender {
 	public void sendTime() {
 		getClient().sendPacket(new TimeUpdatePacket(this.getWorld()));
 	}
-	
-	/**
-	 * Tracking of local changes:
-	 */
 
 	public void unloadChunk(final ChunkPos c) {
 		if(loadedChunks.contains(c.encode())) {
@@ -435,34 +441,29 @@ public class Player extends LivingEntity implements IPlayer, CommandSender {
 	}
 	
 	public boolean sendChunk(final Chunk c) {
-		if(loadedChunks.contains(c.getPos().encode()))
+		if (loadedChunks.contains(c.getPos().encode())) {
 			return false;
-
+		}
 		loadedChunks.add(c.getPos().encode());
-
 		getClient().sendPacket(new ChunkPacket(c));
-
 		return true;
 	}
-	
-	public boolean sendChunks(List<Chunk> chunks) {
-		if(chunks == null) return false;
-		if(chunks.isEmpty()) return false;
-		
-		for(final Chunk c : chunks)
-			if(loadedChunks.contains(c.getPos().encode()))
+
+	public boolean sendChunks(final List<Chunk> chunks) {
+		if (!Assert.notEmpty(chunks)) {
+			return false;
+		}
+		for (final Chunk c : chunks) {
+			if (loadedChunks.contains(c.getPos().encode()))
 				chunks.remove(c);
 			else {
 				loadedChunks.add(c.getPos().encode());
 			}
-		
-		if(chunks.isEmpty())
+		}
+		if (chunks.isEmpty()) {
 			return false;
-		
+		}
 		getClient().sendPacket(new MapChunkPacket(getWorld(), chunks));
-
-		chunks = null; // GC the list
-
 		return true;
 	}
 

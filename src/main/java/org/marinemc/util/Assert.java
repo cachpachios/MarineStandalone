@@ -48,6 +48,20 @@ public class Assert {
         }
     }
 
+    public static <T> boolean notEmpty(T t) {
+        notNull(t);
+
+        boolean b;
+        if (t instanceof Collection) {
+            b = ((Collection) t).isEmpty();
+        } else if (t instanceof Map) {
+            b = ((Collection) t).isEmpty();
+        } else {
+            throw new IllegalArgumentException("T is not a collection or a map");
+        }
+        return true;
+    }
+
     public static void contains(Object[] t, Object o) {
         contains(Arrays.asList(t), o);
     }
