@@ -20,6 +20,7 @@
 package org.marinemc.game.player;
 
 import org.marinemc.game.CommandManager;
+import org.marinemc.game.chat.ChatColor;
 import org.marinemc.game.chat.ChatMessage;
 import org.marinemc.game.command.Command;
 import org.marinemc.game.command.CommandSender;
@@ -28,6 +29,7 @@ import org.marinemc.game.inventory.PlayerInventory;
 import org.marinemc.game.permission.Group;
 import org.marinemc.game.permission.Permission;
 import org.marinemc.game.permission.PermissionManager;
+import org.marinemc.logging.Logging;
 import org.marinemc.net.Client;
 import org.marinemc.net.play.clientbound.ChatPacket;
 import org.marinemc.net.play.clientbound.inv.InventoryContentPacket;
@@ -309,7 +311,16 @@ public class Player extends LivingEntity implements IPlayer, CommandSender {
 
 	@Override
 	public void executeCommand(Command command, String[] arguments) {
-		command.execute(this, arguments);
+		if (hasPermission(command.getPermission())) {
+			try {
+				command.execute(this, arguments);
+			} catch (final Throwable e) {
+				sendMessage(ChatColor.RED + "Something went wrong when executing the command...");
+				Logging.getLogger().error("Something whent wrong when executing command /" + command.toString(), e);
+			}
+		} else {
+			sendMessage("You are not permitted to use that command");
+		}
 	}
 
 	@Override
