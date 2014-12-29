@@ -28,7 +28,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.marinemc.game.player.Player;
-import org.marinemc.io.binary.ByteArray;
+import org.marinemc.io.binary.ByteHolder;
 import org.marinemc.server.Marine;
 /**
  * @author Fozie
@@ -155,49 +155,30 @@ public class Client {
     }
 
     public ConnectionStatus process() { // Returns true if connection is closed.
-        int a = 0;
-        try {
-            a = input.available();
-        } catch (IOException e) {
-            return ConnectionStatus.CONNECTION_PROBLEMS;
-        }
-
-        if (a == 0) return ConnectionStatus.EMPTY;
-
-        byte[] allData = new byte[a];
-
-        try {
-            input.read(allData);
-        } catch (IOException e) {
-            return ConnectionStatus.CONNECTION_PROBLEMS;
-        }
-
-        ByteArray data = new ByteArray(allData);
-        
-        List<ByteArray> packages = new ArrayList<ByteArray>(4);
-
-        while (data.getRemainingBytes() > 0) {
-            int l = data.readVarInt();
-
-            if (l == 0)
-                continue;
-
-            if (l > data.getRemainingBytes())
-                continue;
-
-            packages.add(new ByteArray(data.readBytes(l)));
-        }
-
-        for (ByteArray p : packages) {
-        	final int id  = p.readVarInt();
-            getNetwork().packetHandler.intercept(id, p, this);
-        }
-
-        data = null;
-        packages.clear();
-        packages = null;
-        allData = null;
-        return ConnectionStatus.PROCESSED;
+    	while(true) {
+    		Integer l = 0;
+    		
+    		l = PacketOutputStream.readVarIntFromStream(input);
+    		
+    		if(l == null)
+    			return ConnectionStatus.CLOSED;
+    		
+    		if(l == 0)
+    			return ConnectionStatus.EMPTY;
+    		
+    		byte[] packet = new byte[l];
+    		
+    		try {
+				input.read(packet);
+			} catch (IOException e) {
+				return ConnectionStatus.CLOSED;
+			}
+    		
+    		getNetwork().packetHandler.rawIntercept(this, packet);
+    		
+    		
+    	}
+    	
     }
 
     public int getCompressionThreshold() {
@@ -222,7 +203,6 @@ public class Client {
 
     public enum ConnectionStatus {
         EMPTY,
-        CONNECTION_PROBLEMS,
         PROCESSED,
         CLOSED
     }

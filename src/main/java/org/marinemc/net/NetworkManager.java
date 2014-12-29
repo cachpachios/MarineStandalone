@@ -117,9 +117,7 @@ public class NetworkManager {
             boolean didProccessSomething = false;
             for (final Client c : clientList) {
                 Client.ConnectionStatus status = c.process();
-                if (status == Client.ConnectionStatus.CONNECTION_PROBLEMS)   
-                        cleanUp(c);
-                else if (status == Client.ConnectionStatus.CLOSED) 
+                if (status == Client.ConnectionStatus.CLOSED) 
                         cleanUp(c);
                 
                 if (status == Client.ConnectionStatus.PROCESSED)

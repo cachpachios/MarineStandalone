@@ -20,6 +20,7 @@
 package org.marinemc.net;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 
 import org.marinemc.io.binary.ByteUtils;
@@ -50,5 +51,29 @@ public class PacketOutputStream { // Here we enable encryption and compression i
     	data.writeVarInt(0, data.size());
     	
         stream.write(data.toBytes());
+    }
+    
+    public static Integer readVarIntFromStream(InputStream stream) {
+        int out = 0;
+        int bytes = 0;
+        byte in;
+        int x;
+        while (true) {
+        	try {
+				x = stream.read();
+			} catch (IOException e) {
+				return null;
+			}
+        	
+        	if(x == -1)
+        		return null;
+        	
+            in = (byte) x;
+            out |= (in & 0x7F) << (bytes++ * 7);
+            if ((in & 0x80) != 0x80) {
+                break;
+            }
+        }
+        return out;
     }
 }

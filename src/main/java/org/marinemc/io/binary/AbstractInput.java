@@ -62,7 +62,7 @@ public abstract class AbstractInput implements ByteInput{
 	@Override
 	public long readVarLong() {
         long out = 0;
-        long bytes = 0;
+        int bytes = 0;
         byte in;
         while (true) {
             in = readByte();

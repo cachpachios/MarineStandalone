@@ -1,29 +1,32 @@
 package org.marinemc.io.binary;
 
+import java.util.Arrays;
 import java.util.RandomAccess;
 
-public class ByteArray extends AbstractInput implements StoredReader, Byteable, RandomAccess {
+public class ByteArray extends AbstractInput implements StoredReader, ByteDataInput, RandomAccess {
 
-	private final byte[] data;
+	private byte[] data;
 
-	private transient int position;
+	private int position;
 	
 	public ByteArray(final byte[] data) {
-		position = -1;
+		position = 0;
 		this.data = data;
 	}
 	
 	@Override
 	public byte readByte() {
-		return data[++position];
+		return data[position++];
 	}
+	
+	@Override
+    public byte[] readBytes(int size) {
+    	return Arrays.copyOfRange(data, position, position + size);
+    }
 
 	@Override
 	public int getReaderPosition() {
-		if(position == -1)
-			return 0;
-		else
-			return position;
+		return position;
 	}
 
 	@Override

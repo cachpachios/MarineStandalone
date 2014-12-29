@@ -21,6 +21,7 @@ package org.marinemc.io.binary;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,7 +42,7 @@ import org.marinemc.util.Position;
  * @author Fozie
  */
 @Deprecated
-public class ByteHolder implements Iterable<Byte>, Byteable {
+public class ByteHolder implements Iterable<Byte>, ByteDataOutput, ByteDataInput {
 
     protected List<Byte> bytes;
 
@@ -450,5 +451,41 @@ public class ByteHolder implements Iterable<Byte>, Byteable {
     public byte[] toBytes() {
         return unwrap((Byte[]) bytes.toArray());
     }
+
+	@Override
+	public void writeByte(byte v) {
+		bytes.add(v);
+	}
+
+	@Override
+	public void writeVarLong(long v) {
+		
+	}
+
+	@Override
+	public void writeString(String s, Charset set) {
+        writeend(s.getBytes(set));
+	}
+
+	@Override
+	public void write(byte... input) {
+		writeend(input);
+	}
+
+	@Override
+	public int size() {
+		return bytes.size();
+	}
+
+	@Override
+	public long readVarLong() {
+		return 0;
+	}
+
+	@Override
+	public String readString(int size, Charset charset) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }
