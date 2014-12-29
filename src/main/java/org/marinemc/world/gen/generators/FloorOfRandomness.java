@@ -6,7 +6,6 @@ import org.marinemc.world.Dimension;
 import org.marinemc.world.Identifiers;
 import org.marinemc.world.chunk.Chunk;
 import org.marinemc.world.chunk.ChunkPos;
-import org.marinemc.world.gen.ChunkPopulator;
 import org.marinemc.world.gen.LevelType;
 import org.marinemc.world.gen.WorldGenerator;
 

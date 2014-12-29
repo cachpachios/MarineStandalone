@@ -19,14 +19,14 @@
 
 package org.marinemc.game;
 
-import org.marinemc.game.command.Command;
-import org.marinemc.game.command.ServiceProvider;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import org.marinemc.game.command.Command;
+import org.marinemc.game.command.ServiceProvider;
 
 /**
  * Created 2014-12-01 for MarineStandalone

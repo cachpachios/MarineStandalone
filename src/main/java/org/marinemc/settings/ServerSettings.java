@@ -19,8 +19,6 @@
 
 package org.marinemc.settings;
 
-import org.marinemc.logging.Logging;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -28,6 +26,8 @@ import java.io.FileReader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+
+import org.marinemc.logging.Logging;
 
 /**
  * Server settings (.properties) implementation

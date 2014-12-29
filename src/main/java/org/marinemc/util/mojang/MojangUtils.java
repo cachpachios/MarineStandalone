@@ -19,15 +19,15 @@
 
 package org.marinemc.util.mojang;
 
-import org.json.JSONTokener;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+
+import org.json.JSONTokener;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 /**
  * Mojang Utilities - Unsupported!

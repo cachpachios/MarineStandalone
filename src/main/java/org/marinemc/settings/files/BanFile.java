@@ -19,13 +19,13 @@
 
 package org.marinemc.settings.files;
 
-import org.json.JSONArray;
-import org.marinemc.settings.StorageConfig;
-import org.marinemc.util.Assert;
-
 import java.io.File;
 import java.net.InetAddress;
 import java.util.UUID;
+
+import org.json.JSONArray;
+import org.marinemc.settings.StorageConfig;
+import org.marinemc.util.Assert;
 
 /**
  * Created 2014-12-27 for MarineStandalone

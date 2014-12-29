@@ -19,15 +19,15 @@
 
 package org.marinemc.game.permission;
 
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.marinemc.game.player.Player;
 import org.marinemc.server.Marine;
 import org.marinemc.settings.JSONConfig;
-
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created 2014-12-24 for MarineStandalone

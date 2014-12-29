@@ -19,6 +19,11 @@
 
 package org.marinemc.game.player;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
+
 import org.marinemc.game.CommandManager;
 import org.marinemc.game.chat.ChatColor;
 import org.marinemc.game.chat.ChatMessage;
@@ -38,7 +43,12 @@ import org.marinemc.net.play.clientbound.player.ClientboundPlayerLookPositionPac
 import org.marinemc.net.play.clientbound.player.ExperiencePacket;
 import org.marinemc.net.play.clientbound.player.PlayerAbilitesPacket;
 import org.marinemc.net.play.clientbound.player.PlayerLookPacket;
-import org.marinemc.net.play.clientbound.world.*;
+import org.marinemc.net.play.clientbound.world.BlockChangePacket;
+import org.marinemc.net.play.clientbound.world.ChunkPacket;
+import org.marinemc.net.play.clientbound.world.MapChunkPacket;
+import org.marinemc.net.play.clientbound.world.SpawnPointPacket;
+import org.marinemc.net.play.clientbound.world.TimeUpdatePacket;
+import org.marinemc.net.play.clientbound.world.UnloadChunkPacket;
 import org.marinemc.util.Assert;
 import org.marinemc.util.Location;
 import org.marinemc.util.Position;
@@ -50,11 +60,6 @@ import org.marinemc.world.chunk.Chunk;
 import org.marinemc.world.chunk.ChunkPos;
 import org.marinemc.world.entity.EntityType;
 import org.marinemc.world.entity.LivingEntity;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
 
 /**
  * The online ingame Player instance object

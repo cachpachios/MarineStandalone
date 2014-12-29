@@ -22,7 +22,6 @@ package org.marinemc.net.play.clientbound.inv;
 import java.io.IOException;
 
 import org.marinemc.game.inventory.Inventory;
-import org.marinemc.io.binary.ByteInput;
 import org.marinemc.io.binary.ByteList;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;

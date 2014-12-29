@@ -19,10 +19,10 @@
 
 package org.marinemc.game.chat.builder;
 
-import org.marinemc.game.chat.ChatColor;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.marinemc.game.chat.ChatColor;
 
 /**
  * Created 2014-12-13 for MarineStandalone

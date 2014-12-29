@@ -19,12 +19,12 @@
 
 package org.marinemc.game.scheduler;
 
-import org.marinemc.game.command.ServiceProvider;
-
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
+
+import org.marinemc.game.command.ServiceProvider;
 
 /**
  * A Scheduler implementation made for MarineStandalone

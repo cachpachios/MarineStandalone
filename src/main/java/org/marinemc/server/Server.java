@@ -19,7 +19,14 @@
 
 package org.marinemc.server;
 
-import org.json.JSONException;
+import java.io.File;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.util.Collection;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.UUID;
+
 import org.marinemc.events.Event;
 import org.marinemc.events.EventManager;
 import org.marinemc.events.standardevents.ServerReadyEvent;
@@ -31,7 +38,17 @@ import org.marinemc.game.command.Command;
 import org.marinemc.game.command.CommandSender;
 import org.marinemc.game.command.ConsoleSender;
 import org.marinemc.game.command.ServiceProvider;
-import org.marinemc.game.commands.*;
+import org.marinemc.game.commands.Help;
+import org.marinemc.game.commands.Info;
+import org.marinemc.game.commands.List;
+import org.marinemc.game.commands.Me;
+import org.marinemc.game.commands.Plugins;
+import org.marinemc.game.commands.Say;
+import org.marinemc.game.commands.SendAboveActionBarMessage;
+import org.marinemc.game.commands.Stop;
+import org.marinemc.game.commands.Teleport;
+import org.marinemc.game.commands.Tellraw;
+import org.marinemc.game.commands.Test;
 import org.marinemc.game.permission.PermissionManager;
 import org.marinemc.game.player.Player;
 import org.marinemc.game.scheduler.MarineRunnable;
@@ -53,14 +70,6 @@ import org.marinemc.world.Difficulty;
 import org.marinemc.world.Gamemode;
 import org.marinemc.world.Identifiers;
 import org.marinemc.world.World;
-
-import java.io.File;
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.util.Collection;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.UUID;
 
 /**
  * Server implementation
@@ -106,11 +115,7 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
         this.pluginFolder = new File("./plugins");
         this.storageFolder = new File("./storage");
         this.settingsFolder = new File("./settings");
-        try {
-			this.jsonFileHandler = new JSONFileHandler(settingsFolder, storageFolder);
-		} catch (JSONException e) {
-			this.jsonFileHandler = null;
-		}
+		this.jsonFileHandler = new JSONFileHandler(settingsFolder, storageFolder);
         this.scheduler = new Scheduler();
         this.console = new ConsoleSender();
         this.gamemode = Gamemode.valueOf(ServerSettings.getInstance().gamemode.toUpperCase());

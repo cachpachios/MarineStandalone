@@ -19,12 +19,12 @@
 
 package org.marinemc.game.commands;
 
+import java.util.ArrayList;
+
 import org.marinemc.game.CommandManager;
 import org.marinemc.game.command.Command;
 import org.marinemc.game.command.CommandSender;
 import org.marinemc.util.StringUtils;
-
-import java.util.ArrayList;
 
 /**
  * Created 2014-12-05 for MarineStandalone

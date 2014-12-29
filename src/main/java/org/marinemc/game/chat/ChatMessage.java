@@ -19,12 +19,12 @@
 
 package org.marinemc.game.chat;
 
-import org.marinemc.game.chat.builder.Event;
-import org.marinemc.game.chat.builder.Part;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import org.marinemc.game.chat.builder.Event;
+import org.marinemc.game.chat.builder.Part;
 
 /**
  * Chat Message

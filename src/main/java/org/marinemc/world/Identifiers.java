@@ -19,15 +19,14 @@
 
 package org.marinemc.world;
 
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.marinemc.util.annotations.Cautious;
 import org.marinemc.util.annotations.Hacky;
 import org.marinemc.util.annotations.Unsafe;
 import org.marinemc.world.chunk.ChunkSection;
-
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
 
 /**
  * Static class to index map data values

@@ -19,6 +19,11 @@
 
 package org.marinemc;
 
+import java.awt.GraphicsEnvironment;
+import java.lang.management.ManagementFactory;
+import java.util.Arrays;
+import java.util.List;
+
 import org.marinemc.game.system.MarineSecurityManager;
 import org.marinemc.logging.Logging;
 import org.marinemc.server.Server;
@@ -28,11 +33,6 @@ import org.marinemc.util.StartSettings;
 import org.marinemc.util.StringUtils;
 import org.marinemc.util.SystemUtils;
 import org.marinemc.util.annotations.Protected;
-
-import java.awt.*;
-import java.lang.management.ManagementFactory;
-import java.util.Arrays;
-import java.util.List;
 
 @Protected
 /**
@@ -102,7 +102,6 @@ public class Bootstrap {
         return -1;
     }
 
-    @SuppressWarnings("ALL")
     private static void chargeUp() {
         double v;
         for (int x = 0; x < 10000; x++) {

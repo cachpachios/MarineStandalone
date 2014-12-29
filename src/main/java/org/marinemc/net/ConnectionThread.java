@@ -19,10 +19,10 @@
 
 package org.marinemc.net;
 
-import org.marinemc.logging.Logging;
-
 import java.io.IOException;
 import java.net.Socket;
+
+import org.marinemc.logging.Logging;
 /**
  * @author Fozie
  */

@@ -19,6 +19,12 @@
 
 package org.marinemc.server;
 
+import java.io.File;
+import java.net.InetAddress;
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
+
 import org.marinemc.events.Event;
 import org.marinemc.game.PlayerManager;
 import org.marinemc.game.WorldManager;
@@ -33,12 +39,6 @@ import org.marinemc.util.Location;
 import org.marinemc.world.Difficulty;
 import org.marinemc.world.Gamemode;
 import org.marinemc.world.World;
-
-import java.io.File;
-import java.net.InetAddress;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
 
 /**
  * MarineServer interface

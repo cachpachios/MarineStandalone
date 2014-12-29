@@ -19,10 +19,6 @@
 
 package org.marinemc.net;
 
-import org.marinemc.Bootstrap;
-import org.marinemc.logging.Logging;
-import org.marinemc.server.Marine;
-
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -30,6 +26,10 @@ import java.net.Socket;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import org.marinemc.Bootstrap;
+import org.marinemc.logging.Logging;
+import org.marinemc.server.Marine;
 /**
  * @author Fozie
  */

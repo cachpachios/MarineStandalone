@@ -19,7 +19,11 @@
 
 package org.marinemc.io.data;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 /**
  * Memory efficient nibble array allways recommended to use this in any case

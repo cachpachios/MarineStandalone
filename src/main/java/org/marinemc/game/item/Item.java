@@ -19,14 +19,14 @@
 
 package org.marinemc.game.item;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.marinemc.game.chat.ChatColor;
 import org.marinemc.util.IDObject;
 import org.marinemc.world.BlockID;
-
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Created 2014-12-03 for MarineStandalone

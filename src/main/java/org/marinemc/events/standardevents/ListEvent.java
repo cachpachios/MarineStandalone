@@ -21,7 +21,6 @@ package org.marinemc.events.standardevents;
 
 import org.marinemc.events.Cancellable;
 import org.marinemc.events.Event;
-import org.marinemc.net.Client;
 import org.marinemc.net.packets.status.ListResponse;
 
 /**

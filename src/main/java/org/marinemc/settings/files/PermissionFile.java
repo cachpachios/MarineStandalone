@@ -19,9 +19,9 @@
 
 package org.marinemc.settings.files;
 
-import org.marinemc.settings.StorageConfig;
-
 import java.io.File;
+
+import org.marinemc.settings.StorageConfig;
 
 /**
  * Created 2014-12-27 for MarineStandalone

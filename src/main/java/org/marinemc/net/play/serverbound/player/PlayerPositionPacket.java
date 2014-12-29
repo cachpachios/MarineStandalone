@@ -19,11 +19,8 @@
 
 package org.marinemc.net.play.serverbound.player;
 
-import java.io.IOException;
-
 import org.marinemc.io.binary.ByteInput;
 import org.marinemc.net.Packet;
-import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
 /**
  * @author Fozie

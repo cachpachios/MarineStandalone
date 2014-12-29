@@ -19,9 +19,9 @@
 
 package org.marinemc.settings;
 
-import org.json.JSONException;
-
 import java.io.File;
+
+import org.json.JSONException;
 
 /**
  * Created 2014-12-27 for MarineStandalone

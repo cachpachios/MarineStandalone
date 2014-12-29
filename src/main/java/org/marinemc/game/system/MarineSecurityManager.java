@@ -19,13 +19,13 @@
 
 package org.marinemc.game.system;
 
+import java.security.AccessControlException;
+import java.security.Permission;
+
 import org.marinemc.logging.Logging;
 import org.marinemc.plugins.Plugin;
 import org.marinemc.plugins.PluginClassLoader;
 import org.marinemc.util.annotations.Protected;
-
-import java.security.AccessControlException;
-import java.security.Permission;
 
 /**
  * A custom SecurityManager created for

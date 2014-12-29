@@ -19,6 +19,13 @@
 
 package org.marinemc.game;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+import java.util.regex.Pattern;
+
 import org.marinemc.events.standardevents.JoinEvent;
 import org.marinemc.events.standardevents.PreLoginEvent;
 import org.marinemc.game.async.ChatManager;
@@ -40,9 +47,6 @@ import org.marinemc.util.annotations.Cautious;
 import org.marinemc.util.annotations.Hacky;
 import org.marinemc.util.mojang.UUIDHandler;
 import org.marinemc.world.entity.EntityType;
-
-import java.util.*;
-import java.util.regex.Pattern;
 
 /**
  * The place where players are saved and accessed.

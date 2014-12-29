@@ -20,11 +20,11 @@
 package org.marinemc.plugins;
 
 
+import java.io.InputStream;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-
-import java.io.InputStream;
 
 /**
  * The plugin description file

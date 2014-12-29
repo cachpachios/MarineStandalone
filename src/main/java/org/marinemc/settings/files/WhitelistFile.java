@@ -19,11 +19,11 @@
 
 package org.marinemc.settings.files;
 
-import org.json.JSONArray;
-import org.marinemc.settings.StorageConfig;
-
 import java.io.File;
 import java.util.UUID;
+
+import org.json.JSONArray;
+import org.marinemc.settings.StorageConfig;
 
 /**
  * Created 2014-12-27 for MarineStandalone

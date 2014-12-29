@@ -21,7 +21,6 @@ package org.marinemc.net.play.clientbound;
 
 import java.io.IOException;
 
-import org.marinemc.io.binary.ByteInput;
 import org.marinemc.io.binary.ByteList;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;

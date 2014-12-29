@@ -19,17 +19,21 @@
 
 package org.marinemc.io.binary;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.UUID;
+import java.util.zip.DataFormatException;
+
 import org.marinemc.io.ByteCompressor;
 import org.marinemc.io.ByteCompressor.EncodingUseless;
 import org.marinemc.io.data.ByteEncoder;
 import org.marinemc.logging.Logging;
 import org.marinemc.util.Position;
-
-import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.*;
-import java.util.zip.DataFormatException;
 
 /**
  * (Used to be called ByteData)

@@ -19,11 +19,16 @@
 
 package org.marinemc.events;
 
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.marinemc.Bootstrap;
 import org.marinemc.logging.Logging;
 import org.marinemc.plugins.Plugin;
-
-import java.util.*;
 
 /**
  * Event Manager

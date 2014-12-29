@@ -19,6 +19,10 @@
 
 package org.marinemc.server;
 
+import java.net.InetAddress;
+import java.util.Collection;
+import java.util.UUID;
+
 import org.marinemc.game.chat.ChatMessage;
 import org.marinemc.game.permission.Permission;
 import org.marinemc.game.player.Player;
@@ -30,10 +34,6 @@ import org.marinemc.util.operations.ArgumentOperation;
 import org.marinemc.util.operations.PermissionFilter;
 import org.marinemc.util.operations.PlayerOperation;
 import org.marinemc.world.World;
-
-import java.net.InetAddress;
-import java.util.Collection;
-import java.util.UUID;
 
 /**
  * Static API Class - Fun stuff in here

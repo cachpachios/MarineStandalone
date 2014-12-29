@@ -19,6 +19,9 @@
 
 package org.marinemc.plugins;
 
+import java.io.File;
+import java.util.UUID;
+
 import org.marinemc.events.EventListener;
 import org.marinemc.events.EventManager;
 import org.marinemc.game.CommandManager;
@@ -27,9 +30,6 @@ import org.marinemc.game.command.Command;
 import org.marinemc.game.command.ServiceProvider;
 import org.marinemc.logging.Logging;
 import org.marinemc.util.Assert;
-
-import java.io.File;
-import java.util.UUID;
 
 /**
  * Plugins will need to implement this class in order
