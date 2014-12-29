@@ -23,10 +23,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.marinemc.io.binary.ByteData;
+import org.marinemc.io.binary.ByteHolder;
 /**
  * @author Fozie
  */
+@Deprecated
 public final class ByteEncoder {
     public static byte[] writeByte(byte b) {
         return new byte[]{
@@ -119,7 +120,7 @@ public final class ByteEncoder {
     }
 
     public static byte[] writeVarInt(int v) {
-        ByteData r = new ByteData();
+        ByteHolder r = new ByteHolder();
 
         byte part;
         while (true) {

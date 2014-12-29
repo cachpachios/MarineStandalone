@@ -19,11 +19,11 @@
 
 package org.marinemc.net.interceptors;
 
-import org.marinemc.io.binary.ByteData;
+import org.marinemc.io.binary.ByteInput;
 import org.marinemc.net.Client;
 /**
  * @author Fozie
  */
 public interface PacketInterceptor {
-    public boolean intercept(int id, ByteData data, final Client c);
+    public boolean intercept(int id, ByteInput data, final Client c);
 }

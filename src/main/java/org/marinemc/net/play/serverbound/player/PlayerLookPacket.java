@@ -19,12 +19,12 @@
 
 package org.marinemc.net.play.serverbound.player;
 
-import org.marinemc.io.binary.ByteData;
+import java.io.IOException;
+
+import org.marinemc.io.binary.ByteInput;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
-
-import java.io.IOException;
 /**
  * @author Fozie
  */
@@ -54,7 +54,7 @@ public class PlayerLookPacket extends Packet {
     }
 
     @Override
-    public void readFromBytes(ByteData input) {
+    public void readFromBytes(ByteInput input) {
         yaw = input.readFloat();
         pitch = input.readFloat();
         onGround = input.readBoolean();

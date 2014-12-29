@@ -19,13 +19,13 @@
 
 package org.marinemc.net.play.clientbound.player;
 
-import org.marinemc.io.binary.ByteData;
+import java.io.IOException;
+
+import org.marinemc.io.binary.ByteList;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
 import org.marinemc.util.Location;
-
-import java.io.IOException;
 /**
  * @author Fozie
  */
@@ -40,7 +40,7 @@ public class PlayerLookPacket extends Packet {
 
     @Override
     public void writeToStream(PacketOutputStream stream) throws IOException {
-        ByteData data = new ByteData();
+    	ByteList data = new ByteList();
 
         data.writeFloat(loc.getYaw());
         data.writeFloat(loc.getPitch());
@@ -48,9 +48,4 @@ public class PlayerLookPacket extends Packet {
 
         stream.write(getID(), data);
     }
-
-    @Override
-    public void readFromBytes(ByteData input) {
-    }
-
 }

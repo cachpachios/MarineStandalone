@@ -19,13 +19,13 @@
 
 package org.marinemc.net.play.serverbound.player;
 
-import org.marinemc.io.binary.ByteData;
+import java.io.IOException;
+
+import org.marinemc.io.binary.ByteInput;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
 import org.marinemc.util.Position;
-
-import java.io.IOException;
 /**
  * @author Fozie
  */
@@ -44,7 +44,7 @@ public class DiggingPacket extends Packet {
     }
 
     @Override
-    public void readFromBytes(ByteData input) {
+    public void readFromBytes(ByteInput input) {
         switch (input.readByte()) {
             case 0:
                 status = Status.StartedDigging;
@@ -56,7 +56,7 @@ public class DiggingPacket extends Packet {
                 status = Status.FinishDigging;
         }
 
-        blockPos = input.readPosition();
+        blockPos = Position.Decode(input.readLong());
 
         blockFace = input.readByte(); // Block Face
     }

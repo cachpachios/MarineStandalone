@@ -19,7 +19,8 @@
 
 package org.marinemc.io.nbt;
 
-import org.marinemc.io.binary.ByteData;
+import org.marinemc.io.binary.ByteInput;
+import org.marinemc.io.binary.ByteList;
 /**
  * @author Fozie
  */
@@ -32,17 +33,17 @@ public class NBTLong extends NBTTag<Long> {
         data = v;
     }
 
-    public NBTLong(String name, ByteData data) {
+    public NBTLong(String name, ByteInput data) {
         this(name, data.readShort());
     }
 
     @Override
     public byte[] toByteArray() {
-        ByteData d = new ByteData();
+    	ByteList d = new ByteList();
         d.writeByte(getTagID());
         d.writeUTF8Short(name);
         d.writeLong(data);
-        return d.getBytes();
+        return d.toBytes();
     }
 
     public long toLong() {
@@ -51,8 +52,8 @@ public class NBTLong extends NBTTag<Long> {
 
     @Override
     public byte[] toNonPrefixedByteArray() {
-        ByteData d = new ByteData();
+    	ByteList d = new ByteList();
         d.writeLong(data);
-        return d.getBytes();
+        return d.toBytes();
     }
 }

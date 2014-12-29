@@ -19,13 +19,13 @@
 
 package org.marinemc.net.play.clientbound.player;
 
+import java.io.IOException;
+
 import org.marinemc.game.player.Player;
-import org.marinemc.io.binary.ByteData;
+import org.marinemc.io.binary.ByteList;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
-
-import java.io.IOException;
 
 /**
  * Created 2014-12-07 for MarineStandalone
@@ -43,16 +43,11 @@ public class ExperiencePacket extends Packet {
 
     @Override
     public void writeToStream(PacketOutputStream stream) throws IOException {
-        ByteData data = new ByteData();
+    	ByteList data = new ByteList();
         data.writeFloat(player.getExp());
         data.writeVarInt(player.getLevels());
         data.writeVarInt((int) (player.getLevels() * 100 + (player.getExp() * 10)));
         stream.write(getID(), data);
-    }
-
-    @Override
-    public void readFromBytes(ByteData input) {
-
     }
 
 }

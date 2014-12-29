@@ -19,13 +19,13 @@
 
 package org.marinemc.net.play.clientbound.player;
 
+import java.io.IOException;
+
 import org.marinemc.game.player.Player;
-import org.marinemc.io.binary.ByteData;
+import org.marinemc.io.binary.ByteList;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
-
-import java.io.IOException;
 /**
  * @author Fozie
  */
@@ -40,7 +40,7 @@ public class PlayerAbilitesPacket extends Packet {
 
     @Override
     public void writeToStream(PacketOutputStream stream) throws IOException {
-        ByteData d = new ByteData();
+    	ByteList d = new ByteList();
 
         byte flags = (byte) ((p.isInCreativeMode() ? 8 : 0) | (p.canFly() ? 4 : 0) | (p.isFlying() ? 2 : 0) | (p.isInCreativeMode() ? 1 : 0));
         d.writeByte(flags);
@@ -51,9 +51,4 @@ public class PlayerAbilitesPacket extends Packet {
 
 
     }
-
-    @Override
-    public void readFromBytes(ByteData input) {
-    }// Clientbound only
-
 }

@@ -19,7 +19,8 @@
 
 package org.marinemc.game.item;
 
-import org.marinemc.io.binary.ByteData;
+import org.marinemc.io.binary.ByteDataOutput;
+import org.marinemc.io.binary.ByteInput;
 import org.marinemc.util.wrapper.PacketWrapper;
 
 public class ItemSlot extends PacketWrapper<Item> {
@@ -29,12 +30,12 @@ public class ItemSlot extends PacketWrapper<Item> {
     }
 
     @Override
-    public ByteData toByteData() {
+    public ByteDataOutput toByteData() {
         return null;
     }
 
     @Override
-    public Item readFromData(ByteData d) {
+    public Item readFromData(ByteInput d) {
         return null;
     }
 }

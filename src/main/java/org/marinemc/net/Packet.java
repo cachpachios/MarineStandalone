@@ -19,9 +19,9 @@
 
 package org.marinemc.net;
 
-import org.marinemc.io.binary.ByteData;
-
 import java.io.IOException;
+
+import org.marinemc.io.binary.ByteInput;
 /**
  * @author Fozie
  */
@@ -73,12 +73,8 @@ public abstract class Packet {
         return this.state;
     }
 
-    public void writeToStream(PacketOutputStream stream) throws IOException {
+    public void writeToStream(PacketOutputStream stream) throws IOException {}
 
-    }
-
-    public void readFromBytes(ByteData input) {
-
-    }
+    public void readFromBytes(ByteInput input) {}
 
 }

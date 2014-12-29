@@ -19,22 +19,20 @@
 
 package org.marinemc.game.async;
 
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
-import org.marinemc.game.PlayerManager;
 import org.marinemc.game.player.Player;
 import org.marinemc.net.play.KeepAlivePacket;
 import org.marinemc.server.Marine;
 
-public class TimeoutManager {
+public class TimeoutManager {//TODO
     private final Map<Short, Integer> lastReceived; // Contains last recived in seconds
     private final Map<Short, Integer> lastSent; // Contains last sent KeepAlivePacketID
 
     public TimeoutManager() {
-        this.lastReceived = Collections.synchronizedMap(new ConcurrentHashMap<Short, Integer>());
-        this.lastSent = Collections.synchronizedMap(new ConcurrentHashMap<Short, Integer>());
+        this.lastReceived = new HashMap<>();
+        this.lastSent = new HashMap<>();
     }
 
     private int randomInt(final int max) {
@@ -50,7 +48,7 @@ public class TimeoutManager {
     }
 
     private void update(final Player p) {
-        final int id = randomInt(32);
+        final int id = randomInt(500);
         p.getClient().sendPacket(new KeepAlivePacket(id));
         lastSent.put(p.getUID(), id);
     }

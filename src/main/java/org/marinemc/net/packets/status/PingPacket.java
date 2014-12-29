@@ -19,14 +19,15 @@
 
 package org.marinemc.net.packets.status;
 
-import org.marinemc.io.binary.ByteData;
+import java.io.IOException;
+
+import org.marinemc.io.binary.ByteInput;
 import org.marinemc.io.data.ByteEncoder;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
 
-import java.io.IOException;
-
+@SuppressWarnings("deprecation")
 public class PingPacket extends Packet {
 
     protected long TIME;
@@ -35,13 +36,13 @@ public class PingPacket extends Packet {
         super(0x01, States.INTRODUCE);
     }
 
-    @Override
+	@Override
     public void writeToStream(PacketOutputStream stream) throws IOException {
         stream.write(getID(), ByteEncoder.writeLong(TIME));
     }
 
     @Override
-    public void readFromBytes(ByteData input) {
+    public void readFromBytes(ByteInput input) {
         TIME = input.readLong();
     }
 

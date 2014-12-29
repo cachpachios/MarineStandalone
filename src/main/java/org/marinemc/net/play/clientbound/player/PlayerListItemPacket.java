@@ -19,14 +19,14 @@
 
 package org.marinemc.net.play.clientbound.player;
 
+import java.io.IOException;
+
 import org.marinemc.game.chat.ChatComponent;
 import org.marinemc.game.player.Player;
-import org.marinemc.io.binary.ByteData;
+import org.marinemc.io.binary.ByteList;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
-
-import java.io.IOException;
 
 /**
  * Created 2014-12-05 for MarineStandalone
@@ -52,7 +52,7 @@ public class PlayerListItemPacket extends Packet {
 
     @Override
     public void writeToStream(PacketOutputStream stream) throws IOException {
-        ByteData data = new ByteData();
+    	ByteList data = new ByteList();
         data.writeVarInt(action.getActionID());
         data.writeVarInt(1);
         data.writeUUID(player.getUUID());
@@ -86,11 +86,6 @@ public class PlayerListItemPacket extends Packet {
                 return;
         }
         stream.write(getID(), data);
-    }
-
-    @Override
-    public void readFromBytes(ByteData input) {
-
     }
 
     public static enum Action {

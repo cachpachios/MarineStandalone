@@ -19,15 +19,15 @@
 
 package org.marinemc.net.play.clientbound.world;
 
-import org.marinemc.io.binary.ByteData;
+import java.io.IOException;
+
+import org.marinemc.io.binary.ByteList;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
 import org.marinemc.util.Position;
 import org.marinemc.world.Block;
 import org.marinemc.world.BlockID;
-
-import java.io.IOException;
 /**
  * @author Fozie
  */
@@ -52,10 +52,10 @@ public class BlockChangePacket extends Packet {
     @Override
     public void writeToStream(PacketOutputStream stream) throws IOException {
 
-        ByteData data = new ByteData();
+    	ByteList data = new ByteList();
 
         data.writePosition(pos);
-        data.writeVarInt(newBlock);
+        data.writeVarInt	(newBlock);
 
         stream.write(getID(), data);
 

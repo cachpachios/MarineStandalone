@@ -19,16 +19,16 @@
 
 package org.marinemc.net.play.clientbound.world;
 
-import org.marinemc.io.binary.ByteData;
+import java.io.IOException;
+import java.util.List;
+
+import org.marinemc.io.binary.ByteList;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
 import org.marinemc.world.Dimension;
 import org.marinemc.world.World;
 import org.marinemc.world.chunk.Chunk;
-
-import java.io.IOException;
-import java.util.List;
 /**
  * @author Fozie
  */
@@ -46,7 +46,7 @@ public class MapChunkPacket extends Packet {
 
     @Override
     public void writeToStream(PacketOutputStream stream) throws IOException {
-        ByteData data = new ByteData();
+    	ByteList data = new ByteList();
 
         data.writeBoolean(world.getDimension() == Dimension.OVERWORLD);
 
@@ -64,10 +64,6 @@ public class MapChunkPacket extends Packet {
         }
 
         stream.write(getID(), data);
-    }
-
-    @Override
-    public void readFromBytes(ByteData input) {
     }
 
 }

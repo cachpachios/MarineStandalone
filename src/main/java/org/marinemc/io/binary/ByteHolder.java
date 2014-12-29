@@ -32,32 +32,35 @@ import java.util.*;
 import java.util.zip.DataFormatException;
 
 /**
+ * (Used to be called ByteData)
+ * 
  * @author Fozie
  */
-public class ByteData implements Iterable<Byte>, Byteable {
+@Deprecated
+public class ByteHolder implements Iterable<Byte>, Byteable {
 
     protected List<Byte> bytes;
 
     protected int readerPos;
 
-    public ByteData(List<Byte> list) {
+    public ByteHolder(List<Byte> list) {
         this.bytes = list;
     }
 
-    public ByteData(final byte[] bytes) {
+    public ByteHolder(final byte[] bytes) {
         this(wrap(bytes));
     }
 
-    public ByteData() {
+    public ByteHolder() {
         this.bytes = new ArrayList<Byte>();
     }
 
-    public ByteData(final Byte[] b) {
+    public ByteHolder(final Byte[] b) {
         this.bytes = new ArrayList<>(Arrays.asList(b));
     }
 
-    public static ByteData getDataDecompressed(final byte[] data) throws DataFormatException {
-			return new ByteData(ByteCompressor.instance().decode(data));
+    public static ByteHolder getDataDecompressed(final byte[] data) throws DataFormatException {
+			return new ByteHolder(ByteCompressor.instance().decode(data));
     }
     
     public final static Byte[] wrap(final byte[] array) {
@@ -106,12 +109,12 @@ public class ByteData implements Iterable<Byte>, Byteable {
     public byte readByte() {
 
         if (!hasBytes()) {
-            Logging.getLogger().error("ByteData object is empty");
+            Logging.getLogger().error("ByteHolder object is empty");
             return 0;
         }
 
         if (!canReadAnother()) {
-            Logging.getLogger().error("ByteData ran out of bytes");
+            Logging.getLogger().error("ByteHolder ran out of bytes");
             return 0;
         }
 
@@ -210,13 +213,13 @@ public class ByteData implements Iterable<Byte>, Byteable {
         return out;
     }
 
-    public ByteData subData(int a, int b) {
-        return new ByteData(this.bytes.subList(a, b));
+    public ByteHolder subData(int a, int b) {
+        return new ByteHolder(this.bytes.subList(a, b));
     }
 
-    public ByteData readData(int l) {
+    public ByteHolder readData(int l) {
         int x = 0;
-        ByteData data = new ByteData();
+        ByteHolder data = new ByteHolder();
 
         while (l > x) {
             data.writeByte(readByte());
@@ -427,7 +430,7 @@ public class ByteData implements Iterable<Byte>, Byteable {
         return bytes;
     }
 
-    public void writeData(ByteData data) {
+    public void writeData(ByteHolder data) {
         bytes.addAll(data.getByteList());
     }
 

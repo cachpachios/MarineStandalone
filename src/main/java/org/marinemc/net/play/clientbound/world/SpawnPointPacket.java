@@ -19,13 +19,13 @@
 
 package org.marinemc.net.play.clientbound.world;
 
-import org.marinemc.io.binary.ByteData;
+import java.io.IOException;
+
+import org.marinemc.io.binary.ByteList;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
 import org.marinemc.util.Position;
-
-import java.io.IOException;
 /**
  * @author Fozie
  */
@@ -40,15 +40,10 @@ public class SpawnPointPacket extends Packet { // Only used to make the client k
 
     @Override
     public void writeToStream(PacketOutputStream stream) throws IOException {
-        ByteData d = new ByteData();
+    	ByteList d = new ByteList();
+    	
         d.writePosition(spawnPoint);
-        d.writePacketPrefix();
 
         stream.write(getID(), d);
     }
-
-    @Override
-    public void readFromBytes(ByteData input) {
-    } // Clientbound only
-
 }

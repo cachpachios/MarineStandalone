@@ -19,12 +19,13 @@
 
 package org.marinemc.net.play.clientbound;
 
-import org.marinemc.io.binary.ByteData;
+import java.io.IOException;
+
+import org.marinemc.io.binary.ByteInput;
+import org.marinemc.io.binary.ByteList;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
-
-import java.io.IOException;
 
 /**
  * Created 2014-12-06 for MarineStandalone
@@ -44,18 +45,12 @@ public class GameStateChangePacket extends Packet {
 
     @Override
     public void writeToStream(PacketOutputStream stream) throws IOException {
-        ByteData data = new ByteData();
+    	ByteList data = new ByteList();
         data.writeByte((byte) reason.ordinal());
         if (value > -1f)
             data.writeFloat(value);
         stream.write(getID(), data);
     }
-
-    @Override
-    public void readFromBytes(ByteData input) {
-
-    }
-
     public static enum Reason {
         INVALID_BED,
         END_RAINING,

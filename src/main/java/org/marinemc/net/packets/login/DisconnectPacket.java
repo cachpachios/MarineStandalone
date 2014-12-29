@@ -19,14 +19,15 @@
 
 package org.marinemc.net.packets.login;
 
+import java.io.IOException;
+
 import org.marinemc.game.chat.ChatColor;
 import org.marinemc.game.chat.ChatMessage;
-import org.marinemc.io.binary.ByteData;
+import org.marinemc.io.binary.ByteInput;
+import org.marinemc.io.binary.ByteList;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
-
-import java.io.IOException;
 /**
  * @author Fozie
  */
@@ -45,13 +46,13 @@ public class DisconnectPacket extends Packet {
 
     @Override
     public void writeToStream(PacketOutputStream stream) throws IOException {
-        ByteData data = new ByteData();
+        ByteList data = new ByteList();
         data.writeUTF8(msg.toString());
 
         stream.write(getID(), data);
     }
 
     @Override
-    public void readFromBytes(ByteData input) {
+    public void readFromBytes(ByteInput input) {
     }
 }

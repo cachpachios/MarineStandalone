@@ -48,7 +48,8 @@ public abstract class NBTTag<T> {
      *
      * @return
      */
-    final public Class<T> getType() {
+    @SuppressWarnings("unchecked")
+	final public Class<T> getType() {
         return ((Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0]);
     }
 

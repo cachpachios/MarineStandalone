@@ -19,12 +19,13 @@
 
 package org.marinemc.net.play.serverbound;
 
-import org.marinemc.io.binary.ByteData;
+import java.io.IOException;
+
+import org.marinemc.io.binary.ByteInput;
+import org.marinemc.io.binary.ByteUtils;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
-
-import java.io.IOException;
 
 /**
  * Created 2014-12-04 for MarineStandalone
@@ -45,8 +46,8 @@ public class IncomingChatPacket extends Packet {
     }
 
     @Override
-    public void readFromBytes(ByteData input) {
-        msg = input.readUTF8();
+    public void readFromBytes(ByteInput input) {
+        msg = ByteUtils.readUTF8VarInt(input);
     }
 
     public String getMessage() {

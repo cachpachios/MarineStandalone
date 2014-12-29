@@ -2,8 +2,7 @@ package org.marinemc.world.entity.meta;
 
 import java.nio.charset.StandardCharsets;
 
-import org.marinemc.io.binary.ByteData;
-import org.marinemc.io.data.ByteUtils;
+import org.marinemc.io.binary.ByteUtils;
 import org.marinemc.util.vectors.Vector3f;
 import org.marinemc.util.vectors.Vector3i;
 
@@ -28,7 +27,7 @@ public class MetaObject extends Object{
 		case SHORT: data = parse((Short) obj);
 		case INT: data = parse((Integer) obj);
 		case FLOAT: data = parse((Float) obj);
-		case UTF8: data = ByteUtils.combine(parseV(obj.toString().length()), obj.toString().getBytes(StandardCharsets.UTF_8));
+		case UTF8: data = ByteUtils.combine(ByteUtils.VarInt(obj.toString().length()), obj.toString().getBytes(StandardCharsets.UTF_8));
 		case INTVEC: data = ByteUtils.merge(parse(((Vector3i) obj).getX()), parse(((Vector3i) obj).getY()), parse(((Vector3i) obj).getZ()));
 		case FLOATVEC: data = ByteUtils.merge(parse(((Vector3f) obj).getX()), parse(((Vector3f) obj).getY()), parse(((Vector3f) obj).getZ()));
 		default: data = new byte[] {(byte)obj};
@@ -50,7 +49,7 @@ public class MetaObject extends Object{
 		case SHORT: data = parse((short) obj);
 		case INT: data = parse((int) obj);
 		case FLOAT: data = parse((float) obj);
-		case UTF8: data = ByteUtils.combine(parseV(obj.toString().length()), obj.toString().getBytes(StandardCharsets.UTF_8));
+		case UTF8: data = ByteUtils.combine(ByteUtils.VarInt(obj.toString().length()), obj.toString().getBytes(StandardCharsets.UTF_8));
 		case INTVEC: data = ByteUtils.merge(parse(((Vector3i) obj).getX()), parse(((Vector3i) obj).getY()), parse(((Vector3i) obj).getZ()));
 		case FLOATVEC: data = ByteUtils.merge(parse(((Vector3f) obj).getX()), parse(((Vector3f) obj).getY()), parse(((Vector3f) obj).getZ()));
 		default: data = new byte[] {(byte)obj};
@@ -78,25 +77,6 @@ public class MetaObject extends Object{
     
     public static byte[] parse(float v) {
     	return parse(Float.floatToIntBits(v));
-    }
-    
-    private static byte[] parseV(int v) {
-        ByteData r = new ByteData();
-
-        byte part;
-        while (true) {
-            part = (byte) (v & 0x7F);
-            v >>>= 7;
-            if (v != 0) {
-                part |= 0x80;
-            }
-            r.writeByte(part);
-            if (v == 0) {
-                break;
-            }
-        }
-
-        return r.getBytes();
     }
     
     public void finalize() {

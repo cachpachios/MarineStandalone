@@ -4,7 +4,7 @@ import java.nio.charset.Charset;
 import java.util.Deque;
 import java.util.LinkedList;
 
-public class ByteQueue extends AbstractInput implements ByteOutput, Byteable {
+public class ByteQueue extends AbstractInput implements ByteDataOutput, ByteDataInput {
 	final Deque<Byte> queue;
 	
 	public ByteQueue(byte[] data) {
@@ -13,11 +13,19 @@ public class ByteQueue extends AbstractInput implements ByteOutput, Byteable {
 			queue.add(b);
 	}
 
+	public ByteQueue() {
+		queue = new LinkedList<Byte>();
+	}
+
 	@Override
 	public byte readByte() {
 		return queue.poll();
 	}
-
+	
+	public byte peakByte() {
+		return queue.peek();
+	}
+	
 	@Override
 	public void writeBoolean(boolean v) {
 		if(v)
@@ -117,5 +125,10 @@ public class ByteQueue extends AbstractInput implements ByteOutput, Byteable {
 			result[i] = queue.poll();
 		}
 		return result;
+	}
+
+	@Override
+	public int size() {
+		return queue.size();
 	}
 }

@@ -19,15 +19,15 @@
 
 package org.marinemc.net.play.clientbound.player;
 
-import org.marinemc.io.binary.ByteData;
+import java.io.IOException;
+
+import org.marinemc.io.binary.ByteList;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
 import org.marinemc.net.play.serverbound.player.ServerboundPlayerLookPositionPacket;
 import org.marinemc.util.Location;
 import org.marinemc.util.Position;
-
-import java.io.IOException;
 /**
  * @author Fozie
  */
@@ -56,7 +56,7 @@ public class ClientboundPlayerLookPositionPacket extends Packet { //TODO Relativ
 
     @Override
     public void writeToStream(PacketOutputStream stream) throws IOException {
-        ByteData d = new ByteData();
+    	ByteList d = new ByteList();
         if (p == null) {
             d.writeDouble(l.getX());
             d.writeDouble(l.getY());
@@ -76,11 +76,6 @@ public class ClientboundPlayerLookPositionPacket extends Packet { //TODO Relativ
         d.writeByte((byte) 0);
 
         stream.write(getID(), d);
-    }
-
-    @Override
-    public void readFromBytes(ByteData input) {
-
     }
 
 }

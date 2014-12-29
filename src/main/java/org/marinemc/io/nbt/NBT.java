@@ -19,11 +19,13 @@
 
 package org.marinemc.io.nbt;
 
-import org.marinemc.io.BinaryFile;
-import org.marinemc.io.binary.ByteData;
-
 import java.io.File;
 import java.io.IOException;
+
+import org.marinemc.io.BinaryFile;
+import org.marinemc.io.binary.ByteInput;
+import org.marinemc.io.binary.ByteList;
+import org.marinemc.io.binary.ByteUtils;
 
 /**
  * @author Fozie
@@ -33,7 +35,7 @@ public class NBT {
 
     NBTCompound tag;
 
-    public NBT(final ByteData data) throws IOException {
+    public NBT(final ByteInput data) throws IOException {
         final NBTTag preTag = parse(data);
         if (!(preTag instanceof NBTCompound)) {
             throw new IOException("File was in wrong format");
@@ -48,12 +50,12 @@ public class NBT {
         this(new BinaryFile(f).readGZIPBinary().getData());
     }
 
-    public static NBTTag parse(final ByteData data) {
+    public static NBTTag parse(final ByteInput data) {
         return parse(data, data.readByte());
     }
 
-    public static NBTTag parse(final ByteData data, final byte id) {
-        final String s = data.readUTF8Short();
+    public static NBTTag parse(final ByteInput data, final byte id) {
+        final String s = ByteUtils.readUTF8Short(data);
         switch (id) {
             case 1:
                 return new NBTByte(s, data);
@@ -82,8 +84,8 @@ public class NBT {
     }
 
     public void save(File fPath, boolean compress) throws IOException {
-        final ByteData data = new ByteData();
-        data.writeend(tag.toByteArray());
+        final ByteList data = new ByteList();
+        data.write(tag.toByteArray());
         final BinaryFile f = new BinaryFile(fPath, data);
         if (compress)
             f.writeGZIPBinary();

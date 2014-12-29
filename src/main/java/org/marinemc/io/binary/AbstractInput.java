@@ -85,10 +85,8 @@ public abstract class AbstractInput implements ByteInput{
     
     public byte[] readBytes(int size) {
         final byte[] r = new byte[size];
-        int i = 0;
-        while (size > i) {
+        for(int i = 0; i < size;i++)
             r[i] = readByte();
-        }
 
         return r;
     }

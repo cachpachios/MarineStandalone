@@ -19,7 +19,9 @@
 
 package org.marinemc.util.wrapper;
 
-import org.marinemc.io.binary.ByteData;
+import org.marinemc.io.binary.ByteArray;
+import org.marinemc.io.binary.ByteDataOutput;
+import org.marinemc.io.binary.ByteInput;
 
 /**
  * Packet Wrapper used to wrap object when sent in packets
@@ -35,16 +37,16 @@ public abstract class PacketWrapper<T> {
         this.obj = v;
     }
 
-    public abstract T readFromData(ByteData d);
+    public abstract T readFromData(ByteInput d);
 
     public T readFromBytes(byte[] b) {
-        return readFromData(new ByteData(b));
+        return readFromData(new ByteArray(b));
     }
 
-    public abstract ByteData toByteData();
+    public abstract ByteDataOutput toByteData();
 
     public byte[] getBytes() {
-        return toByteData().getBytes();
+        return toByteData().toBytes();
     }
 
     public T getData() {

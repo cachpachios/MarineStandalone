@@ -19,13 +19,13 @@
 
 package org.marinemc.net.play.clientbound.world;
 
-import org.marinemc.io.binary.ByteData;
+import java.io.IOException;
+
+import org.marinemc.io.binary.ByteList;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
 import org.marinemc.world.World;
-
-import java.io.IOException;
 /**
  * @author Fozie
  */
@@ -46,7 +46,7 @@ public class TimeUpdatePacket extends Packet {
 
     @Override
     public void writeToStream(PacketOutputStream stream) throws IOException {
-        ByteData d = new ByteData();
+    	ByteList d = new ByteList();
 
         d.writeLong(worldAge);
         d.writeLong(worldTime);

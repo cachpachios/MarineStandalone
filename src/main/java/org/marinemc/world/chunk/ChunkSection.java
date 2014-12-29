@@ -19,14 +19,14 @@
 
 package org.marinemc.world.chunk;
 
-import org.marinemc.io.binary.ByteData;
+import java.util.Arrays;
+
+import org.marinemc.io.binary.ByteList;
 import org.marinemc.util.Position;
 import org.marinemc.util.annotations.Hacky;
 import org.marinemc.util.annotations.Unsafe;
 import org.marinemc.world.BlockID;
 import org.marinemc.world.Identifiers;
-
-import java.util.Arrays;
 
 /**
  * Final storage of blocks,
@@ -80,11 +80,11 @@ public final class ChunkSection {
         return raw;
     }
 
-    public final byte[] getLightData() {
-    	ByteData d = new ByteData();
+    public final ByteList getLightData() {
+    	ByteList d = new ByteList();
     	for(char id : blockMap)
-    		d.writeend((byte)-1);
-    	return d.getBytes();
+    		d.writeByte((byte)-1);
+    	return d;
     }
 
     public void setType(int x, int y, int z, BlockID id) {

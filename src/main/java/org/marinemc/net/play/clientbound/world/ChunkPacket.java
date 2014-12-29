@@ -19,14 +19,15 @@
 
 package org.marinemc.net.play.clientbound.world;
 
-import org.marinemc.io.binary.ByteData;
+import java.io.IOException;
+
+import org.marinemc.io.binary.ByteList;
+import org.marinemc.io.binary.Byteable;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
 import org.marinemc.world.Dimension;
 import org.marinemc.world.chunk.Chunk;
-
-import java.io.IOException;
 /**
  * @author Fozie
  */
@@ -41,23 +42,19 @@ public class ChunkPacket extends Packet {
 
     @Override
     public void writeToStream(PacketOutputStream stream) throws IOException {
-        ByteData data = new ByteData();
+    	ByteList data = new ByteList();
 
         data.writeInt(c.getPos().getX());
         data.writeInt(c.getPos().getY());
         data.writeBoolean(true);
         data.writeShort(c.getSectionBitMap());
 
-        ByteData d = c.getData(true, c.getWorld().getDimension() == Dimension.OVERWORLD);
+        final ByteList d = c.getData(true, c.getWorld().getDimension() == Dimension.OVERWORLD);
 
-        d.writeVarInt(d.getLength());
+        data.writeVarInt(d.size());
         data.writeData(d);
 
         stream.write(getID(), data);
-    }
-
-    @Override
-    public void readFromBytes(ByteData input) {
     }
 
 }

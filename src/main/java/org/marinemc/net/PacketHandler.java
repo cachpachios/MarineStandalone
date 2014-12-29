@@ -19,7 +19,7 @@
 
 package org.marinemc.net;
 
-import org.marinemc.io.binary.ByteData;
+import org.marinemc.io.binary.ByteInput;
 import org.marinemc.net.interceptors.HandshakeInterceptor;
 import org.marinemc.net.interceptors.IngameInterceptor;
 import org.marinemc.net.interceptors.LoginInterceptor;
@@ -45,7 +45,7 @@ public final class PacketHandler implements PacketInterceptor {
         ingame = new IngameInterceptor();
     }
 
-    public boolean intercept(int id, ByteData data, final Client c) {
+    public boolean intercept(int id, ByteInput data, final Client c) {
         switch (c.getState()) {
             case HANDSHAKE:
                 return handshake.intercept(id, data, c);

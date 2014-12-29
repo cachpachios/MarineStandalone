@@ -3,7 +3,7 @@ package org.marinemc.world.entity.meta;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.marinemc.io.data.ByteUtils;
+import org.marinemc.io.binary.ByteUtils;
 
 class Metadata {
 	private List<MetaObject> objects;

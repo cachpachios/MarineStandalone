@@ -24,7 +24,8 @@ import java.util.List;
 import java.util.Random;
 
 import org.marinemc.game.player.Player;
-import org.marinemc.io.binary.ByteData;
+import org.marinemc.io.binary.ByteList;
+import org.marinemc.io.binary.ByteUtils;
 import org.marinemc.server.Marine;
 import org.marinemc.util.Position;
 import org.marinemc.util.annotations.Cautious;
@@ -148,32 +149,33 @@ public class Chunk {
             sections[s].setLight(x, y / 16, z, light);
     }
 
-    public ByteData getData(boolean biomes, boolean skyLight) {
-        ByteData d = new ByteData();
+    public ByteList getData(boolean biomes, boolean skyLight) {
+        ByteList d = new ByteList();
 
         for (ChunkSection s : sections) {
             if (s != null)
-                d.writeArray(ByteData.wrap(s.getBlockData()));
+                d.write(s.getBlockData());
         }
         for (ChunkSection s : sections) {
             if (s != null)
-                d.writeArray(ByteData.wrap(s.getLightData()));
+            	d.writeData(s.getLightData());
         }
 
         if (biomes)
             d.writeData(getBiomeData());
 
         return d;
-
     }
-
-    public ByteData getBiomeData() {
-        ByteData d = new ByteData();
+    
+    public byte[] getBytes(boolean biomes, boolean skyLight) { return getData(biomes, skyLight).toBytes(); }
+    
+    public ByteList getBiomeData() {
+        ByteList d = new ByteList();
         for(BiomeID b : biomes)
         	if(b != null)
-        		d.writeend(b.getID());
+        		d.writeByte(b.getID());
             else
-            	d.writeend(BiomeID.PLAINS.getID());
+            	d.writeByte(BiomeID.PLAINS.getID());
         return d;
     }
 

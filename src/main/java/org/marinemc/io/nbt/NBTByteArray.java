@@ -19,39 +19,40 @@
 
 package org.marinemc.io.nbt;
 
-import org.marinemc.io.binary.ByteData;
+import org.marinemc.io.binary.ByteArray;
+import org.marinemc.io.binary.ByteInput;
+import org.marinemc.io.binary.ByteList;
 /**
  * @author Fozie
  */
 public class NBTByteArray extends NBTTag<Byte[]> {
 
-    private ByteData array;
+    private ByteArray array;
 
-    public NBTByteArray(String name, ByteData data) {
+    public NBTByteArray(String name, ByteInput data) {
         super(name, 7);
-        int l = data.readInt();
-        array = data.readData(l);
+        array = new ByteArray(data.readBytes(data.readInt()));
     }
 
     public NBTByteArray(String name, byte[] v) {
-        this(name, new ByteData(v));
+        this(name, new ByteArray(v));
     }
 
     @Override
     public byte[] toByteArray() {
-        ByteData d = new ByteData();
+        ByteList d = new ByteList();
         d.writeByte(getTagID());
         d.writeUTF8Short(getName());
-        d.writeInt(array.getLength());
-        d.writeend(array.getBytes());
-        return d.getBytes();
+        d.writeInt(array.length());
+        d.write(array.toBytes());
+        return d.toBytes();
     }
 
     @Override
     public byte[] toNonPrefixedByteArray() {
-        ByteData data = new ByteData();
-        data.writeInt(array.getLength());
-        data.writeend(array.getBytes());
-        return data.getBytes();
+    	ByteList data = new ByteList();
+        data.writeInt(array.length());
+        data.write(array.toBytes());
+        return data.toBytes();
     }
 }

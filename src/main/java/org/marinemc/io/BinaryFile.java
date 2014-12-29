@@ -19,25 +19,39 @@
 
 package org.marinemc.io;
 
-import org.marinemc.io.binary.ByteData;
-
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PushbackInputStream;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
+
+import org.marinemc.io.binary.ByteInput;
+import org.marinemc.io.binary.ByteList;
+import org.marinemc.io.binary.Byteable;
 
 public class BinaryFile {
 
     File file;
-    ByteData data;
+    ByteList data;
 
     public BinaryFile(final File f) {
         this.file = f;
-        this.data = new ByteData();
+        this.data = new ByteList();
     }
 
-    public BinaryFile(final File f, final ByteData v) {
-        this.data = v;
-        this.file = f;
+    public BinaryFile(final File f, final Byteable v) {
+    	if(v instanceof ByteList)
+    		this.data = (ByteList) v;
+    	else
+    		this.data = new ByteList(v);
+    	this.file = f;
     }
 
     public static InputStream decompressStream(final InputStream input) throws IOException {
@@ -58,7 +72,7 @@ public class BinaryFile {
         final byte[] r = new byte[(int) file.length()];
         InputStream input = new BufferedInputStream(new FileInputStream(file));
         input.read(r);
-        data = new ByteData(r);
+        data = new ByteList(r);
         input.close();
         return this;
     }
@@ -69,7 +83,7 @@ public class BinaryFile {
         final byte[] r = new byte[(int) file.length()];
         InputStream input = decompressStream(new BufferedInputStream(new FileInputStream(file)));
         input.read(r);
-        data = new ByteData(r);
+        data = new ByteList(r);
         input.close();
         return this;
     }
@@ -78,7 +92,7 @@ public class BinaryFile {
         if (!file.exists())
             file.createNewFile();
         OutputStream output = new BufferedOutputStream(new FileOutputStream(file));
-        output.write(data.getBytes());
+        output.write(data.toBytes());
         output.close();
     }
 
@@ -86,11 +100,15 @@ public class BinaryFile {
         if (!file.exists())
             file.createNewFile();
         GZIPOutputStream output = new GZIPOutputStream(new BufferedOutputStream(new FileOutputStream(file)));
-        output.write(data.getBytes());
+        output.write(data.toBytes());
         output.close();
     }
 
-    public ByteData getData() {
+    public ByteInput getData() {
         return data;
+    }
+    
+    public byte[] getBytes() {
+    	return data.toBytes();
     }
 }

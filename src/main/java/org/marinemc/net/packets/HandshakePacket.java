@@ -19,12 +19,14 @@
 
 package org.marinemc.net.packets;
 
-import org.marinemc.io.binary.ByteData;
+import java.io.IOException;
+
+import org.marinemc.io.binary.ByteInput;
+import org.marinemc.io.binary.ByteList;
+import org.marinemc.io.binary.ByteUtils;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
-
-import java.io.IOException;
 /**
  * Sent by the client to introduce the client to the server,
  * All new connections should begin with this packet
@@ -44,17 +46,18 @@ public class HandshakePacket extends Packet {
 
     @Override
     public void writeToStream(PacketOutputStream stream) throws IOException {
-        ByteData d = new ByteData();
+    	ByteList d = new ByteList();
         d.writeVarInt(protocolVersion);
         d.writeUTF8(serverAddress);
         d.writeShort((short) port);
         d.writeVarInt(nextState);
+        stream.write(getID(), d);
     }
 
     @Override
-    public void readFromBytes(ByteData input) {
+    public void readFromBytes(ByteInput input) {
         protocolVersion = input.readVarInt();
-        serverAddress = input.readUTF8();
+        serverAddress = ByteUtils.readUTF8VarInt(input);
         port = input.readUnsignedShort();
         nextState = input.readVarInt();
     }

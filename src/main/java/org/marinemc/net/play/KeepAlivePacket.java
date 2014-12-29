@@ -19,12 +19,13 @@
 
 package org.marinemc.net.play;
 
-import org.marinemc.io.binary.ByteData;
+import java.io.IOException;
+
+import org.marinemc.io.binary.ByteInput;
+import org.marinemc.io.binary.ByteList;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
-
-import java.io.IOException;
 /**
  * @author Fozie
  */
@@ -43,7 +44,7 @@ public class KeepAlivePacket extends Packet {
 
     @Override
     public void writeToStream(PacketOutputStream stream) throws IOException {
-        ByteData d = new ByteData();
+        ByteList d = new ByteList();
 
         d.writeVarInt(aliveID);
 
@@ -51,7 +52,7 @@ public class KeepAlivePacket extends Packet {
     }
 
     @Override
-    public void readFromBytes(ByteData input) {
+    public void readFromBytes(ByteInput input) {
     	aliveID = input.readVarInt();
     }
 

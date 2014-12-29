@@ -25,4 +25,6 @@ public interface ByteOutput {
 	public void writeString(String s, Charset set);
 	
 	public void write(byte... input);
+	
+	public int size();
 }

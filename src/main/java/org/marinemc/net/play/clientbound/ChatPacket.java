@@ -19,14 +19,14 @@
 
 package org.marinemc.net.play.clientbound;
 
+import java.io.IOException;
+
 import org.json.simple.JSONObject;
 import org.marinemc.game.chat.ChatMessage;
-import org.marinemc.io.binary.ByteData;
+import org.marinemc.io.binary.ByteList;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
-
-import java.io.IOException;
 
 /**
  * Created 2014-12-04 for MarineStandalone
@@ -86,7 +86,7 @@ public class ChatPacket extends Packet {
         if (message == null || message.length() == 0)
             return;
 
-        ByteData data = new ByteData();
+        ByteList data = new ByteList();
 
         if (message.length() < Short.MAX_VALUE)
             data.writeUTF8(message);

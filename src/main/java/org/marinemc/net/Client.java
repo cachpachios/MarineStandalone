@@ -19,10 +19,6 @@
 
 package org.marinemc.net;
 
-import org.marinemc.game.player.Player;
-import org.marinemc.io.binary.ByteData;
-import org.marinemc.server.Marine;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
@@ -30,6 +26,10 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import org.marinemc.game.player.Player;
+import org.marinemc.io.binary.ByteArray;
+import org.marinemc.server.Marine;
 /**
  * @author Fozie
  */
@@ -172,27 +172,31 @@ public class Client {
             return ConnectionStatus.CONNECTION_PROBLEMS;
         }
 
-        ByteData data = new ByteData(allData);
+        ByteArray data = new ByteArray(allData);
+        
+        List<ByteArray> packages = new ArrayList<ByteArray>(4);
 
-        List<ByteData> packages = new ArrayList<ByteData>();
-
-        while (data.remainingBytes() > 0) {
+        while (data.getRemainingBytes() > 0) {
             int l = data.readVarInt();
 
             if (l == 0)
                 continue;
 
-            if (l > data.remainingBytes())
+            if (l > data.getRemainingBytes())
                 continue;
 
-            packages.add(data.readData(l));
+            packages.add(new ByteArray(data.readBytes(l)));
         }
 
-        for (ByteData p : packages) {
+        for (ByteArray p : packages) {
         	final int id  = p.readVarInt();
             getNetwork().packetHandler.intercept(id, p, this);
         }
 
+        data = null;
+        packages.clear();
+        packages = null;
+        allData = null;
         return ConnectionStatus.PROCESSED;
     }
 

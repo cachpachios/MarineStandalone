@@ -19,10 +19,11 @@
 
 package org.marinemc.io.nbt;
 
-import org.marinemc.io.binary.ByteData;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.marinemc.io.binary.ByteInput;
+import org.marinemc.io.binary.ByteList;
 /**
  * @author Fozie
  */
@@ -32,7 +33,7 @@ public class NBTList extends NBTTag {
     int size;
     List<NBTTag> data;
 
-    public NBTList(String name, ByteData data) {
+    public NBTList(String name, ByteInput data) {
         super(name, 9);
         this.data = new ArrayList<NBTTag>();
         this.type = data.readByte();
@@ -47,7 +48,7 @@ public class NBTList extends NBTTag {
 
     @Override
     public byte[] toByteArray() {
-        ByteData data = new ByteData();
+        ByteList data = new ByteList();
 
         data.writeByte(getTagID());
         data.writeUTF8Short(name);
@@ -55,20 +56,20 @@ public class NBTList extends NBTTag {
         data.writeInt(size);
 
         for (NBTTag tag : this.data)
-            data.writeend(tag.toByteArray());
+            data.write(tag.toByteArray());
 
 
-        return data.getBytes();
+        return data.toBytes();
     }
 
     @Override
     public byte[] toNonPrefixedByteArray() {
-        ByteData data = new ByteData();
+    	ByteList data = new ByteList();
         data.writeByte(type);
         data.writeInt(size);
 
         for (NBTTag tag : this.data)
-            data.writeend(tag.toByteArray());
-        return data.getBytes();
+            data.write(tag.toByteArray());
+        return data.toBytes();
     }
 }

@@ -19,13 +19,14 @@
 
 package org.marinemc.net.packets.login;
 
+import java.io.IOException;
+
 import org.marinemc.game.player.Player;
-import org.marinemc.io.binary.ByteData;
+import org.marinemc.io.binary.ByteInput;
+import org.marinemc.io.binary.ByteList;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
-
-import java.io.IOException;
 /**
  * @author Fozie
  */
@@ -40,7 +41,7 @@ public class LoginSucessPacket extends Packet {
 
     @Override
     public void writeToStream(PacketOutputStream stream) throws IOException {
-        ByteData d = new ByteData();
+        ByteList d = new ByteList();
 
         d.writeUTF8(p.getUUID().toString());
         d.writeUTF8(p.getUserName());
@@ -50,7 +51,7 @@ public class LoginSucessPacket extends Packet {
     }
 
     @Override
-    public void readFromBytes(ByteData input) {
+    public void readFromBytes(ByteInput input) {
         // TODO Auto-generated method stub
 
     }

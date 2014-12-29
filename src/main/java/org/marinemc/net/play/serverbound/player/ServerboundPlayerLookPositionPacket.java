@@ -19,14 +19,14 @@
 
 package org.marinemc.net.play.serverbound.player;
 
-import org.marinemc.io.binary.ByteData;
+import java.io.IOException;
+
+import org.marinemc.io.binary.ByteInput;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
 import org.marinemc.net.play.clientbound.player.ClientboundPlayerLookPositionPacket;
 import org.marinemc.util.Location;
-
-import java.io.IOException;
 /**
  * @author Fozie
  */
@@ -43,7 +43,7 @@ public class ServerboundPlayerLookPositionPacket extends Packet { //TODO Relativ
     }
 
     @Override
-    public void readFromBytes(ByteData input) {
+    public void readFromBytes(ByteInput input) {
         double x = input.readDouble();
         double y = input.readDouble();
         double z = input.readDouble();

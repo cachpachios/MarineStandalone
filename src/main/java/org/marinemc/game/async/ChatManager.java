@@ -21,7 +21,7 @@ package org.marinemc.game.async;
 
 import org.marinemc.events.standardevents.ChatEvent;
 import org.marinemc.game.player.Player;
-import org.marinemc.io.binary.ByteData;
+import org.marinemc.io.binary.ByteInput;
 import org.marinemc.logging.Logging;
 import org.marinemc.net.Client;
 import org.marinemc.net.play.clientbound.ChatPacket;
@@ -103,7 +103,7 @@ public class ChatManager {
         }
     }
     
-    public void interceptChatPacket(ByteData data, Client c) {
+    public void interceptChatPacket(ByteInput data, Client c) {
         IncomingChatPacket p = new IncomingChatPacket();
         p.readFromBytes(data);
         if (p.getMessage().startsWith("/")) {

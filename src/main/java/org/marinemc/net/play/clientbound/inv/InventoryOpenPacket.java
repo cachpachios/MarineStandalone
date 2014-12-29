@@ -19,13 +19,14 @@
 
 package org.marinemc.net.play.clientbound.inv;
 
+import java.io.IOException;
+
 import org.marinemc.game.inventory.Inventory;
-import org.marinemc.io.binary.ByteData;
+import org.marinemc.io.binary.ByteInput;
+import org.marinemc.io.binary.ByteList;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
-
-import java.io.IOException;
 
 /**
  * @author Fozie
@@ -41,16 +42,11 @@ public class InventoryOpenPacket extends Packet {
 
     @Override
     public void writeToStream(PacketOutputStream stream) throws IOException {
-        ByteData data = new ByteData();
+    	ByteList data = new ByteList();
         data.writeByte(inventory.getUID());
         data.writeUTF8(inventory.getType());
         data.writeUTF8(inventory.getTitle().toString());
         data.writeByte(inventory.getNumberOfSlots());
         stream.write(getID(), data);
-    }
-
-    @Override
-    public void readFromBytes(ByteData input) {
-
     }
 }

@@ -19,10 +19,11 @@
 
 package org.marinemc.net;
 
-import org.marinemc.io.binary.ByteData;
-
 import java.io.IOException;
 import java.io.OutputStream;
+
+import org.marinemc.io.binary.ByteUtils;
+import org.marinemc.io.binary.SortedByteOutput;
 /**
  * @author Fozie
  */
@@ -38,16 +39,16 @@ public class PacketOutputStream { // Here we enable encryption and compression i
         return stream;
     }
 
-    public void write(int id, byte[] b) throws IOException {
-        write(id, new ByteData(b));
+    public void write(int id, final byte[] b) throws IOException {
+    	byte[] data = ByteUtils.putFirst(ByteUtils.VarInt(id), b);
+        stream.write(ByteUtils.putFirst(ByteUtils.VarInt(data.length), data));
     }
 
-    public void write(int id, ByteData data) throws IOException {
+    public void write(int id, SortedByteOutput data) throws IOException {
         //TODO Compress and encrypt :D
-        data.writeVarInt(0, id);
-
-        data.writePacketPrefix();
-
-        stream.write(data.getBytes());
+    	data.writeVarInt(0, id);
+    	data.writeVarInt(0, data.size());
+    	
+        stream.write(data.toBytes());
     }
 }

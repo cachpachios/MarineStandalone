@@ -19,13 +19,13 @@
 
 package org.marinemc.net.play.clientbound.player;
 
-import org.marinemc.io.binary.ByteData;
+import java.io.IOException;
+
+import org.marinemc.io.binary.ByteList;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
 import org.marinemc.util.Location;
-
-import java.io.IOException;
 /**
  * @author Fozie
  */
@@ -40,15 +40,13 @@ public class PlayerPositionPacket extends Packet {
 
     @Override
     public void writeToStream(PacketOutputStream stream) throws IOException {
-        ByteData d = new ByteData();
+    	ByteList d = new ByteList();
 
         d.writeDouble(l.getX());
         d.writeDouble(l.getY());
         d.writeDouble(l.getZ());
 
         d.writeBoolean(true);
-
-        d.writePacketPrefix();
 
         stream.write(getID(), d);
     }

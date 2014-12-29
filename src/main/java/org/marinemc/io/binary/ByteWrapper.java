@@ -4,7 +4,7 @@ import java.nio.charset.Charset;
 import java.util.Deque;
 import java.util.LinkedList;
 
-public class ByteWrapper implements ByteOutput, Byteable {
+public class ByteWrapper implements ByteDataOutput {
 	final Deque<Byte> queue;
 	
 	public ByteWrapper() {
@@ -110,5 +110,10 @@ public class ByteWrapper implements ByteOutput, Byteable {
             result[i] = queue.poll();
         }
         return result;
+	}
+
+	@Override
+	public int size() {
+		return queue.size();
 	}
 }

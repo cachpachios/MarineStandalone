@@ -19,14 +19,14 @@
 
 package org.marinemc.net.play.clientbound.world.entities;
 
-import org.marinemc.io.binary.ByteData;
+import java.io.IOException;
+
+import org.marinemc.io.binary.ByteList;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
 import org.marinemc.util.vectors.Vector3;
 import org.marinemc.world.entity.Entity;
-
-import java.io.IOException;
 
 /**
  * @author Fozie
@@ -42,7 +42,7 @@ public class EntityLookMovePacket extends Packet {
 
 	@Override
 	public void writeToStream(PacketOutputStream stream) throws IOException {
-		ByteData data = new ByteData();
+		ByteList data = new ByteList();
 		
 		data.writeVarInt(e.getEntityID());
 		

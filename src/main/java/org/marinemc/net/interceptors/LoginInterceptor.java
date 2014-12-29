@@ -19,7 +19,7 @@
 
 package org.marinemc.net.interceptors;
 
-import org.marinemc.io.binary.ByteData;
+import org.marinemc.io.binary.ByteInput;
 import org.marinemc.net.Client;
 import org.marinemc.net.packets.login.DisconnectPacket;
 import org.marinemc.net.packets.login.LoginPacket;
@@ -31,7 +31,7 @@ import org.marinemc.server.Marine;
 public class LoginInterceptor implements PacketInterceptor {
 
     @Override
-    public boolean intercept(int id, ByteData data, final Client c) {
+    public boolean intercept(int id, ByteInput data, final Client c) {
     	if(id == 0) {
     	   LoginPacket packet = new LoginPacket();
     	   packet.readFromBytes(data);

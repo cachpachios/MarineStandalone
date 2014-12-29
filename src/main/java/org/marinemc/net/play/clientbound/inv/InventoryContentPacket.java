@@ -19,16 +19,16 @@
 
 package org.marinemc.net.play.clientbound.inv;
 
+import java.io.IOException;
+
 import org.marinemc.game.inventory.Inventory;
 import org.marinemc.game.item.Item;
 import org.marinemc.game.item.ItemID;
-import org.marinemc.io.binary.ByteData;
+import org.marinemc.io.binary.ByteList;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
 import org.marinemc.util.wrapper.PacketWrapper;
-
-import java.io.IOException;
 /**
  * @author Fozie
  */
@@ -43,7 +43,7 @@ public class InventoryContentPacket extends Packet {
 
     @Override
     public void writeToStream(PacketOutputStream stream) throws IOException {
-        ByteData d = new ByteData();
+    	ByteList d = new ByteList();
 
         d.writeByte(inv.getID());
 
@@ -53,13 +53,9 @@ public class InventoryContentPacket extends Packet {
             if (slot == null)
                 d.writeShort(ItemID.EMPTY.getFirst());
             else
-                d.writeByte(slot.getBytes());
+                d.write(slot.getBytes());
 
         stream.write(getID(), d);
-    }
-
-    @Override
-    public void readFromBytes(ByteData input) {
     }
 
 }

@@ -19,11 +19,11 @@
 
 package org.marinemc.util;
 
-import org.marinemc.io.Base64Encoding;
-import org.marinemc.io.BinaryFile;
-
 import java.io.File;
 import java.io.IOException;
+
+import org.marinemc.io.Base64Encoding;
+import org.marinemc.io.BinaryFile;
 
 /**
  * Created 2014-12-21 for MarineStandalone
@@ -50,7 +50,7 @@ public class Base64Image {
         } catch (final IOException e) {
             throw new RuntimeException("Unable to read in the binary data", e);
         }
-        this.string = new String(Base64Encoding.encode(f.getData().getBytes()));
+        this.string = new String(Base64Encoding.encode(f.getBytes()));
         this.file = file;
     }
 

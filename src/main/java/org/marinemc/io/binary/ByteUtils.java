@@ -1,4 +1,8 @@
-package org.marinemc.io.data;
+package org.marinemc.io.binary;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 
  * Diffrent utils for array manipulation of byte arrays
@@ -7,6 +11,14 @@ package org.marinemc.io.data;
  *
  */
 public class ByteUtils {
+	
+	public static final List<Byte> asWrappedList(final byte[] array) {
+        final List<Byte> result = new ArrayList<>(array.length);
+        for (int i = 0; i < array.length; i++)
+        	result.add(new Byte(array[i]));
+        return result;
+	}
+	
 	public final static Byte[] wrap(final byte[] array) {
         if (array == null)
             return null;
@@ -66,9 +78,17 @@ public class ByteUtils {
         return result;
     }
     
-    public static byte[] insert(final byte[] input, final byte[] data) {
-    	byte[] r = extendArray(input, input.length + data.length);
-    	System.arraycopy(data, 0, r, input.length, r.length);
+    public static byte[] putLast(final byte[] input, final byte[] data) {
+    	byte[] r = new byte[data.length + input.length];
+        System.arraycopy(data, 0, r, 0, data.length);
+        System.arraycopy(input, 0, r, data.length, input.length);
+    	return r;
+    }
+    
+    public static byte[] putFirst(final byte[] input, final byte[] data) {
+    	byte[] r = new byte[data.length + input.length];
+        System.arraycopy(input, 0, r, 0, input.length);
+        System.arraycopy(data, 0, r, input.length, data.length);
     	return r;
     }
     
@@ -78,7 +98,39 @@ public class ByteUtils {
     
     public static byte[] resize(final byte[] input, final int length) {
     	byte[] r = new byte[length];
-    	System.arraycopy(input, 0, r, 0, length);
+    	System.arraycopy(input, 0, r, 0, Math.min(input.length, length));
     	return r;
+    }
+    
+    public static byte[] shift(final byte[] input, final int amount) {
+    	byte[] r = new byte[input.length + amount];
+    	System.arraycopy(input, 0, r, amount, Math.min(input.length, r.length));
+    	return r;
+    }
+    
+    public static String readUTF8Short(final ByteInput v) {
+    	return new String(v.readBytes(v.readShort()));
+    }
+    public static String readUTF8VarInt(final ByteInput v) {
+    	return new String(v.readBytes(v.readVarInt()));
+    }
+    
+    public static byte[] VarInt(int v) {
+        ArrayList<Byte> r = new ArrayList<Byte>();
+
+        byte part;
+        while (true) {
+            part = (byte) (v & 0x7F);
+            v >>>= 7;
+            if (v != 0) {
+                part |= 0x80;
+            }
+            r.add(part);
+            if (v == 0) {
+                break;
+            }
+        }
+
+        return unwrap((Byte[]) r.toArray());
     }
 }

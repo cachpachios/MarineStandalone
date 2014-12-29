@@ -19,12 +19,14 @@
 
 package org.marinemc.net.packets.login;
 
-import org.marinemc.io.binary.ByteData;
+import java.io.IOException;
+
+import org.marinemc.io.binary.ByteInput;
+import org.marinemc.io.binary.ByteList;
+import org.marinemc.io.binary.ByteUtils;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
-
-import java.io.IOException;
 /**
  * @author Fozie
  */
@@ -38,12 +40,14 @@ public class LoginPacket extends Packet {
 
     @Override
     public void writeToStream(PacketOutputStream stream) throws IOException {
-        // SERVERBOUND PACKET
+        ByteList l = new ByteList();
+        l.writeUTF8(name);
+        stream.write(getID(), l);
     }
 
     @Override
-    public void readFromBytes(ByteData input) {
-        name = input.readUTF8();
+    public void readFromBytes(ByteInput input) {
+        name = ByteUtils.readUTF8VarInt(input);
     }
 
 }

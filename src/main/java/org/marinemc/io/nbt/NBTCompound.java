@@ -19,10 +19,11 @@
 
 package org.marinemc.io.nbt;
 
-import org.marinemc.io.binary.ByteData;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.marinemc.io.binary.ByteInput;
+import org.marinemc.io.binary.ByteList;
 /**
  * @author Fozie
  */
@@ -30,7 +31,7 @@ public class NBTCompound extends NBTTag {
 
     List<NBTTag> data;
 
-    public NBTCompound(String name, ByteData data) {
+    public NBTCompound(String name, ByteInput data) {
         this(name);
         byte id;
         while ((id = data.readByte()) != 0) { // Add all posseble tag until Tag_END appears(d = 0)
@@ -45,16 +46,15 @@ public class NBTCompound extends NBTTag {
 
     @Override
     public byte[] toByteArray() {
-        ByteData d = new ByteData();
+    	ByteList d = new ByteList();
         d.writeByte(getTagID()); // Write start ID
         d.writeUTF8Short(name);
         for (NBTTag tag : data)
-            d.writeend(tag.toByteArray());
+            d.write(tag.toByteArray());
 
-        d.writeByte((byte) 0); // Write the TAG_END tag to tell that the compund have ended.
+        d.writeByte((byte) 0); // Write the TAG_END tag to tell that the compound have ended.
 
-
-        return d.getBytes();
+        return d.toBytes();
     }
 
     public void addTag(NBTTag tag) {
@@ -67,9 +67,9 @@ public class NBTCompound extends NBTTag {
 
     @Override
     public byte[] toNonPrefixedByteArray() {
-        ByteData data = new ByteData();
+    	ByteList data = new ByteList();
         for (NBTTag tag : this.data)
-            data.writeend(tag.toByteArray());
-        return data.getBytes();
+            data.write(tag.toByteArray());
+        return data.toBytes();
     }
 }

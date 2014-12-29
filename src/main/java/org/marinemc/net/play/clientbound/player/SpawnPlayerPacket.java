@@ -19,14 +19,13 @@
 
 package org.marinemc.net.play.clientbound.player;
 
+import java.io.IOException;
+
 import org.marinemc.game.player.Player;
-import org.marinemc.io.binary.ByteData;
+import org.marinemc.io.binary.ByteList;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
-import org.marinemc.world.entity.meta.HumanMeta;
-
-import java.io.IOException;
 
 /*
  * 
@@ -46,7 +45,7 @@ public class SpawnPlayerPacket extends Packet {
 
 	@Override
 	public void writeToStream(PacketOutputStream stream) throws IOException {
-		ByteData d = new ByteData();
+		ByteList d = new ByteList();
 		
 		d.writeVarInt(p.getEntityID());
 		
@@ -105,10 +104,6 @@ public class SpawnPlayerPacket extends Packet {
 		d.writeByte((byte)0x7F); // End meta sending.
 		
 		stream.write(getID(), d);
-	}
-
-	@Override
-	public void readFromBytes(ByteData input) {
 	}
 
 }

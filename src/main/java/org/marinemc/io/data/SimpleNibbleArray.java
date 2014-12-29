@@ -19,15 +19,15 @@
 
 package org.marinemc.io.data;
 
-import org.marinemc.io.binary.ByteData;
-import org.marinemc.util.annotations.Hacky;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import org.marinemc.io.binary.ByteUtils;
+import org.marinemc.util.annotations.Hacky;
+
 
 /**
- * Hacky and memory wasting implementation of NibbleArray, sometimes preformance saving until toBytes() is called.
+ * Hacky and memory wasting implementation of NibbleArray, but preformance saving until toBytes() is called.
  * Anyway not recommended at all!
  *
  * @author Fozie
@@ -55,7 +55,7 @@ public class SimpleNibbleArray extends ArrayList<Byte> implements NibbleArray {
                 r.add(comp);
                 comp = null;
             }
-        return ByteData.unwrap((Byte[]) r.toArray());
+        return ByteUtils.unwrap((Byte[]) r.toArray());
     }
 
     @Override
