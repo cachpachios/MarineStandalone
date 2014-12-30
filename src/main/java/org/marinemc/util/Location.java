@@ -354,7 +354,7 @@ public class Location extends Vector3d implements JSONAware, Cloneable, Comparab
      * @return chunk at the specified location
      */
     public Chunk getChunk() {
-        return world.getChunk(x.intValue() >> 4, z.intValue() >> 4);
+        return world.getChunkForce(x.intValue() >> 4, z.intValue() >> 4);
     }
 
     @Override

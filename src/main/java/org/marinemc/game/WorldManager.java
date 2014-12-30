@@ -27,6 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.marinemc.server.MarineServer;
 import org.marinemc.world.World;
+import org.marinemc.world.gen.generators.TotalFlatGrassGenerator;
 
 /**
  * @author Fozie
@@ -56,7 +57,7 @@ public class WorldManager {
 
     public World getMainWorld() {
         if (mainWorld == null) { // Temporary code when no world loader is implemented
-            World w = new World(server, "MainWorld");
+            World w = new World("MainWorld", new TotalFlatGrassGenerator());
             addWorld(w);
             mainWorld = w.getUID();
             return w;

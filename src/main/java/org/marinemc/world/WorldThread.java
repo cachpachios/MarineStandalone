@@ -4,6 +4,12 @@ import java.lang.ref.WeakReference;
 
 import org.marinemc.server.Marine;
 
+/**
+ * The world thread,
+ * Does ticking and generation
+ * 
+ * @author Fozie
+ */
 public class WorldThread extends Thread {
 	
 	WeakReference<World> ref;
@@ -21,11 +27,23 @@ public class WorldThread extends Thread {
 		while(ref.get() != null) {
 			startTime = System.nanoTime();
 			
+			if(ref.get() == null)
+				break;
+			
 			ref.get().tick();
+			ref.get().generateRequested();
+			
 			
 			try {
-				WorldThread.sleep((skipTime) - ((System.nanoTime()-startTime)/1000/1000));
+				WorldThread.sleep(nonNeg((skipTime) - ((System.nanoTime()-startTime)/1000/1000)));
 			} catch (InterruptedException e) {}
 		}
+	}
+	
+	private final static long nonNeg(long l) {
+		if(l > 0)
+			return l;
+		else
+			return 0;
 	}
 }

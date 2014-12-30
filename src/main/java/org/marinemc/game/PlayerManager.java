@@ -134,7 +134,7 @@ public class PlayerManager {
 		
 		p.sendPositionAndLook();
 		
-		p.sendChunks(Marine.getServer().getWorldManager().getMainWorld().getChunks(0, 0, 6, 6));
+		p.sendChunks(Marine.getServer().getWorldManager().getMainWorld().getChunksForce(0, 0, 6, 6));
 		
 		//p.updateExp();
 		

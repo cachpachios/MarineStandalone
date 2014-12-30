@@ -21,30 +21,27 @@ package org.marinemc.world;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.marinemc.game.WorldManager;
-import org.marinemc.server.MarineServer;
 import org.marinemc.util.Position;
 import org.marinemc.world.chunk.Chunk;
 import org.marinemc.world.chunk.ChunkPos;
 import org.marinemc.world.entity.EntityHandler;
 import org.marinemc.world.gen.LevelType;
 import org.marinemc.world.gen.WorldGenerator;
-import org.marinemc.world.gen.generators.FloorOfRandomness;
-import org.marinemc.world.gen.generators.TotalFlatGrassGenerator;
 
 /**
  * @author Fozie
  */
 public class World { // TODO Save and unload chunks...	
 	
-    //Final Pointers:
-    private final MarineServer server;
-    
+    //Async stuff:
     private WorldThread thread;
+    private List<ChunkPos> chunksToGenerate;
     
     //Identifiers:
     private final String name;
@@ -62,38 +59,19 @@ public class World { // TODO Save and unload chunks...
 
     private WorldGenerator generator;
 
-    public World(MarineServer server, final String name) {
-        this.server = server;
-        loadedChunks = Collections.synchronizedMap(new ConcurrentHashMap<Long, Chunk>());
-        this.generator = new TotalFlatGrassGenerator(); // StandardGenerator
+    public World(final String name, WorldGenerator generator) {
+    	this.loadedChunks = Collections.synchronizedMap(new HashMap<Long, Chunk>());
+        this.generator = generator; // StandardGenerator
         this.generator.setGenerationWorld(this);
-        spawnPoint = generator.getSafeSpawnPoint().getRelativePosition(); //TODO make this get loaded from world or generate random based on worldgenerator
+        this.spawnPoint = generator.getSafeSpawnPoint().getRelativePosition(); //TODO make this get loaded from world or generate random based on worldgenerator
         this.uid = WorldManager.getNextUID();
         this.name = name;
         this.dimension = Dimension.OVERWORLD;
         this.time = 0;
         this.age = 0;
-        entities = new EntityHandler(this);
+        this.entities = new EntityHandler(this);
         
-        thread = new WorldThread(this);
-        thread.start();
-    }
-
-    public World(MarineServer server, final String name, WorldGenerator generator) { //TODO Make it able to load world
-        this.server = server;
-        this.time = 0;
-        this.age = 0;
-        uid = WorldManager.getNextUID();
-        this.name = name;
-        loadedChunks = Collections.synchronizedMap(new ConcurrentHashMap<Long, Chunk>());
-        
-        this.generator = generator;
-        this.generator.setGenerationWorld(this);
-
-        spawnPoint = generator.getSafeSpawnPoint().getRelativePosition(); //TODO make this get loaded from world or generate random based on worldgenerator
-
-
-        dimension = this.generator.getDimension();
+        chunksToGenerate = new CopyOnWriteArrayList<>();
         
         thread = new WorldThread(this);
         thread.start();
@@ -107,31 +85,49 @@ public class World { // TODO Save and unload chunks...
         return loadedChunks.containsKey(p.encode());
     }
 
-    public void generateChunk(int x, int z) {
+    public void generateAsyncChunk(int x, int y) {
+    	chunksToGenerate.add(new ChunkPos(x,y));
+    }
+    
+    public void generateAsyncChunk(ChunkPos pos) {
+    	chunksToGenerate.add(pos);
+    }
+    
+    public void generateAsyncRegion(int x, int y, int amtX, int amtY)  {
+        for (int xx = amtX / 2 * -1; xx < amtX; xx++)
+            for (int yy = amtY / 2 * -1; yy < amtY; yy++)
+            	generateAsyncChunk(xx,yy);
+    }
+    
+    private void forceGenerateChunk(int x, int z) {
         loadedChunks.put(ChunkPos.Encode(x, z), generator.generateChunk(new ChunkPos(x,z)));
     }
 
-    public Chunk getChunk(int x, int z) { // Will generate/loadchunk if not loaded
+    private void forceGenerateChunk(ChunkPos p) {
+        loadedChunks.put(p.encode(), generator.generateChunk(p));
+    }
+    
+    public Chunk getChunkForce(int x, int z) { // Will generate/loadchunk if not loaded
         if (!isChunkLoaded(x, z))
-            return generator.generateChunk(new ChunkPos(x,z)); // TODO Load world
-        else
+        	forceGenerateChunk(x,z); // TODO Load world
+
             return loadedChunks.get(ChunkPos.Encode(x, z));
     }
 
-    public Chunk getChunk(ChunkPos p) { // Will generate/loadchunk if not loaded
+    public Chunk getChunkForce(ChunkPos p) { // Will generate/loadchunk if not loaded
         if (!isChunkLoaded(p))
-            return generator.generateChunk(new ChunkPos(p.getX(), p.getY())); // TODO Load world
-        else
+        	forceGenerateChunk(p); // TODO Load world
+
             return loadedChunks.get(p.encode());
     }
 
-    public List<Chunk> getChunks(int x, int z, int amtX, int amtY) {
+    public List<Chunk> getChunksForce(int x, int z, int amtX, int amtY) {
 
         List<Chunk> chunks = new ArrayList<Chunk>();
 
         for (int xx = amtX / 2 * -1; xx < amtX; xx++)
             for (int yy = amtY / 2 * -1; yy < amtY; yy++)
-                chunks.add(getChunk(x + xx, z + yy));
+                chunks.add(getChunkForce(x + xx, z + yy));
 
         return chunks;
     }
@@ -149,6 +145,18 @@ public class World { // TODO Save and unload chunks...
 
     public String getName() {
         return name;
+    }
+    
+    void generateRequested() {
+    	for(ChunkPos pos : chunksToGenerate) {
+    		if(loadedChunks.containsKey(pos.encode())) {
+    			chunksToGenerate.remove(pos);
+    			continue;
+    		}
+    		
+    		forceGenerateChunk(pos);
+    		
+    	}
     }
 
     void tick() {
@@ -179,7 +187,7 @@ public class World { // TODO Save and unload chunks...
             loadedChunks.get(p.encode()).setBlock(pos.getX(), pos.getY(), pos.getZ(), target);
         } else if (loadIfEmpty) {
             Position pos = blockPos.getChunkBlockPos();
-            getChunk(p).setBlock(pos.getX(), pos.getY(), pos.getZ(), target);
+            getChunkForce(p).setBlock(pos.getX(), pos.getY(), pos.getZ(), target);
         }
     }
 
@@ -191,11 +199,11 @@ public class World { // TODO Save and unload chunks...
         return this.generator;
     }
 
-    public MarineServer getServer() {
-        return this.server;
-    }
-
 	public EntityHandler getEntityHandler() {
         return entities;
     }
+
+	public boolean hasChunksToGenerate() {
+		return !chunksToGenerate.isEmpty();
+	}
 }

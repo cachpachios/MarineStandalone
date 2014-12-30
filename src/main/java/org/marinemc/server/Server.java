@@ -161,8 +161,18 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
         Identifiers.init();
         this.networkManager.openConnection();
         loadPlugins();
-        Logging.getLogger().log("Generating the World");
-        this.worldManager.getMainWorld().getChunks(0, 0, 8, 8);
+        Logging.getLogger().log("Generating the World...");
+        final long generateTime = System.nanoTime();
+        this.worldManager.getMainWorld().generateAsyncRegion(0, 0, 8, 8);
+        while(worldManager.getMainWorld().hasChunksToGenerate()) {
+        	try {
+				Thread.sleep(1);
+			} catch (InterruptedException e) {
+				break;
+			}
+        }
+        Logging.getLogger().log("World Generation took: " + ((System.nanoTime()-generateTime)/1000/1000) +"ms.");
+        
         EventManager.getInstance().bake();
         callEvent(new ServerReadyEvent());
         this.timer.scheduleAtFixedRate(this, 0l, (1000 / tickRate));
