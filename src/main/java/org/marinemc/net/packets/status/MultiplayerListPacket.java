@@ -29,7 +29,6 @@ import org.marinemc.game.chat.ChatColor;
 import org.marinemc.game.player.Player;
 import org.marinemc.io.binary.ByteInput;
 import org.marinemc.io.binary.ByteList;
-import org.marinemc.net.Client;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
@@ -40,11 +39,9 @@ import org.marinemc.server.ServerProperties;
  */
 public class MultiplayerListPacket extends Packet {
 
-    private final Client c;
 
-    public MultiplayerListPacket(final Client c) {
+    public MultiplayerListPacket() {
         super(0x00, States.INTRODUCE);
-        this.c = c;
     }
 
     @SuppressWarnings("unchecked")
@@ -74,11 +71,6 @@ public class MultiplayerListPacket extends Packet {
         ByteList data = new ByteList();
         data.writeUTF8(encode(event.getResponse()));
         stream.write(getID(), data);
-    }
-
-    @Override
-    public void readFromBytes(ByteInput input) {
-    	//TODO
     }
 
     @SuppressWarnings("unchecked")

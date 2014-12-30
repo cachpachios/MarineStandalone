@@ -41,7 +41,7 @@ public class PacketOutputStream { // Here we enable encryption and compression i
     }
 
     public void write(int id, final byte[] b) throws IOException {
-    	byte[] data = ByteUtils.putFirst(ByteUtils.VarInt(id), b);
+    	final byte[] data = ByteUtils.putFirst(ByteUtils.VarInt(id), b);
         stream.write(ByteUtils.putFirst(ByteUtils.VarInt(data.length), data));
     }
 

@@ -131,6 +131,6 @@ public class ByteUtils {
             }
         }
 
-        return unwrap((Byte[]) r.toArray());
+        return unwrap(r.toArray(new Byte[r.size()]));
     }
 }

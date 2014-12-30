@@ -87,6 +87,7 @@ public class ByteList extends AbstractInput implements ByteDataOutput, SortedByt
 	}
 	@Override
 	public void writeVarInt(int pos, int v) {
+			List<Byte> varInt = new ArrayList<Byte>();
 	        byte part;
 	        while (true) {
 	            part = (byte) (v & 0x7F);
@@ -94,11 +95,12 @@ public class ByteList extends AbstractInput implements ByteDataOutput, SortedByt
 	            if (v != 0) {
 	                part |= 0x80;
 	            }
-	            writeByte(pos, part);
+	            varInt.add(part);
 	            if (v == 0) {
 	                break;
 	            }
 	        }
+	        data.addAll(pos, varInt);
 	}
 
 	@Override
@@ -293,8 +295,9 @@ public class ByteList extends AbstractInput implements ByteDataOutput, SortedByt
 		writeString(name, StandardCharsets.UTF_8);
 	}
 	public void writeUTF8(String name) {
-		writeVarInt(name.length());
-		writeString(name, StandardCharsets.UTF_8);
+		final byte[] stringData = name.getBytes(StandardCharsets.UTF_8);
+		writeVarInt(stringData.length);
+		write(stringData);
 	}
 
 	@Override
