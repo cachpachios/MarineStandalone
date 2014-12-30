@@ -99,7 +99,7 @@ public class NetworkManager {
             Logging.getLogger().debug("Client Ping Terminated At: " + client.getAdress().getHostAddress() + ":" + client.getConnection().getPort());
         else {
         	if(client.getUID() != -1)
-        		Marine.getServer().getPlayerManager().removePlayer(client.getUID());
+        		Marine.getServer().getPlayerManager().disconnect_nonnewtork(Marine.getPlayer(client.getUID()));
         }
         clientList.remove(client);
         client.terminate();

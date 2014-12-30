@@ -37,6 +37,7 @@ import org.marinemc.game.permission.PermissionManager;
 import org.marinemc.logging.Logging;
 import org.marinemc.net.Client;
 import org.marinemc.net.play.clientbound.ChatPacket;
+import org.marinemc.net.play.clientbound.KickPacket;
 import org.marinemc.net.play.clientbound.inv.InventoryContentPacket;
 import org.marinemc.net.play.clientbound.inv.InventoryOpenPacket;
 import org.marinemc.net.play.clientbound.player.ClientboundPlayerLookPositionPacket;
@@ -49,6 +50,7 @@ import org.marinemc.net.play.clientbound.world.MapChunkPacket;
 import org.marinemc.net.play.clientbound.world.SpawnPointPacket;
 import org.marinemc.net.play.clientbound.world.TimeUpdatePacket;
 import org.marinemc.net.play.clientbound.world.UnloadChunkPacket;
+import org.marinemc.server.Marine;
 import org.marinemc.util.Assert;
 import org.marinemc.util.Location;
 import org.marinemc.util.Position;
@@ -177,7 +179,8 @@ public class Player extends LivingEntity implements IPlayer, CommandSender {
 	 * @param reason Reason (shown to player)
 	 */
 	public void kick(String reason) {
-		//TODO
+		this.client.sendPacket(new KickPacket(reason));
+		Marine.getServer().getPlayerManager().disconnect(this);
 	}
 
 	@Override

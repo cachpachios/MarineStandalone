@@ -293,6 +293,14 @@ public class PlayerManager {
 		}
 	}
 
+	public void disconnect_nonnewtork(Player p) {
+		Assert.contains(this.players, p.getUID());
+		ChatManager
+				.getInstance()
+				.broadcastMessage(ChatManager.format(ChatManager.LEAVE_MESSAGE, p));
+		removePlayer(p.getUID());
+	}
+	
 	public void disconnect(Player p) {
 		// if(!this.players.containsKey(p.getUID())) {
 		// 	return;
@@ -302,6 +310,7 @@ public class PlayerManager {
 				.getInstance()
 				.broadcastMessage(ChatManager.format(ChatManager.LEAVE_MESSAGE, p));
 		removePlayer(p.getUID());
+		Marine.getServer().getNetworkManager().cleanUp(p.getClient());
 	}
 
 	public PlayerEntityHandler getEntitySpawner() {

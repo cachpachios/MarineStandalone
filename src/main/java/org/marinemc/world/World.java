@@ -34,6 +34,7 @@ import org.marinemc.world.entity.EntityHandler;
 import org.marinemc.world.gen.LevelType;
 import org.marinemc.world.gen.WorldGenerator;
 import org.marinemc.world.gen.generators.FloorOfRandomness;
+import org.marinemc.world.gen.generators.TotalFlatGrassGenerator;
 
 /**
  * @author Fozie
@@ -62,7 +63,7 @@ public class World { // TODO Save and unload chunks...
     public World(MarineServer server, final String name) {
         this.server = server;
         loadedChunks = Collections.synchronizedMap(new ConcurrentHashMap<Long, Chunk>());
-        this.generator = new FloorOfRandomness(); // StandardGenerator
+        this.generator = new TotalFlatGrassGenerator(); // StandardGenerator
         this.generator.setGenerationWorld(this);
         spawnPoint = generator.getSafeSpawnPoint().getRelativePosition(); //TODO make this get loaded from world or generate random based on worldgenerator
         this.uid = WorldManager.getNextUID();

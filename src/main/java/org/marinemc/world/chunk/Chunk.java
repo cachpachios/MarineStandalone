@@ -237,17 +237,13 @@ public class Chunk {
         if (h == 0) return;
         if (w == 0) return;
         if (d == 0) return;
-
-        int numSections = h / 16;
-
-        if (numSections == 0) {
-            if (getSection(y) == null)
-                return;
-            getSection(y).setPrivateCube(x, y, z, w, d, h, type);
-        } else {
-            //TODO Fix this stuff :P
-
-        }
+        
+        final int section = y >> 4;
+        
+        if (sections[section] == null)
+        	if (type != BlockID.AIR)
+        		sections[section] = new ChunkSection(this, section);
+        getSection(y).setPrivateCube(x, y, z, w, d, h, type);
     }
     
     private void setMaxHeight(int x, int z, short y) {

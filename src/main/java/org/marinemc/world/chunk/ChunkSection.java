@@ -109,10 +109,10 @@ public final class ChunkSection {
     }
 
     public void setPrivateCube(int x, int y, int z, int w, int d, int h, BlockID type) {
-        for (int xx = clamp(-(w / 2), 0, 15); xx < (w / 2); xx++)
-            for (int yy = clamp(-(h / 2), 0, 15); yy < (h / 2); yy++)
-                for (int zz = clamp(-(d / 2), 0, 15); yy < (d / 2); zz++)
-                    setType(x + xx, y + yy, z + zz, type);
+        for (int xx = x; xx < x+w; xx++)
+            for (int zz = z; zz < z+d; zz++)
+            	for (int yy = y; yy < y+h; yy++)
+            		setType(xx, yy, zz, type);
     }
 
     public GlobalBlock[] setCube(int x, int y, int z, int w, int d, int h, BlockID type) {
