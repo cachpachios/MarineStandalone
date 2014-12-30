@@ -70,9 +70,4 @@ public class WorldManager {
 
         loadedWorlds.put(w.getUID(), w);
     }
-
-    public void tick() {
-        for (World w : loadedWorlds.values())
-            w.tick();
-    }
 }

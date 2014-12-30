@@ -180,7 +180,6 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
         try {
             networkManager.tryConnections();
             playerManager.tickAllPlayers();
-            worldManager.tick();
             scheduler.tickSync();
         } catch (final Throwable e) {
             Logging.getLogger().error("Something went wrong in the main thread...", e);

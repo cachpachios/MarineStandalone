@@ -44,6 +44,8 @@ public class World { // TODO Save and unload chunks...
     //Final Pointers:
     private final MarineServer server;
     
+    private WorldThread thread;
+    
     //Identifiers:
     private final String name;
     private final byte uid;
@@ -72,6 +74,9 @@ public class World { // TODO Save and unload chunks...
         this.time = 0;
         this.age = 0;
         entities = new EntityHandler(this);
+        
+        thread = new WorldThread(this);
+        thread.start();
     }
 
     public World(MarineServer server, final String name, WorldGenerator generator) { //TODO Make it able to load world
@@ -89,6 +94,9 @@ public class World { // TODO Save and unload chunks...
 
 
         dimension = this.generator.getDimension();
+        
+        thread = new WorldThread(this);
+        thread.start();
     }
 
     public boolean isChunkLoaded(int x, int y) {
@@ -143,7 +151,7 @@ public class World { // TODO Save and unload chunks...
         return name;
     }
 
-    public void tick() {
+    void tick() {
         if (time < 24000)
             ++time;
         else
