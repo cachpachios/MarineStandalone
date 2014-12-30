@@ -285,7 +285,7 @@ public class ByteList extends AbstractInput implements ByteDataOutput, SortedByt
 
 	@Override
 	public byte[] toBytes() {
-		return ByteUtils.unwrap((Byte[])data.toArray());
+		return ByteUtils.unwrap(data.toArray(new Byte[data.size()]));
 	}
 
 	public void writeUTF8Short(String name) {

@@ -37,7 +37,6 @@ public class LoginInterceptor implements PacketInterceptor {
     	   packet.readFromBytes(data);
 		   
     	   final String s = Marine.getServer().getPlayerManager().login(c, packet);
-		   System.out.println("Gg");
     	   if(s == null)
     		   return true; // End the interception with a positive interception
     	   else {

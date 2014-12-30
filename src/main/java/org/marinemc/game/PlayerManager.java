@@ -184,8 +184,6 @@ public class PlayerManager {
 			synchronized (namePointers) {
 				players.put(p.getUID(), p);
 				namePointers.put(p.getUserName(), p.getUID());
-		
-		System.out.println(players.size());
 	}}}
 	
 	/**

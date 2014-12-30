@@ -19,8 +19,8 @@
 
 package org.marinemc.net;
 
-import org.marinemc.io.binary.ByteArray;
 import org.marinemc.io.binary.ByteInput;
+import org.marinemc.io.binary.ByteQueue;
 import org.marinemc.net.interceptors.HandshakeInterceptor;
 import org.marinemc.net.interceptors.IngameInterceptor;
 import org.marinemc.net.interceptors.LoginInterceptor;
@@ -62,7 +62,7 @@ public final class PacketHandler implements PacketInterceptor {
     }
 
 	public void rawIntercept(final Client client, final byte[] packet) {
-		final ByteArray data = new ByteArray(packet);
+		final ByteQueue data = new ByteQueue(packet);
 		intercept(data.readVarInt(), data, client);
 	}
 }

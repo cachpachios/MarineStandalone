@@ -60,6 +60,7 @@ public class HandshakePacket extends Packet {
         serverAddress = ByteUtils.readUTF8VarInt(input);
         port = input.readUnsignedShort();
         nextState = input.readVarInt();
+        System.out.println(toString());
     }
 
     public String toString() {

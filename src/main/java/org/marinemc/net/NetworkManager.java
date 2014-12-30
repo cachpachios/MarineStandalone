@@ -106,8 +106,6 @@ public class NetworkManager {
         
         client = null;
         
-        System.out.println(":" + clientList.size());
-        
 //        WeakReference<Client> r = new WeakReference<Client>(client);
 //        while(r.get() != null)
 //        	System.gc();
