@@ -178,7 +178,7 @@ public class ByteList extends AbstractInput implements ByteDataOutput, SortedByt
 
 	@Override
 	public void writeDouble(double v) {
-		writeDouble(Double.doubleToLongBits(v));
+		writeLong(Double.doubleToLongBits(v));
 	}
 	@Override
 	public void writeVarInt(int v) {
