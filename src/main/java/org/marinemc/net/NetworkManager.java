@@ -111,17 +111,12 @@ public class NetworkManager {
 //        	System.gc();
     }
 
-    public boolean processAll() {
-            boolean didProccessSomething = false;
+    public void processAll() {
             for (final Client c : clientList) {
                 Client.ConnectionStatus status = c.process();
-                if (status == Client.ConnectionStatus.CLOSED) 
+                if (status.equals(Client.ConnectionStatus.CLOSED))
                         cleanUp(c);
-                
-                if (status == Client.ConnectionStatus.PROCESSED)
-                    didProccessSomething = true;
             }
-            return didProccessSomething;
     }
 
     public boolean hasClientsConnected() {

@@ -130,7 +130,8 @@ public class StringUtils {
      * @return fixed message (I've gotten fixed to this fix thing)
      */
     public static String chatFix(String message) {
-        message = message.substring(0, 119);
+    	if(message.length() > 119)
+    		message = message.substring(0, 119);
         if (message.length() > 65) {
             message = message.substring(0, 65) + "\n" + message.substring(65);
         }
