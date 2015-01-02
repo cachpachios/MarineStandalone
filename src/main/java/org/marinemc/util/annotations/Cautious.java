@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 
 /**
  * Used to aware developer that the following code is to be cautious with and not called without understanding what it does.
- * Sometimes it could be put to tell user that its perhaps automaticly checkt and should only in rare cases be needed to be called.
+ * Sometimes it could be put to tell user that its perhaps automaticlly called and should only in rare cases be needed to be called.
  * 
  * @author Fozie
  */

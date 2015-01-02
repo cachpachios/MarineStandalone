@@ -19,19 +19,19 @@
 
 package org.marinemc.util;
 
-import org.marinemc.events.EventListener;
-import org.marinemc.events.EventManager;
-import org.marinemc.events.standardevents.LeaveEvent;
-import org.marinemc.game.player.Player;
-import org.marinemc.server.Marine;
-import org.marinemc.util.operations.ArgumentOperation;
-import org.marinemc.util.operations.Filter;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.UUID;
+
+import org.marinemc.events.EventListener;
+import org.marinemc.events.EventManager;
+import org.marinemc.events.standardevents.LeaveEvent;
+import org.marinemc.game.player.Player;
+import org.marinemc.server.Marine;
+import org.marinemc.util.operations.ArgumentedOperation;
+import org.marinemc.util.operations.Filter;
 
 /**
  * Created 2014-12-12 for MarineStandalone
@@ -239,9 +239,9 @@ public class PlayerList extends ArrayList<Short> implements Serializable {
      *
      * @param f action to perform
      */
-    final public synchronized void foreach(final ArgumentOperation<Player> f) {
+    final public synchronized void foreach(final ArgumentedOperation<Player> f) {
         for (final short s : this)
-            f.accept(Marine.getPlayer(s));
+            f.action(Marine.getPlayer(s));
     }
 
     /**

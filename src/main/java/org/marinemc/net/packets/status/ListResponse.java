@@ -24,7 +24,7 @@ import java.util.UUID;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.marinemc.game.chat.ChatColor;
-import org.marinemc.util.Base64Image;
+import org.marinemc.io.Base64Image;
 
 /**
  * List Response

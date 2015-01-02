@@ -17,13 +17,10 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package org.marinemc.util;
+package org.marinemc.io;
 
 import java.io.File;
 import java.io.IOException;
-
-import org.marinemc.io.Base64Encoding;
-import org.marinemc.io.BinaryFile;
 
 /**
  * Created 2014-12-21 for MarineStandalone
@@ -33,7 +30,7 @@ import org.marinemc.io.BinaryFile;
 public class Base64Image {
 
     private final File file;
-    private final String string;
+    private String string;
 
     public Base64Image(final File file) {
         if (file == null) {
@@ -62,4 +59,22 @@ public class Base64Image {
     public String toString() {
         return this.string;
     }
+    
+    public void refreshImage() {
+        if (file == null) {
+            this.string = "";
+            return;
+        }
+        if (!file.exists()) {
+            throw new IllegalArgumentException("File cannot be null, and has to exist");
+        }
+        BinaryFile f = new BinaryFile(file);
+        try {
+            f.readBinary();
+        } catch (final IOException e) {
+            throw new RuntimeException("Unable to read in the binary data", e);
+        }
+        this.string = new String(Base64Encoding.encode(f.getBytes()));
+    }
+    
 }

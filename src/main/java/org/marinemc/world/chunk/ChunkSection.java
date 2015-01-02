@@ -80,9 +80,10 @@ public final class ChunkSection {
         return raw;
     }
 
+    //TODO: NibbleArray based lightning
     public final ByteList getLightData() {
     	ByteList d = new ByteList();
-    	for(char id : blockMap)
+    	for(int i = 0; i < DATA_SIZE; i++)
     		d.writeByte((byte)-1);
     	return d;
     }

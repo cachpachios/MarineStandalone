@@ -62,5 +62,5 @@ public class ByteArray extends AbstractInput implements StoredReader, ByteDataIn
 	public int length() {
 		return data.length;
 	}
-
+	
 }

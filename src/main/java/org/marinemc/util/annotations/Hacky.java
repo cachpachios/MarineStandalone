@@ -27,7 +27,7 @@ import java.lang.annotation.Target;
 
 /**
  * Used to inform of hacky method, that uses more preformance/memory then necessary.
- * There is usally a more
+ * There is usally a more appropriet approch.
  *
  * @author Fozie
  */
