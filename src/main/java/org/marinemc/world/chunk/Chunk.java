@@ -25,6 +25,7 @@ import java.util.Random;
 
 import org.marinemc.game.player.Player;
 import org.marinemc.io.binary.ByteList;
+import org.marinemc.net.play.clientbound.world.UnloadChunkPacket;
 import org.marinemc.server.Marine;
 import org.marinemc.util.Position;
 import org.marinemc.util.annotations.Cautious;
@@ -81,6 +82,15 @@ public class Chunk {
             subscribingPlayers.add(p.getUID());
     }
 
+    public void unload() {
+    	for(Short s : subscribingPlayers)
+    		if(Marine.getServer().getPlayerManager().getPlayer(s) != null)
+    			Marine.getServer().getPlayerManager().getPlayer(s).getClient().sendPacket(new UnloadChunkPacket(pos));
+    	
+    	//TODO Save chunk perhaps :S
+    	
+    }
+    
     public void setBlock(Position pos, BlockID type) {
         setBlock(pos.x, pos.y, pos.z, type);
     }

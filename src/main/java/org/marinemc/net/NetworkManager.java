@@ -45,7 +45,7 @@ public class NetworkManager {
         clientList = new CopyOnWriteArrayList<Client>();
         
         try {
-            server = new ServerSocket(port, 100, bind); //Port and num "queued" connections
+            server = new ServerSocket(port, 10, bind); //Port and num "queued" connections
         } catch (IOException e) {
             Logging.getLogger().fatal("Port binding failed, perhaps already in use");
             System.exit(1);
@@ -143,15 +143,10 @@ public class NetworkManager {
 
         public void run() {
             while (true) {
-            	if(host.isEmpty()) {
-					try {
-						ClientProcessor.sleep(20);
-					} catch (InterruptedException e) {}
-					
-					continue;
-					
-            	}
             	host.processAll();
+            	try {
+					ClientProcessor.sleep(0, 100);
+				} catch (InterruptedException e) {}
             }
         }
     }
