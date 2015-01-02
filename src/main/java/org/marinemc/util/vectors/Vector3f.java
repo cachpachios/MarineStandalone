@@ -57,4 +57,46 @@ public class Vector3f extends Vector3<Float> {
         setY(getY() / n);
         setZ(getZ() / n);
     }
+    
+	@Override
+	public void divide(Float number) {
+		this.x /= number;
+		this.y /= number;
+		this.z /= number;
+	}
+
+	@Override
+	public void multiply(Float number) {
+		this.x *= number;
+		this.y *= number;
+		this.z *= number;
+	}
+
+	@Override
+	public void add(int factor) {
+		this.x += factor;
+		this.y += factor;
+		this.z += factor;
+	}
+
+	@Override
+	public void add(Float number) {
+		this.x += number;
+		this.y += number;
+		this.z += number;
+	}
+
+	@Override
+	public void sub(int factor) {
+		this.x -= factor;
+		this.y -= factor;
+		this.z -= factor;
+	}
+
+	@Override
+	public void sub(Float number) {
+		this.x -= number;
+		this.y -= number;
+		this.z -= number;
+	}
 }

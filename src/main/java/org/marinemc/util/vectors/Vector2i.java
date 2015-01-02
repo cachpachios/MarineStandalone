@@ -53,4 +53,45 @@ public class Vector2i extends Vector2<Integer> {
         setX(getX() / n);
         setY(getY() / n);
     }
+
+	@Override
+	public void divide(Integer number) {
+		this.x /= number;
+		this.y /= number;
+	}
+
+	@Override
+	public void multiply(Integer number) {
+		this.x *= number;
+		this.y *= number;
+	}
+
+	@Override
+	public void add(int factor) {
+		this.x += factor;
+		this.y += factor;
+	}
+
+	@Override
+	public void add(Integer number) {
+		this.x += number;
+		this.y += number;
+	}
+
+	@Override
+	public void sub(int factor) {
+		this.x -= factor;
+		this.y -= factor;
+	}
+
+	@Override
+	public void sub(Integer number) {
+		this.x -= number;
+		this.y -= number;
+	}
+
+	@Override
+	public Integer[] asArray() {
+		return new Integer[] {x,y};
+	}
 }

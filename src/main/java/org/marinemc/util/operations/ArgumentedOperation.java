@@ -20,17 +20,18 @@
 package org.marinemc.util.operations;
 
 /**
- * Alike Java 8's Consumer class but rewritten for java 7/6 users by Fozie
+ * Preforms a action/operation on a specified object with type T
  *
  * @author Fozie
+ * @see Operation
  */
-public interface ArgumentOperation<T> {
+public interface ArgumentedOperation<T> {
 
     /**
-     * Perform this action for on object
+     * Perform this action on the specified object object
      *
      * @param t object to perform the action on
      */
-    public void accept(T t);
+    public void action(T obj);
 
 }

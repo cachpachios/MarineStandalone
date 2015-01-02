@@ -59,4 +59,45 @@ public class Vector3b extends Vector3<Byte> {
 		this.z = (byte) (z / n);
 	}
 
+	@Override
+	public void divide(Byte number) {
+		this.x = (byte) (this.x / number);
+		this.y = (byte) (this.y / number);
+		this.z = (byte) (this.z / number);
+	}
+
+	@Override
+	public void multiply(Byte number) {
+		this.x = (byte) (this.x * number);
+		this.y = (byte) (this.y * number);
+		this.z = (byte) (this.z * number);
+	}
+
+	@Override
+	public void add(int factor) {
+		this.x = (byte) (this.x + factor);
+		this.y = (byte) (this.y + factor);
+		this.z = (byte) (this.z + factor);
+	}
+
+	@Override
+	public void add(Byte number) {
+		this.x = (byte) (this.x + number);
+		this.y = (byte) (this.y + number);
+		this.z = (byte) (this.z + number);
+	}
+
+	@Override
+	public void sub(int factor) {
+		this.x = (byte) (this.x - factor);
+		this.y = (byte) (this.y - factor);
+		this.z = (byte) (this.z - factor);
+	}
+
+	@Override
+	public void sub(Byte number) {
+		this.x = (byte) (this.x - number);
+		this.y = (byte) (this.y - number);
+		this.z = (byte) (this.z - number);
+	}
 }

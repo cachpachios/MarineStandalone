@@ -25,7 +25,7 @@ package org.marinemc.util.vectors;
  * @author Citymonstret
  * @author Fozie
  */
-public abstract class Vector3<T extends Number> implements Vector {
+public abstract class Vector3<T extends Number> implements Vector<T> {
 
     public T x, y, z;
 
@@ -96,4 +96,10 @@ public abstract class Vector3<T extends Number> implements Vector {
         hash = hash * 3 + getZ().intValue();
         return hash;
     }
+    
+	@Override
+	public T[] asArray() {
+		return (T[]) new Number[] {x,y,z};
+	}
+
 }

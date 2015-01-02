@@ -24,7 +24,7 @@ package org.marinemc.util.vectors;
  *
  * @author Citymonstret
  */
-public abstract class Vector2<T extends Number> implements Vector {
+public abstract class Vector2<T extends Number> implements Vector<T> {
 
     /**
      * X & Y Values

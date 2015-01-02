@@ -23,8 +23,11 @@ package org.marinemc.util.operations;
  * Operation Class
  *
  * @author Citymonstret
+ * @see ArgumenetOperation
  */
 public interface Operation {
-
+    /**
+     * Perform this action
+     */
     public void action();
 }

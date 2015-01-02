@@ -30,9 +30,9 @@ import org.marinemc.game.player.Player;
 public class PermissionFilter extends FilteredOperation<Player> {
 
     private Permission permission;
-    private ArgumentOperation<Player> operation;
+    private ArgumentedOperation<Player> operation;
 
-    public PermissionFilter(final Permission permission, final ArgumentOperation<Player> operation) {
+    public PermissionFilter(final Permission permission, final ArgumentedOperation<Player> operation) {
         this.permission = permission;
         this.operation = operation;
     }
@@ -44,7 +44,7 @@ public class PermissionFilter extends FilteredOperation<Player> {
     @Override
     public void perform(Player player) {
         if (operation != null) {
-            operation.accept(player);
+            operation.action(player);
         }
     }
 

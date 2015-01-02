@@ -23,6 +23,7 @@ package org.marinemc.util.vectors;
  * Double implementation of a 3D Vector
  *
  * @author Citymonstret
+ * @author Fozie
  */
 public class Vector3d extends Vector3<Double> {
 
@@ -85,5 +86,47 @@ public class Vector3d extends Vector3<Double> {
     public Vector3<Double> getGen() {
     	return this;
     }
+
+	@Override
+	public void divide(Double number) {
+		this.x /= number;
+		this.y /= number;
+		this.z /= number;
+	}
+
+	@Override
+	public void multiply(Double number) {
+		this.x *= number;
+		this.y *= number;
+		this.z *= number;
+	}
+
+	@Override
+	public void add(int factor) {
+		this.x += factor;
+		this.y += factor;
+		this.z += factor;
+	}
+
+	@Override
+	public void add(Double number) {
+		this.x += number;
+		this.y += number;
+		this.z += number;
+	}
+
+	@Override
+	public void sub(int factor) {
+		this.x -= factor;
+		this.y -= factor;
+		this.z -= factor;
+	}
+
+	@Override
+	public void sub(Double number) {
+		this.x -= number;
+		this.y -= number;
+		this.z -= number;
+	}
     
 }

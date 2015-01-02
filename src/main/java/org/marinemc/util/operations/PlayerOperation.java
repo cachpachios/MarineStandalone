@@ -26,8 +26,8 @@ import org.marinemc.game.player.Player;
  *
  * @author Citymonstret
  */
-public abstract class PlayerOperation implements ArgumentOperation<Player> {
+public abstract class PlayerOperation implements ArgumentedOperation<Player> {
 
     @Override
-    public abstract void accept(Player player);
+    public abstract void action(Player player);
 }
