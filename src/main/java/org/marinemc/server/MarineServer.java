@@ -19,16 +19,11 @@
 
 package org.marinemc.server;
 
-import java.io.File;
-import java.net.InetAddress;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
-
 import org.marinemc.events.Event;
 import org.marinemc.game.PlayerManager;
 import org.marinemc.game.WorldManager;
 import org.marinemc.game.command.CommandSender;
+import org.marinemc.game.command.ServiceProvider;
 import org.marinemc.game.player.Player;
 import org.marinemc.game.scheduler.Scheduler;
 import org.marinemc.net.NetworkManager;
@@ -40,6 +35,12 @@ import org.marinemc.world.Difficulty;
 import org.marinemc.world.Gamemode;
 import org.marinemc.world.World;
 
+import java.io.File;
+import java.net.InetAddress;
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
+
 /**
  * MarineServer interface
  *
@@ -47,7 +48,7 @@ import org.marinemc.world.World;
  * @author Fozie
  */
 @SuppressWarnings("unused")
-public interface MarineServer {
+public interface MarineServer extends ServiceProvider {
 
     /**
      * See if the server is offline

@@ -19,14 +19,6 @@
 
 package org.marinemc.server;
 
-import java.io.File;
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.util.Collection;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.UUID;
-
 import org.marinemc.events.Event;
 import org.marinemc.events.EventManager;
 import org.marinemc.events.standardevents.ServerReadyEvent;
@@ -38,17 +30,7 @@ import org.marinemc.game.command.Command;
 import org.marinemc.game.command.CommandSender;
 import org.marinemc.game.command.ConsoleSender;
 import org.marinemc.game.command.ServiceProvider;
-import org.marinemc.game.commands.Help;
-import org.marinemc.game.commands.Info;
-import org.marinemc.game.commands.List;
-import org.marinemc.game.commands.Me;
-import org.marinemc.game.commands.Plugins;
-import org.marinemc.game.commands.Say;
-import org.marinemc.game.commands.SendAboveActionBarMessage;
-import org.marinemc.game.commands.Stop;
-import org.marinemc.game.commands.Teleport;
-import org.marinemc.game.commands.Tellraw;
-import org.marinemc.game.commands.Test;
+import org.marinemc.game.commands.*;
 import org.marinemc.game.permission.PermissionManager;
 import org.marinemc.game.player.Player;
 import org.marinemc.game.scheduler.MarineRunnable;
@@ -65,11 +47,20 @@ import org.marinemc.util.Assert;
 import org.marinemc.util.Base64Image;
 import org.marinemc.util.Location;
 import org.marinemc.util.StartSettings;
+import org.marinemc.util.mojang.MojangTask;
 import org.marinemc.util.mojang.UUIDHandler;
 import org.marinemc.world.Difficulty;
 import org.marinemc.world.Gamemode;
 import org.marinemc.world.Identifiers;
 import org.marinemc.world.World;
+
+import java.io.File;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.util.Collection;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.UUID;
 
 /**
  * Server implementation
@@ -178,6 +169,7 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
         this.timer.scheduleAtFixedRate(this, 0l, (1000 / tickRate));
         PermissionManager.instance().load();
         UUIDHandler.instance(); // Make sure to init.
+        getScheduler().createAsyncTask(new MojangTask());
     }
 
     @Override

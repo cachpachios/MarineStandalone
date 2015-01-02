@@ -19,21 +19,22 @@
 
 package org.marinemc.net.packets.status;
 
-import java.io.IOException;
-import java.util.UUID;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.marinemc.events.standardevents.ListEvent;
 import org.marinemc.game.chat.ChatColor;
 import org.marinemc.game.player.Player;
-import org.marinemc.io.binary.ByteInput;
 import org.marinemc.io.binary.ByteList;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
 import org.marinemc.server.Marine;
 import org.marinemc.server.ServerProperties;
+import org.marinemc.util.mojang.MojangTask;
+import org.marinemc.util.mojang.MojangUtils;
+
+import java.io.IOException;
+import java.util.UUID;
 /**
  * @author Fozie
  */
@@ -64,6 +65,13 @@ public class MultiplayerListPacket extends Packet {
         }
 
         ListResponse response = new ListResponse(Marine.getMotd(), Marine.getPlayers().size(), Marine.getMaxPlayers(), samples, Marine.getServer().getFavicon());
+        if (MojangTask.getStatus() != MojangUtils.Status.ONLINE) {
+            String motd = response.getMOTD();
+            if (motd.contains("\n")) {
+                motd = motd.split("\n")[0];
+            }
+            response.setMotd(motd + "\nAuth Servers Are Down");
+        }
         ListEvent event = new ListEvent(response);
 
         Marine.getServer().callEvent(event);

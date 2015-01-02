@@ -1,3 +1,22 @@
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// MarineStandalone is a minecraft server software and API.
+// Copyright (C) MarineMC (marinemc.org)
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 2 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License along
+// with this program; if not, write to the Free Software Foundation, Inc.,
+// 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 package org.marinemc.io.binary;
 
 import java.util.ArrayList;
@@ -11,15 +30,14 @@ import java.util.List;
  *
  */
 public class ByteUtils {
-	
-	public static final List<Byte> asWrappedList(final byte[] array) {
+
+    public static List<Byte> asWrappedList(final byte[] array) {
         final List<Byte> result = new ArrayList<>(array.length);
-        for (int i = 0; i < array.length; i++)
-        	result.add(new Byte(array[i]));
+        for (byte anArray : array) result.add(anArray);
         return result;
 	}
-	
-	public final static Byte[] wrap(final byte[] array) {
+
+    public static Byte[] wrap(final byte[] array) {
         if (array == null)
             return null;
         else if (array.length == 0)
@@ -27,7 +45,7 @@ public class ByteUtils {
 
         final Byte[] result = new Byte[array.length];
         for (int i = 0; i < array.length; i++) {
-            result[i] = new Byte(array[i]);
+            result[i] = array[i];
         }
         return result;
     }
@@ -61,7 +79,7 @@ public class ByteUtils {
         if (array == null) {
             return null;
         }
-        return (byte[]) array.clone();
+        return array.clone();
     }
     
     public static byte[] unwrap(final Byte[] array) {
@@ -73,7 +91,7 @@ public class ByteUtils {
         final byte[] result = new byte[array.length];
         for (int i = 0; i < array.length; i++) {
             Byte b = array[i];
-            result[i] = (b == null ? 0 : b.byteValue());
+            result[i] = (b == null ? 0 : b);
         }
         return result;
     }

@@ -55,7 +55,7 @@ public class Assert {
         if (t instanceof Collection) {
             b = ((Collection) t).isEmpty();
         } else if (t instanceof Map) {
-            b = ((Collection) t).isEmpty();
+            b = ((Map) t).isEmpty();
         } else {
             throw new IllegalArgumentException("T is not a collection or a map");
         }

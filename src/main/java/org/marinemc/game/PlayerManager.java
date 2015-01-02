@@ -19,16 +19,8 @@
 
 package org.marinemc.game;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-import java.util.regex.Pattern;
-
 import org.marinemc.events.standardevents.JoinEvent;
 import org.marinemc.events.standardevents.PreLoginEvent;
-import org.marinemc.game.async.ChatManager;
 import org.marinemc.game.async.TimeoutManager;
 import org.marinemc.game.inventory.PlayerInventory;
 import org.marinemc.game.player.Player;
@@ -47,6 +39,11 @@ import org.marinemc.util.annotations.Cautious;
 import org.marinemc.util.annotations.Hacky;
 import org.marinemc.util.mojang.UUIDHandler;
 import org.marinemc.world.entity.EntityType;
+
+import java.util.*;
+import java.util.regex.Pattern;
+
+import static org.marinemc.game.async.ChatManager.*;
 
 /**
  * The place where players are saved and accessed.
@@ -141,10 +138,10 @@ public class PlayerManager {
 		p.sendPositionAndLook();
 		
 		p.sendTime();
-		
-		JoinEvent event = new JoinEvent(p, ChatManager.JOIN_MESSAGE);
+
+		JoinEvent event = new JoinEvent(p, JOIN_MESSAGE);
 		Marine.getServer().callEvent(event);
-		ChatManager.getInstance().sendJoinMessage(p, event.getJoinMessage());
+		getInstance().sendJoinMessage(p, event.getJoinMessage());
 
 		TablistManager.getInstance().addItem(p);
 		TablistManager.getInstance().joinList(p);
@@ -295,9 +292,8 @@ public class PlayerManager {
 
 	public void disconnect_nonnewtork(Player p) {
 		Assert.contains(this.players, p.getUID());
-		ChatManager
-				.getInstance()
-				.broadcastMessage(ChatManager.format(ChatManager.LEAVE_MESSAGE, p));
+		getInstance()
+				.broadcastMessage(format(LEAVE_MESSAGE, p));
 		removePlayer(p.getUID());
 	}
 	
@@ -306,9 +302,8 @@ public class PlayerManager {
 		// 	return;
 		// }
 		Assert.contains(this.players, p.getUID());
-		ChatManager
-				.getInstance()
-				.broadcastMessage(ChatManager.format(ChatManager.LEAVE_MESSAGE, p));
+		getInstance()
+				.broadcastMessage(format(LEAVE_MESSAGE, p));
 		removePlayer(p.getUID());
 		Marine.getServer().getNetworkManager().cleanUp(p.getClient());
 	}

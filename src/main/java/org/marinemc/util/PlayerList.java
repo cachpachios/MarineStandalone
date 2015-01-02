@@ -19,12 +19,6 @@
 
 package org.marinemc.util;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.UUID;
-
 import org.marinemc.events.EventListener;
 import org.marinemc.events.EventManager;
 import org.marinemc.events.standardevents.LeaveEvent;
@@ -32,6 +26,12 @@ import org.marinemc.game.player.Player;
 import org.marinemc.server.Marine;
 import org.marinemc.util.operations.ArgumentOperation;
 import org.marinemc.util.operations.Filter;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.UUID;
 
 /**
  * Created 2014-12-12 for MarineStandalone
@@ -215,7 +215,7 @@ public class PlayerList extends ArrayList<Short> implements Serializable {
         synchronized (this) {
             players = getPlayers();
         }
-        return new Player[players.size()];
+        return players.toArray(new Player[players.size()]);
     }
 
     @SuppressWarnings("ALL")
