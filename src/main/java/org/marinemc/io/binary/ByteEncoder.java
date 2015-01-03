@@ -17,17 +17,18 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package org.marinemc.io.data;
+package org.marinemc.io.binary;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
-import org.marinemc.io.binary.ByteHolder;
+import org.marinemc.util.vectors.Vector3f;
+import org.marinemc.util.vectors.Vector3i;
 /**
  * @author Fozie
  */
-@Deprecated
 public final class ByteEncoder {
     public static byte[] writeByte(byte b) {
         return new byte[]{
@@ -111,16 +112,30 @@ public final class ByteEncoder {
         return r;
     }
 
-    public static byte[] writeUTFPrefixedString(String s) {
-        return writeBytes(new byte[][]{
-                        writeShort((short) s.length()),
-                        s.getBytes(StandardCharsets.UTF_8)
-                }
-        );
+    public static byte[] writeUTF8(String s) {
+    	List<Byte> data = new ArrayList<Byte>();
+    	
+    	int v = s.length();
+        byte part;
+        while (true) {
+            part = (byte) (v & 0x7F);
+            v >>>= 7;
+            if (v != 0) {
+                part |= 0x80;
+            }
+            data.add(part);
+            if (v == 0) {
+                break;
+            }
+        }
+        
+        for(byte b : s.getBytes(StandardCharsets.UTF_8))
+        	data.add(b);
+        
+        return ByteUtils.unwrap(data.toArray(new Byte[data.size()]));
     }
-
-    public static byte[] writeVarInt(int v) {
-        ByteHolder r = new ByteHolder();
+    public static Collection<Byte> writeListVarInt(int v) {
+    	List<Byte> r = new ArrayList<Byte>();
 
         byte part;
         while (true) {
@@ -129,15 +144,48 @@ public final class ByteEncoder {
             if (v != 0) {
                 part |= 0x80;
             }
-            r.writeByte(part);
+            r.add(part);
+            if (v == 0) {
+                break;
+            }
+        }
+        return r;
+    }
+    public static byte[] writeVarInt(int v) {
+        List<Byte> r = new ArrayList<Byte>();
+
+        byte part;
+        while (true) {
+            part = (byte) (v & 0x7F);
+            v >>>= 7;
+            if (v != 0) {
+                part |= 0x80;
+            }
+            r.add(part);
             if (v == 0) {
                 break;
             }
         }
 
-        return r.getBytes();
+        return ByteUtils.unwrap((Byte[]) r.toArray());
     }
-
+    
+    public static byte[] writeVector3i(Vector3i vec) {
+    	return writeBytes(new byte[][] {
+    									writeInt(vec.x),
+    									writeInt(vec.y),
+    									writeInt(vec.z)
+    									});
+    }
+    
+    public static byte[] writeVector3f(Vector3f vec) {
+    	return writeBytes(new byte[][] {
+    									writeFloat(vec.x),
+    									writeFloat(vec.y),
+    									writeFloat(vec.z)
+    									});
+    }
+    
     public static byte[] writeUnsignedVarInt(int v) {
 
         ArrayList<Byte> out = new ArrayList<Byte>();

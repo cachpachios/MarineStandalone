@@ -129,8 +129,13 @@ public class ByteUtils {
     public static String readUTF8Short(final ByteInput v) {
     	return new String(v.readBytes(v.readShort()));
     }
+    
     public static String readUTF8VarInt(final ByteInput v) {
     	return new String(v.readBytes(v.readVarInt()));
+    }
+    
+    public static byte[] singleton(byte b) {
+    	return new byte[] {b};
     }
     
     public static byte[] VarInt(int v) {

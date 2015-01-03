@@ -1,7 +1,6 @@
 package org.marinemc.world.entity.meta;
 
-import java.nio.charset.StandardCharsets;
-
+import org.marinemc.io.binary.ByteEncoder;
 import org.marinemc.io.binary.ByteUtils;
 import org.marinemc.util.vectors.Vector3f;
 import org.marinemc.util.vectors.Vector3i;
@@ -11,73 +10,52 @@ public class MetaObject extends Object{
 	
 	public final Type type;
 	
-	public MetaObject(Object obj) {
-		Type type;
-		if(obj instanceof Byte) type = Type.BYTE; else
-			if(obj instanceof Boolean) type = Type.BYTE; else
-				if(obj instanceof Short) type = Type.SHORT; else
-					if(obj instanceof Integer) type = Type.INT; else
-						if(obj instanceof Float) type = Type.FLOAT; else
-							if(obj instanceof String) type = Type.UTF8; else
-								if(obj instanceof Vector3i) type = Type.INTVEC; else
-									if(obj instanceof Vector3f) type = Type.FLOATVEC; else
-										throw new ClassCastException("Invalid object type!");
-		switch(type) {
-		case BYTE: if(obj instanceof Boolean) data = new byte[] {encodeBoolean((Boolean) obj)}; else data = new byte[] {(Byte) obj };
-		case SHORT: data = parse((Short) obj);
-		case INT: data = parse((Integer) obj);
-		case FLOAT: data = parse((Float) obj);
-		case UTF8: data = ByteUtils.combine(ByteUtils.VarInt(obj.toString().length()), obj.toString().getBytes(StandardCharsets.UTF_8));
-		case INTVEC: data = ByteUtils.merge(parse(((Vector3i) obj).getX()), parse(((Vector3i) obj).getY()), parse(((Vector3i) obj).getZ()));
-		case FLOATVEC: data = ByteUtils.merge(parse(((Vector3f) obj).getX()), parse(((Vector3f) obj).getY()), parse(((Vector3f) obj).getZ()));
-		default: data = new byte[] {(byte)obj};
-		}
-		
-		this.type = type;
+	public MetaObject(byte v) {
+		this.data = ByteUtils.singleton(v);
+		this.type = Type.BYTE;
 	}
 	
-	private byte encodeBoolean(boolean b) {
-		if(b)
-			return 0x01;
-		else
-			return 0x00;
+	public MetaObject(boolean v) {
+		this.data = ByteEncoder.writeBoolean(v);
+		this.type = Type.BYTE;
 	}
+	
+	public MetaObject(short v) {
+		this.data = ByteEncoder.writeShort(v);
+		this.type = Type.SHORT;
+	}
+	
+	public MetaObject(int v) {
+		this.data = ByteEncoder.writeInt(v);
+		this.type = Type.INT;
+	}
+	
+	public MetaObject(float v) {
+		this.data = ByteEncoder.writeInt(Float.floatToIntBits(v));
+		this.type = Type.FLOAT;
+	}
+	
+	public MetaObject(String v) {
+		this.data = ByteEncoder.writeUTF8(v);
+		this.type = Type.UTF8;
+	}
+	
 	
 	public MetaObject(Type type, Object obj) {
 		switch(type) {
-		case BYTE: data = new byte[] {(byte)obj};
-		case SHORT: data = parse((short) obj);
-		case INT: data = parse((int) obj);
-		case FLOAT: data = parse((float) obj);
-		case UTF8: data = ByteUtils.combine(ByteUtils.VarInt(obj.toString().length()), obj.toString().getBytes(StandardCharsets.UTF_8));
-		case INTVEC: data = ByteUtils.merge(parse(((Vector3i) obj).getX()), parse(((Vector3i) obj).getY()), parse(((Vector3i) obj).getZ()));
-		case FLOATVEC: data = ByteUtils.merge(parse(((Vector3f) obj).getX()), parse(((Vector3f) obj).getY()), parse(((Vector3f) obj).getZ()));
+		case BYTE: if(obj instanceof Boolean) data = ByteEncoder.writeBoolean((boolean) obj); else data = new byte[] {(Byte) obj};
+		case SHORT: data = ByteEncoder.writeShort((short) obj);
+		case INT: data = ByteEncoder.writeInt((int) obj);
+		case FLOAT: data = ByteEncoder.writeFloat((float) obj);
+		case UTF8: data = ByteEncoder.writeUTF8((String) obj);
+		case INTVEC: data = ByteEncoder.writeVector3i((Vector3i) obj);
+		case FLOATVEC: data = ByteEncoder.writeVector3f((Vector3f) obj);
 		default: data = new byte[] {(byte)obj};
 		}
 		
 		this.type = type;
 		
 	}
-	
-    private static byte[] parse(short v) {
-        return new byte[]{
-                (byte) (0xff & (v >> 8)),
-                (byte) (0xff & v)
-        };
-    } 
-    
-    public static byte[] parse(int v) {
-        return new byte[]{
-                (byte) (0xff & (v >> 24)),
-                (byte) (0xff & (v >> 16)),
-                (byte) (0xff & (v >> 8)),
-                (byte) (0xff & v)
-        };
-    }
-    
-    public static byte[] parse(float v) {
-    	return parse(Float.floatToIntBits(v));
-    }
     
     public void finalize() {
     	data = null;

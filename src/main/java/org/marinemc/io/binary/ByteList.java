@@ -306,8 +306,9 @@ public class ByteList extends AbstractInput implements ByteDataOutput, SortedByt
 	}
 
 	public void writeUUID(UUID uuid) {
-		writeLong(uuid.getLeastSignificantBits());
-		writeLong(uuid.getMostSignificantBits());
+//		writeLong(uuid.getLeastSignificantBits());
+//		writeLong(uuid.getMostSignificantBits());
+		writeUTF8(uuid.toString());
 	}
 
 	public void writePosition(Position pos) {

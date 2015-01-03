@@ -32,7 +32,6 @@ import java.util.zip.DataFormatException;
 
 import org.marinemc.io.ByteCompressor;
 import org.marinemc.io.ByteCompressor.EncodingUseless;
-import org.marinemc.io.data.ByteEncoder;
 import org.marinemc.logging.Logging;
 import org.marinemc.util.Position;
 

@@ -1,39 +1,33 @@
 package org.marinemc.world.entity.meta;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
-import org.marinemc.io.binary.ByteUtils;
+import org.marinemc.io.binary.ByteList;
 
-class Metadata {
-	private List<MetaObject> objects;
+abstract class Metadata {
+	private Map<Integer, MetaObject> objects;
 	
 	public Metadata(final int size) {
-		objects = new ArrayList<>(size);
+		objects = new HashMap<>(size);
 	}
 	
-	void add(MetaObject obj) {
-		objects.add(obj);
-	}
-	
-	void set(int i, MetaObject obj) {
-		objects.set(i, obj);
+	void add(int i, MetaObject obj) {
+		objects.put(i, obj);
 	}
 	
 	public void finalAdd() {}
 	
-	private final static byte[] endPoint = new byte[] {127};
-	
 	public byte[] getBytes() {
-		byte[] r = new byte[0];
-		int i = -1;
-		for(MetaObject obj : objects) {
-			ByteUtils.combine(r, new byte[] {obj.getPrefix(++i)});
-			ByteUtils.combine(r, obj.getBytes());
-		}
-		ByteUtils.combine(r, endPoint);
+		ByteList data = new ByteList();
 		
-		return r;
+		for(int id : objects.keySet()) {
+			data.writeByte(objects.get(id).getPrefix(id));
+			data.write(objects.get(id).getBytes());
+		}
+		data.writeByte((byte) 0x7F);
+		
+		return data.toBytes();
 	}
 	
 }

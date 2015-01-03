@@ -7,8 +7,8 @@ public abstract class EntityMeta extends Metadata {
 	public EntityMeta(int size, short air) {
 		super(2 + size);
 		
-		add(new MetaObject((byte) 0)); //TODO: Bitmap with booleans onFire, crouched, sprinting, blocking, invis
+		add(0, new MetaObject((byte) 0)); //TODO: Bitmap with booleans onFire, crouch, sprinting, blocking, invis
 		
-		add(new MetaObject(air));
+		add(1, new MetaObject(air));
 	}
 }

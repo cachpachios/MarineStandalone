@@ -21,8 +21,8 @@ package org.marinemc.net.packets.status;
 
 import java.io.IOException;
 
+import org.marinemc.io.binary.ByteEncoder;
 import org.marinemc.io.binary.ByteInput;
-import org.marinemc.io.data.ByteEncoder;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;

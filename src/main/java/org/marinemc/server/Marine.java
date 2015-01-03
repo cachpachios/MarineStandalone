@@ -30,7 +30,7 @@ import org.marinemc.game.scheduler.Scheduler;
 import org.marinemc.game.system.MarineSecurityManager;
 import org.marinemc.logging.Logging;
 import org.marinemc.util.annotations.Protected;
-import org.marinemc.util.operations.ArgumentOperation;
+import org.marinemc.util.operations.ArgumentedOperation;
 import org.marinemc.util.operations.PermissionFilter;
 import org.marinemc.util.operations.PlayerOperation;
 import org.marinemc.world.World;
@@ -193,7 +193,7 @@ public class Marine {
     public static void broadcast(final Permission permission, final String message) {
         foreach(new PermissionFilter(permission, new PlayerOperation() {
             @Override
-            public void accept(Player player) {
+            public void action(Player player) {
                 player.sendMessage(message);
             }
         }));
@@ -242,9 +242,9 @@ public class Marine {
      *
      * @param o Operation to perform
      */
-    public static void foreach(final ArgumentOperation<Player> o) {
+    public static void foreach(final ArgumentedOperation<Player> o) {
         for (final Player player : getPlayers()) {
-            o.accept(player);
+            o.action(player);
         }
     }
 

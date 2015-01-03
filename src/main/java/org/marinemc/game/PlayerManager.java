@@ -32,6 +32,7 @@ import org.marinemc.net.packets.login.LoginPacket;
 import org.marinemc.net.packets.login.LoginSucessPacket;
 import org.marinemc.net.play.clientbound.ChatPacket;
 import org.marinemc.net.play.clientbound.JoinGamePacket;
+import org.marinemc.net.play.clientbound.player.SpawnPlayerPacket;
 import org.marinemc.server.Marine;
 import org.marinemc.util.Assert;
 import org.marinemc.util.Location;
@@ -148,7 +149,7 @@ public class PlayerManager {
 		TablistManager.getInstance().setHeaderAndFooter("Testing", "MarineStandalone", p);
 
 		putPlayer(p);
-//		//Send them the herobrine :>
+		//Send them the herobrine :>
 //		p.getClient().sendPacket(new SpawnPlayerPacket(new Player(
 //				EntityType.PLAYER,
 //				5,
@@ -167,7 +168,7 @@ public class PlayerManager {
 //				new PlayerInventory((byte) 0),
 //				null
 //		)));
-		
+//		
 		return null; // To indicate that the player was successfully created and joined
 	}
 	

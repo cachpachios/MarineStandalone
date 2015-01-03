@@ -26,6 +26,7 @@ import org.marinemc.io.binary.ByteList;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
+import org.marinemc.world.entity.meta.HumanMeta;
 
 /*
  * 
@@ -62,46 +63,8 @@ public class SpawnPlayerPacket extends Packet {
 		// WARNING FOLLOWING CANT BE -1 IT WILL CRASH THE CLIENT
 		d.writeShort((short) 0); // TODO : In hand item like p.getInHand(); 
 		
-//		d.writeByte((byte) ((0 << 5 | 0 & 31) & 255));
-//		d.writeByte((byte)0);
-//		
-//		d.writeByte((byte) ((1 << 5 | 1 & 31) & 255));
-//		d.writeShort((short) 0);
-//
-//		d.writeByte((byte) ((2 << 5 | 4 & 31) & 255));
-//		d.writeUTF8(p.getUserName());
-//		
-//		d.writeByte((byte) ((3 << 5 | 0 & 31) & 255));
-//		d.writeBoolean(true);
-//		
-//		d.writeByte((byte) ((6 << 5 | 3 & 31) & 255));
-//		d.writeFloat(1);
-//		
-//		d.writeByte((byte) ((7 << 5 | 2 & 31) & 255));
-//		d.writeInt(0);
-//		
-//		d.writeByte((byte) ((8 << 5 | 0 & 31) & 255));
-//		d.writeByte((byte)0);
-//		
-//		d.writeByte((byte) ((9 << 5 | 0 & 31) & 255));
-//		d.writeByte((byte)0);
-//		
-//		d.writeByte((byte) ((15 << 5 | 0 & 31) & 255));
-//		d.writeByte((byte)0);
-//		
-//		d.writeByte((byte) ((10 << 5 | 0 & 31) & 255));
-//		d.writeByte((byte)0);
-//		
-//		d.writeByte((byte) ((16 << 5 | 0 & 31) & 255));
-//		d.writeByte((byte)0);
-//		
-//		d.writeByte((byte) ((17 << 5 | 3 & 31) & 255));
-//		d.writeFloat(0);
-//		
-//		d.writeByte((byte) ((15 << 5 | 2 & 31) & 255));
-//		d.writeInt(0);
+		d.write(new HumanMeta((short)20, "Herobrine", true, 20f, (byte)0).getBytes());
 		
-		d.writeByte((byte)0x7F); // End meta sending.
 		
 		stream.write(getID(), d);
 	}
