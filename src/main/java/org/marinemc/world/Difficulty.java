@@ -19,6 +19,8 @@
 
 package org.marinemc.world;
 /**
+ * All posseble difficulties in minecraft as of 1.8.2
+ * 
  * @author Fozie
  */
 public enum Difficulty {

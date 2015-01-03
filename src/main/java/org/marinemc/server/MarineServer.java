@@ -359,4 +359,6 @@ public interface MarineServer extends ServiceProvider {
      * @param b True to add, false to remove
      */
     public void setWhitelisted(UUID uuid, boolean b);
+
+	public int getViewDistance();
 }

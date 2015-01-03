@@ -102,6 +102,7 @@ public final class ChunkSection {
 
     @Hacky
     public BlockID getBlock(int x, int y, int z) {
+    	//TODO Include MetaData in the search
         return Identifiers.getBlockID((byte) (getType(x, y, z) & 0xff));
     }
 

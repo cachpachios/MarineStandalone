@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.marinemc.game.WorldManager;
+import org.marinemc.game.player.Player;
 import org.marinemc.util.Position;
 import org.marinemc.world.chunk.Chunk;
 import org.marinemc.world.chunk.ChunkPos;
@@ -41,7 +42,7 @@ public class World { // TODO Save and unload chunks...
 	
     //Async stuff:
     private WorldThread thread;
-    private List<ChunkPos> chunksToGenerate;
+    private List<Long> chunksToGenerate;
     
     //Identifiers:
     private final String name;
@@ -86,11 +87,15 @@ public class World { // TODO Save and unload chunks...
     }
 
     public void generateAsyncChunk(int x, int y) {
-    	chunksToGenerate.add(new ChunkPos(x,y));
+    	ChunkPos pos = new ChunkPos(x,y);
+
+    	if(!loadedChunks.containsKey(pos.encode()))
+    		chunksToGenerate.add(pos.encode());
     }
     
     public void generateAsyncChunk(ChunkPos pos) {
-    	chunksToGenerate.add(pos);
+    	if(!loadedChunks.containsKey(pos.encode()))
+    		chunksToGenerate.add(pos.encode());
     }
     
     public void generateAsyncRegion(int x, int y, int amtX, int amtY)  {
@@ -148,13 +153,13 @@ public class World { // TODO Save and unload chunks...
     }
     
     void generateRequested() {
-    	for(ChunkPos pos : chunksToGenerate) {
-    		if(loadedChunks.containsKey(pos.encode())) {
+    	for(Long pos : chunksToGenerate) {
+    		if(loadedChunks.containsKey(pos)) {
     			chunksToGenerate.remove(pos);
     			continue;
     		}
     		
-    		forceGenerateChunk(pos);
+    		forceGenerateChunk(new ChunkPos(pos));
     		
     	}
     }
@@ -205,5 +210,9 @@ public class World { // TODO Save and unload chunks...
 
 	public boolean hasChunksToGenerate() {
 		return !chunksToGenerate.isEmpty();
+	}
+
+	public void putForDownload(Player p) {
+		
 	}
 }

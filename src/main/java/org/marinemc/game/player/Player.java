@@ -53,6 +53,7 @@ import org.marinemc.net.play.clientbound.world.UnloadChunkPacket;
 import org.marinemc.server.Marine;
 import org.marinemc.util.Assert;
 import org.marinemc.util.Location;
+import org.marinemc.util.MathUtils;
 import org.marinemc.util.Position;
 import org.marinemc.util.StringComparison;
 import org.marinemc.util.annotations.Cautious;
@@ -483,4 +484,34 @@ public class Player extends LivingEntity implements IPlayer, CommandSender {
 	final public String toString() {
 		return this.name;
 	}
+
+	public void localChunkRegion(int w, int h) {
+		List<Long> chunksToSend = new ArrayList<Long>();
+		List<Long> chunksToUnload = new ArrayList<Long>();
+		
+		System.out.println("Invoke");
+		
+		// Put missing chunks for sending
+		for(int x = -(w/2); x < w/2;x++)
+			for(int y = -(h/2); x < h/2;y++) {
+				if(loadedChunks.contains(ChunkPos.Encode(x, y)))
+					chunksToSend.add(ChunkPos.Encode(x, y));
+			}
+		
+		// Remove extra chunks
+		for(Long l : loadedChunks) {
+			ChunkPos c = new ChunkPos(l);
+			if(!MathUtils.isInsideRect((int)getX(), (int)getY(), w,h, c.x, c.y))
+				chunksToUnload.add(l);
+		}
+		
+		for(Long l : chunksToUnload)
+			getWorld().getChunkForce(new ChunkPos(l)).unload(this);
+		
+		for(Long l : chunksToSend)
+			sendChunk(getWorld().getChunkForce(new ChunkPos(l)));
+		
+		chunksToSend = null;
+		chunksToUnload = null;
+	} 
 }

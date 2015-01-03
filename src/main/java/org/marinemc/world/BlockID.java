@@ -23,6 +23,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.marinemc.util.IDObject;
 /**
+ * All posseble blocks/materials in minecraft as of 1.8.2
+ * 
  * @author Fozie
  */
 public enum BlockID implements IDObject {

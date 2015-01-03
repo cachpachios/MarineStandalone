@@ -38,7 +38,10 @@ public class MojangTask extends MarineRunnable {
     }
 
     public static synchronized MojangUtils.Status getStatus() {
-        return instance.AUTH;
+    	if(instance != null)
+    		return instance.AUTH;
+    	else
+    		return MojangUtils.Status.UNKNOWN;
     }
 
     @Override

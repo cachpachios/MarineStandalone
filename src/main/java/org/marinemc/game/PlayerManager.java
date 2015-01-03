@@ -19,9 +19,22 @@
 
 package org.marinemc.game;
 
+import static org.marinemc.game.async.ChatManager.JOIN_MESSAGE;
+import static org.marinemc.game.async.ChatManager.LEAVE_MESSAGE;
+import static org.marinemc.game.async.ChatManager.format;
+import static org.marinemc.game.async.ChatManager.getInstance;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+import java.util.regex.Pattern;
+
 import org.marinemc.events.standardevents.JoinEvent;
 import org.marinemc.events.standardevents.PreLoginEvent;
 import org.marinemc.game.async.TimeoutManager;
+import org.marinemc.game.async.WorldStreamingThread;
 import org.marinemc.game.inventory.PlayerInventory;
 import org.marinemc.game.player.Player;
 import org.marinemc.game.player.PlayerEntityHandler;
@@ -32,19 +45,14 @@ import org.marinemc.net.packets.login.LoginPacket;
 import org.marinemc.net.packets.login.LoginSucessPacket;
 import org.marinemc.net.play.clientbound.ChatPacket;
 import org.marinemc.net.play.clientbound.JoinGamePacket;
-import org.marinemc.net.play.clientbound.player.SpawnPlayerPacket;
 import org.marinemc.server.Marine;
 import org.marinemc.util.Assert;
 import org.marinemc.util.Location;
 import org.marinemc.util.annotations.Cautious;
 import org.marinemc.util.annotations.Hacky;
 import org.marinemc.util.mojang.UUIDHandler;
+import org.marinemc.util.operations.PlayerOperation;
 import org.marinemc.world.entity.EntityType;
-
-import java.util.*;
-import java.util.regex.Pattern;
-
-import static org.marinemc.game.async.ChatManager.*;
 
 /**
  * The place where players are saved and accessed.
@@ -56,21 +64,25 @@ public class PlayerManager {
 	private final Pattern validName;
 	private final TimeoutManager timeout;
 	private final PlayerEntityHandler localEntityHandler;
-	private volatile Map<Short, Player> players;
-	private volatile Map<String, Short> namePointers;
+	private Map<Short, Player> players;
+	private Map<String, Short> namePointers;
 
+	private final WorldStreamingThread worldStreamer;
+	
 	public PlayerManager() {
 		players = new HashMap<Short, Player>();
 		localEntityHandler = new PlayerEntityHandler();
 		namePointers = new HashMap<String, Short>();
 		timeout = new TimeoutManager();
 		validName = Pattern.compile("^[a-zA-Z0-9_]{2,16}$");
+		worldStreamer = new WorldStreamingThread(this);
+		worldStreamer.start();
 	}
 
 	public String login(Client client, final LoginPacket packet) {
 		// TODO: Encryption and Compression
 		// TODO Proper authentication
-
+		
 		String name = packet.name;
 		UUID uuid = UUIDHandler.instance().getUUID(name);
 
@@ -168,7 +180,7 @@ public class PlayerManager {
 //				new PlayerInventory((byte) 0),
 //				null
 //		)));
-//		
+		
 		return null; // To indicate that the player was successfully created and joined
 	}
 	
@@ -311,5 +323,14 @@ public class PlayerManager {
 
 	public PlayerEntityHandler getEntitySpawner() {
 		return localEntityHandler;
+	}
+
+	public boolean isEmpty() {
+		return players.isEmpty();
+	}
+
+	public void forEach(PlayerOperation operation) {
+		for(Player p : players.values())
+				operation.action(p);
 	}
 }

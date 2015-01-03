@@ -475,4 +475,9 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
         Assert.notNull(offlineMode);
         this.offlineMode = offlineMode;
     }
+
+	@Override
+	public int getViewDistance() {
+		return 10;
+	}
 }

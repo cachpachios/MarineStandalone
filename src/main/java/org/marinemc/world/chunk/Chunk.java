@@ -25,7 +25,6 @@ import java.util.Random;
 
 import org.marinemc.game.player.Player;
 import org.marinemc.io.binary.ByteList;
-import org.marinemc.net.play.clientbound.world.UnloadChunkPacket;
 import org.marinemc.server.Marine;
 import org.marinemc.util.Position;
 import org.marinemc.util.annotations.Cautious;
@@ -85,10 +84,14 @@ public class Chunk {
     public void unload() {
     	for(Short s : subscribingPlayers)
     		if(Marine.getServer().getPlayerManager().getPlayer(s) != null)
-    			Marine.getServer().getPlayerManager().getPlayer(s).getClient().sendPacket(new UnloadChunkPacket(pos));
-    	
+    			Marine.getServer().getPlayerManager().getPlayer(s).unloadChunk(pos);
+    	subscribingPlayers.clear();
     	//TODO Save chunk perhaps :S
-    	
+    }
+    
+    public void unload(final Player p) {
+    	subscribingPlayers.remove(p.getUID());
+		p.unloadChunk(pos);
     }
     
     public void setBlock(Position pos, BlockID type) {
@@ -132,6 +135,18 @@ public class Chunk {
             setMaxHeight(x,z,(short) y);
         }
     }    
+    
+    public BlockID getBlockTypeAt(int x, int y, int z) {
+        int section = y >> 4;
+
+        if (sections[section] == null)
+            return BlockID.AIR;
+
+        if (section > 0)
+            return sections[section].getBlock(x, y/section, z);
+        else
+            return sections[section].getBlock(x, y, z);
+    }
     
     @Cautious
     public boolean isTop(int x, int y, int z) {
@@ -225,15 +240,6 @@ public class Chunk {
 
         if (sections[s] == null)
             return (char) 0;
-
-        return sections[s].getType(x / 16, y / 16, z / 16);
-    }
-    
-    public Character getNullableBlock(int x, int y, int z) {
-        int s = y >> 4;
-
-        if (sections[s] == null)
-            return null;
 
         return sections[s].getType(x / 16, y / 16, z / 16);
     }

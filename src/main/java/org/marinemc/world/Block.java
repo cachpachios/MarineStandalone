@@ -28,26 +28,16 @@ public class Block implements Comparable<BlockID> {
     private final Chunk chunk;
     private final byte localX, localZ;    // Local position in Chunk 			Range: (0-15)
     private final short y;                // Y same both localy and globaly	Range: (0-255)
-    private BlockID type;
-    private byte blockLight;
-    private byte skyLight;
 
-    public Block(Chunk c, int localX, int localY, int localZ, BlockID type, byte blockLight, byte skyLight) {
+    public Block(Chunk c, int localX, int localY, int localZ) {
         this.chunk = c;
         this.localX = (byte) localX;
         this.y = (byte) localY;
         this.localZ = (byte) localZ;
-        this.type = type;
-        this.blockLight = blockLight;
-        this.skyLight = skyLight;
-    }
-
-    public Block(Chunk c, int localX, int y, int localZ, BlockID type) {
-        this(c, localX, y, localZ, type, (byte) -1, (byte) -1);
     }
 
     public Block(Chunk c, Position pos, BlockID type) {
-        this(c, pos.getX() / c.getPos().getX(), pos.getY(), pos.getZ() / c.getPos().getY(), type);
+        this(c, pos.getX() / c.getPos().getX(), pos.getY(), pos.getZ() / c.getPos().getY());
     }
 
     public Chunk getChunk() {
@@ -55,42 +45,30 @@ public class Block implements Comparable<BlockID> {
     }
 
     public BlockID getType() {
-        return type;
+        return chunk.getBlockTypeAt(localX, y, localZ);
     }
-
-    public void setType(BlockID type) {
-        this.type = type;
-    }
-
+    
     public byte getBlockLight() {
-        return blockLight;
+        return (byte)-1; //TODO
     }
-
-    public void setBlockLight(byte light) {
-        blockLight = light;
-    }
-
+    
     public byte getSkyLight() {
-        return skyLight;
-    }
-
-    public void setSkyLight(byte light) {
-        skyLight = light;
+        return (byte)-1; //TODO
     }
 
     public byte getLocalX() {
         return localX;
     }
 
-    public int getGlobalX() {
+    public int getX() {
         return localX * chunk.getPos().getX();
     }
 
-    public int getGlobalZ() {
+    public int getZ() {
         return localZ * chunk.getPos().getY();
     }
 
-    public short getGlobalY() { // Dublicate of getY();
+    public short getLocalY() { // Dublicate of getY();
         return getY();
     }
 
@@ -106,13 +84,13 @@ public class Block implements Comparable<BlockID> {
         return new Position(localX * chunk.getPos().getX(), y, localZ * chunk.getPos().getY());
     }
 
-    public short getPacketBlock() {
-        return (short) ((type.getID() << 4) | type.getMetaBlock());
+    public short getPacketID() {
+        return (short) ((getType().getID() << 4) | getType().getMetaBlock());
     }
 
     @Override
     public int compareTo(BlockID o) {
-        return new Short(type.getPacketID()).compareTo(new Short(o.getPacketID()));
+    	return o.compareTo(getType());
     }
 }
 
