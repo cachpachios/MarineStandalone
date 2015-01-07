@@ -70,6 +70,8 @@ import org.marinemc.world.entity.LivingEntity;
  * @author Fozie
  */
 
+
+
 public class Player extends LivingEntity implements IPlayer, CommandSender {
 	/*
 	 * Identifier variables:
@@ -104,6 +106,8 @@ public class Player extends LivingEntity implements IPlayer, CommandSender {
 	 */
 	private boolean isFlying;
 	private boolean canFly;
+	
+	//TODO Use this:
 	private boolean isSneaking;
 
 	private PlayerInventory inventory;

@@ -23,12 +23,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
+import org.marinemc.events.standardevents.ClientTerminationEvent;
 import org.marinemc.game.player.Player;
-import org.marinemc.io.binary.ByteHolder;
 import org.marinemc.server.Marine;
 /**
  * @author Fozie
@@ -125,13 +123,13 @@ public class Client {
     }
 
     public void terminate() {
+    	Marine.getServer().callEvent(new ClientTerminationEvent(connection.getInetAddress()));
         try {
             this.connection.getOutputStream().flush();
             this.connection.getOutputStream().close();
             this.connection.getInputStream().close();
             this.connection.close();
-        } catch (IOException e) {
-        }
+        } catch (IOException e) {}
     }
     
     public boolean isActive() {

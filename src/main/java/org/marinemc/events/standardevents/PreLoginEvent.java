@@ -19,6 +19,7 @@
 
 package org.marinemc.events.standardevents;
 
+import org.marinemc.events.Cancellable;
 import org.marinemc.events.Event;
 import org.marinemc.game.player.Player;
 
@@ -27,23 +28,15 @@ import org.marinemc.game.player.Player;
  *
  * @author Citymonstret
  */
-public class PreLoginEvent extends Event {
+public class PreLoginEvent extends Event implements Cancellable {
 
     private Player player;
     private boolean allowed = true;
-    private String message = "";
+    private String message = "Disconnected";
 
     public PreLoginEvent(Player player) {
         super("pre_join", true);
         this.player = player;
-    }
-
-    public boolean isAllowed() {
-        return this.allowed;
-    }
-
-    public void setAllowed(boolean n) {
-        this.allowed = n;
     }
 
     public String getMessage() {
@@ -57,4 +50,14 @@ public class PreLoginEvent extends Event {
     public Player getPlayer() {
         return this.player;
     }
+
+	@Override
+	public boolean isCancelled() {
+		return allowed;
+	}
+
+	@Override
+	public void setCancelled(boolean n) {
+		allowed = n;
+	}
 }

@@ -20,6 +20,7 @@
 package org.marinemc.events;
 
 import org.marinemc.game.player.Player;
+import org.marinemc.game.player.WeakPlayer;
 
 /**
  * Player Event - For events focusing on players
@@ -28,7 +29,7 @@ import org.marinemc.game.player.Player;
  */
 public abstract class PlayerEvent extends Event {
 
-    private final Player player;
+    private final WeakPlayer player;
 
     /**
      * Constructor, will default "async" to false
@@ -49,15 +50,15 @@ public abstract class PlayerEvent extends Event {
      */
     public PlayerEvent(final Player player, final String name, final boolean async) {
         super("player_event:" + name, async);
-        this.player = player;
+        this.player = new WeakPlayer(player);
     }
 
     /**
      * Get the affected player
      *
-     * @return affected player
+     * @return The affected player however this can be null if player is out of memory
      */
     public Player getPlayer() {
-        return this.player;
+        return this.player.getPlayer();
     }
 }

@@ -20,21 +20,34 @@
 package org.marinemc.events.standardevents;
 
 import org.marinemc.events.Cancellable;
-import org.marinemc.events.PlayerEvent;
+import org.marinemc.events.Event;
+import org.marinemc.game.chat.ChatSender;
+import org.marinemc.game.chat.UnspecifiedSender;
 import org.marinemc.game.player.Player;
 
 /**
  * Created 2014-12-07 for MarineStandalone
  *
  * @author Citymonstret
+ * @author Fozie
  */
-public class ChatEvent extends PlayerEvent implements Cancellable {
+public class ChatEvent extends Event implements Cancellable {
 
     private String message;
     private boolean cancelled;
 
-    public ChatEvent(final Player sender, String message) {
-        super(sender, "chat", true);
+    private ChatSender sender;
+    
+    public ChatEvent(ChatSender sender, String message) {
+        super("chat", true);
+        this.sender = sender;
+        this.message = message;
+        this.cancelled = false;
+    }
+    
+    public ChatEvent(String message) {
+        super("chat", true);
+        this.sender = UnspecifiedSender.getInstance();
         this.message = message;
         this.cancelled = false;
     }
@@ -47,8 +60,8 @@ public class ChatEvent extends PlayerEvent implements Cancellable {
         this.message = newMessage;
     }
 
-    public Player getSender() {
-        return this.getPlayer();
+    public ChatSender getSender() {
+        return this.sender;
     }
 
     @Override

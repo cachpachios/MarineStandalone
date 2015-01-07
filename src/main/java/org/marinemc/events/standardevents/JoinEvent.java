@@ -19,6 +19,7 @@
 
 package org.marinemc.events.standardevents;
 
+import org.marinemc.events.Cancellable;
 import org.marinemc.events.PlayerEvent;
 import org.marinemc.game.player.Player;
 
@@ -26,8 +27,9 @@ import org.marinemc.game.player.Player;
  * Created 2014-12-13 for MarineStandalone
  *
  * @author Citymonstret
+ * @author Fozie
  */
-public class JoinEvent extends PlayerEvent {
+public class JoinEvent extends PlayerEvent implements Cancellable {
 
     private String joinMessage;
 
@@ -43,5 +45,31 @@ public class JoinEvent extends PlayerEvent {
     public void setJoinMessage(String joinMessage) {
         this.joinMessage = joinMessage;
     }
+    
+    /*
+     * Kicking stuff:
+     */
+    
+    boolean isCancelled = false;
+    String leaveMessage = "Login Cancelled!";
+    
+	@Override
+	public boolean isCancelled() {
+		return isCancelled;
+	}
 
+	@Override
+	public void setCancelled(boolean n) {
+		isCancelled = n;
+	}
+
+	public void setLeaveMessage(String msg) {
+		leaveMessage = msg;
+		isCancelled = true;
+	}
+	
+	public String getLeaveMessage() {
+		return leaveMessage;
+	}
+	
 }

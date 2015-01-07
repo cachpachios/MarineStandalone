@@ -39,6 +39,7 @@ import org.marinemc.game.inventory.PlayerInventory;
 import org.marinemc.game.player.Player;
 import org.marinemc.game.player.PlayerEntityHandler;
 import org.marinemc.game.player.UIDGenerator;
+import org.marinemc.game.player.WeakPlayer;
 import org.marinemc.net.Client;
 import org.marinemc.net.States;
 import org.marinemc.net.packets.login.LoginPacket;
@@ -64,8 +65,17 @@ public class PlayerManager {
 	private final Pattern validName;
 	private final TimeoutManager timeout;
 	private final PlayerEntityHandler localEntityHandler;
-	private Map<Short, Player> players;
-	private Map<String, Short> namePointers;
+	
+	/**
+	 * Player list:
+	 */
+	private volatile Map<Short, Player> players;
+	
+	/**
+	 * Name pointers:
+	 * (Returns the UID from the username of an online player)
+	 */
+	private volatile Map<String, Short> namePointers;
 
 	private final WorldStreamingThread worldStreamer;
 	
@@ -79,7 +89,7 @@ public class PlayerManager {
 		worldStreamer.start();
 	}
 
-	public String login(Client client, final LoginPacket packet) {
+	public String login(final Client client, final LoginPacket packet) {
 		// TODO: Encryption and Compression
 		// TODO Proper authentication
 		
@@ -119,9 +129,11 @@ public class PlayerManager {
 
 		PreLoginEvent preEvent = new PreLoginEvent(p);
 		Marine.getServer().callEvent(preEvent);
-		if (!preEvent.isAllowed()) {
-			return preEvent.getMessage(); // Is banned or something xD
+		
+		if (!preEvent.isCancelled()) {
+			return preEvent.getMessage(); // Does this if the prelogin event is cancelled
 		}
+		
 		if (Marine.getServer().usingWhitelist() && !Marine.getServer().isWhitelisted(p)) {
 			return "You are not whitelisted";
 		}
@@ -140,26 +152,29 @@ public class PlayerManager {
 		
 		p.getClient().sendPacket(new JoinGamePacket(p));
 		
+		JoinEvent event = new JoinEvent(p, JOIN_MESSAGE);
+		Marine.getServer().callEvent(event);
+		if(event.isCancelled()) {
+			return "Unable to join server";
+		}
+		
 		p.updateAbilites();
 		
 		p.sendPositionAndLook();
 		
-		p.sendChunks(Marine.getServer().getWorldManager().getMainWorld().getChunksForce(0, 0, 6, 6));
-		
 		//p.updateExp();
+		p.sendChunks(p.getWorld().getSpawnChunks());
 		
 		p.sendPositionAndLook();
 		
 		p.sendTime();
-
-		JoinEvent event = new JoinEvent(p, JOIN_MESSAGE);
-		Marine.getServer().callEvent(event);
+		
 		getInstance().sendJoinMessage(p, event.getJoinMessage());
-
+		
 		TablistManager.getInstance().addItem(p);
 		TablistManager.getInstance().joinList(p);
 		TablistManager.getInstance().setHeaderAndFooter("Testing", "MarineStandalone", p);
-
+		
 		putPlayer(p);
 		//Send them the herobrine :>
 //		p.getClient().sendPacket(new SpawnPlayerPacket(new Player(
@@ -189,26 +204,24 @@ public class PlayerManager {
 	 * Adds a player to the main player storage
 	 * @param p The player that should be added
 	 */
-	public synchronized void putPlayer(Player p) {
-		synchronized (players) {
-			synchronized (namePointers) {
+	public  void putPlayer(Player p) {
 				players.put(p.getUID(), p);
 				namePointers.put(p.getUserName(), p.getUID());
-	}}}
+	}
 	
 	/**
 	 * Get all UID's of player online
 	 * 
 	 * @return A set over all UID's online
 	 */
-	public synchronized Set<Short> getOnlineUIDs() {
+	public  Set<Short> getOnlineUIDs() {
 		return players.keySet();
 	}
 	/**
 	 * Get all players on the server
 	 * @return A collection of all players online
 	 */
-	public synchronized Collection<Player> getPlayers() {
+	public  Collection<Player> getPlayers() {
 		return players.values();
 	}
 
@@ -216,7 +229,7 @@ public class PlayerManager {
 	 * Ticks/Updates all existing players
 	 * Called in Server.java's main loop (Each tick(20hz) )
 	 */
-	public synchronized void tickAllPlayers() {
+	public  void tickAllPlayers() {
 		for(final Player p : players.values())
 			p.sendTime();
 	}
@@ -227,9 +240,9 @@ public class PlayerManager {
 	 * @param uid The uid of the object
 	 * @return The pointed player or null if non existance
 	 */
-	public synchronized Player getPlayer(short uid) {synchronized(players) {
+	public  Player getPlayer(short uid) {
 		return players.get(uid);
-	}}
+	}
 
 	/**
 	 * Get the amount of players on the server,
@@ -237,7 +250,7 @@ public class PlayerManager {
 	 * 
 	 * @return Amount of players stored here
 	 */
-	public synchronized int getPlayersConnected() {
+	public  int getPlayersConnected() {
 		return this.players.size();
 	}
 
@@ -250,7 +263,7 @@ public class PlayerManager {
 	 */
 	@Hacky
 	@Cautious
-	public synchronized Player getPlayer(UUID uuid) {
+	public  Player getPlayer(UUID uuid) {
 		for(Player p : this.getPlayers())
 			if(p.getUUID().toString().equals(uuid.toString()))
 				return p;
@@ -263,7 +276,7 @@ public class PlayerManager {
 	 * @param username The username of the player to get
 	 * @return Either the player or null if not online.
 	 */
-	public synchronized Player getPlayer(String username) {
+	public  Player getPlayer(String username) {
 		if(namePointers.containsKey(username))
 			return players.get(namePointers.get(username));
 		return null;
@@ -275,7 +288,7 @@ public class PlayerManager {
 	 * @param uid The UID of the player
 	 * @return An boolean if the player is online
 	 */
-	public synchronized boolean isPlayerOnline(short uid) {
+	public  boolean isPlayerOnline(short uid) {
 		return players.containsKey(uid);
 	}
 	
@@ -286,10 +299,9 @@ public class PlayerManager {
 	 * @param packet
 	 */
 	public void broadcastPacket(ChatPacket packet) {
-		synchronized(players) { 
 		for(Player p : this.players.values())
 			p.getClient().sendPacket(packet);
-	}}
+	}
 	
 	public Player getPlayerByClient(final Client c) {
 		return c.getUID() != -1 ? getPlayer(c.getUID()) : null;
@@ -304,10 +316,13 @@ public class PlayerManager {
 	}
 
 	public void disconnect_nonnewtork(Player p) {
+		if(p == null)
+			return;
 		Assert.contains(this.players, p.getUID());
 		getInstance()
 				.broadcastMessage(format(LEAVE_MESSAGE, p));
 		removePlayer(p.getUID());
+		p = null;
 	}
 	
 	public void disconnect(Player p) {
@@ -326,11 +341,8 @@ public class PlayerManager {
 	}
 
 	public boolean isEmpty() {
+    	System.out.println("Players online: " + players.size());
 		return players.isEmpty();
 	}
 
-	public void forEach(PlayerOperation operation) {
-		for(Player p : players.values())
-				operation.action(p);
-	}
 }

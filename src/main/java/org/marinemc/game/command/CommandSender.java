@@ -21,6 +21,7 @@ package org.marinemc.game.command;
 
 import org.marinemc.game.chat.ChatMessage;
 import org.marinemc.game.chat.ChatReciever;
+import org.marinemc.game.chat.ChatSender;
 import org.marinemc.game.permission.Permission;
 import org.marinemc.util.Location;
 
@@ -30,7 +31,7 @@ import org.marinemc.util.Location;
  *
  * @author Citymonstret
  */
-public interface CommandSender extends ChatReciever {
+public interface CommandSender extends ChatReciever, ChatSender {
 
     public void sendMessage(String message);
 

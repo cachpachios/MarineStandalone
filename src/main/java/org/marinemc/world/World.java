@@ -27,10 +27,10 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.marinemc.game.WorldManager;
-import org.marinemc.game.player.Player;
 import org.marinemc.server.Marine;
 import org.marinemc.util.MathUtils;
 import org.marinemc.util.Position;
+import org.marinemc.util.annotations.Threaded;
 import org.marinemc.world.chunk.Chunk;
 import org.marinemc.world.chunk.ChunkPos;
 import org.marinemc.world.entity.EntityHandler;
@@ -103,7 +103,16 @@ public class World { // TODO Save and unload chunks...
     public void generateAsyncRegion(int x, int y, int amtX, int amtY)  {
         for (int xx = amtX / 2 * -1; xx < amtX; xx++)
             for (int yy = amtY / 2 * -1; yy < amtY; yy++)
-            	generateAsyncChunk(xx,yy);
+            	generateAsyncChunk(x + xx, y + yy);
+    }
+    
+    public boolean isEntireRegionInMemory(int x, int y, int amtX, int amtY) {
+    	boolean r = true;
+        for (int xx = amtX / 2 * -1; xx < amtX; xx++)
+            for (int yy = amtY / 2 * -1; yy < amtY; yy++)
+            	if(!loadedChunks.containsKey(ChunkPos.Encode(x + xx, y + yy)))
+            		r = false;
+        return r;
     }
     
     private void forceGenerateChunk(int x, int z) {
@@ -221,5 +230,25 @@ public class World { // TODO Save and unload chunks...
 				loadedChunks.remove(c);
 				
 			}
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	@Threaded
+	public List<Chunk> getSpawnChunks() {
+		List<Chunk> spawnChunks = new ArrayList<>(Marine.getServer().getViewDistance()*Marine.getServer().getViewDistance());
+		if(!this.isEntireRegionInMemory(spawnPoint.x, spawnPoint.z, Marine.getServer().getViewDistance(), Marine.getServer().getViewDistance())) {
+			this.generateAsyncRegion(spawnPoint.x, spawnPoint.y, Marine.getServer().getViewDistance(), Marine.getServer().getViewDistance());
+			// Wait for the chunks to be generated:
+			while(hasChunksToGenerate()) try { Thread.sleep(WorldThread.skipTime*2);} catch (InterruptedException e) {}
+		}
+		
+        for (int xx = Marine.getServer().getViewDistance() / 2 * -1; xx < Marine.getServer().getViewDistance(); xx++)
+            for (int yy = Marine.getServer().getViewDistance() / 2 * -1; yy < Marine.getServer().getViewDistance(); yy++)
+            	spawnChunks.add(getChunkForce(spawnPoint.x + xx, spawnPoint.z + yy));
+		
+		return spawnChunks;
 	}
 }

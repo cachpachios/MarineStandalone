@@ -25,6 +25,7 @@ import java.util.Map;
 
 import org.marinemc.util.annotations.Cautious;
 import org.marinemc.util.annotations.Hacky;
+import org.marinemc.util.annotations.Protected;
 import org.marinemc.util.annotations.Unsafe;
 import org.marinemc.world.chunk.ChunkSection;
 
@@ -34,7 +35,6 @@ import org.marinemc.world.chunk.ChunkSection;
  *
  * @author Fozie
  */
-
 @Hacky
 public final class Identifiers {
 
@@ -72,7 +72,12 @@ public final class Identifiers {
         	return block_id.get(r);
     }
     
+    /**
+     * Init the Identifiers class,
+     * Warning this should only be done by the server at start
+     */
     @Unsafe
+    @Protected
     @Cautious
     public static void init() {
         block_id = new HashMap<>();

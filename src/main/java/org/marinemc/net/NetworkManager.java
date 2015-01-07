@@ -80,7 +80,9 @@ public class NetworkManager {
     		c.sendPacket(p);
     }
 
+    
     public void connect(Socket accept) {
+    	//TODO For the love of god, add some dos attack protection...
     	final Client c;
         try {
             c = new Client(accept);

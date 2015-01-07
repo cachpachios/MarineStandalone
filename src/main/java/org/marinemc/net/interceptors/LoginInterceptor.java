@@ -42,6 +42,10 @@ public class LoginInterceptor implements PacketInterceptor {
     	   else {
     		   DisconnectPacket disc = new DisconnectPacket(s);
     		   c.sendPacket(disc);
+    		   
+    		   Marine.getServer().getNetworkManager().cleanUp(c);
+    		   
+    		   return true;
     	   }
     	}
        return false;
