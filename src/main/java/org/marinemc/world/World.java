@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.marinemc.game.WorldManager;
@@ -52,7 +53,7 @@ public class World { // TODO Save and unload chunks...
     private final Dimension dimension;
 
     //Data:
-    private Map<Long, Chunk> loadedChunks;
+    private volatile Map<Long, Chunk> loadedChunks;
     private Position spawnPoint;
     
     private EntityHandler entities;
@@ -61,9 +62,16 @@ public class World { // TODO Save and unload chunks...
     private long time;
 
     private WorldGenerator generator;
-
+	private Random randomizer;
+	/**
+	 * Constructor with a random world seed
+	 */
     public World(final String name, WorldGenerator generator) {
+    	this(name,(long) (Math.random() * Long.MAX_VALUE),generator);
+    }
+    public World(final String name,long seed, WorldGenerator generator) {
     	this.loadedChunks = Collections.synchronizedMap(new HashMap<Long, Chunk>());
+    	this.randomizer = new Random();
         this.generator = generator; // StandardGenerator
         this.generator.setGenerationWorld(this);
         this.spawnPoint = generator.getSafeSpawnPoint().getRelativePosition(); //TODO make this get loaded from world or generate random based on worldgenerator
@@ -238,17 +246,21 @@ public class World { // TODO Save and unload chunks...
 	 */
 	@Threaded
 	public List<Chunk> getSpawnChunks() {
-		List<Chunk> spawnChunks = new ArrayList<>(Marine.getServer().getViewDistance()*Marine.getServer().getViewDistance());
-		if(!this.isEntireRegionInMemory(spawnPoint.x, spawnPoint.z, Marine.getServer().getViewDistance(), Marine.getServer().getViewDistance())) {
-			this.generateAsyncRegion(spawnPoint.x, spawnPoint.y, Marine.getServer().getViewDistance(), Marine.getServer().getViewDistance());
+		List<Chunk> spawnChunks = new ArrayList<>(8*8);
+		if(!this.isEntireRegionInMemory(spawnPoint.x, spawnPoint.z, 8, 8)) {
+			this.generateAsyncRegion(spawnPoint.x, spawnPoint.y, 8, 8);
 			// Wait for the chunks to be generated:
 			while(hasChunksToGenerate()) try { Thread.sleep(WorldThread.skipTime*2);} catch (InterruptedException e) {}
 		}
 		
-        for (int xx = Marine.getServer().getViewDistance() / 2 * -1; xx < Marine.getServer().getViewDistance(); xx++)
-            for (int yy = Marine.getServer().getViewDistance() / 2 * -1; yy < Marine.getServer().getViewDistance(); yy++)
+        for (int xx = 8 / 2 * -1; xx < 8; xx++)
+            for (int yy = 8 / 2 * -1; yy < 8; yy++)
             	spawnChunks.add(getChunkForce(spawnPoint.x + xx, spawnPoint.z + yy));
 		
 		return spawnChunks;
+	}
+
+	public Random getRandom() {
+		return randomizer;
 	}
 }

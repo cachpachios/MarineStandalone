@@ -10,11 +10,13 @@ import java.util.List;
 import java.util.RandomAccess;
 import java.util.UUID;
 
+import org.marinemc.io.ByteCompressor;
+import org.marinemc.io.ByteCompressor.EncodingUseless;
 import org.marinemc.util.Position;
 
 
-public class ByteList extends AbstractInput implements ByteDataOutput, SortedByteOutput, ByteDataInput, StoredReader, Iterable<Byte>, RandomAccess {
-	final List<Byte> data;
+public class ByteList extends AbstractInput implements ByteDataOutput, CompressableStoredByteOutput, ByteDataInput, StoredReader, Iterable<Byte>, RandomAccess {
+	List<Byte> data;
 	
 	int position;
 	
@@ -325,5 +327,10 @@ public class ByteList extends AbstractInput implements ByteDataOutput, SortedByt
 	
 	public void writeData(ByteList list) {
 		data.addAll(list.getCollection());
+	}
+	
+	@Override
+	public void compress() throws EncodingUseless {
+		data = new ArrayList<>(Arrays.asList(ByteUtils.wrap(ByteCompressor.instance().encode(toBytes()))));
 	}
 }

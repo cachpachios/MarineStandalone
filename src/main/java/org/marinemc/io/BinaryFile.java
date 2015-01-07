@@ -36,7 +36,6 @@ import org.marinemc.io.binary.ByteArray;
 import org.marinemc.io.binary.ByteInput;
 import org.marinemc.io.binary.Byteable;
 /**
- * 
  * @author Fozie
  */
 public class BinaryFile {
@@ -58,11 +57,11 @@ public class BinaryFile {
     }
 
     public static InputStream decompressStream(final InputStream input) throws IOException {
-        final PushbackInputStream pb = new PushbackInputStream(input, 2); //we need a pushbackstream to look ahead
+        final PushbackInputStream pb = new PushbackInputStream(input, 2); // We need a pushbackstream to look ahead for the signature
         byte[] signature = new byte[2];
-        pb.read(signature); //read the signature
-        pb.unread(signature); //push back the signature to the stream
-        if (signature[0] == (byte) 0x1f && signature[1] == (byte) 0x8b) //check if matches standard gzip magic number
+        pb.read(signature); // Read the signature
+        pb.unread(signature); // Push back the signature to the stream
+        if (signature[0] == (byte) 0x1f && signature[1] == (byte) 0x8b) // Check if the signature matches standard gzip magic number
             return new GZIPInputStream(pb);
         else
             return pb;

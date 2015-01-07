@@ -2,7 +2,7 @@ package org.marinemc.io.binary;
 
 import java.nio.charset.Charset;
 
-public interface SortedByteOutput extends ByteOutput, Byteable{
+public interface SortedByteOutput extends ByteOutput{
 	public void writeBoolean(int pos, boolean v);
 	
 	public void writeByte(int pos, byte v);

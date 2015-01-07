@@ -47,6 +47,7 @@ import org.marinemc.net.packets.login.LoginSucessPacket;
 import org.marinemc.net.play.clientbound.ChatPacket;
 import org.marinemc.net.play.clientbound.JoinGamePacket;
 import org.marinemc.server.Marine;
+import org.marinemc.settings.ServerSettings;
 import org.marinemc.util.Assert;
 import org.marinemc.util.Location;
 import org.marinemc.util.annotations.Cautious;
@@ -143,6 +144,8 @@ public class PlayerManager {
 		if (Marine.isBanned(uuid)) {
 			return "You are banned from the server";
 		}
+		
+		client.setCompressionThreshold(ServerSettings.getInstance().network_threshould);
 		
 		client.sendPacket(new LoginSucessPacket(p)); // Send the LoginSuccessPacket
 		

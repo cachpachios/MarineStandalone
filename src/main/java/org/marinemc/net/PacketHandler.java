@@ -65,4 +65,7 @@ public final class PacketHandler implements PacketInterceptor {
 		final ByteQueue data = new ByteQueue(packet);
 		intercept(data.readVarInt(), data, client);
 	}
+	public void rawIntercept(final Client client, ByteQueue data) {
+		intercept(data.readVarInt(), data, client);
+	}
 }

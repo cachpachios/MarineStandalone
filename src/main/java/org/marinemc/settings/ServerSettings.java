@@ -41,6 +41,7 @@ public class ServerSettings {
     public int tickrate = 20;
     public int maxPlayers = 20;
     public int cacheHours = 720;
+    public int network_threshould = 256;
     public String host = "0.0.0.0";
     public String motd = "&cNo MOTD";
     public String gamemode = "survival";
@@ -68,6 +69,7 @@ public class ServerSettings {
                     put("motd", "&cTesting...");
                     put("tickrate", "20");
                     put("useHashing", "false"); // Depending on what server you are running hashing is best for big servers with many players online, linear scanning for small servers with less players
+                    put("network-threshould","256");
                     put("gamemode", "survival");
                     put("difficulty", "peaceful");
                     put("maxPlayers", "20");
@@ -100,6 +102,7 @@ public class ServerSettings {
             this.offlineMode = getBoolean(config.getProperty("offlineMode"));
             this.whitelist = getBoolean(config.getProperty("whitelist"));
             this.cacheHours = getInt(config.getProperty("cacheHours"));
+            this.network_threshould = getInt(config.getProperty("network-threshould"));
             reader.close();
         } catch (Exception e) {
             e.printStackTrace();

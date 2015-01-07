@@ -24,15 +24,20 @@ import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Collection;
+import java.util.zip.DataFormatException;
 
 import org.marinemc.events.standardevents.ClientTerminationEvent;
 import org.marinemc.game.player.Player;
+import org.marinemc.io.ByteCompressor;
+import org.marinemc.logging.Logging;
+import org.marinemc.net.packets.login.CompressionPacket;
 import org.marinemc.server.Marine;
+import org.marinemc.util.ObjectMeta;
 /**
  * @author Fozie
  */
 public class Client {
-    private final static byte[] NULL_BYTE = new byte[]{0};
+	final static byte[] NULL_BYTE = new byte[]{0};
     private final Socket connection;
     private final PacketOutputStream output;
     private final PacketQue que;
@@ -49,7 +54,7 @@ public class Client {
         this.state = States.HANDSHAKE;
         this.connection = s;
         this.input = s.getInputStream();
-        output = new PacketOutputStream(s.getOutputStream());
+        output = new PacketOutputStream(this);
         this.uid = -1;
         isActive = true;
         this.que = new PacketQue(this);
@@ -75,7 +80,7 @@ public class Client {
             packet.writeToStream(output);
             connection.getOutputStream().flush();
         } catch (IOException e) {
-            //TODO:
+            isActive = false;
         }
         sending = false;
     }
@@ -136,13 +141,19 @@ public class Client {
     	return isActive;
     }
     
+    /**
+     * Checks the connection and returns true if its closed
+     * @return
+     */
     boolean tryConnection() {
+    	if(isActive)
         try { // Write a 0 bit to check if available
             getConnection().getOutputStream().write(NULL_BYTE);
         } catch (IOException e1) {
         	isActive = false;
             return false;
         }
+    	
         return true;
     }
 
@@ -162,16 +173,43 @@ public class Client {
     		if(l == 0)
     			return ConnectionStatus.EMPTY;
     		
-    		byte[] packet = new byte[l];
+    		if(this.compressionThreshold == -1) {
+        		byte[] packet = new byte[l];
     		
-    		try {
-				input.read(packet);
-			} catch (IOException e) {
-				return ConnectionStatus.CLOSED;
-			}
-    		
-    		getNetwork().packetHandler.rawIntercept(this, packet);
-    		
+        		try {
+    				input.read(packet);
+    			} catch (IOException e) {
+    				return ConnectionStatus.CLOSED;
+    			}
+    			getNetwork().packetHandler.rawIntercept(this, packet);
+    		} else {
+    			ObjectMeta<Integer, Integer> preCompress = PacketOutputStream.readVarIntWithLength(input);
+    			if(preCompress.get() == 0) {
+            		byte[] packet = new byte[l-1];
+            		
+            		try {
+        				input.read(packet);
+        			} catch (IOException e) {
+        				return ConnectionStatus.CLOSED;
+        			}
+        			getNetwork().packetHandler.rawIntercept(this, packet);
+    			}
+    			else {
+            		byte[] compressed = new byte[l-preCompress.getMeta()];
+            		
+            		try {
+        				input.read(compressed);
+        			} catch (IOException e) {
+        				return ConnectionStatus.CLOSED;
+        			}
+        			try {
+						getNetwork().packetHandler.rawIntercept(this, ByteCompressor.instance().decode(compressed));
+					} catch (DataFormatException e) {
+						Logging.getLogger().warn("An packet was unable to be decompressed from client: " + getAdress().getHostAddress(), e);
+						continue;
+					}
+    			}
+    		}
     		
     	}
     	
@@ -182,6 +220,9 @@ public class Client {
     }
 
     public void setCompressionThreshold(int compressionThreshold) {
+    	if(!(state != States.HANDSHAKE && state != States.INTRODUCE))
+    		return;
+    	sendPacket(new CompressionPacket(compressionThreshold));
         this.compressionThreshold = compressionThreshold;
     }
 

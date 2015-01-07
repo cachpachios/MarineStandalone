@@ -21,42 +21,101 @@ package org.marinemc.net;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.SocketException;
+import java.lang.ref.WeakReference;
 
+import org.marinemc.io.ByteCompressor;
+import org.marinemc.io.ByteCompressor.EncodingUseless;
 import org.marinemc.io.binary.ByteUtils;
-import org.marinemc.io.binary.SortedByteOutput;
+import org.marinemc.io.binary.CompressableStoredByteOutput;
+import org.marinemc.util.ObjectMeta;
+import org.marinemc.util.vectors.Vector2i;
 /**
  * @author Fozie
  */
 public class PacketOutputStream { // Here we enable encryption and compression if needed
-
-    private final OutputStream stream;
-
-    public PacketOutputStream(OutputStream stream) {
-        this.stream = stream;
+    WeakReference<Client> c;
+    
+    public PacketOutputStream(final Client c) {
+    	this.c = new WeakReference<>(c);
     }
 
-    public OutputStream getStream() {
-        return stream;
+    boolean referenceCheck() {
+    	return c.get() == null;
     }
-
+   
+    private void finalWrite(final byte[] uncompressed) throws IOException {
+    	if(referenceCheck())
+    		return;
+    	
+    	if(c.get().getCompressionThreshold() == -1) {
+        	c.get().getConnection().getOutputStream().write(ByteUtils.putFirst(ByteUtils.VarInt(uncompressed.length), uncompressed));
+    	}
+    	else {
+    		if(uncompressed.length < c.get().getCompressionThreshold())
+    			c.get().getConnection().getOutputStream().write(ByteUtils.putFirst(Client.NULL_BYTE, uncompressed));
+    		else {
+    		byte[] output;
+    		if(uncompressed.length < c.get().getCompressionThreshold())
+				output = ByteUtils.putFirst(Client.NULL_BYTE, uncompressed);
+    			try {
+					output = ByteUtils.putFirst(ByteUtils.VarInt(uncompressed.length), ByteCompressor.instance().encode(uncompressed));
+				} catch (EncodingUseless e) { // This means compression is waste of brandwith and it will send uncompressed data
+					output = ByteUtils.putFirst(Client.NULL_BYTE, uncompressed);
+				}
+        		c.get().getConnection().getOutputStream().write(ByteUtils.putFirst(ByteUtils.VarInt(output.length), output));
+    			}
+    		}
+    }
+    
+    private void finalWrite(final CompressableStoredByteOutput uncompressed) throws IOException {
+    	if(referenceCheck())
+    		return;
+    	
+    	if(c.get().getCompressionThreshold() == -1) {
+    		uncompressed.writeVarInt(0, uncompressed.size());
+        	c.get().getConnection().getOutputStream().write(uncompressed.toBytes());
+    	}
+    	else {
+    		if(uncompressed.size() < c.get().getCompressionThreshold())
+				uncompressed.writeByte(0, (byte)0);
+    		else
+    		try {
+    			int uncompressedSize = uncompressed.size();
+				uncompressed.compress();
+				uncompressed.writeVarInt(0, uncompressedSize);
+			} catch (EncodingUseless e) {
+				uncompressed.writeByte(0, (byte)0);
+			}
+    		
+    		uncompressed.writeVarInt(0, uncompressed.size());
+    		
+        	c.get().getConnection().getOutputStream().write(uncompressed.toBytes());
+    	}
+    }
+    
+    
     public void write(int id, final byte[] b) throws IOException {
-    	final byte[] data = ByteUtils.putFirst(ByteUtils.VarInt(id), b);
-        stream.write(ByteUtils.putFirst(ByteUtils.VarInt(data.length), data));
+    	finalWrite(ByteUtils.putFirst(ByteUtils.VarInt(id), b));
     }
 
-    public void write(int id, SortedByteOutput data) throws IOException {
-        //TODO Compress and encrypt :D
+    public void writeNoCompress(int id, byte[] b) throws IOException {
+    	if(referenceCheck())
+    		return;
+    	
+    	if(c.get().getCompressionThreshold() == -1) {
+        	c.get().getConnection().getOutputStream().write(ByteUtils.putFirst(ByteUtils.VarInt(b.length), b));
+    	}
+    	else {
+			b = ByteUtils.putFirst(Client.NULL_BYTE, b);
+			b = ByteUtils.putFirst(ByteUtils.VarInt(b.length), b);
+			c.get().getConnection().getOutputStream().write(b);
+    	}
+    }
+    
+    public void write(int id, CompressableStoredByteOutput data) throws IOException {
     	data.writeVarInt(0, id);
-    	data.writeVarInt(0, data.size());
-    	try {
-    		stream.write(data.toBytes());
-    	}
-    	catch(SocketException e) {
-    		return; 
-    	}
-    } 
+    	finalWrite(data);
+    }
     
     public static Integer readVarIntFromStream(InputStream stream) {
         int out = 0;
@@ -80,5 +139,29 @@ public class PacketOutputStream { // Here we enable encryption and compression i
             }
         }
         return out;
+    }
+    
+    public static ObjectMeta<Integer, Integer> readVarIntWithLength(InputStream stream) {
+    	int out = 0;
+        int bytes = 0;
+        byte in;
+        int x;
+        while (true) {
+        	try {
+				x = stream.read();
+			} catch (IOException e) {
+				return null;
+			}
+        	
+        	if(x == -1)
+        		return null;
+        	
+            in = (byte) x;
+            out |= (in & 0x7F) << (bytes++ * 7);
+            if ((in & 0x80) != 0x80) {
+                break;
+            }
+        }
+        return new ObjectMeta(out,bytes);
     }
 }

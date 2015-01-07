@@ -3,7 +3,10 @@ package org.marinemc.io.binary;
 import java.util.Arrays;
 import java.util.RandomAccess;
 
-public class ByteArray extends AbstractInput implements StoredReader, ByteDataInput, RandomAccess {
+import org.marinemc.io.ByteCompressor;
+import org.marinemc.io.ByteCompressor.EncodingUseless;
+
+public class ByteArray extends AbstractInput implements StoredReader, ByteDataInput, RandomAccess, Compressable {
 
 	private byte[] data;
 
@@ -61,6 +64,11 @@ public class ByteArray extends AbstractInput implements StoredReader, ByteDataIn
 
 	public int length() {
 		return data.length;
+	}
+
+	@Override
+	public void compress() throws EncodingUseless{
+		data = ByteCompressor.instance().encode(data);
 	}
 	
 }

@@ -19,6 +19,7 @@
 
 package org.marinemc.io.binary;
 
+
 /**
  * Used to indicate that the object can return its self in a byte array in use of saving/sending to client
  * 

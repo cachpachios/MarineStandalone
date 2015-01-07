@@ -40,7 +40,7 @@ public final class ChunkSection {
 	 * Amount of bytes per save chunk,
 	 * Total byte size per chunk for blocks and lightning is DATA_SIZE * 3
 	 */
-    final static int DATA_SIZE = 16 * 16 * 16;
+    final static int DATA_SIZE = 16*16*16;
     private final int sectionID;
     private final ChunkPos chunkPos;
     private short[] blockMap; // Each block is 2 bytes some for the block id some for the metadata. 
@@ -79,21 +79,21 @@ public final class ChunkSection {
     }
 
     public byte[] getBlockData() { //TODO: Optimize
-        byte[] raw = new byte[DATA_SIZE * 2];
+    	final byte[] data = new byte[DATA_SIZE * 2];
         int i = -1;
         for (short id : blockMap) {
-            raw[++i] = ((byte) (id & 0xff));
-            raw[++i] = ((byte) (id >> 8));
+        	data[++i] = ((byte) (id & 0xff));
+        	data[++i] = ((byte) (id >> 8));
         }
-        return raw;
+        return data;
     }
 
     //TODO: NibbleArray based lightning
-    public final ByteList getLightData() {
-    	ByteList d = new ByteList();
+    public byte[] getLightData() {
+    	final byte[] bytes = new byte[DATA_SIZE];
     	for(int i = 0; i < DATA_SIZE; i++)
-    		d.writeByte((byte)-1);
-    	return d;
+    		bytes[i] = (byte)-1;
+    	return bytes;
     }
 
     public void setType(int x, int y, int z, BlockID id) {

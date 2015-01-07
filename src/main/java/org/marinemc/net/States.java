@@ -27,7 +27,8 @@ public enum States {
     HANDSHAKE,
     INTRODUCE,
     LOGIN,
-    INGAME;
+    INGAME,
+    GLOBAL;
 
     public static final States getFromID(int id) {
         switch (id) {

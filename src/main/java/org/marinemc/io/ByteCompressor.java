@@ -47,10 +47,10 @@ public class ByteCompressor {
         byte[] compressedData = new byte[data.length];
         deflater.deflate(compressedData);
         deflater.reset();
-        if (compressedData.length >= data.length) {
-            // Compression did just increase the size, consider raising threashold.
+        if (compressedData.length > data.length) {
+            // Compression did just increase the size, consider raising threadshold.
              throw new EncodingUseless();
-        }
+        } 
         return compressedData;
     }
 

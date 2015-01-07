@@ -24,10 +24,13 @@ import java.util.List;
 import java.util.Random;
 
 import org.marinemc.game.player.Player;
+import org.marinemc.io.binary.ByteArray;
 import org.marinemc.io.binary.ByteList;
+import org.marinemc.io.binary.ByteUtils;
 import org.marinemc.server.Marine;
 import org.marinemc.util.Position;
 import org.marinemc.util.annotations.Cautious;
+import org.marinemc.util.annotations.Hacky;
 import org.marinemc.util.annotations.Serverside;
 import org.marinemc.util.annotations.Unsafe;
 import org.marinemc.world.BiomeID;
@@ -41,7 +44,7 @@ import org.marinemc.world.World;
  */
 public class Chunk {
 	
-	public static final int WIDTH = 16, HEIGHT = 16;
+	public static final int WIDTH = 16, DEPTH = 16;
 
     private final World w;
     private final ChunkPos pos;
@@ -61,17 +64,21 @@ public class Chunk {
         this.pos = pos;
         this.sections = new ChunkSection[16];
         
-        this.biomes = new BiomeID	[WIDTH*HEIGHT];
-        this.heightMap = new short	[WIDTH*HEIGHT];
+        this.biomes 	= new BiomeID	[WIDTH*DEPTH];
+        this.heightMap 	= new short		[WIDTH*DEPTH];
 
         this.subscribingPlayers = new ArrayList<>();
-        this.random = new Random();
+        this.random = w.getRandom();
     }
 
     public Random getRandom() {
         return this.random;
     }
     
+    /**
+     * Checks if any players have loaded this chunk
+     * @return However any players have this chunk loaded
+     */
     public boolean isActive() {
     	return subscribingPlayers.size() != 0;
     }
@@ -176,34 +183,43 @@ public class Chunk {
         else
             sections[s].setLight(x, y / 16, z, light);
     }
+    
+    @Hacky
+    public int amountSections() {
+    	int x = 0;
+    	for(ChunkSection s : sections)
+    		if(s != null)
+    			++x;
+    	return x;
+    }
 
-    public ByteList getData(boolean biomes, boolean skyLight) {
-        ByteList d = new ByteList();
-
-        for (ChunkSection s : sections) {
+    public byte[] getBytes(boolean biomes, boolean skyLight) {
+        byte[] d = new byte[0];
+        
+        for (ChunkSection s : sections)
             if (s != null)
-                d.write(s.getBlockData());
-        }
-        for (ChunkSection s : sections) {
+            	ByteUtils.combine(d, s.getBlockData());
+        
+        for (ChunkSection s : sections)
             if (s != null)
-            	d.writeData(s.getLightData());
-        }
-
+            	ByteUtils.combine(d, s.getLightData());
+        
         if (biomes)
-            d.writeData(getBiomeData());
+        	ByteUtils.combine(d, getBiomeData());
 
         return d;
     }
     
-    public byte[] getBytes(boolean biomes, boolean skyLight) { return getData(biomes, skyLight).toBytes(); }
+    public ByteArray getData(boolean biomes, boolean skyLight) { return new ByteArray(getBytes(biomes, skyLight)); }
     
-    public ByteList getBiomeData() {
-        ByteList d = new ByteList();
+    public byte[] getBiomeData() {
+        byte[] d = new byte[16*16];
+        int i = -1;
         for(BiomeID b : biomes)
         	if(b != null)
-        		d.writeByte(b.getID());
+        		d[++i] = b.getID();
             else
-            	d.writeByte(BiomeID.PLAINS.getID());
+        		d[++i] = BiomeID.PLAINS.getID();
         return d;
     }
 
@@ -230,6 +246,11 @@ public class Chunk {
 
     @Serverside
     public void setPrivateType(int x, int y, int z, BlockID type) {
+    	if(x > 15)
+    		return;
+    	if(z > 15)
+    		return;
+    	
         setType(x, y, z, type);
     }
 

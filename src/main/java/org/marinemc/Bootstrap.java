@@ -114,6 +114,7 @@ public class Bootstrap {
             v = Math.atan(x);
             v = Math.random();
         }
+        v = 0;
     }
 
     public static boolean debug() {

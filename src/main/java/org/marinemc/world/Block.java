@@ -19,18 +19,20 @@
 
 package org.marinemc.world;
 
+import java.lang.ref.WeakReference;
+
 import org.marinemc.util.Position;
 import org.marinemc.world.chunk.Chunk;
 /**
  * @author Fozie
  */
 public class Block implements Comparable<BlockID> {
-    private final Chunk chunk;
-    private final byte localX, localZ;    // Local position in Chunk 			Range: (0-15)
+    private WeakReference<Chunk> chunk;
+    private final byte localX, localZ;	   // Local position in Chunk 			Range: (0-15)
     private final short y;                // Y same both localy and globaly	Range: (0-255)
 
-    public Block(Chunk c, int localX, int localY, int localZ) {
-        this.chunk = c;
+    public Block(final Chunk c, int localX, int localY, int localZ) {
+        this.chunk = new WeakReference<>(c);
         this.localX = (byte) localX;
         this.y = (byte) localY;
         this.localZ = (byte) localZ;
@@ -41,18 +43,25 @@ public class Block implements Comparable<BlockID> {
     }
 
     public Chunk getChunk() {
-        return chunk;
+        return chunk.get();
     }
 
+    boolean referenceCheck() {
+    	return chunk.get() == null;
+    }
+    
     public BlockID getType() {
-        return chunk.getBlockTypeAt(localX, y, localZ);
+    	if(referenceCheck()) return BlockID.AIR;
+        return chunk.get().getBlockTypeAt(localX, y, localZ);
     }
     
     public byte getBlockLight() {
+    	if(referenceCheck()) return (byte)-1;
         return (byte)-1; //TODO
     }
     
     public byte getSkyLight() {
+    	if(referenceCheck()) return (byte)-1;
         return (byte)-1; //TODO
     }
 
@@ -61,11 +70,13 @@ public class Block implements Comparable<BlockID> {
     }
 
     public int getX() {
-        return localX * chunk.getPos().getX();
+    	if(referenceCheck()) return 0;
+        return localX * chunk.get().getPos().getX();
     }
 
     public int getZ() {
-        return localZ * chunk.getPos().getY();
+    	if(referenceCheck()) return 0;
+        return localZ * chunk.get().getPos().getY();
     }
 
     public short getLocalY() { // Dublicate of getY();
@@ -81,11 +92,13 @@ public class Block implements Comparable<BlockID> {
     }
 
     public Position getGlobalPos() {
-        return new Position(localX * chunk.getPos().getX(), y, localZ * chunk.getPos().getY());
+    	if(referenceCheck()) return null;
+        return new Position(localX * chunk.get().getPos().getX(), y, localZ * chunk.get().getPos().getY());
     }
 
     public short getPacketID() {
-        return (short) ((getType().getID() << 4) | getType().getMetaBlock());
+    	if(referenceCheck()) return (short) 0;
+		return (short) (((getType().getIntID() << 4) & 0xfff0) | getType().getMetaBlock());
     }
 
     @Override

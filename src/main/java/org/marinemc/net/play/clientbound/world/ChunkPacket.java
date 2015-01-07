@@ -22,6 +22,7 @@ package org.marinemc.net.play.clientbound.world;
 import java.io.IOException;
 
 import org.marinemc.io.binary.ByteList;
+import org.marinemc.io.binary.ByteUtils;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
@@ -41,19 +42,20 @@ public class ChunkPacket extends Packet {
 
     @Override
     public void writeToStream(PacketOutputStream stream) throws IOException {
-    	ByteList data = new ByteList();
+    	ByteList metadata = new ByteList();
 
-        data.writeInt(c.getPos().getX());
-        data.writeInt(c.getPos().getY());
-        data.writeBoolean(true);
-        data.writeShort(c.getSectionBitMap());
+    	metadata.writeInt(c.getPos().getX());
+    	metadata.writeInt(c.getPos().getY());
+    	metadata.writeBoolean(true);
+    	metadata.writeShort(c.getSectionBitMap());
 
-        final ByteList d = c.getData(true, c.getWorld().getDimension() == Dimension.OVERWORLD);
+//        final ByteList d = c.getData(true, c.getWorld().getDimension() == Dimension.OVERWORLD);
+    	
+    	byte[] data = c.getBytes(true, c.getWorld().getDimension() == Dimension.OVERWORLD);
+    	
+    	metadata.writeVarInt(data.length);
 
-        data.writeVarInt(d.size());
-        data.writeData(d);
-
-        stream.write(getID(), data);
+        //stream.write(getID(), ByteUtils.combine(metadata.toBytes(), data));
     }
 
 }

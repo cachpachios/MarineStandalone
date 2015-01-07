@@ -17,12 +17,13 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package org.marinemc.net.play.clientbound.world;
+package org.marinemc.net.packets.world;
 
 import java.io.IOException;
 import java.util.List;
 
 import org.marinemc.io.binary.ByteList;
+import org.marinemc.io.binary.ByteUtils;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
@@ -34,11 +35,11 @@ import org.marinemc.world.chunk.Chunk;
  */
 public class MapChunkPacket extends Packet {
 
-    List<Chunk> chunks;
+    final List<Chunk> chunks;
 
-    World world;
+    final World world;
 
-    public MapChunkPacket(World w, List<Chunk> chunks) {
+    public MapChunkPacket(final World w, final List<Chunk> chunks) {
         super(0x26, States.INGAME);
         this.chunks = chunks;
         world = w;
@@ -58,12 +59,15 @@ public class MapChunkPacket extends Packet {
             data.writeInt(c.getPos().getY());
             data.writeShort(c.getSectionBitMap());
         }
+        
+        byte[] bytes = new byte[0];
+        
         for (Chunk c : chunks) {
-            // Write Chunk data
-            data.writeData(c.getData(true, true));
+        	bytes = ByteUtils.putFirst(bytes, c.getBytes(true, true));
         }
 
-        stream.write(getID(), data);
+        //Disabled cuz its doesnt works :(
+        //stream.write(getID(), ByteUtils.putFirst(data.toBytes(),bytes));
     }
 
 }
