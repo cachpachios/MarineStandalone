@@ -75,7 +75,6 @@ public class Client {
         //TODO: PacketBuffer
         try {
             packet.writeToStream(output);
-            System.out.println("Sent packet: "+packet.getID()+ ", State: " + state.name());
             connection.getOutputStream().flush();
         } catch (IOException e) {
             //TODO:
@@ -87,7 +86,6 @@ public class Client {
         for (final Packet packet : packets) {
             try {
                 packet.writeToStream(output);
-                System.out.println("(QUE) Sent packet: " + packet.getID() + ", State: " + state.name());
                 connection.getOutputStream().flush();
             } catch (IOException e) {
                 e.printStackTrace();

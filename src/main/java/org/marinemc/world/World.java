@@ -28,6 +28,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.marinemc.game.WorldManager;
 import org.marinemc.game.player.Player;
+import org.marinemc.server.Marine;
+import org.marinemc.util.MathUtils;
 import org.marinemc.util.Position;
 import org.marinemc.world.chunk.Chunk;
 import org.marinemc.world.chunk.ChunkPos;
@@ -212,7 +214,12 @@ public class World { // TODO Save and unload chunks...
 		return !chunksToGenerate.isEmpty();
 	}
 
-	public void putForDownload(Player p) {
-		
+	void finalizeChunks() {
+		for(Chunk c : loadedChunks.values())
+			if(!c.isActive() && !MathUtils.isInsideRect(0, 0, Marine.getServer().getViewDistance(), Marine.getServer().getViewDistance(), c.getPos().getX(), c.getPos().getY())) {
+				c.unload();
+				loadedChunks.remove(c);
+				
+			}
 	}
 }

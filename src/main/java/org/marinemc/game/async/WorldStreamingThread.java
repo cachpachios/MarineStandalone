@@ -43,7 +43,6 @@ public class WorldStreamingThread extends Thread {
 			manager.forEach(action);
 			
 			try {
-				System.out.println("Sleep: " + nonNeg(sleepTime - ((System.nanoTime() - time)/1000/1000)));
 				WorldStreamingThread.sleep(nonNeg(sleepTime - ((System.nanoTime() - time)/1000/1000)));
 				} catch (InterruptedException e) {
 					Logging.getLogger().error("The WorldStreamer got interupted :S");

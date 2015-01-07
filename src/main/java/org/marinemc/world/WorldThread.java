@@ -24,6 +24,7 @@ public class WorldThread extends Thread {
 	
 	public void run() {
 		long startTime;
+		boolean finalizeChunks = false;
 		while(ref.get() != null) {
 			startTime = System.nanoTime();
 			
@@ -32,8 +33,12 @@ public class WorldThread extends Thread {
 			
 			ref.get().tick();
 			ref.get().generateRequested();
-			
-			
+			if(finalizeChunks)  {
+				ref.get().finalizeChunks();
+				finalizeChunks = false;
+			}
+			else
+				finalizeChunks = true;
 			try {
 				WorldThread.sleep(nonNeg((skipTime) - ((System.nanoTime()-startTime)/1000/1000)));
 			} catch (InterruptedException e) {}

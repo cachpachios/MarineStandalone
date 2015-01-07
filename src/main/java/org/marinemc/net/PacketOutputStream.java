@@ -22,6 +22,7 @@ package org.marinemc.net;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.SocketException;
 
 import org.marinemc.io.binary.ByteUtils;
 import org.marinemc.io.binary.SortedByteOutput;
@@ -49,9 +50,13 @@ public class PacketOutputStream { // Here we enable encryption and compression i
         //TODO Compress and encrypt :D
     	data.writeVarInt(0, id);
     	data.writeVarInt(0, data.size());
-    	
-        stream.write(data.toBytes());
-    }
+    	try {
+    		stream.write(data.toBytes());
+    	}
+    	catch(SocketException e) {
+    		return; 
+    	}
+    } 
     
     public static Integer readVarIntFromStream(InputStream stream) {
         int out = 0;

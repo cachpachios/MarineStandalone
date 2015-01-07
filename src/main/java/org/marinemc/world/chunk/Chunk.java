@@ -71,6 +71,10 @@ public class Chunk {
     public Random getRandom() {
         return this.random;
     }
+    
+    public boolean isActive() {
+    	return subscribingPlayers.size() != 0;
+    }
 
     public void unsubscribePlayer(final Player p) { // Make player unsubscribe to events within the chunks(BlockUpdates, entities etc)
         subscribingPlayers.remove(p.getUID());
@@ -235,7 +239,7 @@ public class Chunk {
     }
 
 
-    public char getBlock(int x, int y, int z) {
+    public short getBlock(int x, int y, int z) {
         int s = y >> 4;
 
         if (sections[s] == null)

@@ -29,32 +29,40 @@ import org.marinemc.world.BlockID;
 import org.marinemc.world.Identifiers;
 
 /**
- * Final storage of blocks,
+ * Final storage of blocks and lightning.
  *
  * @author Fozie
  */
 @Unsafe
 public final class ChunkSection {
-
+	
+	/**
+	 * Amount of bytes per save chunk,
+	 * Total byte size per chunk for blocks and lightning is DATA_SIZE * 3
+	 */
     final static int DATA_SIZE = 16 * 16 * 16;
     private final int sectionID;
     private final ChunkPos chunkPos;
-    private char[] blockMap;
-    private byte[] lightMap;
+    private short[] blockMap; // Each block is 2 bytes some for the block id some for the metadata. 
+    private byte[] lightMap; // TODO Replace with nibblearray
 
-
+    /**
+     * Create an empty chunksection with parent chunk and id.
+     * @param c The chunk the chunk section is beloning to
+     * @param y The ID or Y value of the chunk, to get global y multiply it with 16
+     */
     public ChunkSection(final Chunk c, int y) {
         this.chunkPos = c.getPos();
         this.sectionID = y;
-        this.blockMap = new char[DATA_SIZE];
+        this.blockMap = new short[DATA_SIZE];
         this.lightMap = new byte[DATA_SIZE];
     }
     
-    public static char EncodeType(final BlockID type) {
+    public static short EncodeType(final BlockID type) {
     	if(type.isMetaBlock())
-    		return (char) (((type.getIntID() << 4) & 0xfff0) | type.getMetaBlock());
+    		return (short) (((type.getIntID() << 4) & 0xfff0) | type.getMetaBlock());
     	else
-    		return (char) (type.getIntID() << 4);
+    		return (short) (type.getIntID() << 4);
     }
 
     public static int getIndex(int x, int y, int z) {
@@ -73,7 +81,7 @@ public final class ChunkSection {
     public byte[] getBlockData() { //TODO: Optimize
         byte[] raw = new byte[DATA_SIZE * 2];
         int i = -1;
-        for (char id : blockMap) {
+        for (short id : blockMap) {
             raw[++i] = ((byte) (id & 0xff));
             raw[++i] = ((byte) (id >> 8));
         }
@@ -96,7 +104,7 @@ public final class ChunkSection {
         lightMap[getIndex(x, y, z)] = light;
     }
 
-    public char getType(int x, int y, int z) {
+    public short getType(int x, int y, int z) {
         return blockMap[getIndex(x, y, z)];
     }
 
@@ -140,6 +148,6 @@ public final class ChunkSection {
     }
 
     public void fillSection(BlockID type) {
-        Arrays.fill(blockMap, (char) (type.getID() << 4));
+        Arrays.fill(blockMap, (short) (type.getID() << 4));
     }
 }

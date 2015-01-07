@@ -41,7 +41,7 @@ public final class Identifiers {
 	private static int blockSize;
 	
     private static Map<Byte, BlockID> block_id;
-    private static Map<Character, BlockID> block_encode;
+    private static Map<Short, BlockID> block_encode;
 
     public static BlockID getBlockID(byte id) {
         if (block_id == null) init();
