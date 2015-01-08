@@ -9,11 +9,11 @@ public class BitUtils {
         return (data & bit) != 0;
     }
 
-    public static byte setBit(byte input, int bit, boolean status) {
+    public static byte setBit(final byte input, final int bit, final boolean status) {
         if (status) {
-            return (byte) (input | bit);
+            return (byte) (input | (1 << bit));
         } else {
-            return (byte) (input & ~bit);
+            return (byte) (input & ~(1 << bit));
         }
     }
     
@@ -23,9 +23,9 @@ public class BitUtils {
 
     public static short setBit(short input, int bit, boolean status) {
         if (status) {
-            return (short) (input | bit);
+            return (short) (input | (1 << bit));
         } else {
-            return (short) (input & ~bit);
+            return (short) (input & ~(1 << bit));
         }
     }
     
@@ -35,9 +35,9 @@ public class BitUtils {
 
     public static int setBit(int input, int bit, boolean status) {
         if (status) {
-            return (input | bit);
+            return (short) (input | (1 << bit));
         } else {
-            return (input & ~bit);
+            return (short) (input & ~(1 << bit));
         }
     }
     
