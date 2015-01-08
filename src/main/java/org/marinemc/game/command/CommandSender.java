@@ -25,7 +25,6 @@ import org.marinemc.game.chat.ChatSender;
 import org.marinemc.game.permission.Permission;
 import org.marinemc.util.Location;
 
-
 /**
  * CommandSender = Player, Console, RCON & Command Blocks
  *
@@ -33,53 +32,63 @@ import org.marinemc.util.Location;
  */
 public interface CommandSender extends ChatReciever, ChatSender {
 
-    public void sendMessage(String message);
+	@Override
+	public void sendMessage(String message);
 
-    public void sendMessage(ChatMessage message);
+	@Override
+	public void sendMessage(ChatMessage message);
 
-    /**
-     * Execute a command without any arguments
-     *
-     * @param command Command to execute
-     */
-    public void executeCommand(String command);
+	/**
+	 * Execute a command without any arguments
+	 *
+	 * @param command
+	 *            Command to execute
+	 */
+	public void executeCommand(String command);
 
-    /**
-     * Execute a command with arguments
-     *
-     * @param command   Command to execute
-     * @param arguments Arguments
-     */
-    public void executeCommand(String command, String[] arguments);
+	/**
+	 * Execute a command with arguments
+	 *
+	 * @param command
+	 *            Command to execute
+	 * @param arguments
+	 *            Arguments
+	 */
+	public void executeCommand(String command, String[] arguments);
 
-    /**
-     * Execute a command with arguments
-     *
-     * @param command   Command to execute
-     * @param arguments Arguments
-     */
-    public void executeCommand(Command command, String[] arguments);
+	/**
+	 * Execute a command with arguments
+	 *
+	 * @param command
+	 *            Command to execute
+	 * @param arguments
+	 *            Arguments
+	 */
+	public void executeCommand(Command command, String[] arguments);
 
-    /**
-     * Get the sender location
-     *
-     * @return current location
-     */
-    public Location getLocation();
+	/**
+	 * Get the sender location
+	 *
+	 * @return current location
+	 */
+	public Location getLocation();
 
-    /**
-     * Check if the sender has the given permission
-     *
-     * @param permission Permission
-     * @return has permission?
-     */
-    public boolean hasPermission(String permission);
+	/**
+	 * Check if the sender has the given permission
+	 *
+	 * @param permission
+	 *            Permission
+	 * @return has permission?
+	 */
+	@Override
+	public boolean hasPermission(String permission);
 
-    /**
-     * Check if the sender has the given permission
-     *
-     * @param permission Permission
-     * @return has permission?
-     */
-    public boolean hasPermission(Permission permission);
+	/**
+	 * Check if the sender has the given permission
+	 *
+	 * @param permission
+	 *            Permission
+	 * @return has permission?
+	 */
+	public boolean hasPermission(Permission permission);
 }

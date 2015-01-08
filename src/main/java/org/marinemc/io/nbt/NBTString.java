@@ -28,31 +28,31 @@ import org.marinemc.io.binary.ByteUtils;
  */
 public class NBTString extends NBTTag<String> {
 
-    String string;
+	String string;
 
-    public NBTString(String name, String v) {
-        super(name, 8);
-        string = v;
-    }
+	public NBTString(final String name, final String v) {
+		super(name, 8);
+		string = v;
+	}
 
-    public NBTString(String name, ByteInput data) {
-        this(name, ByteUtils.readUTF8Short(data));
-    }
+	public NBTString(final String name, final ByteInput data) {
+		this(name, ByteUtils.readUTF8Short(data));
+	}
 
-    @Override
-    public byte[] toByteArray() {
-        ByteList d = new ByteList();
-        d.writeByte(getTagID());
-        d.writeUTF8Short(name);
-        d.writeUTF8Short(string);
-        return d.toBytes();
-    }
+	@Override
+	public byte[] toByteArray() {
+		final ByteList d = new ByteList();
+		d.writeByte(getTagID());
+		d.writeUTF8Short(name);
+		d.writeUTF8Short(string);
+		return d.toBytes();
+	}
 
-    @Override
-    public byte[] toNonPrefixedByteArray() {
-    	ByteList data = new ByteList();
-        data.writeUTF8Short(this.string);
-        return data.toBytes();
-    }
+	@Override
+	public byte[] toNonPrefixedByteArray() {
+		final ByteList data = new ByteList();
+		data.writeUTF8Short(string);
+		return data.toBytes();
+	}
 
 }

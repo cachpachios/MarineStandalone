@@ -21,16 +21,14 @@ package org.marinemc.server;
 
 public class ServerProperties {
 
-    //FINAL VALUES
-    public static final int PROTOCOL_VERSION = 47;
-    public static final int MAX_Y = 256;
+	// FINAL VALUES
+	public static final int PROTOCOL_VERSION = 47;
+	public static final int MAX_Y = 256;
 
-    // BUILD INFO
-    public static String
-            BUILD_VERSION = "0.0.1-SNAPSHOT",
-            BUILD_TYPE = "Development",
-            BUILD_NAME = "WorldWideWorld",
-            MINECRAFT_NAME = "1.8";
+	// BUILD INFO
+	public static String BUILD_VERSION = "0.0.1-SNAPSHOT",
+			BUILD_TYPE = "Development", BUILD_NAME = "WorldWideWorld",
+			MINECRAFT_NAME = "1.8";
 
-    public static boolean BUILD_STABLE = false;
+	public static boolean BUILD_STABLE = false;
 }

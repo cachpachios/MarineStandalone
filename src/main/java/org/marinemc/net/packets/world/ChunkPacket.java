@@ -28,32 +28,35 @@ import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
 import org.marinemc.world.Dimension;
 import org.marinemc.world.chunk.Chunk;
+
 /**
  * @author Fozie
  */
 public class ChunkPacket extends Packet {
 
-    final Chunk c;
+	final Chunk c;
 
-    public ChunkPacket(Chunk c) {
-        super(0x21, States.INGAME);
-        this.c = c;
-    }
+	public ChunkPacket(final Chunk c) {
+		super(0x21, States.INGAME);
+		this.c = c;
+	}
 
-    @Override
-    public void writeToStream(PacketOutputStream stream) throws IOException {
-    	ByteList metadata = new ByteList();
+	@Override
+	public void writeToStream(final PacketOutputStream stream)
+			throws IOException {
+		final ByteList metadata = new ByteList();
 
-    	metadata.writeInt(c.getPos().getX());
-    	metadata.writeInt(c.getPos().getY());
-    	metadata.writeBoolean(true);
-    	metadata.writeShort(c.getSectionBitMap());
-    	
-    	byte[] data = c.getBytes(true, c.getWorld().getDimension() == Dimension.OVERWORLD);
-    	
-    	metadata.writeVarInt(data.length);
+		metadata.writeInt(c.getPos().getX());
+		metadata.writeInt(c.getPos().getY());
+		metadata.writeBoolean(true);
+		metadata.writeShort(c.getSectionBitMap());
 
-        stream.write(getID(), ByteUtils.putFirst(metadata.toBytes(), data));
-    }
+		final byte[] data = c.getBytes(true,
+				c.getWorld().getDimension() == Dimension.OVERWORLD);
+
+		metadata.writeVarInt(data.length);
+
+		stream.write(getID(), ByteUtils.putFirst(metadata.toBytes(), data));
+	}
 
 }

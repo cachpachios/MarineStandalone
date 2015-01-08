@@ -28,54 +28,60 @@ import org.marinemc.net.States;
 import org.marinemc.net.play.serverbound.player.ServerboundPlayerLookPositionPacket;
 import org.marinemc.util.Location;
 import org.marinemc.util.Position;
+
 /**
  * @author Fozie
  */
-public class ClientboundPlayerLookPositionPacket extends Packet { //TODO Relative positions
+public class ClientboundPlayerLookPositionPacket extends Packet { // TODO
+																	// Relative
+																	// positions
 
-    final Location l;
-    final Position p;
+	final Location l;
+	final Position p;
 
-    public ClientboundPlayerLookPositionPacket(Location l) {
-        this(null, l);
-    }
+	public ClientboundPlayerLookPositionPacket(final Location l) {
+		this(null, l);
+	}
 
-    public ClientboundPlayerLookPositionPacket(Position p) {
-        this(p, null);
-    }
+	public ClientboundPlayerLookPositionPacket(final Position p) {
+		this(p, null);
+	}
 
-    public ClientboundPlayerLookPositionPacket(Position p, Location l) {
-        super(0x08, States.INGAME);
-        this.l = l;
-        this.p = p;
-    }
+	public ClientboundPlayerLookPositionPacket(final Position p,
+			final Location l) {
+		super(0x08, States.INGAME);
+		this.l = l;
+		this.p = p;
+	}
 
-    public ClientboundPlayerLookPositionPacket(ServerboundPlayerLookPositionPacket l) {
-        this(l.getLocation());
-    }
+	public ClientboundPlayerLookPositionPacket(
+			final ServerboundPlayerLookPositionPacket l) {
+		this(l.getLocation());
+	}
 
-    @Override
-    public void writeToStream(PacketOutputStream stream) throws IOException {
-    	ByteList d = new ByteList();
-        if (p == null) {
-            d.writeDouble(l.getX());
-            d.writeDouble(l.getY());
-            d.writeDouble(l.getZ());
+	@Override
+	public void writeToStream(final PacketOutputStream stream)
+			throws IOException {
+		final ByteList d = new ByteList();
+		if (p == null) {
+			d.writeDouble(l.getX());
+			d.writeDouble(l.getY());
+			d.writeDouble(l.getZ());
 
-            d.writeFloat(l.getYaw());
-            d.writeFloat(l.getPitch());
-        } else {
-            d.writeDouble(p.getX());
-            d.writeDouble(p.getY());
-            d.writeDouble(p.getZ());
+			d.writeFloat(l.getYaw());
+			d.writeFloat(l.getPitch());
+		} else {
+			d.writeDouble(p.getX());
+			d.writeDouble(p.getY());
+			d.writeDouble(p.getZ());
 
-            d.writeFloat(l.getYaw());
-            d.writeFloat(l.getPitch());
-        }
+			d.writeFloat(l.getYaw());
+			d.writeFloat(l.getPitch());
+		}
 
-        d.writeByte((byte) 0);
+		d.writeByte((byte) 0);
 
-        stream.write(getID(), d);
-    }
+		stream.write(getID(), d);
+	}
 
 }

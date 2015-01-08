@@ -34,43 +34,47 @@ import org.marinemc.world.gen.generators.TotalFlatGrassGenerator;
  */
 public class WorldManager {
 
-    private static byte nextUID = Byte.MIN_VALUE;
-    private final MarineServer server;
-    public Map<Byte, World> loadedWorlds;
-    private Byte mainWorld;
+	private static byte nextUID = Byte.MIN_VALUE;
+	private final MarineServer server;
+	public Map<Byte, World> loadedWorlds;
+	private Byte mainWorld;
 
-    public WorldManager(MarineServer server) {
-        this.server = server;
-        loadedWorlds = Collections.synchronizedMap(new ConcurrentHashMap<Byte, World>());
-        mainWorld = null;
-    }
+	public WorldManager(final MarineServer server) {
+		this.server = server;
+		loadedWorlds = Collections
+				.synchronizedMap(new ConcurrentHashMap<Byte, World>());
+		mainWorld = null;
+	}
 
-    // TODO World loading..
+	// TODO World loading..
 
-    public byte getNextUID() {
-        while(loadedWorlds.containsKey(++nextUID))
-        	if(nextUID == Byte.MIN_VALUE) return nextUID;
-        return nextUID;
-    }
+	public byte getNextUID() {
+		while (loadedWorlds.containsKey(++nextUID))
+			if (nextUID == Byte.MIN_VALUE)
+				return nextUID;
+		return nextUID;
+	}
 
-    public List<World> getWorlds() {
-        return new ArrayList<>(loadedWorlds.values());
-    }
+	public List<World> getWorlds() {
+		return new ArrayList<>(loadedWorlds.values());
+	}
 
-    public World getMainWorld() {
-        if (mainWorld == null) { // Temporary code when no world loader is implemented
-            World w = new World("MainWorld", new TotalFlatGrassGenerator());
-            addWorld(w);
-            mainWorld = w.getUID();
-            return w;
-        } else
-            return loadedWorlds.get(mainWorld);
-    }
+	public World getMainWorld() {
+		if (mainWorld == null) { // Temporary code when no world loader is
+									// implemented
+			final World w = new World("MainWorld",
+					new TotalFlatGrassGenerator());
+			addWorld(w);
+			mainWorld = w.getUID();
+			return w;
+		} else
+			return loadedWorlds.get(mainWorld);
+	}
 
-    public void addWorld(World w) {
-        if (loadedWorlds.containsKey(w.getUID()))
-            return;
+	public void addWorld(final World w) {
+		if (loadedWorlds.containsKey(w.getUID()))
+			return;
 
-        loadedWorlds.put(w.getUID(), w);
-    }
+		loadedWorlds.put(w.getUID(), w);
+	}
 }

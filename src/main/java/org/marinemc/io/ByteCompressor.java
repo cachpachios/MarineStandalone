@@ -24,46 +24,46 @@ import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
 public class ByteCompressor {
-    private static final int COMPRESSION_LEVEL = Deflater.DEFAULT_COMPRESSION;
-    
-    private final Deflater deflater;
-    private final Inflater inflater;
+	private static final int COMPRESSION_LEVEL = Deflater.DEFAULT_COMPRESSION;
 
-    public ByteCompressor() {
-    	deflater = new Deflater(COMPRESSION_LEVEL);
-    	inflater = new Inflater();
-    }
-    
-    
-    private static ByteCompressor compressor;
-    public static ByteCompressor instance() {
-    	if(compressor == null)
-    		compressor = new ByteCompressor();
-    	return compressor;
-    }
-    
-    public byte[] encode(final byte[] data) throws EncodingUseless{
-        deflater.setInput(data);
-        deflater.finish();
-        byte[] compressedData = new byte[data.length];
-        deflater.deflate(compressedData);
-        deflater.reset();
-        if (compressedData.length > data.length) {
-            // Compression did just increase the size, consider raising threadshold.
-             throw new EncodingUseless();
-        } 
-        return compressedData;
-    }
+	private final Deflater deflater;
+	private final Inflater inflater;
 
-    public byte[] decode(final byte[] data) throws DataFormatException {
-        inflater.setInput(data);
-        byte[] decompressedData = new byte[data.length];
-        inflater.inflate(decompressedData);
-        inflater.reset();
-        return decompressedData;
-    }
-    
-    public class EncodingUseless extends Exception {
+	public ByteCompressor() {
+		deflater = new Deflater(COMPRESSION_LEVEL);
+		inflater = new Inflater();
+	}
+
+	private static ByteCompressor compressor;
+
+	public static ByteCompressor instance() {
+		if (compressor == null)
+			compressor = new ByteCompressor();
+		return compressor;
+	}
+
+	public byte[] encode(final byte[] data) throws EncodingUseless {
+		deflater.setInput(data);
+		deflater.finish();
+		final byte[] compressedData = new byte[data.length];
+		deflater.deflate(compressedData);
+		deflater.reset();
+		if (compressedData.length > data.length)
+			// Compression did just increase the size, consider raising
+			// threadshold.
+			throw new EncodingUseless();
+		return compressedData;
+	}
+
+	public byte[] decode(final byte[] data) throws DataFormatException {
+		inflater.setInput(data);
+		final byte[] decompressedData = new byte[data.length];
+		inflater.inflate(decompressedData);
+		inflater.reset();
+		return decompressedData;
+	}
+
+	public class EncodingUseless extends Exception {
 		private static final long serialVersionUID = 4747194970964612987L;
-    }
+	}
 }

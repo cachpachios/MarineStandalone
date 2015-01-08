@@ -35,58 +35,59 @@ import org.marinemc.game.command.ServiceProvider;
  */
 public class CommandManager {
 
-    private static CommandManager instance;
-    // These are already async-optimized
-    private final Map<String, Command> stringMap;
+	private static CommandManager instance;
+	// These are already async-optimized
+	private final Map<String, Command> stringMap;
 
-    public CommandManager() {
-        stringMap = new ConcurrentHashMap<>();
-    }
+	public CommandManager() {
+		stringMap = new ConcurrentHashMap<>();
+	}
 
-    public static CommandManager getInstance() {
-        if (instance == null) {
-            instance = new CommandManager();
-        }
-        return instance;
-    }
+	public static CommandManager getInstance() {
+		if (instance == null)
+			instance = new CommandManager();
+		return instance;
+	}
 
-    public Command getCommand(final String cmd) {
-        try {
-            return stringMap.get(cmd);
-        } catch (NullPointerException e) {
-            return null;
-        }
-    }
+	public Command getCommand(final String cmd) {
+		try {
+			return stringMap.get(cmd);
+		} catch (final NullPointerException e) {
+			return null;
+		}
+	}
 
-    public void registerCommand(final ServiceProvider provider, final Command command) {
-        String name = command.toString();
-        if (stringMap.containsKey(name)) {
-            final Command old = stringMap.get(name);
-            if (old.getServiceProvider().getProviderPriority() == 0x00 && provider.getProviderPriority() != 0x00) {
-                old.setName(old.getServiceProvider().getProviderName() + ":" + old.toString());
-            } else {
-                command.setName(provider.getProviderName() + ":" + command);
-            }
-        }
-        name = command.toString();
-        final List<String> ss = new ArrayList<>();
-        stringMap.put(name, command);
-        for (final String s : command.getAliases()) {
-            if (stringMap.containsKey(s)) ss.add(s);
-            else stringMap.put(s, command);
-        }
-        command.getAliases().removeAll(ss);
-        command.setProvider(this);
-        command.setServiceProvider(provider);
-    }
+	public void registerCommand(final ServiceProvider provider,
+			final Command command) {
+		String name = command.toString();
+		if (stringMap.containsKey(name)) {
+			final Command old = stringMap.get(name);
+			if (old.getServiceProvider().getProviderPriority() == 0x00
+					&& provider.getProviderPriority() != 0x00)
+				old.setName(old.getServiceProvider().getProviderName() + ":"
+						+ old.toString());
+			else
+				command.setName(provider.getProviderName() + ":" + command);
+		}
+		name = command.toString();
+		final List<String> ss = new ArrayList<>();
+		stringMap.put(name, command);
+		for (final String s : command.getAliases())
+			if (stringMap.containsKey(s))
+				ss.add(s);
+			else
+				stringMap.put(s, command);
+		command.getAliases().removeAll(ss);
+		command.setProvider(this);
+		command.setServiceProvider(provider);
+	}
 
-    public Collection<Command> getCommands() {
-        Collection<Command> commands = new ArrayList<>();
-        for (final Command command : stringMap.values()) {
-            if (!commands.contains(command))
-                commands.add(command);
-        }
-        return commands;
-    }
+	public Collection<Command> getCommands() {
+		final Collection<Command> commands = new ArrayList<>();
+		for (final Command command : stringMap.values())
+			if (!commands.contains(command))
+				commands.add(command);
+		return commands;
+	}
 
 }

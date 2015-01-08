@@ -19,12 +19,7 @@
 
 package org.marinemc.plugins;
 
-
 import java.io.InputStream;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.json.JSONTokener;
 
 /**
  * The plugin description file
@@ -33,32 +28,34 @@ import org.json.JSONTokener;
  */
 public class PluginFile {
 
-    public final String name;
-    public final String mainClass;
-    public final String author;
-    public final String version;
-    public final JSONArray dependencies;
+	public final String name;
+	public final String mainClass;
+	public final String author;
+	public final String version;
+	public final JSONArray dependencies;
 
-    /**
-     * Constructor
-     *
-     * @param stream Stream with desc.json incoming
-     * @throws Exception If anything bad happens
-     */
-    public PluginFile(InputStream stream) throws Exception {
-        final JSONTokener tokener = new JSONTokener(stream);
-        final JSONObject object = new JSONObject(tokener);
+	/**
+	 * Constructor
+	 *
+	 * @param stream
+	 *            Stream with desc.json incoming
+	 * @throws Exception
+	 *             If anything bad happens
+	 */
+	public PluginFile(final InputStream stream) throws Exception {
+		final JSONTokener tokener = new JSONTokener(stream);
+		final JSONObject object = new JSONObject(tokener);
 
-        this.name = object.getString("name");
-        this.mainClass = object.getString("main");
-        this.author = object.getString("author");
-        this.version = object.getString("version");
-        if (object.isNull("depends"))
-            this.dependencies = new JSONArray();
-        else
-            this.dependencies = object.getJSONArray("depends");
+		name = object.getString("name");
+		mainClass = object.getString("main");
+		author = object.getString("author");
+		version = object.getString("version");
+		if (object.isNull("depends"))
+			dependencies = new JSONArray();
+		else
+			dependencies = object.getJSONArray("depends");
 
-        stream.close();
-    }
+		stream.close();
+	}
 
 }

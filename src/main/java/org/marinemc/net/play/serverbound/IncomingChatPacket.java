@@ -34,24 +34,25 @@ import org.marinemc.net.States;
  */
 public class IncomingChatPacket extends Packet {
 
-    private String msg;
+	private String msg;
 
-    public IncomingChatPacket() {
-        super(0x01, States.INGAME);
-    }
+	public IncomingChatPacket() {
+		super(0x01, States.INGAME);
+	}
 
-    @Override
-    public void writeToStream(PacketOutputStream stream) throws IOException {
+	@Override
+	public void writeToStream(final PacketOutputStream stream)
+			throws IOException {
 
-    }
+	}
 
-    @Override
-    public void readFromBytes(ByteInput input) {
-        msg = ByteUtils.readUTF8VarInt(input);
-    }
+	@Override
+	public void readFromBytes(final ByteInput input) {
+		msg = ByteUtils.readUTF8VarInt(input);
+	}
 
-    public String getMessage() {
-        return msg;
-    }
+	public String getMessage() {
+		return msg;
+	}
 
 }

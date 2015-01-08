@@ -28,6 +28,6 @@ import org.marinemc.game.player.Player;
  */
 public abstract class PlayerOperation implements ArgumentedOperation<Player> {
 
-    @Override
-    public abstract void action(Player player);
+	@Override
+	public abstract void action(Player player);
 }

@@ -32,31 +32,32 @@ import org.marinemc.world.chunk.ChunkPos;
 
 /**
  * 
- * Sent to tell client to unload a chunk.
- * Same as ChunkPacket but without information
+ * Sent to tell client to unload a chunk. Same as ChunkPacket but without
+ * information
  * 
  * @author Fozie
  *
  */
-public class UnloadChunkPacket extends Packet{
+public class UnloadChunkPacket extends Packet {
 
 	final ChunkPos pos;
-	
+
 	public UnloadChunkPacket(final ChunkPos c) {
 		super(0x21, States.INGAME);
 		pos = c;
 	}
 
 	@Override
-	public void writeToStream(PacketOutputStream stream) throws IOException {
-		ByteList data = new ByteList();
-		
+	public void writeToStream(final PacketOutputStream stream)
+			throws IOException {
+		final ByteList data = new ByteList();
+
 		data.writeInt(pos.getX());
 		data.writeInt(pos.getY());
 		data.writeBoolean(true);
 		data.writeShort((short) 0);
 		data.writeVarInt(0);
-		
+
 		stream.write(getID(), data);
 	}
 

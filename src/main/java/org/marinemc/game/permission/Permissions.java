@@ -26,6 +26,6 @@ package org.marinemc.game.permission;
  */
 public class Permissions {
 
-    public static final Permission ALL_PERMISSIONS = new Permission("*");
+	public static final Permission ALL_PERMISSIONS = new Permission("*");
 
 }

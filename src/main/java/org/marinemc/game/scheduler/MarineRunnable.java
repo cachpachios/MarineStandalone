@@ -23,82 +23,83 @@ import org.marinemc.game.command.ServiceProvider;
 import org.marinemc.server.Marine;
 
 /**
- * A runnable class created for MarineStandalone,
- * can be used in both internal files and plugins.
+ * A runnable class created for MarineStandalone, can be used in both internal
+ * files and plugins.
  *
  * @author Citymonstret
  */
 public abstract class MarineRunnable {
 
-    private final ServiceProvider provider;
-    private final long requiredTick, totalRuns;
-    private long tick;
-    private long ran;
+	private final ServiceProvider provider;
+	private final long requiredTick, totalRuns;
+	private long tick;
+	private long ran;
 
-    /**
-     * Constructor
-     *
-     * @param requiredTick ticks between each #run();
-     * @param runs         number of times the runnable will run, set to -1 for inf.
-     */
-    public MarineRunnable(final ServiceProvider provider, final long requiredTick, final long runs) {
-        this.requiredTick = requiredTick;
-        this.totalRuns = runs;
-        this.provider = provider;
-        this.ran = 0;
-        this.tick = 0;
-    }
+	/**
+	 * Constructor
+	 *
+	 * @param requiredTick
+	 *            ticks between each #run();
+	 * @param runs
+	 *            number of times the runnable will run, set to -1 for inf.
+	 */
+	public MarineRunnable(final ServiceProvider provider,
+			final long requiredTick, final long runs) {
+		this.requiredTick = requiredTick;
+		totalRuns = runs;
+		this.provider = provider;
+		ran = 0;
+		tick = 0;
+	}
 
-    /**
-     * Will cancel the task, and GC the object
-     *
-     * @param scheduler Scheduler class
-     */
-    public void cancel(final Scheduler scheduler, final long n) {
-        // Will automatically remove THIS task :D
-        scheduler.removeTask(n);
-        //
-        this.tick = Long.MAX_VALUE;
-        this.ran = Long.MAX_VALUE;
-    }
+	/**
+	 * Will cancel the task, and GC the object
+	 *
+	 * @param scheduler
+	 *            Scheduler class
+	 */
+	public void cancel(final Scheduler scheduler, final long n) {
+		// Will automatically remove THIS task :D
+		scheduler.removeTask(n);
+		//
+		tick = Long.MAX_VALUE;
+		ran = Long.MAX_VALUE;
+	}
 
-    final void tick(Scheduler scheduler, long n) {
-        ++this.tick;
-        if (this.tick >= this.requiredTick) {
-            if ((totalRuns == -1 || ran++ <= totalRuns)) {
-                this.run();
-                this.tick = 0;
-            } else {
-                this.cancel(scheduler, n);
-            }
-        }
-    }
+	final void tick(final Scheduler scheduler, final long n) {
+		++tick;
+		if (tick >= requiredTick)
+			if (totalRuns == -1 || ran++ <= totalRuns) {
+				run();
+				tick = 0;
+			} else
+				cancel(scheduler, n);
+	}
 
-    /**
-     * Create this task SYNC
-     *
-     * @return Task ID
-     */
-    final public long runSync() {
-        return Marine.getScheduler().createSyncTask(this);
-    }
+	/**
+	 * Create this task SYNC
+	 *
+	 * @return Task ID
+	 */
+	final public long runSync() {
+		return Marine.getScheduler().createSyncTask(this);
+	}
 
-    /**
-     * Create this task ASYNC
-     *
-     * @return Task ID
-     */
-    final public long runAsync() {
-        return Marine.getScheduler().createAsyncTask(this);
-    }
+	/**
+	 * Create this task ASYNC
+	 *
+	 * @return Task ID
+	 */
+	final public long runAsync() {
+		return Marine.getScheduler().createAsyncTask(this);
+	}
 
-    /**
-     * Run the task (will be repeated)
-     * using the tick method
-     */
-    public abstract void run();
+	/**
+	 * Run the task (will be repeated) using the tick method
+	 */
+	public abstract void run();
 
-    public ServiceProvider getProvider() {
-        return this.provider;
-    }
+	public ServiceProvider getProvider() {
+		return provider;
+	}
 }

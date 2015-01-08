@@ -24,52 +24,53 @@ import java.util.List;
 
 import org.marinemc.io.binary.ByteInput;
 import org.marinemc.io.binary.ByteList;
+
 /**
  * @author Fozie
  */
 public class NBTCompound extends NBTTag {
 
-    List<NBTTag> data;
+	List<NBTTag> data;
 
-    public NBTCompound(String name, ByteInput data) {
-        this(name);
-        byte id;
-        while ((id = data.readByte()) != 0) { // Add all posseble tag until Tag_END appears(d = 0)
-            this.data.add(NBT.parse(data, id));
-        }
-    }
+	public NBTCompound(final String name, final ByteInput data) {
+		this(name);
+		byte id;
+		while ((id = data.readByte()) != 0)
+			this.data.add(NBT.parse(data, id));
+	}
 
-    public NBTCompound(String name) {
-        super(name, 10);
-        this.data = new ArrayList<>();
-    }
+	public NBTCompound(final String name) {
+		super(name, 10);
+		data = new ArrayList<>();
+	}
 
-    @Override
-    public byte[] toByteArray() {
-    	ByteList d = new ByteList();
-        d.writeByte(getTagID()); // Write start ID
-        d.writeUTF8Short(name);
-        for (NBTTag tag : data)
-            d.write(tag.toByteArray());
+	@Override
+	public byte[] toByteArray() {
+		final ByteList d = new ByteList();
+		d.writeByte(getTagID()); // Write start ID
+		d.writeUTF8Short(name);
+		for (final NBTTag tag : data)
+			d.write(tag.toByteArray());
 
-        d.writeByte((byte) 0); // Write the TAG_END tag to tell that the compound have ended.
+		d.writeByte((byte) 0); // Write the TAG_END tag to tell that the
+								// compound have ended.
 
-        return d.toBytes();
-    }
+		return d.toBytes();
+	}
 
-    public void addTag(NBTTag tag) {
-        data.add(tag);
-    }
+	public void addTag(final NBTTag tag) {
+		data.add(tag);
+	}
 
-    public List<NBTTag> getTags() {
-        return data;
-    }
+	public List<NBTTag> getTags() {
+		return data;
+	}
 
-    @Override
-    public byte[] toNonPrefixedByteArray() {
-    	ByteList data = new ByteList();
-        for (NBTTag tag : this.data)
-            data.write(tag.toByteArray());
-        return data.toBytes();
-    }
+	@Override
+	public byte[] toNonPrefixedByteArray() {
+		final ByteList data = new ByteList();
+		for (final NBTTag tag : this.data)
+			data.write(tag.toByteArray());
+		return data.toBytes();
+	}
 }

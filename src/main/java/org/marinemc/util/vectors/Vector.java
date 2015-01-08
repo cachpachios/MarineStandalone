@@ -28,65 +28,74 @@ package org.marinemc.util.vectors;
  */
 public interface Vector<T extends Number> {
 
-    /**
-     * Divide all values by a factor
-     *
-     * @param factor Factor to divide by
-     */
-    public void divide(final int factor);
+	/**
+	 * Divide all values by a factor
+	 *
+	 * @param factor
+	 *            Factor to divide by
+	 */
+	public void divide(final int factor);
 
-    /**
-     * Divide all values by an other number
-     *
-     * @param number Number to divide by
-     */
-    public void divide(final T number);
-    
-    /**
-     * Multiply all values by a factor
-     *
-     * @param factor Factor to multiply with
-     */
-    public void multiply(final int factor);
-    
-    /**
-    * Multiply all values by by an other number
-    *
-    * @param number Number to multiply with
-    */
-    public void multiply(final T number);
-    
-    /**
-     * Adds all values by a factor
-     *
-     * @param factor Factor to add with
-     */
-    public void add(final int factor);
-    
-    /**
-    * Adds all values by by an other number
-    *
-    * @param number Number to add with
-    */
-    public void add(final T number);
-    
-    /**
-     * Subtracts all values by a factor
-     *
-     * @param factor Factor to subtract with
-     */
-    public void sub(final int factor);
-    
-    /**
-    * Subtracts all values by by an other number
-    *
-    * @param number Number to subtract with
-    */
-    public void sub(final T number);
-    
-    /**
-     * Gives all values packed in an array
-     * @return All values in one single array
-     */
-    public T[] asArray();
+	/**
+	 * Divide all values by an other number
+	 *
+	 * @param number
+	 *            Number to divide by
+	 */
+	public void divide(final T number);
+
+	/**
+	 * Multiply all values by a factor
+	 *
+	 * @param factor
+	 *            Factor to multiply with
+	 */
+	public void multiply(final int factor);
+
+	/**
+	 * Multiply all values by by an other number
+	 *
+	 * @param number
+	 *            Number to multiply with
+	 */
+	public void multiply(final T number);
+
+	/**
+	 * Adds all values by a factor
+	 *
+	 * @param factor
+	 *            Factor to add with
+	 */
+	public void add(final int factor);
+
+	/**
+	 * Adds all values by by an other number
+	 *
+	 * @param number
+	 *            Number to add with
+	 */
+	public void add(final T number);
+
+	/**
+	 * Subtracts all values by a factor
+	 *
+	 * @param factor
+	 *            Factor to subtract with
+	 */
+	public void sub(final int factor);
+
+	/**
+	 * Subtracts all values by by an other number
+	 *
+	 * @param number
+	 *            Number to subtract with
+	 */
+	public void sub(final T number);
+
+	/**
+	 * Gives all values packed in an array
+	 * 
+	 * @return All values in one single array
+	 */
+	public T[] asArray();
 }

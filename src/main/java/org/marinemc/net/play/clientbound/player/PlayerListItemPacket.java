@@ -35,74 +35,74 @@ import org.marinemc.net.States;
  */
 public class PlayerListItemPacket extends Packet {
 
-    private final Action action;
-    private final Player player;
-    private final String s;
+	private final Action action;
+	private final Player player;
+	private final String s;
 
-    public PlayerListItemPacket(Action action, Player player) {
-        this(action, player, "");
-    }
+	public PlayerListItemPacket(final Action action, final Player player) {
+		this(action, player, "");
+	}
 
-    public PlayerListItemPacket(Action action, Player player, String s) {
-        super(0x38, States.INGAME);
-        this.action = action;
-        this.player = player;
-        this.s = s;
-    }
+	public PlayerListItemPacket(final Action action, final Player player,
+			final String s) {
+		super(0x38, States.INGAME);
+		this.action = action;
+		this.player = player;
+		this.s = s;
+	}
 
-    @Override
-    public void writeToStream(PacketOutputStream stream) throws IOException {
-    	ByteList data = new ByteList();
-        data.writeVarInt(action.getActionID());
-        data.writeVarInt(1);
-        data.writeUUID(player.getUUID());
-        switch (action) {
-            case ADD_PLAYER: {
-                data.writeUTF8(player.getUserName());
-                data.writeVarInt(0);
-                data.writeVarInt(player.getGamemode().getID());
-                data.writeVarInt(10);
-                data.writeBoolean(false);
-            }
-            break;
-            case UPDATE_GAME_MODE: {
-                data.writeVarInt(player.getGamemode().getID());
-            }
-            break;
-            case UPDATE_LATENCY: {
-                data.writeVarInt(10);
-            }
-            break;
-            case UPDATE_DISPLAY_NAME: {
-                boolean hasDisplayName = player.hasDisplayName();
-                data.writeBoolean(hasDisplayName);
-                if (hasDisplayName)
-                    data.writeUTF8(new ChatComponent(player.getDisplayName()).toString());
-            }
-            break;
-            case REMOVE_PLAYER:
-                break;
-            default:
-                return;
-        }
-        stream.write(getID(), data);
-    }
+	@Override
+	public void writeToStream(final PacketOutputStream stream)
+			throws IOException {
+		final ByteList data = new ByteList();
+		data.writeVarInt(action.getActionID());
+		data.writeVarInt(1);
+		data.writeUUID(player.getUUID());
+		switch (action) {
+		case ADD_PLAYER: {
+			data.writeUTF8(player.getUserName());
+			data.writeVarInt(0);
+			data.writeVarInt(player.getGamemode().getID());
+			data.writeVarInt(10);
+			data.writeBoolean(false);
+		}
+			break;
+		case UPDATE_GAME_MODE: {
+			data.writeVarInt(player.getGamemode().getID());
+		}
+			break;
+		case UPDATE_LATENCY: {
+			data.writeVarInt(10);
+		}
+			break;
+		case UPDATE_DISPLAY_NAME: {
+			final boolean hasDisplayName = player.hasDisplayName();
+			data.writeBoolean(hasDisplayName);
+			if (hasDisplayName)
+				data.writeUTF8(new ChatComponent(player.getDisplayName())
+						.toString());
+		}
+			break;
+		case REMOVE_PLAYER:
+			break;
+		default:
+			return;
+		}
+		stream.write(getID(), data);
+	}
 
-    public static enum Action {
-        ADD_PLAYER(0),
-        UPDATE_GAME_MODE(1),
-        UPDATE_LATENCY(2),
-        UPDATE_DISPLAY_NAME(3),
-        REMOVE_PLAYER(4);
+	public static enum Action {
+		ADD_PLAYER(0), UPDATE_GAME_MODE(1), UPDATE_LATENCY(2), UPDATE_DISPLAY_NAME(
+				3), REMOVE_PLAYER(4);
 
-        private final int actionID;
+		private final int actionID;
 
-        Action(final int actionID) {
-            this.actionID = actionID;
-        }
+		Action(final int actionID) {
+			this.actionID = actionID;
+		}
 
-        public int getActionID() {
-            return this.actionID;
-        }
-    }
+		public int getActionID() {
+			return actionID;
+		}
+	}
 }

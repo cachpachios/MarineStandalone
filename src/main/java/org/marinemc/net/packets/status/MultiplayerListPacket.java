@@ -19,8 +19,9 @@
 
 package org.marinemc.net.packets.status;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import java.io.IOException;
+import java.util.UUID;
+
 import org.marinemc.events.standardevents.ListEvent;
 import org.marinemc.game.chat.ChatColor;
 import org.marinemc.game.player.Player;
@@ -33,78 +34,78 @@ import org.marinemc.server.ServerProperties;
 import org.marinemc.util.mojang.MojangTask;
 import org.marinemc.util.mojang.MojangUtils;
 
-import java.io.IOException;
-import java.util.UUID;
 /**
  * @author Fozie
  */
 public class MultiplayerListPacket extends Packet {
 
+	public MultiplayerListPacket() {
+		super(0x00, States.INTRODUCE);
+	}
 
-    public MultiplayerListPacket() {
-        super(0x00, States.INTRODUCE);
-    }
+	@SuppressWarnings("unchecked")
+	@Override
+	public void writeToStream(final PacketOutputStream stream)
+			throws IOException {
+		final JSONArray samples = new JSONArray();
+		JSONObject player = new JSONObject();
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public void writeToStream(PacketOutputStream stream) throws IOException {
-        JSONArray samples = new JSONArray();
-        JSONObject player = new JSONObject();
+		if (Marine.getServer().getPlayerCount() == 0) {
+			player.put("id", UUID.fromString("1-1-3-3-7").toString());
+			player.put("name", ChatColor.red + "There is nobody online!");
+			samples.add(player);
+		} else
+			for (final Player p : Marine.getPlayers()) {
+				player = new JSONObject();
+				player.put("id", p.getUUID().toString());
+				player.put("name", p.getUserName());
+				samples.add(player);
+			}
 
-        if (Marine.getServer().getPlayerCount() == 0) {
-            player.put("id", UUID.fromString("1-1-3-3-7").toString());
-            player.put("name", ChatColor.red + "There is nobody online!");
-            samples.add(player);
-        } else {
-            for (Player p : Marine.getPlayers()) {
-                player = new JSONObject();
-                player.put("id", p.getUUID().toString());
-                player.put("name", p.getUserName());
-                samples.add(player);
-            }
-        }
+		final ListResponse response = new ListResponse(Marine.getMotd(), Marine
+				.getPlayers().size(), Marine.getMaxPlayers(), samples, Marine
+				.getServer().getFavicon());
+		if (MojangTask.getStatus() != MojangUtils.Status.ONLINE) {
+			String motd = response.getMOTD();
+			if (motd.contains("\n"))
+				motd = motd.split("\n")[0];
+			response.setMotd(motd + "\nAuth Servers Are Down");
+		}
+		final ListEvent event = new ListEvent(response);
 
-        ListResponse response = new ListResponse(Marine.getMotd(), Marine.getPlayers().size(), Marine.getMaxPlayers(), samples, Marine.getServer().getFavicon());
-        if (MojangTask.getStatus() != MojangUtils.Status.ONLINE) {
-            String motd = response.getMOTD();
-            if (motd.contains("\n")) {
-                motd = motd.split("\n")[0];
-            }
-            response.setMotd(motd + "\nAuth Servers Are Down");
-        }
-        ListEvent event = new ListEvent(response);
+		Marine.getServer().callEvent(event);
 
-        Marine.getServer().callEvent(event);
+		final ByteList data = new ByteList();
+		data.writeUTF8(encode(event.getResponse()));
+		stream.write(getID(), data);
+	}
 
-        ByteList data = new ByteList();
-        data.writeUTF8(encode(event.getResponse()));
-        stream.write(getID(), data);
-    }
+	@SuppressWarnings("unchecked")
+	public String encode(final ListResponse response) {
+		final JSONObject json = new JSONObject();
 
-    @SuppressWarnings("unchecked")
-    public String encode(ListResponse response) {
-        JSONObject json = new JSONObject();
+		final JSONObject version = new JSONObject();
+		version.put("name", ServerProperties.MINECRAFT_NAME);
+		version.put("protocol", ServerProperties.PROTOCOL_VERSION);
+		json.put("version", version);
 
-        JSONObject version = new JSONObject();
-        version.put("name", ServerProperties.MINECRAFT_NAME);
-        version.put("protocol", ServerProperties.PROTOCOL_VERSION);
-        json.put("version", version);
+		final JSONObject players = new JSONObject();
 
-        JSONObject players = new JSONObject();
+		players.put("max", response.getMaxPlayers());
+		players.put("online", response.getCurrentPlayers());
+		players.put("sample", response.getSamplePlayers());
+		json.put("players", players);
 
-        players.put("max", response.getMaxPlayers());
-        players.put("online", response.getCurrentPlayers());
-        players.put("sample", response.getSamplePlayers());
-        json.put("players", players);
+		final JSONObject description = new JSONObject();
+		description.put("text", response.getMOTD());
+		json.put("description", description);
 
-        JSONObject description = new JSONObject();
-        description.put("text", response.getMOTD());
-        json.put("description", description);
+		if (response.getFavicon() != null
+				&& response.getFavicon().toString().length() > 0)
+			json.put("favicon",
+					"data:image/png;base64," + response.getFavicon());
 
-        if (response.getFavicon() != null && response.getFavicon().toString().length() > 0)
-            json.put("favicon", "data:image/png;base64," + response.getFavicon());
+		return json.toJSONString();
 
-        return json.toJSONString();
-
-    }
+	}
 }

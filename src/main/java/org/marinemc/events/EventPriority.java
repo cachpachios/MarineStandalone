@@ -25,7 +25,5 @@ package org.marinemc.events;
  * @author Citymonstret
  */
 public enum EventPriority {
-    LOW,
-    MEDIUM,
-    HIGH
+	LOW, MEDIUM, HIGH
 }

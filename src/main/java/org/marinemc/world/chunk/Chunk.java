@@ -42,289 +42,311 @@ import org.marinemc.world.World;
  * @author Fozie
  */
 public class Chunk {
-	
+
 	public static final int WIDTH = 16, DEPTH = 16;
 
-    private final World w;
-    private final ChunkPos pos;
+	private final World w;
+	private final ChunkPos pos;
 
-    private ChunkSection[] sections;
-    private BiomeID[] biomes;
+	private final ChunkSection[] sections;
+	private final BiomeID[] biomes;
 
-    private short[] heightMap; // Sorted x + y * width
-    private Random random;
-    
-//    private List<Entity> entities;
+	private final short[] heightMap; // Sorted x + y * width
+	private final Random random;
 
-    private List<Short> subscribingPlayers;
+	// private List<Entity> entities;
 
-    public Chunk(World w, ChunkPos pos) {
-        this.w = w;
-        this.pos = pos;
-        this.sections = new ChunkSection[16];
-        
-        this.biomes 	= new BiomeID	[WIDTH*DEPTH];
-        this.heightMap 	= new short		[WIDTH*DEPTH];
+	private final List<Short> subscribingPlayers;
 
-        this.subscribingPlayers = new ArrayList<>();
-        this.random = w.getRandom();
-    }
+	public Chunk(final World w, final ChunkPos pos) {
+		this.w = w;
+		this.pos = pos;
+		sections = new ChunkSection[16];
 
-    public Random getRandom() {
-        return this.random;
-    }
-    
-    /**
-     * Checks if any players have loaded this chunk
-     * @return However any players have this chunk loaded
-     */
-    public boolean isActive() {
-    	return subscribingPlayers.size() != 0;
-    }
+		biomes = new BiomeID[WIDTH * DEPTH];
+		heightMap = new short[WIDTH * DEPTH];
 
-    public void unsubscribePlayer(final Player p) { // Make player unsubscribe to events within the chunks(BlockUpdates, entities etc)
-        subscribingPlayers.remove(p.getUID());
-    }
+		subscribingPlayers = new ArrayList<>();
+		random = w.getRandom();
+	}
 
-    public void subscribePlayer(final Player p) { // Make player unsubscribe to events within the chunks(BlockUpdates, entities etc)
-        if (!subscribingPlayers.contains(p.getUID()))
-            subscribingPlayers.add(p.getUID());
-    }
+	public Random getRandom() {
+		return random;
+	}
 
-    public void unload() {
-    	for(Short s : subscribingPlayers)
-    		if(Marine.getServer().getPlayerManager().getPlayer(s) != null)
-    			Marine.getServer().getPlayerManager().getPlayer(s).unloadChunk(pos);
-    	subscribingPlayers.clear();
-    	//TODO Save chunk perhaps :S
-    }
-    
-    public void unload(final Player p) {
-    	subscribingPlayers.remove(new Short(p.getUID()));
+	/**
+	 * Checks if any players have loaded this chunk
+	 * 
+	 * @return However any players have this chunk loaded
+	 */
+	public boolean isActive() {
+		return subscribingPlayers.size() != 0;
+	}
+
+	public void unsubscribePlayer(final Player p) { // Make player unsubscribe
+													// to events within the
+													// chunks(BlockUpdates,
+													// entities etc)
+		subscribingPlayers.remove(p.getUID());
+	}
+
+	public void subscribePlayer(final Player p) { // Make player unsubscribe to
+													// events within the
+													// chunks(BlockUpdates,
+													// entities etc)
+		if (!subscribingPlayers.contains(p.getUID()))
+			subscribingPlayers.add(p.getUID());
+	}
+
+	public void unload() {
+		for (final Short s : subscribingPlayers)
+			if (Marine.getServer().getPlayerManager().getPlayer(s) != null)
+				Marine.getServer().getPlayerManager().getPlayer(s)
+						.unloadChunk(pos);
+		subscribingPlayers.clear();
+		// TODO Save chunk perhaps :S
+	}
+
+	public void unload(final Player p) {
+		subscribingPlayers.remove(new Short(p.getUID()));
 		p.unloadChunk(pos);
-    }
-    
-    public void setBlock(Position pos, BlockID type) {
-        setBlock(pos.x, pos.y, pos.z, type);
-    }
+	}
 
-    public void updateBlockChange(Position pos, BlockID type) {
-        for (Short s : subscribingPlayers)
-            Marine.getPlayer(s).sendBlockUpdate(pos, type);
-    }
+	public void setBlock(final Position pos, final BlockID type) {
+		setBlock(pos.x, pos.y, pos.z, type);
+	}
 
-    public void updateBlockChange(int x, int y, int z, BlockID type) {
-        updateBlockChange(new Position(x, y, z), type);
-    }
+	public void updateBlockChange(final Position pos, final BlockID type) {
+		for (final Short s : subscribingPlayers)
+			Marine.getPlayer(s).sendBlockUpdate(pos, type);
+	}
 
-    //TODO: TileEntities, Entities
+	public void updateBlockChange(final int x, final int y, final int z,
+			final BlockID type) {
+		updateBlockChange(new Position(x, y, z), type);
+	}
 
-    protected void setType(int x, int y, int z, BlockID type) {
-        int section = y >> 4;
+	// TODO: TileEntities, Entities
 
-        if (sections[section] == null)
-            if (type != BlockID.AIR) {
-                sections[section] = new ChunkSection(this, section);
-                
-                if (section > 0)
-                    sections[section].setType(x, y / (section), z, type);
-                if (section == 0)
-                    sections[section].setType(x, y, z, type);
-                setMaxHeight(x,z,(short) y);
-                
-                return;
-            }
-            else return;
+	protected void setType(final int x, final int y, final int z,
+			final BlockID type) {
+		final int section = y >> 4;
 
-        if (section > 0)
-            sections[section].setType(x, y / (section), z, type);
-        if (section == 0)
-            sections[section].setType(x, y, z, type);
-        
-        if(y > getMaxHeightAt(x,z)) {
-            setMaxHeight(x,z,(short) y);
-        }
-    }    
-    
-    public BlockID getBlockTypeAt(int x, int y, int z) {
-        int section = y >> 4;
+		if (sections[section] == null)
+			if (type != BlockID.AIR) {
+				sections[section] = new ChunkSection(this, section);
 
-        if (sections[section] == null)
-            return BlockID.AIR;
+				if (section > 0)
+					sections[section].setType(x, y / section, z, type);
+				if (section == 0)
+					sections[section].setType(x, y, z, type);
+				setMaxHeight(x, z, (short) y);
 
-        if (section > 0)
-            return sections[section].getBlock(x, y/section, z);
-        else
-            return sections[section].getBlock(x, y, z);
-    }
-    
-    @Cautious
-    public boolean isTop(int x, int y, int z) {
-        for(int i = y; i < (256 - y); i++){
-        	if((int)getBlock(x,i,z) != 0)
-        		return false;
-        }
-        return true;
-    }
+				return;
+			} else
+				return;
 
-    protected void setLight(int x, int y, int z, Byte light) {
-        setLight(x, y, z, light.byteValue());
-    }
+		if (section > 0)
+			sections[section].setType(x, y / section, z, type);
+		if (section == 0)
+			sections[section].setType(x, y, z, type);
 
-    protected void setLight(int x, int y, int z, byte light) {
-        if (y > 255)
-            return;
+		if (y > getMaxHeightAt(x, z))
+			setMaxHeight(x, z, (short) y);
+	}
 
-        int s = y >> 4;
+	public BlockID getBlockTypeAt(final int x, final int y, final int z) {
+		final int section = y >> 4;
 
-        if (sections[s] == null)
-            return;
-        else
-            sections[s].setLight(x, y / 16, z, light);
-    }
-    
-    @Hacky
-    public int amountSections() {
-    	int x = 0;
-    	for(ChunkSection s : sections)
-    		if(s != null)
-    			++x;
-    	return x;
-    }
+		if (sections[section] == null)
+			return BlockID.AIR;
 
-    public byte[] getBytes(boolean biomes, boolean skyLight) {
-        byte[] d = new byte[0];
-        
-        for (ChunkSection s : sections)
-            if (s != null)
-            	d = ByteUtils.combine(d, s.getBlockData());
-        
-        for (ChunkSection s : sections)
-            if (s != null)
-            	d = ByteUtils.combine(d, s.getLightData());
-        
-        if (biomes)
-        	d = ByteUtils.combine(d, getBiomeData());
+		if (section > 0)
+			return sections[section].getBlock(x, y / section, z);
+		else
+			return sections[section].getBlock(x, y, z);
+	}
 
-        return d;
-    }
-    
-    public ByteArray getData(boolean biomes, boolean skyLight) { return new ByteArray(getBytes(biomes, skyLight)); }
-    
-    public byte[] getBiomeData() {
-        byte[] d = new byte[16*16];
-        int i = -1;
-        for(BiomeID b : biomes)
-        	if(b != null)
-        		d[++i] = b.getID();
-            else
-        		d[++i] = BiomeID.PLAINS.getID();
-        return d;
-    }
+	@Cautious
+	public boolean isTop(final int x, final int y, final int z) {
+		for (int i = y; i < 256 - y; i++)
+			if (getBlock(x, i, z) != 0)
+				return false;
+		return true;
+	}
 
-    public ChunkPos getPos() {
-        return pos;
-    }
+	protected void setLight(final int x, final int y, final int z,
+			final Byte light) {
+		setLight(x, y, z, light.byteValue());
+	}
 
-    public short getSectionBitMap() {
-        short r = 0;
-        for (ChunkSection s : sections)
-            if (s != null)
-                r |= 1 << s.getID();
-        return r;
-    }
+	protected void setLight(final int x, final int y, final int z,
+			final byte light) {
+		if (y > 255)
+			return;
 
-    public World getWorld() {
-        return w;
-    }
+		final int s = y >> 4;
 
-    public void setBlock(Integer x, Integer y, Integer z, BlockID type) {
-        setType(x, y, z, type);
-        updateBlockChange(new Position(x * pos.getX(), y, z * pos.getY()), type);
-    }
+		if (sections[s] == null)
+			return;
+		else
+			sections[s].setLight(x, y / 16, z, light);
+	}
 
-    @Serverside
-    public void setPrivateType(int x, int y, int z, BlockID type) {
-    	if(x > 15)
-    		return;
-    	if(z > 15)
-    		return;
-    	
-        setType(x, y, z, type);
-    }
+	@Hacky
+	public int amountSections() {
+		int x = 0;
+		for (final ChunkSection s : sections)
+			if (s != null)
+				++x;
+		return x;
+	}
 
-    @Serverside
-    public void setPrivateLight(int x, int y, int z, byte light) {
-        setLight(x, y, z, light);
-    }
+	public byte[] getBytes(final boolean biomes, final boolean skyLight) {
+		byte[] d = new byte[0];
 
+		for (final ChunkSection s : sections)
+			if (s != null)
+				d = ByteUtils.combine(d, s.getBlockData());
 
-    public short getBlock(int x, int y, int z) {
-        int s = y >> 4;
+		for (final ChunkSection s : sections)
+			if (s != null)
+				d = ByteUtils.combine(d, s.getLightData());
 
-        if (sections[s] == null)
-            return (char) 0;
+		if (biomes)
+			d = ByteUtils.combine(d, getBiomeData());
 
-        return sections[s].getType(x / 16, y / 16, z / 16);
-    }
-    
-    @Unsafe
-    public final ChunkSection getSection(int y) {
-        return sections[y >> 4];
-    }
+		return d;
+	}
 
-    public void setPrivateCube(int x, int y, int z, int w, int d, int h, BlockID type) {
-        if (h == 0) return;
-        if (w == 0) return;
-        if (d == 0) return;
-        
-        final int section = y >> 4;
-        
-        if (sections[section] == null)
-        	if (type != BlockID.AIR)
-        		sections[section] = new ChunkSection(this, section);
-        getSection(y).setPrivateCube(x, y, z, w, d, h, type);
-    }
-    
-    private void setMaxHeight(int x, int z, short y) {
-    	if(x > 15) return;
-    	if(z > 15) return;
-    	heightMap[index(x,z)] = y;
-    }
-    
-    public short getMaxHeightAt(int x, int z) {
-    	if(x > 15) return -1;
-    	if(z > 15) return -1;
-    	return heightMap[index(x,z)];
-    }
-   
-    
-    private int index(int x, int y) {
-    	return (x + (y * WIDTH));
-    }
+	public ByteArray getData(final boolean biomes, final boolean skyLight) {
+		return new ByteArray(getBytes(biomes, skyLight));
+	}
 
-    public int getDataSize(boolean biomes, boolean skylight) {
-        int size = 0;
+	public byte[] getBiomeData() {
+		final byte[] d = new byte[16 * 16];
+		int i = -1;
+		for (final BiomeID b : biomes)
+			if (b != null)
+				d[++i] = b.getID();
+			else
+				d[++i] = BiomeID.PLAINS.getID();
+		return d;
+	}
 
-        for (ChunkSection s : sections)
-            if (s != null) {
-                size += ChunkSection.DATA_SIZE * 3;
-                if (skylight)
-                    size += ChunkSection.DATA_SIZE;
-            }
+	public ChunkPos getPos() {
+		return pos;
+	}
 
-        if (biomes) size += 256;
+	public short getSectionBitMap() {
+		short r = 0;
+		for (final ChunkSection s : sections)
+			if (s != null)
+				r |= 1 << s.getID();
+		return r;
+	}
 
-        return size;
-    }
+	public World getWorld() {
+		return w;
+	}
+
+	public void setBlock(final Integer x, final Integer y, final Integer z,
+			final BlockID type) {
+		setType(x, y, z, type);
+		updateBlockChange(new Position(x * pos.getX(), y, z * pos.getY()), type);
+	}
+
+	@Serverside
+	public void setPrivateType(final int x, final int y, final int z,
+			final BlockID type) {
+		if (x > 15)
+			return;
+		if (z > 15)
+			return;
+
+		setType(x, y, z, type);
+	}
+
+	@Serverside
+	public void setPrivateLight(final int x, final int y, final int z,
+			final byte light) {
+		setLight(x, y, z, light);
+	}
+
+	public short getBlock(final int x, final int y, final int z) {
+		final int s = y >> 4;
+
+		if (sections[s] == null)
+			return (char) 0;
+
+		return sections[s].getType(x / 16, y / 16, z / 16);
+	}
+
+	@Unsafe
+	public final ChunkSection getSection(final int y) {
+		return sections[y >> 4];
+	}
+
+	public void setPrivateCube(final int x, final int y, final int z,
+			final int w, final int d, final int h, final BlockID type) {
+		if (h == 0)
+			return;
+		if (w == 0)
+			return;
+		if (d == 0)
+			return;
+
+		final int section = y >> 4;
+
+		if (sections[section] == null)
+			if (type != BlockID.AIR)
+				sections[section] = new ChunkSection(this, section);
+		getSection(y).setPrivateCube(x, y, z, w, d, h, type);
+	}
+
+	private void setMaxHeight(final int x, final int z, final short y) {
+		if (x > 15)
+			return;
+		if (z > 15)
+			return;
+		heightMap[index(x, z)] = y;
+	}
+
+	public short getMaxHeightAt(final int x, final int z) {
+		if (x > 15)
+			return -1;
+		if (z > 15)
+			return -1;
+		return heightMap[index(x, z)];
+	}
+
+	private int index(final int x, final int y) {
+		return x + y * WIDTH;
+	}
+
+	public int getDataSize(final boolean biomes, final boolean skylight) {
+		int size = 0;
+
+		for (final ChunkSection s : sections)
+			if (s != null) {
+				size += ChunkSection.DATA_SIZE * 3;
+				if (skylight)
+					size += ChunkSection.DATA_SIZE;
+			}
+
+		if (biomes)
+			size += 256;
+
+		return size;
+	}
 
 	public Player[] getSubscribingPlayers() {
 		final Player[] pl = new Player[subscribingPlayers.size()];
-		
-		int i = -1;
-		for(final short s : subscribingPlayers)
-            pl[i] = Marine.getPlayer(s);
 
-        return pl;
-    }
+		final int i = -1;
+		for (final short s : subscribingPlayers)
+			pl[i] = Marine.getPlayer(s);
+
+		return pl;
+	}
 }

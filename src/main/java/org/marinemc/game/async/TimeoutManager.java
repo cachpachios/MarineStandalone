@@ -26,68 +26,68 @@ import org.marinemc.game.player.Player;
 import org.marinemc.net.play.KeepAlivePacket;
 import org.marinemc.server.Marine;
 
-public class TimeoutManager {//TODO
-    private final Map<Short, Integer> lastReceived; // Contains last recived in seconds
-    private final Map<Short, Integer> lastSent; // Contains last sent KeepAlivePacketID
+public class TimeoutManager {// TODO
+	private final Map<Short, Integer> lastReceived; // Contains last recived in
+													// seconds
+	private final Map<Short, Integer> lastSent; // Contains last sent
+												// KeepAlivePacketID
 
-    public TimeoutManager() {
-        this.lastReceived = new HashMap<>();
-        this.lastSent = new HashMap<>();
-    }
+	public TimeoutManager() {
+		lastReceived = new HashMap<>();
+		lastSent = new HashMap<>();
+	}
 
-    private int randomInt(final int max) {
-        return (int) (Math.random() * max);
-    }
+	private int randomInt(final int max) {
+		return (int) (Math.random() * max);
+	}
 
-    private long getMiliTime() {
-        return (int) (System.nanoTime() / 1000 / 1000);
-    }
+	private long getMiliTime() {
+		return (int) (System.nanoTime() / 1000 / 1000);
+	}
 
-    public void addPlayerToManager(final Player p) {
-        lastReceived.put(p.getUID(), 0);
-    }
+	public void addPlayerToManager(final Player p) {
+		lastReceived.put(p.getUID(), 0);
+	}
 
-    private void update(final Player p) {
-        final int id = randomInt(500);
-        p.getClient().sendPacket(new KeepAlivePacket(id));
-        lastSent.put(p.getUID(), id);
-    }
+	private void update(final Player p) {
+		final int id = randomInt(500);
+		p.getClient().sendPacket(new KeepAlivePacket(id));
+		lastSent.put(p.getUID(), id);
+	}
 
+	public void cleanUp(final Player p) {
+		final short uid = p.getUID();
+		lastReceived.remove(uid);
+		lastSent.remove(uid);
+	}
 
-    public void cleanUp(final Player p) {
-        final short uid = p.getUID();
-        lastReceived.remove(uid);
-        lastSent.remove(uid);
-    }
-    
-    private void clean(Short uid) {
-        lastReceived.remove(uid);
-        lastSent.remove(uid);
-    }
+	private void clean(final Short uid) {
+		lastReceived.remove(uid);
+		lastSent.remove(uid);
+	}
 
-    private void disconnect(final Player p) {
-        Marine.getServer().getPlayerManager().disconnect(p);
-    }
-    
-    public void run() { // Will update each second :D
-        int time = (int) getMiliTime();
-        for (final Short uid : lastReceived.keySet()) 
-        	if(!Marine.getServer().getPlayerManager().isPlayerOnline(uid))
-        		clean(uid);
-        	else
-            if (lastReceived.get(uid) - time >= 10) {
-                Player plr = Marine.getServer().getPlayerManager().getPlayer(uid);
-                disconnect(plr);
-            }
-    }
+	private void disconnect(final Player p) {
+		Marine.getServer().getPlayerManager().disconnect(p);
+	}
 
-    public void keepAlive(final Player p) {
-        final short uid = p.getUID();
-        lastSent.remove(uid);
-        // It is automatically removed by default :)
-        lastReceived.put(uid, (int) getMiliTime());
-        update(p);
-    }
+	public void run() { // Will update each second :D
+		final int time = (int) getMiliTime();
+		for (final Short uid : lastReceived.keySet())
+			if (!Marine.getServer().getPlayerManager().isPlayerOnline(uid))
+				clean(uid);
+			else if (lastReceived.get(uid) - time >= 10) {
+				final Player plr = Marine.getServer().getPlayerManager()
+						.getPlayer(uid);
+				disconnect(plr);
+			}
+	}
 
+	public void keepAlive(final Player p) {
+		final short uid = p.getUID();
+		lastSent.remove(uid);
+		// It is automatically removed by default :)
+		lastReceived.put(uid, (int) getMiliTime());
+		update(p);
+	}
 
 }

@@ -34,38 +34,40 @@ import org.marinemc.net.interceptors.StatusInterceptor;
  */
 public final class PacketHandler implements PacketInterceptor {
 
-    HandshakeInterceptor handshake;
-    StatusInterceptor status;
-    LoginInterceptor login;
-    IngameInterceptor ingame;
+	HandshakeInterceptor handshake;
+	StatusInterceptor status;
+	LoginInterceptor login;
+	IngameInterceptor ingame;
 
-    public PacketHandler() {
-        handshake = new HandshakeInterceptor();
-        status = new StatusInterceptor();
-        login = new LoginInterceptor();
-        ingame = new IngameInterceptor();
-    }
+	public PacketHandler() {
+		handshake = new HandshakeInterceptor();
+		status = new StatusInterceptor();
+		login = new LoginInterceptor();
+		ingame = new IngameInterceptor();
+	}
 
-    public boolean intercept(int id, final ByteInput data, final Client c) {
-        switch (c.getState()) {
-            case HANDSHAKE:
-                return handshake.intercept(id, data, c);
-            case INTRODUCE:
-                return status.intercept(id, data, c);
-            case LOGIN:
-                return login.intercept(id, data, c);
-            case INGAME:
-                return ingame.intercept(id, data, c);
-            default:
-                return false;
-        }
-    }
+	@Override
+	public boolean intercept(final int id, final ByteInput data, final Client c) {
+		switch (c.getState()) {
+		case HANDSHAKE:
+			return handshake.intercept(id, data, c);
+		case INTRODUCE:
+			return status.intercept(id, data, c);
+		case LOGIN:
+			return login.intercept(id, data, c);
+		case INGAME:
+			return ingame.intercept(id, data, c);
+		default:
+			return false;
+		}
+	}
 
 	public void rawIntercept(final Client client, final byte[] packet) {
 		final ByteQueue data = new ByteQueue(packet);
 		intercept(data.readVarInt(), data, client);
 	}
-	public void rawIntercept(final Client client, ByteQueue data) {
+
+	public void rawIntercept(final Client client, final ByteQueue data) {
 		intercept(data.readVarInt(), data, client);
 	}
 }

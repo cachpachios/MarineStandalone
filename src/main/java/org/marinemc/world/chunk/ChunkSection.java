@@ -21,7 +21,6 @@ package org.marinemc.world.chunk;
 
 import java.util.Arrays;
 
-import org.marinemc.io.binary.ByteList;
 import org.marinemc.util.Position;
 import org.marinemc.util.annotations.Hacky;
 import org.marinemc.util.annotations.Unsafe;
@@ -35,119 +34,130 @@ import org.marinemc.world.Identifiers;
  */
 @Unsafe
 public final class ChunkSection {
-	
+
 	/**
-	 * Amount of bytes per save chunk,
-	 * Total byte size per chunk for blocks and lightning is DATA_SIZE * 3
+	 * Amount of bytes per save chunk, Total byte size per chunk for blocks and
+	 * lightning is DATA_SIZE * 3
 	 */
-    final static int DATA_SIZE = 16*16*16;
-    private final int sectionID;
-    private final ChunkPos chunkPos;
-    private short[] blockMap; // Each block is 2 bytes some for the block id some for the metadata. 
-    private byte[] lightMap; // TODO Replace with nibblearray
+	final static int DATA_SIZE = 16 * 16 * 16;
+	private final int sectionID;
+	private final ChunkPos chunkPos;
+	private final short[] blockMap; // Each block is 2 bytes some for the block
+									// id some for the metadata.
+	private final byte[] lightMap; // TODO Replace with nibblearray
 
-    /**
-     * Create an empty chunksection with parent chunk and id.
-     * @param c The chunk the chunk section is beloning to
-     * @param y The ID or Y value of the chunk, to get global y multiply it with 16
-     */
-    public ChunkSection(final Chunk c, int y) {
-        this.chunkPos = c.getPos();
-        this.sectionID = y;
-        this.blockMap = new short[DATA_SIZE];
-        this.lightMap = new byte[DATA_SIZE];
-    }
-    
-    public static short EncodeType(final BlockID type) {
-    	if(type.isMetaBlock())
-    		return (short) (((type.getIntID() << 4) & 0xfff0) | type.getMetaBlock());
-    	else
-    		return (short) (type.getIntID() << 4);
-    }
+	/**
+	 * Create an empty chunksection with parent chunk and id.
+	 * 
+	 * @param c
+	 *            The chunk the chunk section is beloning to
+	 * @param y
+	 *            The ID or Y value of the chunk, to get global y multiply it
+	 *            with 16
+	 */
+	public ChunkSection(final Chunk c, final int y) {
+		chunkPos = c.getPos();
+		sectionID = y;
+		blockMap = new short[DATA_SIZE];
+		lightMap = new byte[DATA_SIZE];
+	}
 
-    public static int getIndex(int x, int y, int z) {
-        return ((y & 0xf) << 8) | (z << 4) | x;
-    }
+	public static short EncodeType(final BlockID type) {
+		if (type.isMetaBlock())
+			return (short) (type.getIntID() << 4 & 0xfff0 | type.getMetaBlock());
+		else
+			return (short) (type.getIntID() << 4);
+	}
 
-    public static final <T extends Comparable<T>> T clamp(T v, T min, T max) {
-        if (v.compareTo(max) == 1)
-            return max;
-        else if (v.compareTo(min) == -1)
-            return min;
-        else
-            return v;
-    }
+	public static int getIndex(final int x, final int y, final int z) {
+		return (y & 0xf) << 8 | z << 4 | x;
+	}
 
-    public byte[] getBlockData() { //TODO: Optimize
-    	final byte[] data = new byte[DATA_SIZE * 2];
-        int i = -1;
-        for (short id : blockMap) {
-        	data[++i] = ((byte) (id & 0xff));
-        	data[++i] = ((byte) (id >> 8));
-        }
-        return data;
-    }
+	public static final <T extends Comparable<T>> T clamp(final T v,
+			final T min, final T max) {
+		if (v.compareTo(max) == 1)
+			return max;
+		else if (v.compareTo(min) == -1)
+			return min;
+		else
+			return v;
+	}
 
-    //TODO: NibbleArray based lightning
-    public byte[] getLightData() {
-    	final byte[] bytes = new byte[DATA_SIZE];
-    	for(int i = 0; i < DATA_SIZE; i++)
-    		bytes[i] = (byte)-1;
-    	return bytes;
-    }
+	public byte[] getBlockData() { // TODO: Optimize
+		final byte[] data = new byte[DATA_SIZE * 2];
+		int i = -1;
+		for (final short id : blockMap) {
+			data[++i] = (byte) (id & 0xff);
+			data[++i] = (byte) (id >> 8);
+		}
+		return data;
+	}
 
-    public void setType(int x, int y, int z, BlockID id) {
-        blockMap[getIndex(x, y, z)] = EncodeType(id);
-    }
+	// TODO: NibbleArray based lightning
+	public byte[] getLightData() {
+		final byte[] bytes = new byte[DATA_SIZE];
+		for (int i = 0; i < DATA_SIZE; i++)
+			bytes[i] = (byte) -1;
+		return bytes;
+	}
 
-    public void setLight(int x, int y, int z, byte light) {
-        lightMap[getIndex(x, y, z)] = light;
-    }
+	public void setType(final int x, final int y, final int z, final BlockID id) {
+		blockMap[getIndex(x, y, z)] = EncodeType(id);
+	}
 
-    public short getType(int x, int y, int z) {
-        return blockMap[getIndex(x, y, z)];
-    }
+	public void setLight(final int x, final int y, final int z, final byte light) {
+		lightMap[getIndex(x, y, z)] = light;
+	}
 
-    @Hacky
-    public BlockID getBlock(int x, int y, int z) {
-    	//TODO Include MetaData in the search
-        return Identifiers.getBlockID((byte) (getType(x, y, z) & 0xff));
-    }
+	public short getType(final int x, final int y, final int z) {
+		return blockMap[getIndex(x, y, z)];
+	}
 
-    public int getID() {
-        return sectionID;
-    }
+	@Hacky
+	public BlockID getBlock(final int x, final int y, final int z) {
+		// TODO Include MetaData in the search
+		return Identifiers.getBlockID((byte) (getType(x, y, z) & 0xff));
+	}
 
-    public void setPrivateCube(int x, int y, int z, int w, int d, int h, BlockID type) {
-        for (int xx = x; xx < x+w; xx++)
-            for (int zz = z; zz < z+d; zz++)
-            	for (int yy = y; yy < y+h; yy++)
-            		setType(xx, yy, zz, type);
-    }
+	public int getID() {
+		return sectionID;
+	}
 
-    public GlobalBlock[] setCube(int x, int y, int z, int w, int d, int h, BlockID type) {
-        final GlobalBlock[] r = new GlobalBlock[w * d * h];
-        int i = 0;
-        for (int xx = clamp(-(w / 2), 0, 15); xx < (w / 2); xx++)
-            for (int yy = clamp(-(h / 2), 0, 15); yy < (h / 2); yy++)
-                for (int zz = clamp(-(d / 2), 0, 15); yy < (d / 2); zz++) {
-                    setType(x + xx, y + yy, z + zz, type);
-                    r[++i] = new GlobalBlock(getGlobalBlockPos(x + xx, y + yy, z + zz), type);
-                }
-        return r;
-    }
+	public void setPrivateCube(final int x, final int y, final int z,
+			final int w, final int d, final int h, final BlockID type) {
+		for (int xx = x; xx < x + w; xx++)
+			for (int zz = z; zz < z + d; zz++)
+				for (int yy = y; yy < y + h; yy++)
+					setType(xx, yy, zz, type);
+	}
 
-    public Position getGlobalBlockPos(int x, int y, int z) {
-        int cX = chunkPos.getX() + 1;
-        int cY = chunkPos.getX() + 1;
+	public GlobalBlock[] setCube(final int x, final int y, final int z,
+			final int w, final int d, final int h, final BlockID type) {
+		final GlobalBlock[] r = new GlobalBlock[w * d * h];
+		int i = 0;
+		for (int xx = clamp(-(w / 2), 0, 15); xx < w / 2; xx++)
+			for (int yy = clamp(-(h / 2), 0, 15); yy < h / 2; yy++)
+				for (int zz = clamp(-(d / 2), 0, 15); yy < d / 2; zz++) {
+					setType(x + xx, y + yy, z + zz, type);
+					r[++i] = new GlobalBlock(getGlobalBlockPos(x + xx, y + yy,
+							z + zz), type);
+				}
+		return r;
+	}
 
-        if (cX == 0) cX = -1;
-        if (cY == 0) cY = -1;
+	public Position getGlobalBlockPos(final int x, final int y, final int z) {
+		int cX = chunkPos.getX() + 1;
+		int cY = chunkPos.getX() + 1;
 
-        return new Position(x * cX, y * (sectionID + 1), z * cY);
-    }
+		if (cX == 0)
+			cX = -1;
+		if (cY == 0)
+			cY = -1;
 
-    public void fillSection(BlockID type) {
-        Arrays.fill(blockMap, (short) (type.getID() << 4));
-    }
+		return new Position(x * cX, y * (sectionID + 1), z * cY);
+	}
+
+	public void fillSection(final BlockID type) {
+		Arrays.fill(blockMap, (short) (type.getID() << 4));
+	}
 }

@@ -34,20 +34,21 @@ import org.marinemc.net.States;
  */
 public class ExperiencePacket extends Packet {
 
-    private final Player player;
+	private final Player player;
 
-    public ExperiencePacket(final Player player) {
-        super(0x1F, States.INGAME);
-        this.player = player;
-    }
+	public ExperiencePacket(final Player player) {
+		super(0x1F, States.INGAME);
+		this.player = player;
+	}
 
-    @Override
-    public void writeToStream(PacketOutputStream stream) throws IOException {
-    	ByteList data = new ByteList();
-        data.writeFloat(player.getExp());
-        data.writeVarInt(player.getLevels());
-        data.writeVarInt((int) (player.getLevels() * 100 + (player.getExp() * 10)));
-        stream.write(getID(), data);
-    }
+	@Override
+	public void writeToStream(final PacketOutputStream stream)
+			throws IOException {
+		final ByteList data = new ByteList();
+		data.writeFloat(player.getExp());
+		data.writeVarInt(player.getLevels());
+		data.writeVarInt((int) (player.getLevels() * 100 + player.getExp() * 10));
+		stream.write(getID(), data);
+	}
 
 }

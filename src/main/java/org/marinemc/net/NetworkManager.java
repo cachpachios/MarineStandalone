@@ -30,126 +30,132 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.marinemc.Bootstrap;
 import org.marinemc.logging.Logging;
 import org.marinemc.server.Marine;
+
 /**
  * @author Fozie
  */
 public class NetworkManager {
-    public PacketHandler packetHandler;
-    public ServerSocket server;
-    public ClientProcessor clientHandler;
-    private volatile List<Client> clientList;
-    
-    private ConnectionThread connector;
+	public PacketHandler packetHandler;
+	public ServerSocket server;
+	public ClientProcessor clientHandler;
+	private volatile List<Client> clientList;
 
-    public NetworkManager(int port, InetAddress bind) {
-        clientList = new CopyOnWriteArrayList<Client>();
-        
-        try {
-            server = new ServerSocket(port, 10, bind); //Port and num "queued" connections
-        } catch (IOException e) {
-            Logging.getLogger().fatal("Port binding failed, perhaps already in use");
-            System.exit(1);
-        }
-        Logging.getLogger().logf("Binding to {0}:{1}", bind.getHostName(), port);
-        if (port != 25565) {
-            Logging.getLogger().warn(
-                    "You are not running on the default port (§c25565§0)");
-        }
-        connector = new ConnectionThread(this);
+	private final ConnectionThread connector;
 
-        packetHandler = new PacketHandler();
+	public NetworkManager(final int port, final InetAddress bind) {
+		clientList = new CopyOnWriteArrayList<Client>();
 
-        clientHandler = new ClientProcessor(this);
-    }
-
-    public void openConnection() {
-        connector.start(); // Permitt Connections
-        clientHandler.start(); // Start the connection thread to intercept any packages
-    }
-
-    public Collection<Client> getClients() {
-        return clientList;
-    }
-
-    public boolean isEmpty() {
-    	return clientList.isEmpty();
-    }
-    
-    public void broadcastPacket(Packet p) {
-    	for (final Client c : clientList)
-    		c.sendPacket(p);
-    }
-
-    
-    public void connect(Socket accept) {
-    	//TODO For the love of god, add some dos attack protection...
-    	final Client c;
-        try {
-            c = new Client(accept);
-        } catch (IOException e) {
-            return;
-        }
-        clientList.add(c);
-    }
-
-    public void cleanUp(Client c) {
-    	terminate(c);
-    }
-
-    private void terminate(Client client) {
-        if (client.getState() != States.INGAME && Bootstrap.debug())
-            Logging.getLogger().debug("Client Ping Terminated At: " + client.getAdress().getHostAddress() + ":" + client.getConnection().getPort());
-        else {
-        	if(client.getUID() != -1)
-        		Marine.getServer().getPlayerManager().disconnect_nonnewtork(Marine.getPlayer(client.getUID()));
-        }
-        clientList.remove(client);
-        client.terminate();
-        
-        client = null;
-        
-//        WeakReference<Client> r = new WeakReference<Client>(client);
-//        while(r.get() != null)
-//        	System.gc();
-    }
-
-    public void processAll() {
-            for (final Client c : clientList) {
-                Client.ConnectionStatus status = c.process();
-                if (status.equals(Client.ConnectionStatus.CLOSED))
-                        cleanUp(c);
-            }
-    }
-
-    public boolean hasClientsConnected() {
-        return clientList.size() > 0;
-    }
-
-    public void tryConnections()  {
-		for (final Client c : clientList) {
-		    if (!c.tryConnection())
-		    		cleanUp(c);
+		try {
+			server = new ServerSocket(port, 10, bind); // Port and num "queued"
+														// connections
+		} catch (final IOException e) {
+			Logging.getLogger().fatal(
+					"Port binding failed, perhaps already in use");
+			System.exit(1);
 		}
-    }
+		Logging.getLogger()
+				.logf("Binding to {0}:{1}", bind.getHostName(), port);
+		if (port != 25565)
+			Logging.getLogger().warn(
+					"You are not running on the default port (§c25565§0)");
+		connector = new ConnectionThread(this);
 
-    // Client processing thread
+		packetHandler = new PacketHandler();
 
-    public class ClientProcessor extends Thread {
+		clientHandler = new ClientProcessor(this);
+	}
 
-        private NetworkManager host;
+	public void openConnection() {
+		connector.start(); // Permitt Connections
+		clientHandler.start(); // Start the connection thread to intercept any
+								// packages
+	}
 
-        public ClientProcessor(NetworkManager manager) {
-            super("ClientInterceptor");
-            host = manager;
-        }
+	public Collection<Client> getClients() {
+		return clientList;
+	}
 
-        public void run() {
-            while (true) {
-            	host.processAll();
-            	try {
+	public boolean isEmpty() {
+		return clientList.isEmpty();
+	}
+
+	public void broadcastPacket(final Packet p) {
+		for (final Client c : clientList)
+			c.sendPacket(p);
+	}
+
+	public void connect(final Socket accept) {
+		// TODO For the love of god, add some dos attack protection...
+		final Client c;
+		try {
+			c = new Client(accept);
+		} catch (final IOException e) {
+			return;
+		}
+		clientList.add(c);
+	}
+
+	public void cleanUp(final Client c) {
+		terminate(c);
+	}
+
+	private void terminate(Client client) {
+		if (client.getState() != States.INGAME && Bootstrap.debug())
+			Logging.getLogger().debug(
+					"Client Ping Terminated At: "
+							+ client.getAdress().getHostAddress() + ":"
+							+ client.getConnection().getPort());
+		else if (client.getUID() != -1)
+			Marine.getServer().getPlayerManager()
+					.disconnect_nonnewtork(Marine.getPlayer(client.getUID()));
+		clientList.remove(client);
+		client.terminate();
+
+		client = null;
+
+		// WeakReference<Client> r = new WeakReference<Client>(client);
+		// while(r.get() != null)
+		// System.gc();
+	}
+
+	public void processAll() {
+		for (final Client c : clientList) {
+			final Client.ConnectionStatus status = c.process();
+			if (status.equals(Client.ConnectionStatus.CLOSED))
+				cleanUp(c);
+		}
+	}
+
+	public boolean hasClientsConnected() {
+		return clientList.size() > 0;
+	}
+
+	public void tryConnections() {
+		for (final Client c : clientList)
+			if (!c.tryConnection())
+				cleanUp(c);
+	}
+
+	// Client processing thread
+
+	public class ClientProcessor extends Thread {
+
+		private final NetworkManager host;
+
+		public ClientProcessor(final NetworkManager manager) {
+			super("ClientInterceptor");
+			host = manager;
+		}
+
+		@Override
+		public void run() {
+			while (true) {
+				host.processAll();
+				try {
 					ClientProcessor.sleep(0, 100);
-				} catch (InterruptedException e) {}
-            }
-        }
-    }
-} 
+				} catch (final InterruptedException e) {
+				}
+			}
+		}
+	}
+}

@@ -18,26 +18,25 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 package org.marinemc.world;
+
 /**
  * All posseble difficulties in minecraft as of 1.8.2
  * 
  * @author Fozie
  */
 public enum Difficulty {
-    PEACEFUL("Peaceful", 0),
-    EASY("Easy", 1),
-    NORMAL("Normal", 2),
-    HARD("Hard", 3);
+	PEACEFUL("Peaceful", 0), EASY("Easy", 1), NORMAL("Normal", 2), HARD("Hard",
+			3);
 
-    private final String name;
-    private final byte id;
+	private final String name;
+	private final byte id;
 
-    private Difficulty(String name, int id) {
-        this.name = name;
-        this.id = (byte) id;
-    }
+	private Difficulty(final String name, final int id) {
+		this.name = name;
+		this.id = (byte) id;
+	}
 
-    public byte getID() {
-        return id;
-    }
+	public byte getID() {
+		return id;
+	}
 }

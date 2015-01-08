@@ -29,39 +29,40 @@ import org.marinemc.game.player.Player;
  */
 public class LeaveEvent extends PlayerEvent {
 
-    private final QuitReason reason;
-    private String message;
+	private final QuitReason reason;
+	private String message;
 
-    public LeaveEvent(final Player player, final QuitReason reason) {
-        super(player, "leave");
-        this.reason = reason;
-        this.message = reason.getMessage();
-    }
+	public LeaveEvent(final Player player, final QuitReason reason) {
+		super(player, "leave");
+		this.reason = reason;
+		message = reason.getMessage();
+	}
 
-    public QuitReason getReason() {
-        return this.reason;
-    }
+	public QuitReason getReason() {
+		return reason;
+	}
 
-    public String getMessage() {
-        return this.message;
-    }
+	public String getMessage() {
+		return message;
+	}
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
+	public void setMessage(final String message) {
+		this.message = message;
+	}
 
-    public static enum QuitReason {
-        KICKED("%plr got kicked for: %reason"), NORMAL("%plr left the game"), TIMEOUT("%plr timed out");
+	public static enum QuitReason {
+		KICKED("%plr got kicked for: %reason"), NORMAL("%plr left the game"), TIMEOUT(
+				"%plr timed out");
 
-        private final String message;
+		private final String message;
 
-        QuitReason(final String message) {
-            this.message = message;
-        }
+		QuitReason(final String message) {
+			this.message = message;
+		}
 
-        public String getMessage() {
-            return this.message;
-        }
-    }
+		public String getMessage() {
+			return message;
+		}
+	}
 
 }

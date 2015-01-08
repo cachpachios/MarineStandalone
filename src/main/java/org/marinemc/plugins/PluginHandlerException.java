@@ -20,26 +20,29 @@
 package org.marinemc.plugins;
 
 /**
- * Exception thrown by the plugin internals when something
- * that shouldn't occur, occurs.
+ * Exception thrown by the plugin internals when something that shouldn't occur,
+ * occurs.
  *
  * @author Citymonstret
  */
 public class PluginHandlerException extends RuntimeException {
 
-    public PluginHandlerException(PluginClassLoader classLoader, String error, Exception cause) {
-        super("PluginClassLoader caused an exception, description: " + error);
-    }
+	public PluginHandlerException(final PluginClassLoader classLoader,
+			final String error, final Exception cause) {
+		super("PluginClassLoader caused an exception, description: " + error);
+	}
 
-    public PluginHandlerException(PluginClassLoader classLoader, String error) {
-        super("PluginClassLoader caused an exception, description: " + error);
-    }
+	public PluginHandlerException(final PluginClassLoader classLoader,
+			final String error) {
+		super("PluginClassLoader caused an exception, description: " + error);
+	}
 
-    public PluginHandlerException(PluginLoader loader, String error, Exception cause) {
-        super("PluginLoader caused an exception, description: " + error, cause);
-    }
+	public PluginHandlerException(final PluginLoader loader,
+			final String error, final Exception cause) {
+		super("PluginLoader caused an exception, description: " + error, cause);
+	}
 
-    public PluginHandlerException(PluginLoader loader, String error) {
-        super("PluginLoader caused an exception, description: " + error);
-    }
+	public PluginHandlerException(final PluginLoader loader, final String error) {
+		super("PluginLoader caused an exception, description: " + error);
+	}
 }

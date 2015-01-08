@@ -29,50 +29,52 @@ import java.util.Map;
  */
 public class UIDGenerator {
 
-    private static UIDGenerator instance;
-    private final Map<Integer, Short> UIDMap;
-    private short nextUnassigned;
+	private static UIDGenerator instance;
+	private final Map<Integer, Short> UIDMap;
+	private short nextUnassigned;
 
-    private UIDGenerator() {
-        UIDMap = new IdentityHashMap<>(Short.MAX_VALUE);
-        nextUnassigned = Short.MIN_VALUE;
-    }
+	private UIDGenerator() {
+		UIDMap = new IdentityHashMap<>(Short.MAX_VALUE);
+		nextUnassigned = Short.MIN_VALUE;
+	}
 
-    /**
-     * Get the instance
-     *
-     * @return instance
-     */
-    public static UIDGenerator instance() {
-        if (instance == null)
-            instance = new UIDGenerator();
-        return instance;
-    }
+	/**
+	 * Get the instance
+	 *
+	 * @return instance
+	 */
+	public static UIDGenerator instance() {
+		if (instance == null)
+			instance = new UIDGenerator();
+		return instance;
+	}
 
-    /**
-     * Return the UID for the player, if no one can be found will return Short.MIN_VALUE
-     *
-     * @param username Player Username
-     * @return UID
-     */
-    public short getUID(final String username) {
-        if (UIDMap.containsKey(username.hashCode()))
-            return UIDMap.get(username.hashCode());
-        short uid = ++nextUnassigned;
-        
-        if(uid == -1)
-        	uid = ++nextUnassigned;
-        
-        if(UIDMap.containsValue(uid)) {
-        	while(true) {
-        		uid = ++nextUnassigned;
-        		if(uid == -1) continue;
-        		
-        		if(!UIDMap.containsValue(uid))
-        			return uid;
-        	}
-        }
-        else
-        	return uid;
-    }
+	/**
+	 * Return the UID for the player, if no one can be found will return
+	 * Short.MIN_VALUE
+	 *
+	 * @param username
+	 *            Player Username
+	 * @return UID
+	 */
+	public short getUID(final String username) {
+		if (UIDMap.containsKey(username.hashCode()))
+			return UIDMap.get(username.hashCode());
+		short uid = ++nextUnassigned;
+
+		if (uid == -1)
+			uid = ++nextUnassigned;
+
+		if (UIDMap.containsValue(uid))
+			while (true) {
+				uid = ++nextUnassigned;
+				if (uid == -1)
+					continue;
+
+				if (!UIDMap.containsValue(uid))
+					return uid;
+			}
+		else
+			return uid;
+	}
 }

@@ -28,34 +28,34 @@ import org.marinemc.game.chat.ChatMessage;
  */
 public class ChestInventory extends Inventory {
 
-    private final String title;
+	private final String title;
 
-    public ChestInventory(int rows, String title, byte uid) {
-        super(rows * 9, uid);
-        this.title = title;
-    }
+	public ChestInventory(final int rows, final String title, final byte uid) {
+		super(rows * 9, uid);
+		this.title = title;
+	}
 
-    public ChestInventory(int rows, byte uid) {
-        this(rows, "Chest", uid);
-    }
+	public ChestInventory(final int rows, final byte uid) {
+		this(rows, "Chest", uid);
+	}
 
-    @Override
-    public byte getID() {
-        return (byte) InventoryID.CHEST.getIntegerID();
-    }
+	@Override
+	public byte getID() {
+		return (byte) InventoryID.CHEST.getIntegerID();
+	}
 
-    @Override
-    public String getType() {
-        return InventoryID.CHEST.getStringID();
-    }
+	@Override
+	public String getType() {
+		return InventoryID.CHEST.getStringID();
+	}
 
-    @Override
-    public ChatMessage getTitle() {
-        return new ChatMessage(title);
-    }
+	@Override
+	public ChatMessage getTitle() {
+		return new ChatMessage(title);
+	}
 
-    @Override
-    public byte getNumberOfSlots() {
-        return (byte) super.getSlots().length;
-    }
+	@Override
+	public byte getNumberOfSlots() {
+		return (byte) super.getSlots().length;
+	}
 }

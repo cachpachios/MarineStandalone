@@ -22,20 +22,21 @@ package org.marinemc.net.interceptors;
 import org.marinemc.io.binary.ByteInput;
 import org.marinemc.net.Client;
 import org.marinemc.net.packets.HandshakePacket;
+
 /**
  * @author Fozie
  */
 public class HandshakeInterceptor implements PacketInterceptor {
 
-    @Override
-    public boolean intercept(int id, ByteInput data, final Client c) {
-        if (id == 0x00) {
-            HandshakePacket packet = new HandshakePacket();
-            packet.readFromBytes(data);
-            c.setState(packet.getState());
-            return true;
-        }
+	@Override
+	public boolean intercept(final int id, final ByteInput data, final Client c) {
+		if (id == 0x00) {
+			final HandshakePacket packet = new HandshakePacket();
+			packet.readFromBytes(data);
+			c.setState(packet.getState());
+			return true;
+		}
 
-        return false;
-    }
+		return false;
+	}
 }

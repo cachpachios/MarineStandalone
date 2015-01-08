@@ -25,16 +25,16 @@ package org.marinemc.util;
  * @author Citymonstret
  */
 public class StartSettings {
-    public int port;
-    public int tickrate;
+	public int port;
+	public int tickrate;
 
-    public StartSettings() {
-        this.port = 25565;
-        this.tickrate = 20;
-    }
+	public StartSettings() {
+		port = 25565;
+		tickrate = 20;
+	}
 
-    public StartSettings(int port, int tickrate) {
-        this.port = port;
-        this.tickrate = tickrate;
-    }
+	public StartSettings(final int port, final int tickrate) {
+		this.port = port;
+		this.tickrate = tickrate;
+	}
 }

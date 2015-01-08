@@ -31,45 +31,45 @@ import org.marinemc.game.player.Player;
  */
 public class JoinEvent extends PlayerEvent implements Cancellable {
 
-    private String joinMessage;
+	private String joinMessage;
 
-    public JoinEvent(Player player, String joinMessage) {
-        super(player, "join");
-        this.joinMessage = joinMessage;
-    }
+	public JoinEvent(final Player player, final String joinMessage) {
+		super(player, "join");
+		this.joinMessage = joinMessage;
+	}
 
-    public String getJoinMessage() {
-        return this.joinMessage;
-    }
+	public String getJoinMessage() {
+		return joinMessage;
+	}
 
-    public void setJoinMessage(String joinMessage) {
-        this.joinMessage = joinMessage;
-    }
-    
-    /*
-     * Kicking stuff:
-     */
-    
-    boolean isCancelled = false;
-    String leaveMessage = "Login Cancelled!";
-    
+	public void setJoinMessage(final String joinMessage) {
+		this.joinMessage = joinMessage;
+	}
+
+	/*
+	 * Kicking stuff:
+	 */
+
+	boolean isCancelled = false;
+	String leaveMessage = "Login Cancelled!";
+
 	@Override
 	public boolean isCancelled() {
 		return isCancelled;
 	}
 
 	@Override
-	public void setCancelled(boolean n) {
+	public void setCancelled(final boolean n) {
 		isCancelled = n;
 	}
 
-	public void setLeaveMessage(String msg) {
+	public void setLeaveMessage(final String msg) {
 		leaveMessage = msg;
 		isCancelled = true;
 	}
-	
+
 	public String getLeaveMessage() {
 		return leaveMessage;
 	}
-	
+
 }

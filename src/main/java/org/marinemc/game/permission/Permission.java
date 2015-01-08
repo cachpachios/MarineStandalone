@@ -26,14 +26,14 @@ package org.marinemc.game.permission;
  */
 public class Permission {
 
-    private final String perm;
+	private final String perm;
 
-    public Permission(final String perm) {
-        this.perm = perm.toLowerCase().replace(' ', '.');
-    }
-    
-    @Override
-    public int hashCode() {
-    	return perm.hashCode();
-    }
+	public Permission(final String perm) {
+		this.perm = perm.toLowerCase().replace(' ', '.');
+	}
+
+	@Override
+	public int hashCode() {
+		return perm.hashCode();
+	}
 }

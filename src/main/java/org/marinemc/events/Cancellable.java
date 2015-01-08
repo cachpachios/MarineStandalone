@@ -26,17 +26,18 @@ package org.marinemc.events;
  */
 public interface Cancellable {
 
-    /**
-     * Check if an event is cancelled
-     *
-     * @return event cancel state
-     */
-    public boolean isCancelled();
+	/**
+	 * Check if an event is cancelled
+	 *
+	 * @return event cancel state
+	 */
+	public boolean isCancelled();
 
-    /**
-     * Set the cancel state of an event
-     *
-     * @param n new state
-     */
-    public void setCancelled(final boolean n);
+	/**
+	 * Set the cancel state of an event
+	 *
+	 * @param n
+	 *            new state
+	 */
+	public void setCancelled(final boolean n);
 }

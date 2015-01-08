@@ -33,76 +33,75 @@ import org.marinemc.game.chat.builder.Part;
  */
 public class ChatMessage {
 
-    public List<Event> events = new ArrayList<>();
-    public List<Part> with = new ArrayList<>();
-    private String text;
-    private ChatColor color = ChatColor.WHITE;
-    private List<ChatColor> formats = new ArrayList<>();
+	public List<Event> events = new ArrayList<>();
+	public List<Part> with = new ArrayList<>();
+	private final String text;
+	private ChatColor color = ChatColor.WHITE;
+	private final List<ChatColor> formats = new ArrayList<>();
 
-    public ChatMessage(String text) {
-        this.text = text;
-    }
+	public ChatMessage(final String text) {
+		this.text = text;
+	}
 
-    public ChatMessage color(ChatColor color) {
-        this.color = color;
-        return this;
-    }
+	public ChatMessage color(final ChatColor color) {
+		this.color = color;
+		return this;
+	}
 
-    public ChatMessage with(Part part) {
-        with.add(part);
-        return this;
-    }
+	public ChatMessage with(final Part part) {
+		with.add(part);
+		return this;
+	}
 
-    public ChatMessage event(Event event) {
-        events.add(event);
-        return this;
-    }
+	public ChatMessage event(final Event event) {
+		events.add(event);
+		return this;
+	}
 
-    public ChatMessage format(ChatColor color) {
-        if (!color.isFormat())
-            throw new RuntimeException(color.getDataString() + " is not a color");
-        if (formats.contains(color))
-            formats.remove(color);
-        else
-            formats.add(color);
-        return this;
-    }
+	public ChatMessage format(final ChatColor color) {
+		if (!color.isFormat())
+			throw new RuntimeException(color.getDataString()
+					+ " is not a color");
+		if (formats.contains(color))
+			formats.remove(color);
+		else
+			formats.add(color);
+		return this;
+	}
 
-    @Override
-    public String toString() {
-        String format = "{\"text\":\"%s\",\"color\":\"%s\"%s%s%s}";
-        format = format.replaceFirst("%s", text);
-        format = format.replaceFirst("%s", color.getDataString());
-        StringBuilder w = new StringBuilder("");
-        if (with != null && !with.isEmpty()) {
-            Iterator<Part> iterator = with.iterator();
-            w.append(",\"extra\":[");
-            while (iterator.hasNext()) {
-                w.append(iterator.next());
-                if (iterator.hasNext())
-                    w.append(",");
-            }
-            w.append("]");
-        }
-        format = format.replaceFirst("%s", w.toString());
-        w = new StringBuilder();
-        if (events.isEmpty()) {
-            format = format.replaceFirst("%s", "");
-        } else {
-            for (Event event : events) {
-                w.append(",").append(event);
-            }
-            format = format.replaceFirst("%s", w.toString());
-        }
-        w = new StringBuilder();
-        if (formats.isEmpty()) {
-            format = format.replaceFirst("%s", "");
-        } else {
-            for (ChatColor f : formats) {
-                w.append(",\"").append(f.getDataString()).append("\":\"true\"");
-            }
-            format = format.replaceFirst("%s", w.toString());
-        }
-        return format;
-    }
+	@Override
+	public String toString() {
+		String format = "{\"text\":\"%s\",\"color\":\"%s\"%s%s%s}";
+		format = format.replaceFirst("%s", text);
+		format = format.replaceFirst("%s", color.getDataString());
+		StringBuilder w = new StringBuilder("");
+		if (with != null && !with.isEmpty()) {
+			final Iterator<Part> iterator = with.iterator();
+			w.append(",\"extra\":[");
+			while (iterator.hasNext()) {
+				w.append(iterator.next());
+				if (iterator.hasNext())
+					w.append(",");
+			}
+			w.append("]");
+		}
+		format = format.replaceFirst("%s", w.toString());
+		w = new StringBuilder();
+		if (events.isEmpty())
+			format = format.replaceFirst("%s", "");
+		else {
+			for (final Event event : events)
+				w.append(",").append(event);
+			format = format.replaceFirst("%s", w.toString());
+		}
+		w = new StringBuilder();
+		if (formats.isEmpty())
+			format = format.replaceFirst("%s", "");
+		else {
+			for (final ChatColor f : formats)
+				w.append(",\"").append(f.getDataString()).append("\":\"true\"");
+			format = format.replaceFirst("%s", w.toString());
+		}
+		return format;
+	}
 }

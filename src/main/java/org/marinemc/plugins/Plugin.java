@@ -32,221 +32,226 @@ import org.marinemc.logging.Logging;
 import org.marinemc.util.Assert;
 
 /**
- * Plugins will need to implement this class in order
- * to be loaded.
+ * Plugins will need to implement this class in order to be loaded.
  * <p/>
- * Use the methods in here, rather than any external
- * methods that do the same thing, as these are optimized
- * for use in plugins, and will make sure that nothing
- * breaks.
+ * Use the methods in here, rather than any external methods that do the same
+ * thing, as these are optimized for use in plugins, and will make sure that
+ * nothing breaks.
  *
  * @author Citymonstret
  */
 public class Plugin implements ServiceProvider {
 
-    private final UUID uuid;
-    private boolean enabled;
+	private final UUID uuid;
+	private boolean enabled;
 
-    private String name, version, author;
+	private String name, version, author;
 
-    private File data;
+	private File data;
 
-    private PluginClassLoader classLoader;
+	private PluginClassLoader classLoader;
 
-    private PluginFile desc;
+	private PluginFile desc;
 
-    private PluginLogger logger;
+	private PluginLogger logger;
 
-    /**
-     * Constructor
-     */
-    public Plugin() {
-        this.uuid = UUID.randomUUID();
-        this.enabled = false;
-    }
+	/**
+	 * Constructor
+	 */
+	public Plugin() {
+		uuid = UUID.randomUUID();
+		enabled = false;
+	}
 
-    final public void create(final PluginFile desc, final File data, final PluginClassLoader classLoader) {
-        Assert.notNull(desc, data, classLoader);
-        if (this.desc != null)
-            throw new RuntimeException("Plugin already created: " + desc.name);
-        this.desc = desc;
-        this.classLoader = classLoader;
-        this.name = desc.name;
-        this.data = data;
-        this.author = desc.author;
-        this.version = desc.version;
-        this.logger = new PluginLogger(this);
-    }
+	final public void create(final PluginFile desc, final File data,
+			final PluginClassLoader classLoader) {
+		Assert.notNull(desc, data, classLoader);
+		if (this.desc != null)
+			throw new RuntimeException("Plugin already created: " + desc.name);
+		this.desc = desc;
+		this.classLoader = classLoader;
+		name = desc.name;
+		this.data = data;
+		author = desc.author;
+		version = desc.version;
+		logger = new PluginLogger(this);
+	}
 
-    /**
-     * Get the plugin class loader
-     *
-     * @return Plugin class loader
-     */
-    final public PluginClassLoader getClassLoader() {
-        return this.classLoader;
-    }
+	/**
+	 * Get the plugin class loader
+	 *
+	 * @return Plugin class loader
+	 */
+	final public PluginClassLoader getClassLoader() {
+		return classLoader;
+	}
 
-    /**
-     * Used to enable the plugin
-     *
-     * @throws PluginException If the plugin is already enabled, or if couldn't be enabled
-     */
-    final public void enable() {
-        if (this.enabled)
-            throw new PluginException(this, "Plugin is already enabled");
-        try {
-            this.enabled = true;
-            this.onEnable();
-        } catch (Exception e) {
-            this.enabled = false;
-            Logging.getLogger().error("Could not enable " + ChatColor.RED + getName() + ChatColor.WHITE + ", see stacktrace for more info");
-            throw new PluginException(this, "Could not enable plugin", e);
-        }
-    }
+	/**
+	 * Used to enable the plugin
+	 *
+	 * @throws PluginException
+	 *             If the plugin is already enabled, or if couldn't be enabled
+	 */
+	final public void enable() {
+		if (enabled)
+			throw new PluginException(this, "Plugin is already enabled");
+		try {
+			enabled = true;
+			onEnable();
+		} catch (final Exception e) {
+			enabled = false;
+			Logging.getLogger().error(
+					"Could not enable " + ChatColor.RED + getName()
+							+ ChatColor.WHITE
+							+ ", see stacktrace for more info");
+			throw new PluginException(this, "Could not enable plugin", e);
+		}
+	}
 
-    /**
-     * Used to disable the plugin
-     *
-     * @throws PluginException if it isn't enabled
-     */
-    final public void disable() {
-        if (!this.enabled)
-            throw new PluginException(this, "Plugin is not enabled");
-        this.enabled = false;
-        this.onDisable();
-    }
+	/**
+	 * Used to disable the plugin
+	 *
+	 * @throws PluginException
+	 *             if it isn't enabled
+	 */
+	final public void disable() {
+		if (!enabled)
+			throw new PluginException(this, "Plugin is not enabled");
+		enabled = false;
+		onDisable();
+	}
 
-    /**
-     * Listen to enable
-     */
-    public void onEnable() {
-    }
+	/**
+	 * Listen to enable
+	 */
+	public void onEnable() {
+	}
 
-    /**
-     * Listen to disable
-     */
-    public void onDisable() {
-    }
+	/**
+	 * Listen to disable
+	 */
+	public void onDisable() {
+	}
 
-    /**
-     * Get the plugin name
-     *
-     * @return Plugin name
-     */
-    final public String getName() {
-        return this.name;
-    }
+	/**
+	 * Get the plugin name
+	 *
+	 * @return Plugin name
+	 */
+	final public String getName() {
+		return name;
+	}
 
-    /**
-     * Get the plugin version
-     *
-     * @return Plugin version
-     */
-    public String getVersion() {
-        return this.version;
-    }
+	/**
+	 * Get the plugin version
+	 *
+	 * @return Plugin version
+	 */
+	public String getVersion() {
+		return version;
+	}
 
-    /**
-     * Get the plugin author
-     *
-     * @return Plugin author
-     */
-    public String getAuthor() {
-        return this.author;
-    }
+	/**
+	 * Get the plugin author
+	 *
+	 * @return Plugin author
+	 */
+	public String getAuthor() {
+		return author;
+	}
 
-    /**
-     * Check if the plugin is enabled
-     *
-     * @return boolean (enabled)
-     */
-    public boolean isEnabled() {
-        return this.enabled;
-    }
+	/**
+	 * Check if the plugin is enabled
+	 *
+	 * @return boolean (enabled)
+	 */
+	public boolean isEnabled() {
+		return enabled;
+	}
 
-    /**
-     * Get the plugin uuid
-     *
-     * @return UUID
-     */
-    final public UUID getUUID() {
-        return this.uuid;
-    }
+	/**
+	 * Get the plugin uuid
+	 *
+	 * @return UUID
+	 */
+	final public UUID getUUID() {
+		return uuid;
+	}
 
-    /**
-     * Get the plugin data folder
-     *
-     * @return Plugin data folder
-     */
-    public File getDataFolder() {
-        return this.data;
-    }
+	/**
+	 * Get the plugin data folder
+	 *
+	 * @return Plugin data folder
+	 */
+	public File getDataFolder() {
+		return data;
+	}
 
-    /**
-     * Get the plugin description file
-     *
-     * @return Plugin Desc. file
-     */
-    public PluginFile getDesc() {
-        return this.desc;
-    }
+	/**
+	 * Get the plugin description file
+	 *
+	 * @return Plugin Desc. file
+	 */
+	public PluginFile getDesc() {
+		return desc;
+	}
 
-    /**
-     * Get the plugin logger
-     *
-     * @return plugin logger
-     */
-    public PluginLogger getLogger() {
-        return this.logger;
-    }
+	/**
+	 * Get the plugin logger
+	 *
+	 * @return plugin logger
+	 */
+	public PluginLogger getLogger() {
+		return logger;
+	}
 
-    @Override
-    public boolean equals(final Object object) {
-        return object instanceof Plugin && ((Plugin) object).getUUID().equals(getUUID());
-    }
+	@Override
+	public boolean equals(final Object object) {
+		return object instanceof Plugin
+				&& ((Plugin) object).getUUID().equals(getUUID());
+	}
 
-    @Override
-    public int hashCode() {
-        return 3 * uuid.hashCode() + 37 * getName().toLowerCase().hashCode();
-    }
+	@Override
+	public int hashCode() {
+		return 3 * uuid.hashCode() + 37 * getName().toLowerCase().hashCode();
+	}
 
-    @Override
-    public String toString() {
-        return this.name;
-    }
+	@Override
+	public String toString() {
+		return name;
+	}
 
-    @Override
-    final public String getProviderName() {
-        return getName().toLowerCase().replace(" ", "");
-    }
+	@Override
+	final public String getProviderName() {
+		return getName().toLowerCase().replace(" ", "");
+	}
 
-    @Override
-    final public byte getProviderPriority() {
-        return 0x01;
-    }
+	@Override
+	final public byte getProviderPriority() {
+		return 0x01;
+	}
 
-    /**
-     * Register a command using this instance as the
-     * provider
-     *
-     * @param command Command
-     */
-    final public void addCommand(final Command command) {
-        Assert.notNull(command);
-        CommandManager.getInstance().registerCommand(this, command);
-    }
+	/**
+	 * Register a command using this instance as the provider
+	 *
+	 * @param command
+	 *            Command
+	 */
+	final public void addCommand(final Command command) {
+		Assert.notNull(command);
+		CommandManager.getInstance().registerCommand(this, command);
+	}
 
-    /**
-     * Register a listener using this
-     * instance as the provider
-     *
-     * @param listener Listener to register
-     */
-    final public void registerListener(final EventListener listener) {
-        Assert.notNull(listener);
-        listener.setIDENTIFIERObject__DO_NOT_USE__(this);
-        EventManager.getInstance().addListener(listener);
-    }
+	/**
+	 * Register a listener using this instance as the provider
+	 *
+	 * @param listener
+	 *            Listener to register
+	 */
+	final public void registerListener(final EventListener listener) {
+		Assert.notNull(listener);
+		listener.setIDENTIFIERObject__DO_NOT_USE__(this);
+		EventManager.getInstance().addListener(listener);
+	}
 
 }

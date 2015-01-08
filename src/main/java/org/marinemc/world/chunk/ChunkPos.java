@@ -20,39 +20,36 @@
 package org.marinemc.world.chunk;
 
 import org.marinemc.util.vectors.Vector2i;
+
 /**
  * @author Fozie
  */
 public class ChunkPos extends Vector2i implements Comparable<ChunkPos> {
 
-    public ChunkPos(int x, int y) {
-        super(x, y);
-    }
+	public ChunkPos(final int x, final int y) {
+		super(x, y);
+	}
 
-    public ChunkPos(long encoded) {
-        this((int) (encoded >> 32), (int) encoded);
-    }
+	public ChunkPos(final long encoded) {
+		this((int) (encoded >> 32), (int) encoded);
+	}
 
-    public static long Encode(int x, int y) {
-        return (long) x << 32 | y & 0xFFFFFFFFL;
-    }
+	public static long Encode(final int x, final int y) {
+		return (long) x << 32 | y & 0xFFFFFFFFL;
+	}
 
-    public long encode() {
-        return (long) getX() << 32 | getY() & 0xFFFFFFFFL;
-    }
-    
-    @Override
-    public int compareTo(ChunkPos v) {
-        int
-                x = getX(),
-                y = getY(),
-                x2 = v.getX(),
-                y2 = v.getY();
-        if (x == x2 && y == y2)
-            return 0;
-        if (x < x2 && y < y2)
-            return -1;
-        else
-            return 1;
-    }
+	public long encode() {
+		return (long) getX() << 32 | getY() & 0xFFFFFFFFL;
+	}
+
+	@Override
+	public int compareTo(final ChunkPos v) {
+		final int x = getX(), y = getY(), x2 = v.getX(), y2 = v.getY();
+		if (x == x2 && y == y2)
+			return 0;
+		if (x < x2 && y < y2)
+			return -1;
+		else
+			return 1;
+	}
 }

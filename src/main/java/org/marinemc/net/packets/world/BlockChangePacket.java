@@ -28,37 +28,39 @@ import org.marinemc.net.States;
 import org.marinemc.util.Position;
 import org.marinemc.world.Block;
 import org.marinemc.world.BlockID;
+
 /**
  * @author Fozie
  */
 public class BlockChangePacket extends Packet {
-    public Position pos;
-    public int newBlock;
+	public Position pos;
+	public int newBlock;
 
-    public BlockChangePacket(Block toBlock) {
-        this(toBlock.getGlobalPos(), toBlock.getType().getPacketID());
-    }
+	public BlockChangePacket(final Block toBlock) {
+		this(toBlock.getGlobalPos(), toBlock.getType().getPacketID());
+	}
 
-    public BlockChangePacket(Position pos, short b) {
-        super(0x23, States.INGAME);
-        this.pos = pos;
-        this.newBlock = (int)b;
-    }
+	public BlockChangePacket(final Position pos, final short b) {
+		super(0x23, States.INGAME);
+		this.pos = pos;
+		newBlock = b;
+	}
 
-    public BlockChangePacket(Position p, BlockID b) {
-        this(p, b.getID());
-    }
+	public BlockChangePacket(final Position p, final BlockID b) {
+		this(p, b.getID());
+	}
 
-    @Override
-    public void writeToStream(PacketOutputStream stream) throws IOException {
+	@Override
+	public void writeToStream(final PacketOutputStream stream)
+			throws IOException {
 
-    	ByteList data = new ByteList();
+		final ByteList data = new ByteList();
 
-        data.writePosition(pos);
-        data.writeVarInt	(newBlock);
+		data.writePosition(pos);
+		data.writeVarInt(newBlock);
 
-        stream.write(getID(), data);
+		stream.write(getID(), data);
 
-    }
+	}
 
 }

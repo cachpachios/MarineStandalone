@@ -29,14 +29,14 @@ import org.marinemc.plugins.Plugin;
  */
 public class PluginEnableEvent extends Event {
 
-    private final Plugin plugin;
+	private final Plugin plugin;
 
-    public PluginEnableEvent(final Plugin plugin) {
-        super("plugin_load", false);
-        this.plugin = plugin;
-    }
+	public PluginEnableEvent(final Plugin plugin) {
+		super("plugin_load", false);
+		this.plugin = plugin;
+	}
 
-    final public Plugin getPlugin() {
-        return this.plugin;
-    }
+	final public Plugin getPlugin() {
+		return plugin;
+	}
 }

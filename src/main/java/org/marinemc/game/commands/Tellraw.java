@@ -22,8 +22,6 @@ package org.marinemc.game.commands;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.json.JSONObject;
-import org.json.JSONTokener;
 import org.marinemc.game.chat.ChatColor;
 import org.marinemc.game.command.Command;
 import org.marinemc.game.command.CommandSender;
@@ -37,52 +35,52 @@ import org.marinemc.server.Marine;
  */
 public class Tellraw extends Command {
 
-    public Tellraw() {
-        super("tellraw", "marine.tellraw", "Send a pure JSON Message", "tr");
-    }
+	public Tellraw() {
+		super("tellraw", "marine.tellraw", "Send a pure JSON Message", "tr");
+	}
 
-    public void execute(CommandSender sender, String... args) {
-        if (args.length < 2)
-            sender.sendMessage("/tellraw [specifier/username] {message}");
-        else {
-            String sp = args[0];
-            Collection<Player> r;
-            if (sp.equals("@p") || sp.equals("@a") || sp.equals("@r")) {
-                r = getPlayers(sender, sp);
-            } else {
-                Player p;
-                if ((p = Marine.getPlayer(sp)) == null) {
-                    sender.sendMessage("No player with that name was found");
-                    return;
-                }
-                r = Arrays.asList(p);
-            }
-            if (r == null) {
-                sender.sendMessage("No players found");
-            } else {
-                StringBuilder builder = new StringBuilder();
-                args = replaceAll(args, sender);
-                for (int i = 1; i < args.length; i++)
-                    builder.append(args[i]).append(" ");
-                String msg = ChatColor.transform('&', builder.toString());
-                if (msg.endsWith(" "))
-                    msg = msg.substring(0, msg.length() - 1);
-                if (!msg.startsWith("{") || !msg.endsWith("}"))
-                    msg = "{\"text\":\"" + msg + "\"}";
-                JSONObject o;
-                try {
-                    JSONTokener tokener = new JSONTokener(msg);
-                    o = new JSONObject(tokener);
-                } catch (Exception e) {
-                    o = null;
-                }
-                if (o == null) {
-                    sender.sendMessage("Invalid JSON");
-                } else {
-                    for (final Player p : r)
-                        p.sendMessageRaw(msg);
-                }
-            }
-        }
-    }
+	@Override
+	public void execute(final CommandSender sender, String... args) {
+		if (args.length < 2)
+			sender.sendMessage("/tellraw [specifier/username] {message}");
+		else {
+			final String sp = args[0];
+			Collection<Player> r;
+			if (sp.equals("@p") || sp.equals("@a") || sp.equals("@r"))
+				r = getPlayers(sender, sp);
+			else {
+				Player p;
+				if ((p = Marine.getPlayer(sp)) == null) {
+					sender.sendMessage("No player with that name was found");
+					return;
+				}
+				r = Arrays.asList(p);
+			}
+			if (r == null)
+				sender.sendMessage("No players found");
+			else {
+				final StringBuilder builder = new StringBuilder();
+				args = replaceAll(args, sender);
+				for (int i = 1; i < args.length; i++)
+					builder.append(args[i]).append(" ");
+				String msg = ChatColor.transform('&', builder.toString());
+				if (msg.endsWith(" "))
+					msg = msg.substring(0, msg.length() - 1);
+				if (!msg.startsWith("{") || !msg.endsWith("}"))
+					msg = "{\"text\":\"" + msg + "\"}";
+				JSONObject o;
+				try {
+					final JSONTokener tokener = new JSONTokener(msg);
+					o = new JSONObject(tokener);
+				} catch (final Exception e) {
+					o = null;
+				}
+				if (o == null)
+					sender.sendMessage("Invalid JSON");
+				else
+					for (final Player p : r)
+						p.sendMessageRaw(msg);
+			}
+		}
+	}
 }

@@ -31,33 +31,33 @@ import org.marinemc.io.binary.ByteInput;
  */
 public abstract class PacketWrapper<T> {
 
-    private T obj;
+	private T obj;
 
-    public PacketWrapper(T v) {
-        this.obj = v;
-    }
+	public PacketWrapper(final T v) {
+		this.obj = v;
+	}
 
-    public abstract T readFromData(ByteInput d);
+	public abstract T readFromData(ByteInput d);
 
-    public T readFromBytes(byte[] b) {
-        return readFromData(new ByteArray(b));
-    }
+	public T readFromBytes(final byte[] b) {
+		return readFromData(new ByteArray(b));
+	}
 
-    public abstract ByteDataOutput toByteData();
+	public abstract ByteDataOutput toByteData();
 
-    public byte[] getBytes() {
-        return toByteData().toBytes();
-    }
+	public byte[] getBytes() {
+		return toByteData().toBytes();
+	}
 
-    public T getData() {
-        return obj;
-    }
+	public T getData() {
+		return obj;
+	}
 
-    public void setData(T data) {
-        obj = data;
-    }
+	public void setData(final T data) {
+		obj = data;
+	}
 
-    public T get() {
-        return obj;
-    }
+	public T get() {
+		return obj;
+	}
 }

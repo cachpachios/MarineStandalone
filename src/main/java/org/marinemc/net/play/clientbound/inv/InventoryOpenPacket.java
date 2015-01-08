@@ -32,20 +32,21 @@ import org.marinemc.net.States;
  */
 public class InventoryOpenPacket extends Packet {
 
-    private final Inventory inventory;
+	private final Inventory inventory;
 
-    public InventoryOpenPacket(Inventory inventory) {
-        super(0x2d, States.INGAME);
-        this.inventory = inventory;
-    }
+	public InventoryOpenPacket(final Inventory inventory) {
+		super(0x2d, States.INGAME);
+		this.inventory = inventory;
+	}
 
-    @Override
-    public void writeToStream(PacketOutputStream stream) throws IOException {
-    	ByteList data = new ByteList();
-        data.writeByte(inventory.getUID());
-        data.writeUTF8(inventory.getType());
-        data.writeUTF8(inventory.getTitle().toString());
-        data.writeByte(inventory.getNumberOfSlots());
-        stream.write(getID(), data);
-    }
+	@Override
+	public void writeToStream(final PacketOutputStream stream)
+			throws IOException {
+		final ByteList data = new ByteList();
+		data.writeByte(inventory.getUID());
+		data.writeUTF8(inventory.getType());
+		data.writeUTF8(inventory.getTitle().toString());
+		data.writeByte(inventory.getNumberOfSlots());
+		stream.write(getID(), data);
+	}
 }

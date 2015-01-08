@@ -22,9 +22,10 @@ package org.marinemc.io.data;
 import java.util.List;
 
 import org.marinemc.io.binary.Byteable;
+
 /**
  * @author Fozie
  */
 public interface NibbleArray extends List<Byte>, Byteable {
-    public boolean contains(byte nibble);
+	public boolean contains(byte nibble);
 }

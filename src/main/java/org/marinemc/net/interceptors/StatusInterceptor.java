@@ -23,22 +23,23 @@ import org.marinemc.io.binary.ByteInput;
 import org.marinemc.net.Client;
 import org.marinemc.net.packets.status.MultiplayerListPacket;
 import org.marinemc.net.packets.status.PingPacket;
+
 /**
  * @author Fozie
  */
 public class StatusInterceptor implements PacketInterceptor {
 
-    @Override
-    public boolean intercept(int id, ByteInput data, final Client c) {
-        if (id == 0x00) {
-            MultiplayerListPacket packet = new MultiplayerListPacket();
-            c.sendPacket(packet);
-        } else if (id == 0x01) {
-            PingPacket packet = new PingPacket();
-            packet.readFromBytes(data);
-            c.sendPacket(packet);
-        }
-        return false;
-    }
+	@Override
+	public boolean intercept(final int id, final ByteInput data, final Client c) {
+		if (id == 0x00) {
+			final MultiplayerListPacket packet = new MultiplayerListPacket();
+			c.sendPacket(packet);
+		} else if (id == 0x01) {
+			final PingPacket packet = new PingPacket();
+			packet.readFromBytes(data);
+			c.sendPacket(packet);
+		}
+		return false;
+	}
 
 }

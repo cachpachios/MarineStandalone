@@ -28,50 +28,54 @@ import org.marinemc.world.gen.ChunkPopulator;
 import org.marinemc.world.gen.LevelType;
 import org.marinemc.world.gen.WorldGenerator;
 import org.marinemc.world.gen.pop.NaturePop;
+
 /**
  * @author Fozie
  */
 public final class TotalFlatGrassGenerator extends WorldGenerator {
 
+	public TotalFlatGrassGenerator() {
+		super(new ChunkPopulator[] { new NaturePop() });
+	}
 
-    public TotalFlatGrassGenerator() {
-    	super(new ChunkPopulator[]{new NaturePop()});
-    }
+	@Override
+	public Position getSafeSpawnPoint() {
+		return new Position(0, 5, 0);
+	}
 
-    @Override
-    public Position getSafeSpawnPoint() {
-        return new Position(0, 5, 0);
-    }
+	@Override
+	public Chunk generateChunkTerrain(final ChunkPos pos) { // Really need to be
+															// improved i guess
+															// it could be made
+															// in a less laggy
+															// way :S
+		final Chunk r = new Chunk(world, pos);
+		for (int xx = 0; xx < 16; xx++)
+			for (int zz = 0; zz < 16; zz++) {
+				r.setPrivateType(xx, 0, zz, BlockID.BEDROCK);
+				r.setPrivateType(xx, 1, zz, BlockID.DIRT);
+				r.setPrivateType(xx, 2, zz, BlockID.DIRT);
+				r.setPrivateType(xx, 3, zz, BlockID.DIRT);
+				r.setPrivateType(xx, 4, zz, BlockID.GRASS);
 
-    @Override
-    public Chunk generateChunkTerrain(final ChunkPos pos) { // Really need to be improved i guess it could be made in a less laggy way :S
-        Chunk r = new Chunk(world, pos);
-        for (int xx = 0; xx < 16; xx++)
-            for (int zz = 0; zz < 16; zz++) {
-                r.setPrivateType(xx, 0, zz, BlockID.BEDROCK);
-                r.setPrivateType(xx, 1, zz, BlockID.DIRT);
-                r.setPrivateType(xx, 2, zz, BlockID.DIRT);
-                r.setPrivateType(xx, 3, zz, BlockID.DIRT);
-                r.setPrivateType(xx, 4, zz, BlockID.GRASS);
+				r.setPrivateLight(xx, 0, zz, (byte) -1);
+				r.setPrivateLight(xx, 1, zz, (byte) -1);
+				r.setPrivateLight(xx, 2, zz, (byte) -1);
+				r.setPrivateLight(xx, 3, zz, (byte) -1);
+				r.setPrivateLight(xx, 4, zz, (byte) -1);
 
-                r.setPrivateLight(xx, 0, zz, (byte) -1);
-                r.setPrivateLight(xx, 1, zz, (byte) -1);
-                r.setPrivateLight(xx, 2, zz, (byte) -1);
-                r.setPrivateLight(xx, 3, zz, (byte) -1);
-                r.setPrivateLight(xx, 4, zz, (byte) -1);
+			}
+		return r;
+	}
 
-            }
-        return r;
-    }
+	@Override
+	public Dimension getDimension() {
+		return Dimension.OVERWORLD;
+	}
 
-    @Override
-    public Dimension getDimension() {
-        return Dimension.OVERWORLD;
-    }
-
-    @Override
-    public LevelType getLevelType() {
-        return LevelType.FLAT;
-    }
+	@Override
+	public LevelType getLevelType() {
+		return LevelType.FLAT;
+	}
 
 }

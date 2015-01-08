@@ -36,88 +36,91 @@ import org.marinemc.util.StringUtils;
  */
 public class ChatManager {
 
-    public static String CHAT_FORMAT = "<%plr> %msg",
-            JOIN_MESSAGE = "%plr joined the game",
-            LEAVE_MESSAGE = "%plr left the game",
-            WELCOME_MESSAGE = "Welcome online §l%plr";
+	public static String CHAT_FORMAT = "<%plr> %msg",
+			JOIN_MESSAGE = "%plr joined the game",
+			LEAVE_MESSAGE = "%plr left the game",
+			WELCOME_MESSAGE = "Welcome online §l%plr";
 
-    private static ChatManager instance;
+	private static ChatManager instance;
 
-    public static ChatManager getInstance() {
-        if (instance == null) {
-            instance = new ChatManager();
-        }
-        return instance;
-    }
+	public static ChatManager getInstance() {
+		if (instance == null)
+			instance = new ChatManager();
+		return instance;
+	}
 
-    public static String format(String s, Player p) {
-        return translate(CHAT_FORMAT, p, StringUtils.chatFix(s));
-    }
+	public static String format(final String s, final Player p) {
+		return translate(CHAT_FORMAT, p, StringUtils.chatFix(s));
+	}
 
-    private static String translate(String s, Object... strs) {
-        for (Object object : strs) {
-            if (object instanceof Player) {
-                s = s.replace("%plr", ((Player) object).getUserName());
-            } else if (object instanceof String) {
-                s = s.replace("%msg", object.toString());
-            }
-        }
-        return s;
-    }
+	private static String translate(String s, final Object... strs) {
+		for (final Object object : strs)
+			if (object instanceof Player)
+				s = s.replace("%plr", ((Player) object).getUserName());
+			else if (object instanceof String)
+				s = s.replace("%msg", object.toString());
+		return s;
+	}
 
-    public void sendJoinMessage(Player player, String message) {
-//        Chat chat = new Chat("WARNING ")
-//                .color(ChatColor.RED)
-//                .format(ChatColor.BOLD)
-//                .with(
-//                        new Part("You are a cow", ChatColor.WHITE)
-//                                .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, "§cHello World!\n§m---------\n§lLOLOLOL"))
-//                )
-//                .event(new Event("hoverEvent", "show_text", "§cA Serious warning"));
-//        player.sendMessage(chat);
+	public void sendJoinMessage(final Player player, final String message) {
+		// Chat chat = new Chat("WARNING ")
+		// .color(ChatColor.RED)
+		// .format(ChatColor.BOLD)
+		// .with(
+		// new Part("You are a cow", ChatColor.WHITE)
+		// .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+		// "§cHello World!\n§m---------\n§lLOLOLOL"))
+		// )
+		// .event(new Event("hoverEvent", "show_text", "§cA Serious warning"));
+		// player.sendMessage(chat);
 
-        Marine.broadcastMessage(translate(message, player));
-        player.sendAboveActionbarMessage(translate(WELCOME_MESSAGE, player)); // TODO Custom Message, event and toggleable
-    }
+		Marine.broadcastMessage(translate(message, player));
+		player.sendAboveActionbarMessage(translate(WELCOME_MESSAGE, player)); // TODO
+																				// Custom
+																				// Message,
+																				// event
+																				// and
+																				// toggleable
+	}
 
-    public void sendLeaveMessage(Player player) {
-        Marine.broadcastMessage(translate(LEAVE_MESSAGE, player));
-    }
+	public void sendLeaveMessage(final Player player) {
+		Marine.broadcastMessage(translate(LEAVE_MESSAGE, player));
+	}
 
-    public void broadcastMessage(String msg) {
-        Marine.getServer().getPlayerManager().broadcastPacket(new ChatPacket(msg));
-        Logging.getLogger().log(msg);
-    }
+	public void broadcastMessage(final String msg) {
+		Marine.getServer().getPlayerManager()
+				.broadcastPacket(new ChatPacket(msg));
+		Logging.getLogger().log(msg);
+	}
 
-    public void sendChatMessage(Player player, String message) {
-        if (player.checkForSpam()) {
-            player.kick("Do not spam");
-        } else {
-            ChatEvent event = new ChatEvent(player, message);
-            Marine.getServer().callEvent(event);
-            if (!event.isCancelled()) {
-                Marine.broadcastMessage(
-                        translate(CHAT_FORMAT, player, event.getMessage())
-                );
-            }
-        }
-    }
-    
-    public void interceptChatPacket(ByteInput data, Client c) {
-        IncomingChatPacket p = new IncomingChatPacket();
-        p.readFromBytes(data);
-        if (p.getMessage().startsWith("/")) {
-            String[] parts = p.getMessage().split(" ");
-            String[] args;
-            if (parts.length < 2) {
-                args = new String[]{};
-            } else {
-                args = new String[parts.length - 1];
-                System.arraycopy(parts, 1, args, 0, parts.length - 1);
-            }
-            Marine.getServer().getPlayerManager().getPlayerByClient(c).executeCommand(parts[0], args);
-        } else {
-            broadcastMessage(ChatManager.format(p.getMessage(), Marine.getServer().getPlayerManager().getPlayerByClient(c)));
-        }
-    }
+	public void sendChatMessage(final Player player, final String message) {
+		if (player.checkForSpam())
+			player.kick("Do not spam");
+		else {
+			final ChatEvent event = new ChatEvent(player, message);
+			Marine.getServer().callEvent(event);
+			if (!event.isCancelled())
+				Marine.broadcastMessage(translate(CHAT_FORMAT, player,
+						event.getMessage()));
+		}
+	}
+
+	public void interceptChatPacket(final ByteInput data, final Client c) {
+		final IncomingChatPacket p = new IncomingChatPacket();
+		p.readFromBytes(data);
+		if (p.getMessage().startsWith("/")) {
+			final String[] parts = p.getMessage().split(" ");
+			String[] args;
+			if (parts.length < 2)
+				args = new String[] {};
+			else {
+				args = new String[parts.length - 1];
+				System.arraycopy(parts, 1, args, 0, parts.length - 1);
+			}
+			Marine.getServer().getPlayerManager().getPlayerByClient(c)
+					.executeCommand(parts[0], args);
+		} else
+			broadcastMessage(ChatManager.format(p.getMessage(), Marine
+					.getServer().getPlayerManager().getPlayerByClient(c)));
+	}
 }

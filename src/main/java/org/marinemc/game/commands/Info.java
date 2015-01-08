@@ -37,33 +37,40 @@ import org.marinemc.util.StringUtils;
  */
 public class Info extends Command {
 
-    public Info() {
-        super("info", "marine.info", "Display server info", "version", "i");
-    }
+	public Info() {
+		super("info", "marine.info", "Display server info", "version", "i");
+	}
 
-    @Override
-    public void execute(CommandSender sender, String[] arguments) {
-        if (!(sender instanceof Player)) {
-            sender.sendMessage(
-                    StringUtils
-                            .format(
-                                    "Server Info - Software: {0}, Version: {1}, Protocol: {2}, Minecraft: {3}",
-                                    "MarineStandalone", ServerProperties.BUILD_VERSION, ServerProperties.PROTOCOL_VERSION, ServerProperties.MINECRAFT_NAME));
-        } else {
-            ((Player) sender).sendMessage(new ChatMessage("Server Info\n")
-                            .color(ChatColor.RED)
-                            .format(ChatColor.BOLD)
-                            .with(new Part("  Software: ", ChatColor.RED))
-                            .with(new Part("MarineStandalone\n", ChatColor.WHITE)
-                                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, "§chttps://marinemc.org §f- Click for URL"))
-                                    .event(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://marinemc.org")))
-                            .with(new Part("  Version: ", ChatColor.RED))
-                            .with(new Part(ServerProperties.BUILD_VERSION, ChatColor.WHITE))
-                            .with(new Part("\n  Protocol: ", ChatColor.RED))
-                            .with(new Part(ServerProperties.PROTOCOL_VERSION + "", ChatColor.WHITE))
-                            .with(new Part("\n  Minecraft: ", ChatColor.RED))
-                            .with(new Part(ServerProperties.MINECRAFT_NAME, ChatColor.WHITE))
-            );
-        }
-    }
+	@Override
+	public void execute(final CommandSender sender, final String[] arguments) {
+		if (!(sender instanceof Player))
+			sender.sendMessage(StringUtils
+					.format("Server Info - Software: {0}, Version: {1}, Protocol: {2}, Minecraft: {3}",
+							"MarineStandalone", ServerProperties.BUILD_VERSION,
+							ServerProperties.PROTOCOL_VERSION,
+							ServerProperties.MINECRAFT_NAME));
+		else
+			((Player) sender)
+					.sendMessage(new ChatMessage("Server Info\n")
+							.color(ChatColor.RED)
+							.format(ChatColor.BOLD)
+							.with(new Part("  Software: ", ChatColor.RED))
+							.with(new Part("MarineStandalone\n",
+									ChatColor.WHITE)
+									.event(new HoverEvent(
+											HoverEvent.Action.SHOW_TEXT,
+											"§chttps://marinemc.org §f- Click for URL"))
+									.event(new ClickEvent(
+											ClickEvent.Action.OPEN_URL,
+											"https://marinemc.org")))
+							.with(new Part("  Version: ", ChatColor.RED))
+							.with(new Part(ServerProperties.BUILD_VERSION,
+									ChatColor.WHITE))
+							.with(new Part("\n  Protocol: ", ChatColor.RED))
+							.with(new Part(ServerProperties.PROTOCOL_VERSION
+									+ "", ChatColor.WHITE))
+							.with(new Part("\n  Minecraft: ", ChatColor.RED))
+							.with(new Part(ServerProperties.MINECRAFT_NAME,
+									ChatColor.WHITE)));
+	}
 }

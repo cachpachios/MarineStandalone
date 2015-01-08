@@ -21,8 +21,6 @@ package org.marinemc.settings;
 
 import java.io.File;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.marinemc.settings.files.BanFile;
 import org.marinemc.settings.files.PermissionFile;
 import org.marinemc.settings.files.WhitelistFile;
@@ -34,43 +32,44 @@ import org.marinemc.settings.files.WhitelistFile;
  */
 public class JSONFileHandler {
 
-    public final JSONConfig groups;
-    public final WhitelistFile whitelist;
-    public final BanFile banned;
-    private final File settingsPath, storagePath;
+	public final JSONConfig groups;
+	public final WhitelistFile whitelist;
+	public final BanFile banned;
+	private final File settingsPath, storagePath;
 
-    public JSONFileHandler(final File settingsPath, final File storagePath) throws JSONException {
-        this.settingsPath = settingsPath;
-        this.storagePath = storagePath;
-        this.banned = new BanFile(storagePath);
-        this.whitelist = new WhitelistFile(storagePath);
-        this.groups = new PermissionFile(storagePath);
-    }
+	public JSONFileHandler(final File settingsPath, final File storagePath)
+			throws JSONException {
+		this.settingsPath = settingsPath;
+		this.storagePath = storagePath;
+		banned = new BanFile(storagePath);
+		whitelist = new WhitelistFile(storagePath);
+		groups = new PermissionFile(storagePath);
+	}
 
-    public void saveAll() {
-        this.groups.saveFile();
-        this.banned.saveFile();
-        this.whitelist.saveFile();
-    }
+	public void saveAll() {
+		groups.saveFile();
+		banned.saveFile();
+		whitelist.saveFile();
+	}
 
-    public JSONObject getAdministratorJSONObject() {
-        return this.groups.map;
-    }
+	public JSONObject getAdministratorJSONObject() {
+		return groups.map;
+	}
 
-    public JSONObject getBannedJSONObject() {
-        return this.banned.map;
-    }
+	public JSONObject getBannedJSONObject() {
+		return banned.map;
+	}
 
-    public JSONObject getWhitelistJSONObject() {
-        return this.whitelist.map;
-    }
+	public JSONObject getWhitelistJSONObject() {
+		return whitelist.map;
+	}
 
-    public File getSettingsPath() {
-        return this.settingsPath;
-    }
+	public File getSettingsPath() {
+		return settingsPath;
+	}
 
-    public File getStoragePath() {
-        return this.storagePath;
-    }
+	public File getStoragePath() {
+		return storagePath;
+	}
 
 }

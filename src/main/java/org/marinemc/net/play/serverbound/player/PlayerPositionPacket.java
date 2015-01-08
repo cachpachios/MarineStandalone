@@ -22,25 +22,26 @@ package org.marinemc.net.play.serverbound.player;
 import org.marinemc.io.binary.ByteInput;
 import org.marinemc.net.Packet;
 import org.marinemc.net.States;
+
 /**
  * @author Fozie
  */
 public class PlayerPositionPacket extends Packet {
 
-    public double X, Y, Z; // Absolute Position (Y is feets, head = Y+1.62)
-    public boolean onGround; // Inverted isAirborn
+	public double X, Y, Z; // Absolute Position (Y is feets, head = Y+1.62)
+	public boolean onGround; // Inverted isAirborn
 
-    public PlayerPositionPacket() {
-        super(0x04, States.INGAME);
-    }
+	public PlayerPositionPacket() {
+		super(0x04, States.INGAME);
+	}
 
-    @Override
-    public void readFromBytes(ByteInput input) {
-        X = input.readDouble();
-        Y = input.readDouble();
-        Z = input.readDouble();
+	@Override
+	public void readFromBytes(final ByteInput input) {
+		X = input.readDouble();
+		Y = input.readDouble();
+		Z = input.readDouble();
 
-        onGround = input.readBoolean();
-    }
+		onGround = input.readBoolean();
+	}
 
 }

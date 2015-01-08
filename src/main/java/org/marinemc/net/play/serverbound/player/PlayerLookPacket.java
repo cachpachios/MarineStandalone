@@ -25,39 +25,41 @@ import org.marinemc.io.binary.ByteInput;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
+
 /**
  * @author Fozie
  */
 public class PlayerLookPacket extends Packet {
 
-    private float yaw, pitch;
-    private boolean onGround;
+	private float yaw, pitch;
+	private boolean onGround;
 
-    public PlayerLookPacket() {
-        super(0x05, States.INGAME);
-    }
+	public PlayerLookPacket() {
+		super(0x05, States.INGAME);
+	}
 
-    public float getYaw() {
-        return yaw;
-    }
+	public float getYaw() {
+		return yaw;
+	}
 
-    public float getPitch() {
-        return pitch;
-    }
+	public float getPitch() {
+		return pitch;
+	}
 
-    public boolean getOnGround() {
-        return onGround;
-    }
+	public boolean getOnGround() {
+		return onGround;
+	}
 
-    @Override
-    public void writeToStream(PacketOutputStream stream) throws IOException {
-    }
+	@Override
+	public void writeToStream(final PacketOutputStream stream)
+			throws IOException {
+	}
 
-    @Override
-    public void readFromBytes(ByteInput input) {
-        yaw = input.readFloat();
-        pitch = input.readFloat();
-        onGround = input.readBoolean();
-    }
+	@Override
+	public void readFromBytes(final ByteInput input) {
+		yaw = input.readFloat();
+		pitch = input.readFloat();
+		onGround = input.readBoolean();
+	}
 
 }

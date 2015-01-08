@@ -23,8 +23,6 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.marinemc.game.player.Player;
 import org.marinemc.server.Marine;
 import org.marinemc.settings.JSONConfig;
@@ -36,88 +34,89 @@ import org.marinemc.settings.JSONConfig;
  */
 public class PermissionManager {
 
-    private static PermissionManager instance;
-    private final Map<String, Permission> permissionMap;
-    private final Map<String, Group> groupMap;
-    private final Map<String, String> playerGroupMap;
+	private static PermissionManager instance;
+	private final Map<String, Permission> permissionMap;
+	private final Map<String, Group> groupMap;
+	private final Map<String, String> playerGroupMap;
 
-    public PermissionManager() {
-        this.permissionMap = new ConcurrentHashMap<>();
-        this.groupMap = new ConcurrentHashMap<>();
-        this.playerGroupMap = new ConcurrentHashMap<>();
-    }
+	public PermissionManager() {
+		permissionMap = new ConcurrentHashMap<>();
+		groupMap = new ConcurrentHashMap<>();
+		playerGroupMap = new ConcurrentHashMap<>();
+	}
 
-    public static PermissionManager instance() {
-        if (instance == null) {
-            instance = new PermissionManager();
-        }
-        return instance;
-    }
+	public static PermissionManager instance() {
+		if (instance == null)
+			instance = new PermissionManager();
+		return instance;
+	}
 
-    public Permission getPerm(String name) {
-        return getPerm(name, false);
-    }
+	public Permission getPerm(final String name) {
+		return getPerm(name, false);
+	}
 
-    public void load() {
-        JSONConfig config = Marine.getServer().getJsonFileHandler().groups;
-        config.setIfNull("groups", new JSONArray());
-        JSONArray array = Marine.getServer().getJsonFileHandler().groups.get("groups");
-        JSONObject object;
-        for (int x = 0; x < array.length(); x++) {
-            object = array.getJSONObject(x);
-            playerGroupMap.put(object.getString("uuid"), object.getString("group"));
-        }
-    }
+	public void load() {
+		final JSONConfig config = Marine.getServer().getJsonFileHandler().groups;
+		config.setIfNull("groups", new JSONArray());
+		final JSONArray array = Marine.getServer().getJsonFileHandler().groups
+				.get("groups");
+		JSONObject object;
+		for (int x = 0; x < array.length(); x++) {
+			object = array.getJSONObject(x);
+			playerGroupMap.put(object.getString("uuid"),
+					object.getString("group"));
+		}
+	}
 
-    public Group getGroup(final UUID uuid) {
-        Group group;
-        try {
-            group = getGroup(playerGroupMap.get(uuid.toString()));
-        } catch (NullPointerException e) {
-            group = null;
-        }
-        return group == null ? Groups.ADMIN : group;
-    }
+	public Group getGroup(final UUID uuid) {
+		Group group;
+		try {
+			group = getGroup(playerGroupMap.get(uuid.toString()));
+		} catch (final NullPointerException e) {
+			group = null;
+		}
+		return group == null ? Groups.ADMIN : group;
+	}
 
-    public Permission getPerm(String name, boolean create) {
-        if (!permissionMap.containsKey(name)) {
-            if (create) {
-                permissionMap.put(name, new Permission(name));
-            } else {
-                throw new NullPointerException("There is no such permission");
-            }
-        }
-        return permissionMap.get(name);
-    }
+	public Permission getPerm(final String name, final boolean create) {
+		if (!permissionMap.containsKey(name))
+			if (create)
+				permissionMap.put(name, new Permission(name));
+			else
+				throw new NullPointerException("There is no such permission");
+		return permissionMap.get(name);
+	}
 
-    public void addPermission(final Permission permission) {
-        this.permissionMap.put(permission.toString(), permission);
-    }
+	public void addPermission(final Permission permission) {
+		permissionMap.put(permission.toString(), permission);
+	}
 
-    public Group getGroup(String name) {
-        return groupMap.get(name);
-    }
+	public Group getGroup(final String name) {
+		return groupMap.get(name);
+	}
 
-    public void addGroup(final Group group) {
-        this.groupMap.put(group.toString(), group);
-    }
+	public void addGroup(final Group group) {
+		groupMap.put(group.toString(), group);
+	}
 
-    public boolean hasPermission(final Group group, final Permission permission) {
-        return group.getPermissions().contains(permission);
-    }
+	public boolean hasPermission(final Group group, final Permission permission) {
+		return group.getPermissions().contains(permission);
+	}
 
-    public boolean hasPermission(final Group group, final String permission) {
-        return hasPermission(group, getPerm(permission));
-    }
+	public boolean hasPermission(final Group group, final String permission) {
+		return hasPermission(group, getPerm(permission));
+	}
 
-    public boolean hasPermission(final Player player, final String permission) {
-        return hasPermission(player, getPerm(permission));
-    }
+	public boolean hasPermission(final Player player, final String permission) {
+		return hasPermission(player, getPerm(permission));
+	}
 
-    public boolean hasPermission(final Player player, final Permission permission) {
-        return player.getPermissions().contains(permission) ||
-                hasPermission(player.getGroup(), permission) ||
-                player.getPermissions().contains(Permissions.ALL_PERMISSIONS) ||
-                hasPermission(player.getGroup(), Permissions.ALL_PERMISSIONS);
-    }
+	public boolean hasPermission(final Player player,
+			final Permission permission) {
+		return player.getPermissions().contains(permission)
+				|| hasPermission(player.getGroup(), permission)
+				|| player.getPermissions()
+						.contains(Permissions.ALL_PERMISSIONS)
+				|| hasPermission(player.getGroup(), Permissions.ALL_PERMISSIONS);
+	}
 }

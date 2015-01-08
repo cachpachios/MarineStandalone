@@ -26,6 +26,6 @@ package org.marinemc.util.operations;
  */
 public interface Filter<T> {
 
-    public boolean filter(T t);
+	public boolean filter(T t);
 
 }

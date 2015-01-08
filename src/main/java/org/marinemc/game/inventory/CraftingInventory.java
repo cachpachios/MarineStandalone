@@ -28,27 +28,27 @@ import org.marinemc.game.chat.ChatMessage;
  */
 public class CraftingInventory extends Inventory {
 
-    public CraftingInventory(byte uid) {
-        super(45, uid);
-    }
+	public CraftingInventory(final byte uid) {
+		super(45, uid);
+	}
 
-    @Override
-    public byte getID() {
-        return (byte) InventoryID.CRAFTING_TABLE.getIntegerID();
-    }
+	@Override
+	public byte getID() {
+		return (byte) InventoryID.CRAFTING_TABLE.getIntegerID();
+	}
 
-    @Override
-    public String getType() {
-        return InventoryID.CRAFTING_TABLE.getStringID();
-    }
+	@Override
+	public String getType() {
+		return InventoryID.CRAFTING_TABLE.getStringID();
+	}
 
-    @Override
-    public ChatMessage getTitle() {
-        return new ChatMessage("Crafting");
-    }
+	@Override
+	public ChatMessage getTitle() {
+		return new ChatMessage("Crafting");
+	}
 
-    @Override
-    public byte getNumberOfSlots() {
-        return 45;
-    }
+	@Override
+	public byte getNumberOfSlots() {
+		return 45;
+	}
 }

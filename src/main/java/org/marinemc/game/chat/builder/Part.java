@@ -31,52 +31,56 @@ import org.marinemc.game.chat.ChatColor;
  */
 public class Part {
 
-    private String s;
-    private ChatColor c;
-    private List<Event> events = new ArrayList<>();
-    private List<ChatColor> formats = new ArrayList<>();
+	private final String s;
+	private final ChatColor c;
+	private final List<Event> events = new ArrayList<>();
+	private final List<ChatColor> formats = new ArrayList<>();
 
-    public Part(String s, ChatColor c) {
-        this.s = s;
-        this.c = c;
-    }
+	public Part(final String s, final ChatColor c) {
+		this.s = s;
+		this.c = c;
+	}
 
-    public Part event(Event event) {
-        events.add(event);
-        return this;
-    }
+	public Part event(final Event event) {
+		events.add(event);
+		return this;
+	}
 
-    public Part format(ChatColor color) {
-        if (!color.isFormat())
-            throw new RuntimeException(color.getDataString() + " is not a format");
-        if (formats.contains(color))
-            formats.remove(color);
-        else
-            formats.add(color);
-        return this;
-    }
+	public Part format(final ChatColor color) {
+		if (!color.isFormat())
+			throw new RuntimeException(color.getDataString()
+					+ " is not a format");
+		if (formats.contains(color))
+			formats.remove(color);
+		else
+			formats.add(color);
+		return this;
+	}
 
-    private String eFormat() {
-        StringBuilder b = new StringBuilder();
-        for (Event e : events)
-            b.append(",").append(e);
-        return b.toString();
-    }
+	private String eFormat() {
+		final StringBuilder b = new StringBuilder();
+		for (final Event e : events)
+			b.append(",").append(e);
+		return b.toString();
+	}
 
-    private String fFormat() {
-        StringBuilder b = new StringBuilder();
-        for (ChatColor c : formats) {
-            b.append(",\"").append(c.getDataString()).append("\":\"true\"");
-        }
-        for (ChatColor c : ChatColor.getFormats()) {
-            if (formats.contains(c)) continue;
-            b.append(",\"").append(c.getDataString()).append("\":\"false\"");
-        }
-        return b.toString();
-    }
+	private String fFormat() {
+		final StringBuilder b = new StringBuilder();
+		for (final ChatColor c : formats)
+			b.append(",\"").append(c.getDataString()).append("\":\"true\"");
+		for (final ChatColor c : ChatColor.getFormats()) {
+			if (formats.contains(c))
+				continue;
+			b.append(",\"").append(c.getDataString()).append("\":\"false\"");
+		}
+		return b.toString();
+	}
 
-    @Override
-    public String toString() {
-        return String.format("{\"text\":\"%s\",\"color\":\"%s\"%s%s}", s, c.getDataString(), events.isEmpty() ? "" : eFormat(), fFormat());
-    }
+	@Override
+	public String toString() {
+		return String
+				.format("{\"text\":\"%s\",\"color\":\"%s\"%s%s}", s,
+						c.getDataString(), events.isEmpty() ? "" : eFormat(),
+						fFormat());
+	}
 }

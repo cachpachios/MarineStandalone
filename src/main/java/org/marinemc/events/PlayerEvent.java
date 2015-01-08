@@ -29,36 +29,43 @@ import org.marinemc.game.player.WeakPlayer;
  */
 public abstract class PlayerEvent extends Event {
 
-    private final WeakPlayer player;
+	private final WeakPlayer player;
 
-    /**
-     * Constructor, will default "async" to false
-     *
-     * @param player Affected Player
-     * @param name   Event Name
-     */
-    public PlayerEvent(final Player player, final String name) {
-        this(player, name, false);
-    }
+	/**
+	 * Constructor, will default "async" to false
+	 *
+	 * @param player
+	 *            Affected Player
+	 * @param name
+	 *            Event Name
+	 */
+	public PlayerEvent(final Player player, final String name) {
+		this(player, name, false);
+	}
 
-    /**
-     * Constructor
-     *
-     * @param player Affected Player
-     * @param name Event Name
-     * @param async Async
-     */
-    public PlayerEvent(final Player player, final String name, final boolean async) {
-        super("player_event:" + name, async);
-        this.player = new WeakPlayer(player);
-    }
+	/**
+	 * Constructor
+	 *
+	 * @param player
+	 *            Affected Player
+	 * @param name
+	 *            Event Name
+	 * @param async
+	 *            Async
+	 */
+	public PlayerEvent(final Player player, final String name,
+			final boolean async) {
+		super("player_event:" + name, async);
+		this.player = new WeakPlayer(player);
+	}
 
-    /**
-     * Get the affected player
-     *
-     * @return The affected player however this can be null if player is out of memory
-     */
-    public Player getPlayer() {
-        return this.player.getPlayer();
-    }
+	/**
+	 * Get the affected player
+	 *
+	 * @return The affected player however this can be null if player is out of
+	 *         memory
+	 */
+	public Player getPlayer() {
+		return player.getPlayer();
+	}
 }

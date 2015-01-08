@@ -18,23 +18,22 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 package org.marinemc.world;
+
 /**
  * All existing dimensions as of 1.8.2
  * 
  * @author Fozie
  */
 public enum Dimension {
-    OVERWORLD(0),
-    NETHER(-1),
-    END(1);
+	OVERWORLD(0), NETHER(-1), END(1);
 
-    private final int id;
+	private final int id;
 
-    private Dimension(int id) {
-        this.id = (byte) id;
-    }
+	private Dimension(final int id) {
+		this.id = (byte) id;
+	}
 
-    public byte getID() {
-        return (byte) id;
-    }
+	public byte getID() {
+		return (byte) id;
+	}
 }

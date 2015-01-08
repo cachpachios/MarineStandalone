@@ -38,34 +38,35 @@ import org.marinemc.world.entity.meta.HumanMeta;
  */
 public class SpawnPlayerPacket extends Packet {
 	final Player p;
-	
+
 	public SpawnPlayerPacket(final Player p) {
 		super(0x0C, States.INGAME);
 		this.p = p;
 	}
 
 	@Override
-	public void writeToStream(PacketOutputStream stream) throws IOException {
-		ByteList d = new ByteList();
-		
+	public void writeToStream(final PacketOutputStream stream)
+			throws IOException {
+		final ByteList d = new ByteList();
+
 		d.writeVarInt(p.getEntityID());
-		
+
 		d.writeUUID(p.getUUID());
-		
+
 		d.writeInt((int) p.getX() * 32);
 		d.writeInt((int) p.getY() * 32);
 		d.writeInt((int) p.getZ() * 32);
-		
-		d.writeByte((byte) (((p.getLocation().getYaw() % 360) / 360) * 256));
-		
-		d.writeByte((byte) (((p.getLocation().getPitch() % 360) / 360) * 256));
-		
+
+		d.writeByte((byte) (p.getLocation().getYaw() % 360 / 360 * 256));
+
+		d.writeByte((byte) (p.getLocation().getPitch() % 360 / 360 * 256));
+
 		// WARNING FOLLOWING CANT BE -1 IT WILL CRASH THE CLIENT
-		d.writeShort((short) 0); // TODO : In hand item like p.getInHand(); 
-		
-		d.write(new HumanMeta((short)20, "Herobrine", true, 20f, (byte)0).getBytes());
-		
-		
+		d.writeShort((short) 0); // TODO : In hand item like p.getInHand();
+
+		d.write(new HumanMeta((short) 20, "Herobrine", true, 20f, (byte) 0)
+				.getBytes());
+
 		stream.write(getID(), d);
 	}
 

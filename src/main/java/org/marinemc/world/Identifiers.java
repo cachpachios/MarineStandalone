@@ -30,8 +30,8 @@ import org.marinemc.util.annotations.Unsafe;
 import org.marinemc.world.chunk.ChunkSection;
 
 /**
- * Static class to index map data values
- * Hacky and not recommended way, preformance is at the cost.
+ * Static class to index map data values Hacky and not recommended way,
+ * preformance is at the cost.
  *
  * @author Fozie
  */
@@ -39,56 +39,58 @@ import org.marinemc.world.chunk.ChunkSection;
 public final class Identifiers {
 
 	private static int blockSize;
-	
-    private static Map<Byte, BlockID> block_id;
-    private static Map<Short, BlockID> block_encode;
 
-    public static BlockID getBlockID(byte id) {
-        if (block_id == null) init();
+	private static Map<Byte, BlockID> block_id;
+	private static Map<Short, BlockID> block_encode;
 
-        if (block_id.containsKey(id))
-            return block_id.get(id);
-        else
-            return BlockID.AIR;
-    }
+	public static BlockID getBlockID(final byte id) {
+		if (block_id == null)
+			init();
 
-    public static BlockID decodeBlock(char id) {
-        if (block_encode == null) init();
+		if (block_id.containsKey(id))
+			return block_id.get(id);
+		else
+			return BlockID.AIR;
+	}
 
-        if (block_encode.containsKey(id))
-            return block_encode.get(id);
-        else
-            return BlockID.AIR;
-    }
-    
-    
-    public static BlockID randomBlock() {
-        if (block_id == null) init();
-        byte r = (byte) (Math.random() * blockSize);
-        
-        if(r < 0)
-        	return BlockID.AIR;
-        else
-        	return block_id.get(r);
-    }
-    
-    /**
-     * Init the Identifiers class,
-     * Warning this should only be done by the server at start
-     */
-    @Unsafe
-    @Protected
-    @Cautious
-    public static void init() {
-        block_id = new HashMap<>();
-        block_encode = new HashMap<>();
-        EnumSet<BlockID> set = EnumSet.allOf(BlockID.class);
-        for (BlockID b : set) {
-            block_id.put(b.getID(), b);
-            block_encode.put(ChunkSection.EncodeType(b), b);
-        }
-        
-        blockSize = block_id.size();
-        
-    }
+	public static BlockID decodeBlock(final char id) {
+		if (block_encode == null)
+			init();
+
+		if (block_encode.containsKey(id))
+			return block_encode.get(id);
+		else
+			return BlockID.AIR;
+	}
+
+	public static BlockID randomBlock() {
+		if (block_id == null)
+			init();
+		final byte r = (byte) (Math.random() * blockSize);
+
+		if (r < 0)
+			return BlockID.AIR;
+		else
+			return block_id.get(r);
+	}
+
+	/**
+	 * Init the Identifiers class, Warning this should only be done by the
+	 * server at start
+	 */
+	@Unsafe
+	@Protected
+	@Cautious
+	public static void init() {
+		block_id = new HashMap<>();
+		block_encode = new HashMap<>();
+		final EnumSet<BlockID> set = EnumSet.allOf(BlockID.class);
+		for (final BlockID b : set) {
+			block_id.put(b.getID(), b);
+			block_encode.put(ChunkSection.EncodeType(b), b);
+		}
+
+		blockSize = block_id.size();
+
+	}
 }

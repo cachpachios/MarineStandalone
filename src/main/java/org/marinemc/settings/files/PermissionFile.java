@@ -30,8 +30,8 @@ import org.marinemc.settings.StorageConfig;
  */
 public class PermissionFile extends StorageConfig {
 
-    public PermissionFile(File file) {
-        super(file, "permissions");
-    }
+	public PermissionFile(final File file) {
+		super(file, "permissions");
+	}
 
 }

@@ -30,20 +30,21 @@ import org.marinemc.net.States;
 @SuppressWarnings("deprecation")
 public class PingPacket extends Packet {
 
-    protected long TIME;
+	protected long TIME;
 
-    public PingPacket() {
-        super(0x01, States.INTRODUCE);
-    }
+	public PingPacket() {
+		super(0x01, States.INTRODUCE);
+	}
 
 	@Override
-    public void writeToStream(PacketOutputStream stream) throws IOException {
-        stream.write(getID(), ByteEncoder.writeLong(TIME));
-    }
+	public void writeToStream(final PacketOutputStream stream)
+			throws IOException {
+		stream.write(getID(), ByteEncoder.writeLong(TIME));
+	}
 
-    @Override
-    public void readFromBytes(ByteInput input) {
-        TIME = input.readLong();
-    }
+	@Override
+	public void readFromBytes(final ByteInput input) {
+		TIME = input.readLong();
+	}
 
 }

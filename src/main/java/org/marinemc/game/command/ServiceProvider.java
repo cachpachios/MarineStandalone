@@ -26,22 +26,20 @@ package org.marinemc.game.command;
  */
 public interface ServiceProvider {
 
-    /**
-     * Get the command provider name
-     *
-     * @return Command Provider
-     */
-    public String getProviderName();
+	/**
+	 * Get the command provider name
+	 *
+	 * @return Command Provider
+	 */
+	public String getProviderName();
 
-    /**
-     * Command Provider Priority
-     * <p/>
-     * 0x00 = Internal
-     * 0x01 = Plugin
-     * 0x02 = Other
-     *
-     * @return Priority
-     */
-    public byte getProviderPriority();
+	/**
+	 * Command Provider Priority
+	 * <p/>
+	 * 0x00 = Internal 0x01 = Plugin 0x02 = Other
+	 *
+	 * @return Priority
+	 */
+	public byte getProviderPriority();
 
 }

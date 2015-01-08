@@ -27,79 +27,82 @@ package org.marinemc.util.vectors;
  */
 public abstract class Vector3<T extends Number> implements Vector<T> {
 
-    public T x, y, z;
+	public T x, y, z;
 
-    /**
-     * Constructor
-     *
-     * @param x X Value
-     * @param y Y Value
-     * @param z Z Value
-     */
-    public Vector3(T x, T y, T z) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-    }
+	/**
+	 * Constructor
+	 *
+	 * @param x
+	 *            X Value
+	 * @param y
+	 *            Y Value
+	 * @param z
+	 *            Z Value
+	 */
+	public Vector3(final T x, final T y, final T z) {
+		this.x = x;
+		this.y = y;
+		this.z = z;
+	}
 
-    /**
-     * Subtract all values of the specified vector
-     * from the current instance
-     *
-     * @param v2 Other instance
-     */
-    public abstract void add(Vector3<T> v2);
+	/**
+	 * Subtract all values of the specified vector from the current instance
+	 *
+	 * @param v2
+	 *            Other instance
+	 */
+	public abstract void add(Vector3<T> v2);
 
-    /**
-     * Subtract all values of the specified vector
-     * from the current instance
-     *
-     * @param v2 Other instance
-     */
-    public abstract void subtract(Vector3<T> v2);
+	/**
+	 * Subtract all values of the specified vector from the current instance
+	 *
+	 * @param v2
+	 *            Other instance
+	 */
+	public abstract void subtract(Vector3<T> v2);
 
-    @Override
-    public abstract void multiply(int n);
+	@Override
+	public abstract void multiply(int n);
 
-    @Override
-    public abstract void divide(int n);
+	@Override
+	public abstract void divide(int n);
 
-    public T getX() {
-        return this.x;
-    }
+	public T getX() {
+		return this.x;
+	}
 
-    public void setX(T x) {
-        this.x = x;
-    }
+	public void setX(final T x) {
+		this.x = x;
+	}
 
-    public T getY() {
-        return this.y;
-    }
+	public T getY() {
+		return this.y;
+	}
 
-    public void setY(T y) {
-        this.y = y;
-    }
+	public void setY(final T y) {
+		this.y = y;
+	}
 
-    public T getZ() {
-        return this.z;
-    }
+	public T getZ() {
+		return this.z;
+	}
 
-    public void setZ(T z) {
-        this.z = z;
-    }
+	public void setZ(final T z) {
+		this.z = z;
+	}
 
-    @Override
-    public int hashCode() {
-        int hash = 37;
-        hash = hash * 3 + getX().intValue();
-        hash = hash * 3 + getY().intValue();
-        hash = hash * 3 + getZ().intValue();
-        return hash;
-    }
-    
+	@Override
+	public int hashCode() {
+		int hash = 37;
+		hash = hash * 3 + getX().intValue();
+		hash = hash * 3 + getY().intValue();
+		hash = hash * 3 + getZ().intValue();
+		return hash;
+	}
+
 	@Override
 	public T[] asArray() {
-		return (T[]) new Number[] {x,y,z};
+		return (T[]) new Number[] { x, y, z };
 	}
 
 }

@@ -21,49 +21,49 @@ package org.marinemc.io.nbt;
 
 import org.marinemc.io.binary.ByteInput;
 import org.marinemc.io.binary.ByteList;
+
 /**
  * @author Fozie
  */
 public class NBTIntArray extends NBTTag<Integer[]> {
 
-    int[] array;
-    private int size;
+	int[] array;
+	private int size;
 
-    public NBTIntArray(String name, ByteInput data) {
-        super(name, 7);
-        size = data.readInt();
-        array = new int[size];
-        for (int i = 0; i <= size; i++) {
-            array[i] = data.readInt();
-        }
-    }
+	public NBTIntArray(final String name, final ByteInput data) {
+		super(name, 7);
+		size = data.readInt();
+		array = new int[size];
+		for (int i = 0; i <= size; i++)
+			array[i] = data.readInt();
+	}
 
-    public NBTIntArray(String name, int[] v) {
-        super(name, 7);
-        array = v;
-    }
+	public NBTIntArray(final String name, final int[] v) {
+		super(name, 7);
+		array = v;
+	}
 
-    public int[] getIntArray() {
-        return array;
-    }
+	public int[] getIntArray() {
+		return array;
+	}
 
-    @Override
-    public byte[] toByteArray() {
-    	ByteList d = new ByteList();
-        d.writeByte(getTagID());
-        d.writeUTF8Short(name);
-        d.writeInt(array.length);
-        for (int x : array)
-            d.writeInt(x);
-        return d.toBytes();
-    }
+	@Override
+	public byte[] toByteArray() {
+		final ByteList d = new ByteList();
+		d.writeByte(getTagID());
+		d.writeUTF8Short(name);
+		d.writeInt(array.length);
+		for (final int x : array)
+			d.writeInt(x);
+		return d.toBytes();
+	}
 
-    @Override
-    public byte[] toNonPrefixedByteArray() {
-    	ByteList d = new ByteList();
-        d.writeInt(array.length);
-        for (int x : array)
-            d.writeInt(x);
-        return d.toBytes();
-    }
+	@Override
+	public byte[] toNonPrefixedByteArray() {
+		final ByteList d = new ByteList();
+		d.writeInt(array.length);
+		for (final int x : array)
+			d.writeInt(x);
+		return d.toBytes();
+	}
 }

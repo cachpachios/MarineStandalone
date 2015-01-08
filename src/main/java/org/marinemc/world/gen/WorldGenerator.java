@@ -32,65 +32,68 @@ import org.marinemc.world.chunk.ChunkPos;
  */
 public abstract class WorldGenerator {
 
-	public final static ChunkPopulator[] NO_POPULATION = new ChunkPopulator[]{new ChunkPopulator() {@Override public void populate(Chunk c) {} }};
-	
-    protected World world;
-    
-    private ChunkPopulator[] populators;
+	public final static ChunkPopulator[] NO_POPULATION = new ChunkPopulator[] { new ChunkPopulator() {
+		@Override
+		public void populate(final Chunk c) {
+		}
+	} };
 
-    public WorldGenerator(final ChunkPopulator[] populators) {
-    	if(populators != null)
-    		this.populators = populators;
-    	else
-    		this.populators = NO_POPULATION.clone();
-    }
-    
-    public void setGenerationWorld(World w) {
-    	world = w;
-    }
-    
-    
-    public Chunk[] generateRegion(int x, int y) {
-        return generateRegion(x, y, 16, 16);
-    }
+	protected World world;
 
-    public abstract LevelType getLevelType();
+	private ChunkPopulator[] populators;
 
-    public Chunk[] generateRegion(int x, int y, int width, int height) {
-        Chunk[] r = new Chunk[width * height];
-        int i = 0;
-        for (int xx = -(width / 2); xx < width / 2; xx++)
-            for (int yy = -(width / 2); yy < width / 2; yy++) {
-                r[i] = generateChunk(new ChunkPos(x + xx, y + yy));
-                i++;
-            }
-        return r;
-    }
+	public WorldGenerator(final ChunkPopulator[] populators) {
+		if (populators != null)
+			this.populators = populators;
+		else
+			this.populators = NO_POPULATION.clone();
+	}
 
-    public abstract Dimension getDimension();
+	public void setGenerationWorld(final World w) {
+		world = w;
+	}
 
-    public void populateChunk(Chunk c) {
-    	if(populators == null)
-    		return;
-    	for(ChunkPopulator pop : populators)
-    		pop.populate(c);
-    }
+	public Chunk[] generateRegion(final int x, final int y) {
+		return generateRegion(x, y, 16, 16);
+	}
 
-    public Chunk generateChunk(final ChunkPos pos) {
-    	Chunk c = generateChunkTerrain(pos);
-    	populateChunk(c);
-    	return c;
-    }
-    
-    public abstract Chunk generateChunkTerrain(final ChunkPos pos);
-    
-    public abstract Position getSafeSpawnPoint();
+	public abstract LevelType getLevelType();
+
+	public Chunk[] generateRegion(final int x, final int y, final int width,
+			final int height) {
+		final Chunk[] r = new Chunk[width * height];
+		int i = 0;
+		for (int xx = -(width / 2); xx < width / 2; xx++)
+			for (int yy = -(width / 2); yy < width / 2; yy++) {
+				r[i] = generateChunk(new ChunkPos(x + xx, y + yy));
+				i++;
+			}
+		return r;
+	}
+
+	public abstract Dimension getDimension();
+
+	public void populateChunk(final Chunk c) {
+		if (populators == null)
+			return;
+		for (final ChunkPopulator pop : populators)
+			pop.populate(c);
+	}
+
+	public Chunk generateChunk(final ChunkPos pos) {
+		final Chunk c = generateChunkTerrain(pos);
+		populateChunk(c);
+		return c;
+	}
+
+	public abstract Chunk generateChunkTerrain(final ChunkPos pos);
+
+	public abstract Position getSafeSpawnPoint();
 
 	public Random getRandom() {
-		if(world != null)
+		if (world != null)
 			return world.getRandom();
 		return new Random();
 	}
-
 
 }

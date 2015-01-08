@@ -30,15 +30,14 @@ import java.lang.annotation.Target;
  * @author Citymonstret
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.METHOD, ElementType.CONSTRUCTOR, ElementType.TYPE})
+@Target({ ElementType.METHOD, ElementType.CONSTRUCTOR, ElementType.TYPE })
 public @interface Protected {
-    /*
-        This doesn't do anything as of now, but I plan to make it
-        able to automatically block plugin-based requests
-
-        (Using)
-        // Security Check Start
-        System.getSecurityManager().checkPermission(MarineSecurityManager.MARINE_PERMISSION);
-        // Security Check end
-     */
+	/*
+	 * This doesn't do anything as of now, but I plan to make it able to
+	 * automatically block plugin-based requests
+	 * 
+	 * (Using) // Security Check Start
+	 * System.getSecurityManager().checkPermission
+	 * (MarineSecurityManager.MARINE_PERMISSION); // Security Check end
+	 */
 }

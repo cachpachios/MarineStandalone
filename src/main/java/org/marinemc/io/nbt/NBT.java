@@ -33,68 +33,70 @@ import org.marinemc.io.binary.ByteUtils;
  */
 public class NBT {
 
-    NBTCompound tag;
+	NBTCompound tag;
 
-    public NBT(final ByteInput data) throws IOException {
-        final NBTTag preTag = parse(data);
-        if (!(preTag instanceof NBTCompound)) {
-            throw new IOException("File was in wrong format");
-        } else this.tag = (NBTCompound) preTag;
-    }
+	public NBT(final ByteInput data) throws IOException {
+		final NBTTag preTag = parse(data);
+		if (!(preTag instanceof NBTCompound))
+			throw new IOException("File was in wrong format");
+		else
+			tag = (NBTCompound) preTag;
+	}
 
-    public NBT(final String name) {
-        tag = new NBTCompound(name);
-    }
+	public NBT(final String name) {
+		tag = new NBTCompound(name);
+	}
 
-    public NBT(final File f) throws IOException {
-        this(new BinaryFile(f).readGZIPBinary().getData());
-    }
+	public NBT(final File f) throws IOException {
+		this(new BinaryFile(f).readGZIPBinary().getData());
+	}
 
-    public static NBTTag parse(final ByteInput data) {
-        return parse(data, data.readByte());
-    }
+	public static NBTTag parse(final ByteInput data) {
+		return parse(data, data.readByte());
+	}
 
-    public static NBTTag parse(final ByteInput data, final byte id) {
-        final String s = ByteUtils.readUTF8Short(data);
-        switch (id) {
-            case 1:
-                return new NBTByte(s, data);
-            case 2:
-                return new NBTShort(s, data);
-            case 3:
-                return new NBTInteger(s, data);
-            case 4:
-                return new NBTLong(s, data);
-            case 5:
-                return new NBTFloat(s, data);
-            case 6:
-                return new NBTDouble(s, data);
-            case 7:
-                return new NBTByteArray(s, data);
-            case 8:
-                return new NBTString(s, data);
-            case 9:
-            case 11:
-                return new NBTList(s, data);
-            case 10:
-                return new NBTCompound(s, data);
-            default:
-                return null;
-        }
-    }
+	public static NBTTag parse(final ByteInput data, final byte id) {
+		final String s = ByteUtils.readUTF8Short(data);
+		switch (id) {
+		case 1:
+			return new NBTByte(s, data);
+		case 2:
+			return new NBTShort(s, data);
+		case 3:
+			return new NBTInteger(s, data);
+		case 4:
+			return new NBTLong(s, data);
+		case 5:
+			return new NBTFloat(s, data);
+		case 6:
+			return new NBTDouble(s, data);
+		case 7:
+			return new NBTByteArray(s, data);
+		case 8:
+			return new NBTString(s, data);
+		case 9:
+		case 11:
+			return new NBTList(s, data);
+		case 10:
+			return new NBTCompound(s, data);
+		default:
+			return null;
+		}
+	}
 
-    public void save(File fPath, boolean compress) throws IOException {
-        final ByteList data = new ByteList();
-        data.write(tag.toByteArray());
-        final BinaryFile f = new BinaryFile(fPath, data);
-        if (compress)
-            f.writeGZIPBinary();
-        else
-            f.writeBinary();
-    }
+	public void save(final File fPath, final boolean compress)
+			throws IOException {
+		final ByteList data = new ByteList();
+		data.write(tag.toByteArray());
+		final BinaryFile f = new BinaryFile(fPath, data);
+		if (compress)
+			f.writeGZIPBinary();
+		else
+			f.writeBinary();
+	}
 
-    public void setMainCompound(final NBTCompound tag) {
-        this.tag = tag;
-    }
+	public void setMainCompound(final NBTCompound tag) {
+		this.tag = tag;
+	}
 
 }

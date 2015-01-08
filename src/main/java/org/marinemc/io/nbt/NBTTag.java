@@ -29,41 +29,43 @@ import java.lang.reflect.ParameterizedType;
  */
 public abstract class NBTTag<T> {
 
-    public final String name;
-    private final byte id;
+	public final String name;
+	private final byte id;
 
-    /**
-     * Constructor
-     *
-     * @param name Tag Name
-     * @param id   Type ID
-     */
-    public NBTTag(final String name, final int id) {
-        this.name = name;
-        this.id = (byte) id;
-    }
+	/**
+	 * Constructor
+	 *
+	 * @param name
+	 *            Tag Name
+	 * @param id
+	 *            Type ID
+	 */
+	public NBTTag(final String name, final int id) {
+		this.name = name;
+		this.id = (byte) id;
+	}
 
-    /**
-     * Get the type (class)
-     *
-     * @return
-     */
-    @SuppressWarnings("unchecked")
+	/**
+	 * Get the type (class)
+	 *
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
 	final public Class<T> getType() {
-        return ((Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0]);
-    }
+		return (Class<T>) ((ParameterizedType) getClass()
+				.getGenericSuperclass()).getActualTypeArguments()[0];
+	}
 
-    final public String getName() {
-        return this.name;
-    }
+	final public String getName() {
+		return this.name;
+	}
 
-    final public byte getTagID() {
-        return this.id;
-    }
+	final public byte getTagID() {
+		return this.id;
+	}
 
-    public abstract byte[] toByteArray();
+	public abstract byte[] toByteArray();
 
-    public abstract byte[] toNonPrefixedByteArray();
-
+	public abstract byte[] toNonPrefixedByteArray();
 
 }

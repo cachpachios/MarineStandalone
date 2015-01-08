@@ -36,103 +36,110 @@ import org.marinemc.logging.Logging;
  */
 public class ServerSettings {
 
-    private static ServerSettings instance;
-    public int port = 25565;
-    public int tickrate = 20;
-    public int maxPlayers = 20;
-    public int cacheHours = 720;
-    public int network_threshould = 256;
-    public String host = "0.0.0.0";
-    public String motd = "&cNo MOTD";
-    public String gamemode = "survival";
-    public boolean useHasing, offlineMode, whitelist;
-    public String difficulty = "peaceful";
-    private Properties config;
+	private static ServerSettings instance;
+	public int port = 25565;
+	public int tickrate = 20;
+	public int maxPlayers = 20;
+	public int cacheHours = 720;
+	public int network_threshould = 256;
+	public String host = "0.0.0.0";
+	public String motd = "&cNo MOTD";
+	public String gamemode = "survival";
+	public boolean useHasing, offlineMode, whitelist;
+	public String difficulty = "peaceful";
+	private Properties config;
 
-    public ServerSettings() {
-        try {
-            config = new Properties();
-            File file = new File("./settings.properties");
-            if (!file.exists()) {
-                if (!file.createNewFile())
-                    throw new RuntimeException("Failed to create settings.properties");
-            }
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-            //config.load(new FileInputStream(file));
-            config.load(reader);
-            Map<String, String> options = new HashMap<String, String>() {
-                private static final long serialVersionUID = 0L;
+	public ServerSettings() {
+		try {
+			config = new Properties();
+			final File file = new File("./settings.properties");
+			if (!file.exists())
+				if (!file.createNewFile())
+					throw new RuntimeException(
+							"Failed to create settings.properties");
+			final BufferedReader reader = new BufferedReader(new FileReader(
+					file));
+			// config.load(new FileInputStream(file));
+			config.load(reader);
+			final Map<String, String> options = new HashMap<String, String>() {
+				private static final long serialVersionUID = 0L;
 
-                {
-                    put("host", "127.0.0.1");
-                    put("port", "25565");
-                    put("motd", "&cTesting...");
-                    put("tickrate", "20");
-                    put("useHashing", "false"); // Depending on what server you are running hashing is best for big servers with many players online, linear scanning for small servers with less players
-                    put("network-threshould","256");
-                    put("gamemode", "survival");
-                    put("difficulty", "peaceful");
-                    put("maxPlayers", "20");
-                    put("offlineMode", "false");
-                    put("cacheHours", "720");
-                    put("whitelist", "false");
-                }
-            };
+				{
+					put("host", "127.0.0.1");
+					put("port", "25565");
+					put("motd", "&cTesting...");
+					put("tickrate", "20");
+					put("useHashing", "false"); // Depending on what server you
+												// are running hashing is best
+												// for big servers with many
+												// players online, linear
+												// scanning for small servers
+												// with less players
+					put("network-threshould", "256");
+					put("gamemode", "survival");
+					put("difficulty", "peaceful");
+					put("maxPlayers", "20");
+					put("offlineMode", "false");
+					put("cacheHours", "720");
+					put("whitelist", "false");
+				}
+			};
 
-            boolean changed = false;
+			boolean changed = false;
 
-            for (String string : options.keySet()) {
-                if (!config.containsKey(string)) {
-                    config.setProperty(string, options.get(string));
-                    changed = true;
-                }
-            }
+			for (final String string : options.keySet())
+				if (!config.containsKey(string)) {
+					config.setProperty(string, options.get(string));
+					changed = true;
+				}
 
-            if (changed)
-                config.store(new FileOutputStream(file), null);
+			if (changed)
+				config.store(new FileOutputStream(file), null);
 
-            this.port = getInt(config.getProperty("port"));
-            this.host = config.getProperty("host");
-            this.motd = config.getProperty("motd");
-            this.tickrate = getInt(config.getProperty("tickrate"));
-            this.useHasing = getBoolean(config.getProperty("useHashing"));
-            this.gamemode = config.getProperty("gamemode");
-            this.difficulty = config.getProperty("difficulty");
-            this.maxPlayers = getInt(config.getProperty("maxPlayers"));
-            this.offlineMode = getBoolean(config.getProperty("offlineMode"));
-            this.whitelist = getBoolean(config.getProperty("whitelist"));
-            this.cacheHours = getInt(config.getProperty("cacheHours"));
-            this.network_threshould = getInt(config.getProperty("network-threshould"));
-            reader.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+			port = getInt(config.getProperty("port"));
+			host = config.getProperty("host");
+			motd = config.getProperty("motd");
+			tickrate = getInt(config.getProperty("tickrate"));
+			useHasing = getBoolean(config.getProperty("useHashing"));
+			gamemode = config.getProperty("gamemode");
+			difficulty = config.getProperty("difficulty");
+			maxPlayers = getInt(config.getProperty("maxPlayers"));
+			offlineMode = getBoolean(config.getProperty("offlineMode"));
+			whitelist = getBoolean(config.getProperty("whitelist"));
+			cacheHours = getInt(config.getProperty("cacheHours"));
+			network_threshould = getInt(config
+					.getProperty("network-threshould"));
+			reader.close();
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
+	}
 
-    public static ServerSettings getInstance() {
-        if (instance == null) {
-            instance = new ServerSettings();
-        }
-        return instance;
-    }
+	public static ServerSettings getInstance() {
+		if (instance == null)
+			instance = new ServerSettings();
+		return instance;
+	}
 
-    public boolean getBoolean(String value) {
-        return value.equalsIgnoreCase("true") || value.equals("1") || value.equalsIgnoreCase("on") || value.equalsIgnoreCase("yes");
-    }
+	public boolean getBoolean(final String value) {
+		return value.equalsIgnoreCase("true") || value.equals("1")
+				|| value.equalsIgnoreCase("on")
+				|| value.equalsIgnoreCase("yes");
+	}
 
-    public int getInt(String value) {
-        try {
-            return Integer.parseInt(value);
-        } catch (Throwable e) {
-            return -1;
-        }
-    }
+	public int getInt(final String value) {
+		try {
+			return Integer.parseInt(value);
+		} catch (final Throwable e) {
+			return -1;
+		}
+	}
 
-    @SuppressWarnings("rawtypes")
-    public void verbose() {
-        for (Map.Entry entry : config.entrySet()) {
-            Logging.getLogger().debug("Key: " + entry.getKey() + " | Value: " + entry.getValue());
-        }
-    }
+	@SuppressWarnings("rawtypes")
+	public void verbose() {
+		for (final Map.Entry entry : config.entrySet())
+			Logging.getLogger().debug(
+					"Key: " + entry.getKey() + " | Value: " + entry.getValue());
+	}
 
 }

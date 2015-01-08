@@ -21,40 +21,40 @@ package org.marinemc.io.nbt;
 
 import org.marinemc.io.binary.ByteInput;
 import org.marinemc.io.binary.ByteList;
+
 /**
  * @author Fozie
  */
 public class NBTShort extends NBTTag<Short> {
 
-    private short data;
+	private final short data;
 
-    public NBTShort(String name, short v) {
-        super(name, 2);
-        data = v;
-    }
+	public NBTShort(final String name, final short v) {
+		super(name, 2);
+		data = v;
+	}
 
+	public NBTShort(final String name, final ByteInput data) {
+		this(name, data.readShort());
+	}
 
-    public NBTShort(String name, ByteInput data) {
-        this(name, data.readShort());
-    }
+	@Override
+	public byte[] toByteArray() {
+		final ByteList d = new ByteList();
+		d.writeByte(getTagID());
+		d.writeUTF8Short(name);
+		d.writeShort(data);
+		return d.toBytes();
+	}
 
-    @Override
-    public byte[] toByteArray() {
-    	ByteList d = new ByteList();
-        d.writeByte(getTagID());
-        d.writeUTF8Short(name);
-        d.writeShort(data);
-        return d.toBytes();
-    }
+	public short toShort() {
+		return data;
+	}
 
-    public short toShort() {
-        return data;
-    }
-
-    @Override
-    public byte[] toNonPrefixedByteArray() {
-    	ByteList data = new ByteList();
-        data.writeShort(this.data);
-        return data.toBytes();
-    }
+	@Override
+	public byte[] toNonPrefixedByteArray() {
+		final ByteList data = new ByteList();
+		data.writeShort(this.data);
+		return data.toBytes();
+	}
 }

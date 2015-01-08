@@ -27,40 +27,44 @@ import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
 import org.marinemc.net.play.clientbound.player.ClientboundPlayerLookPositionPacket;
 import org.marinemc.util.Location;
+
 /**
  * @author Fozie
  */
-public class ServerboundPlayerLookPositionPacket extends Packet { //TODO Relative positions
+public class ServerboundPlayerLookPositionPacket extends Packet { // TODO
+																	// Relative
+																	// positions
 
-    private Location l;
+	private Location l;
 
-    public ServerboundPlayerLookPositionPacket() {
-        super(0x06, States.INGAME);
-    }
+	public ServerboundPlayerLookPositionPacket() {
+		super(0x06, States.INGAME);
+	}
 
-    @Override
-    public void writeToStream(PacketOutputStream stream) throws IOException {
-    }
+	@Override
+	public void writeToStream(final PacketOutputStream stream)
+			throws IOException {
+	}
 
-    @Override
-    public void readFromBytes(ByteInput input) {
-        double x = input.readDouble();
-        double y = input.readDouble();
-        double z = input.readDouble();
+	@Override
+	public void readFromBytes(final ByteInput input) {
+		final double x = input.readDouble();
+		final double y = input.readDouble();
+		final double z = input.readDouble();
 
-        float yaw = input.readFloat();
-        float pitch = input.readFloat();
+		final float yaw = input.readFloat();
+		final float pitch = input.readFloat();
 
-        input.readBoolean(); // onGround
+		input.readBoolean(); // onGround
 
-        l = new Location(null, x, y, z, yaw, pitch);
-    }
+		l = new Location(null, x, y, z, yaw, pitch);
+	}
 
-    public Location getLocation() {
-        return l;
-    }
+	public Location getLocation() {
+		return l;
+	}
 
-    public ClientboundPlayerLookPositionPacket getClientBound() {
-        return new ClientboundPlayerLookPositionPacket(l);
-    }
+	public ClientboundPlayerLookPositionPacket getClientBound() {
+		return new ClientboundPlayerLookPositionPacket(l);
+	}
 }
