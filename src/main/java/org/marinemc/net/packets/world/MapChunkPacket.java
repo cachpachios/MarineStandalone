@@ -63,11 +63,10 @@ public class MapChunkPacket extends Packet {
         byte[] bytes = new byte[0];
         
         for (Chunk c : chunks) {
-        	bytes = ByteUtils.putFirst(bytes, c.getBytes(true, true));
+        	bytes = ByteUtils.combine(bytes, c.getBytes(true, true));
         }
 
-        //Disabled cuz its doesnt works :(
-        //stream.write(getID(), ByteUtils.putFirst(data.toBytes(),bytes));
+        stream.write(getID(), ByteUtils.putFirst(data.toBytes(),bytes));
     }
 
 }

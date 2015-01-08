@@ -44,6 +44,7 @@ public class ByteCompressor {
     
     public byte[] encode(final byte[] data) throws EncodingUseless{
         deflater.setInput(data);
+        deflater.finish();
         byte[] compressedData = new byte[data.length];
         deflater.deflate(compressedData);
         deflater.reset();

@@ -198,14 +198,14 @@ public class Chunk {
         
         for (ChunkSection s : sections)
             if (s != null)
-            	ByteUtils.combine(d, s.getBlockData());
+            	d = ByteUtils.combine(d, s.getBlockData());
         
         for (ChunkSection s : sections)
             if (s != null)
-            	ByteUtils.combine(d, s.getLightData());
+            	d = ByteUtils.combine(d, s.getLightData());
         
         if (biomes)
-        	ByteUtils.combine(d, getBiomeData());
+        	d = ByteUtils.combine(d, getBiomeData());
 
         return d;
     }
