@@ -21,7 +21,7 @@ package org.marinemc.world.gen;
 
 import java.util.Random;
 
-import org.marinemc.util.Location;
+import org.marinemc.util.Position;
 import org.marinemc.world.Dimension;
 import org.marinemc.world.World;
 import org.marinemc.world.chunk.Chunk;
@@ -84,7 +84,7 @@ public abstract class WorldGenerator {
     
     public abstract Chunk generateChunkTerrain(final ChunkPos pos);
     
-    public abstract Location getSafeSpawnPoint();
+    public abstract Position getSafeSpawnPoint();
 
 	public Random getRandom() {
 		if(world != null)

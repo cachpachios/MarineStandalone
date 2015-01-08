@@ -19,6 +19,8 @@
 
 package org.marinemc.net;
 
+import java.lang.ref.WeakReference;
+
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 
@@ -30,11 +32,11 @@ import com.google.common.collect.Multimap;
 public class PacketQue {
 
     private final Multimap<Integer, Packet> que;
-    private final Client c;
+    private final WeakReference<Client> c;
 
     public PacketQue(final Client c) {
         this.que = ArrayListMultimap.create();
-        this.c = c;
+        this.c = new WeakReference<>(c);
     }
 
     public synchronized void add(final Packet packet) {
@@ -46,8 +48,11 @@ public class PacketQue {
     }
 
     public synchronized void executePackets() {
-        for (int key : que.keys()) {
-            c.sendPackets(que.get(key));
+        if(c.get() == null)
+        	return;
+    	
+    	for (int key : que.keys()) {
+            c.get().sendPackets(que.get(key));
         }
     }
 }

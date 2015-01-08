@@ -19,10 +19,13 @@
 
 package org.marinemc.world.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.marinemc.logging.Logging;
 import org.marinemc.util.Location;
 import org.marinemc.util.Position;
-import org.marinemc.util.TrackedLocation;
+import org.marinemc.util.annotations.Cautious;
 import org.marinemc.util.vectors.Vector3d;
 import org.marinemc.util.vectors.Vector3i;
 import org.marinemc.world.World;
@@ -33,28 +36,31 @@ import org.marinemc.world.World;
  */
 public abstract class Entity {
 
+	/**
+	 * Tracking:
+	 */
+	private final List<EntityTracker> trackers;
+	
+	
     private final int entityID;
     private final EntityType type;
     private final World world;
     
-    private TrackedLocation position;
+    private EntityLocation position;
     
     private int ticksLived;
 
-    public Entity(final EntityType type, final int ID, TrackedLocation pos) {
+    public Entity(final EntityType type, final int ID, Location pos) {
         this(type, ID, pos.getWorld(), pos);
     }
     
-    public Entity(final EntityType type, final int ID,  Location pos) {
-        this(type, ID, pos.getWorld(), new TrackedLocation(pos));
-    }
-    
-    public Entity(final EntityType type, final int ID, final World world, TrackedLocation pos) {
+    public Entity(final EntityType type, final int ID, final World world, Location pos) {
         this.entityID = ID;
         this.world = pos.getWorld();
-        this.position = pos;
+        this.position = new EntityLocation(this, pos);
         this.ticksLived = 0;
         this.type = type;
+        this.trackers = new ArrayList<>();
     }
 
     public EntityType getType() {
@@ -117,10 +123,6 @@ public abstract class Entity {
     public Location getLocation() {
     	return position;
     }
-    
-    public TrackedLocation getTrackedLocation() {
-        return position;
-    }
 
     public int getSecondsLived() {
         return ticksLived / 20;
@@ -129,5 +131,37 @@ public abstract class Entity {
     public int getTicksLived() {
         return ticksLived;
     }
+    
+    public void move(double x, double y, double z) {
+    	if(x > 4) teleport(x,y,z);
+    	if(y > 4) teleport(x,y,z);
+    	if(z > 4) teleport(x,y,z);
+    	
+    	this.position.localSetX(x);
+    	this.position.localSetY(x);
+    	this.position.localSetZ(x);
+    	
+    }
+    
+    public void teleport(double x, double y, double z) {
+    	
+    }
+    
+    @Cautious
+    public void addEntityTracker(EntityTracker tracker) {
+    	if(!trackers.contains(tracker))
+    			trackers.add(tracker);
+    }
 
+	public void look(float pitch, float yaw) {
+		this.position.localSetPitch(pitch);
+		this.position.localSetYaw(pitch);
+		
+	}
+	
+	@Override
+	public int hashCode() {
+		return entityID;
+	}
+    
 }

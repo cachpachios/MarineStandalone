@@ -17,41 +17,43 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package org.marinemc.net.play.clientbound.world;
+package org.marinemc.net.packets.world;
 
 import java.io.IOException;
 
 import org.marinemc.io.binary.ByteList;
+import org.marinemc.io.binary.ByteUtils;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
-import org.marinemc.world.World;
+import org.marinemc.world.Dimension;
+import org.marinemc.world.chunk.Chunk;
 /**
  * @author Fozie
  */
-public class TimeUpdatePacket extends Packet {
+public class ChunkPacket extends Packet {
 
-    final long worldTime;
-    final long worldAge;
+    final Chunk c;
 
-    public TimeUpdatePacket(long worldTime, long worldAge) {
-        super(0x03, States.INGAME);
-        this.worldTime = worldTime;
-        this.worldAge = worldAge;
-    }
-
-    public TimeUpdatePacket(World w) {
-        this(w.getTime(), w.getWorldAge());
+    public ChunkPacket(Chunk c) {
+        super(0x21, States.INGAME);
+        this.c = c;
     }
 
     @Override
     public void writeToStream(PacketOutputStream stream) throws IOException {
-    	ByteList d = new ByteList();
+    	ByteList metadata = new ByteList();
 
-        d.writeLong(worldAge);
-        d.writeLong(worldTime);
+    	metadata.writeInt(c.getPos().getX());
+    	metadata.writeInt(c.getPos().getY());
+    	metadata.writeBoolean(true);
+    	metadata.writeShort(c.getSectionBitMap());
+    	
+    	byte[] data = c.getBytes(true, c.getWorld().getDimension() == Dimension.OVERWORLD);
+    	
+    	metadata.writeVarInt(data.length);
 
-        stream.write(getID(), d);
+        stream.write(getID(), ByteUtils.putFirst(metadata.toBytes(), data));
     }
 
 }

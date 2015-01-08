@@ -21,7 +21,9 @@ package org.marinemc.game.player;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.marinemc.game.CommandManager;
@@ -36,7 +38,12 @@ import org.marinemc.game.permission.Permission;
 import org.marinemc.game.permission.PermissionManager;
 import org.marinemc.logging.Logging;
 import org.marinemc.net.Client;
+import org.marinemc.net.packets.world.BlockChangePacket;
+import org.marinemc.net.packets.world.ChunkPacket;
 import org.marinemc.net.packets.world.MapChunkPacket;
+import org.marinemc.net.packets.world.SpawnPointPacket;
+import org.marinemc.net.packets.world.TimeUpdatePacket;
+import org.marinemc.net.packets.world.UnloadChunkPacket;
 import org.marinemc.net.play.clientbound.ChatPacket;
 import org.marinemc.net.play.clientbound.KickPacket;
 import org.marinemc.net.play.clientbound.inv.InventoryContentPacket;
@@ -45,22 +52,20 @@ import org.marinemc.net.play.clientbound.player.ClientboundPlayerLookPositionPac
 import org.marinemc.net.play.clientbound.player.ExperiencePacket;
 import org.marinemc.net.play.clientbound.player.PlayerAbilitesPacket;
 import org.marinemc.net.play.clientbound.player.PlayerLookPacket;
-import org.marinemc.net.play.clientbound.world.BlockChangePacket;
-import org.marinemc.net.play.clientbound.world.ChunkPacket;
-import org.marinemc.net.play.clientbound.world.SpawnPointPacket;
-import org.marinemc.net.play.clientbound.world.TimeUpdatePacket;
-import org.marinemc.net.play.clientbound.world.UnloadChunkPacket;
+import org.marinemc.net.play.clientbound.world.entities.EntityLookMovePacket;
 import org.marinemc.server.Marine;
 import org.marinemc.util.Assert;
 import org.marinemc.util.Location;
-import org.marinemc.util.MathUtils;
 import org.marinemc.util.Position;
 import org.marinemc.util.StringComparison;
 import org.marinemc.util.annotations.Cautious;
+import org.marinemc.util.vectors.Vector3d;
 import org.marinemc.world.BlockID;
 import org.marinemc.world.Gamemode;
 import org.marinemc.world.chunk.Chunk;
 import org.marinemc.world.chunk.ChunkPos;
+import org.marinemc.world.entity.Entity;
+import org.marinemc.world.entity.EntityTracker;
 import org.marinemc.world.entity.EntityType;
 import org.marinemc.world.entity.LivingEntity;
 
@@ -72,7 +77,7 @@ import org.marinemc.world.entity.LivingEntity;
 
 
 
-public class Player extends LivingEntity implements IPlayer, CommandSender {
+public class Player extends LivingEntity implements IPlayer, CommandSender, EntityTracker {
 	/*
 	 * Identifier variables:
 	 */
@@ -152,6 +157,7 @@ public class Player extends LivingEntity implements IPlayer, CommandSender {
 		this.lastChatReset = System.currentTimeMillis();
 		this.messagesSent = 0;
 		this.isSneaking = false;
+		this.trackingEntities = new HashMap<Integer, Vector3d>();
 	}
 	
 	/**
@@ -489,33 +495,93 @@ public class Player extends LivingEntity implements IPlayer, CommandSender {
 		return this.name;
 	}
 
+	
+	//TODO Fix unloading :p
 	public void localChunkRegion(int w, int h) {
-		List<Long> chunksToSend = new ArrayList<Long>();
-		List<Long> chunksToUnload = new ArrayList<Long>();
+		final List<Long> chunksToSend = new ArrayList<Long>();
+//		final List<Long> chunksToUnload = new ArrayList<Long>();
 		
 		System.out.println("Invoke");
 		
 		// Put missing chunks for sending
-		for(int x = -(w/2); x < w/2;x++)
-			for(int y = -(h/2); x < h/2;y++) {
-				if(loadedChunks.contains(ChunkPos.Encode(x, y)))
+        for (int x = -(w); x < w / 2; x++)
+            for (int y = -(h / 2); y < h / 2; y++) {
+				if(!loadedChunks.contains(ChunkPos.Encode(x, y)))
 					chunksToSend.add(ChunkPos.Encode(x, y));
 			}
 		
-		// Remove extra chunks
-		for(Long l : loadedChunks) {
-			ChunkPos c = new ChunkPos(l);
-			if(!MathUtils.isInsideRect((int)getX(), (int)getY(), w,h, c.x, c.y))
-				chunksToUnload.add(l);
+//		// Remove extra chunks
+//		for(Long l : loadedChunks) {
+//			ChunkPos c = new ChunkPos(l);
+//			if(!MathUtils.isInsideRect((int)getX(), (int)getY(), w,h, c.x, c.y))
+//				chunksToUnload.add(l);
+//		}
+		
+//		for(Long l : chunksToUnload)
+//			getWorld().getChunkForce(new ChunkPos(l)).unload(this);
+        
+		if(chunksToSend.size() > 1) {
+			final List<Chunk> chunks = new ArrayList<>(chunksToSend.size());
+			for(Long l : chunksToSend)
+				chunks.add(getWorld().getChunkForce(new ChunkPos(l)));
 		}
+		else
+			for(Long l : chunksToSend)
+				sendChunk(getWorld().getChunkForce(new ChunkPos(l)));
+	}
+
+	/**
+	 * ENTITY TRACKING STARTS HERE:
+	 */
+	
+	private final Map<Integer, Vector3d> trackingEntities;
+	
+	@Override
+	public void killLocalEntity(Entity e) {
+		killLocalEntities(new Entity[] {e});
+	}
+
+	@Override
+	public void killLocalEntity(Integer e) {
+		killLocalEntities(new Integer[] {e});
+	}
+
+	@Override
+	public void killLocalEntities(Entity[] e) {
+		// TODO Send delete entities request or player leave if instanceof player	
+	}
+
+	@Override
+	public void killLocalEntities(Integer[] e) {
 		
-		for(Long l : chunksToUnload)
-			getWorld().getChunkForce(new ChunkPos(l)).unload(this);
-		
-		for(Long l : chunksToSend)
-			sendChunk(getWorld().getChunkForce(new ChunkPos(l)));
-		
-		chunksToSend = null;
-		chunksToUnload = null;
+	}
+
+	@Override
+	public boolean doesTrackEntity(Entity e) {
+		return trackingEntities.containsKey(e.getEntityID());
+	}
+
+	@Override
+	public void updateLocalEntityMove(Entity e, double x, double y, double z) {
+		if(trackingEntities.containsKey(e.getEntityID()))
+			getClient().sendPacket(new EntityLookMovePacket(this, e, trackingEntities.get(e.getEntityID()), new Vector3d(x,y,z))); //TODO Replace this with only move packet
+	}
+	
+	@Override
+	public void updateLocalEntityLook(Entity e) {
+		if(trackingEntities.containsKey(e.getEntityID()))
+			getClient().sendPacket(new EntityLookMovePacket(this, e, trackingEntities.get(e.getEntityID()), e.getLocation())); //TODO Replace this with only look packet
+	}
+
+	@Override
+	public void teleportLocalEntity(Entity e, double x, double y, double z) {
+		// TODO
+	}
+
+	@Override
+	public Vector3d getLastLocalySeenPosition(Entity e) {
+		if(trackingEntities.containsKey(e.getEntityID()))
+			return trackingEntities.get(e.getEntityID());
+		return null;
 	} 
 }

@@ -17,45 +17,48 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package org.marinemc.net.play.clientbound.world;
+package org.marinemc.net.packets.world;
 
 import java.io.IOException;
 
 import org.marinemc.io.binary.ByteList;
-import org.marinemc.io.binary.ByteUtils;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
-import org.marinemc.world.Dimension;
-import org.marinemc.world.chunk.Chunk;
+import org.marinemc.util.Position;
+import org.marinemc.world.Block;
+import org.marinemc.world.BlockID;
 /**
  * @author Fozie
  */
-public class ChunkPacket extends Packet {
+public class BlockChangePacket extends Packet {
+    public Position pos;
+    public int newBlock;
 
-    final Chunk c;
+    public BlockChangePacket(Block toBlock) {
+        this(toBlock.getGlobalPos(), toBlock.getType().getPacketID());
+    }
 
-    public ChunkPacket(Chunk c) {
-        super(0x21, States.INGAME);
-        this.c = c;
+    public BlockChangePacket(Position pos, short b) {
+        super(0x23, States.INGAME);
+        this.pos = pos;
+        this.newBlock = (int)b;
+    }
+
+    public BlockChangePacket(Position p, BlockID b) {
+        this(p, b.getID());
     }
 
     @Override
     public void writeToStream(PacketOutputStream stream) throws IOException {
-    	ByteList metadata = new ByteList();
 
-    	metadata.writeInt(c.getPos().getX());
-    	metadata.writeInt(c.getPos().getY());
-    	metadata.writeBoolean(true);
-    	metadata.writeShort(c.getSectionBitMap());
+    	ByteList data = new ByteList();
 
-//        final ByteList d = c.getData(true, c.getWorld().getDimension() == Dimension.OVERWORLD);
-    	
-    	byte[] data = c.getBytes(true, c.getWorld().getDimension() == Dimension.OVERWORLD);
-    	
-    	metadata.writeVarInt(data.length);
+        data.writePosition(pos);
+        data.writeVarInt	(newBlock);
 
-        //stream.write(getID(), ByteUtils.combine(metadata.toBytes(), data));
+        stream.write(getID(), data);
+
     }
 
 }

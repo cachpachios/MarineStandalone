@@ -19,7 +19,7 @@
 
 package org.marinemc.world.gen.generators;
 
-import org.marinemc.util.Location;
+import org.marinemc.util.Position;
 import org.marinemc.world.BlockID;
 import org.marinemc.world.Dimension;
 import org.marinemc.world.World;
@@ -57,8 +57,8 @@ public class SpikeGenerator extends WorldGenerator {
     }
 
     @Override
-    public Location getSafeSpawnPoint() {
-        return new Location(world, 8, H + 2, 8);
+    public Position getSafeSpawnPoint() {
+        return new Position(0, H + 2, 0);
     }
 
     @Override

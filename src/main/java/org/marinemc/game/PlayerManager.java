@@ -33,18 +33,18 @@ import java.util.regex.Pattern;
 
 import org.marinemc.events.standardevents.JoinEvent;
 import org.marinemc.events.standardevents.PreLoginEvent;
+import org.marinemc.game.async.MovmentValidator;
 import org.marinemc.game.async.TimeoutManager;
 import org.marinemc.game.async.WorldStreamingThread;
 import org.marinemc.game.inventory.PlayerInventory;
 import org.marinemc.game.player.Player;
-import org.marinemc.game.player.PlayerEntityHandler;
 import org.marinemc.game.player.UIDGenerator;
-import org.marinemc.game.player.WeakPlayer;
 import org.marinemc.net.Client;
+import org.marinemc.net.Packet;
 import org.marinemc.net.States;
 import org.marinemc.net.packets.login.LoginPacket;
 import org.marinemc.net.packets.login.LoginSucessPacket;
-import org.marinemc.net.play.clientbound.ChatPacket;
+import org.marinemc.net.packets.player.PlayerMovePacket;
 import org.marinemc.net.play.clientbound.JoinGamePacket;
 import org.marinemc.server.Marine;
 import org.marinemc.settings.ServerSettings;
@@ -53,7 +53,6 @@ import org.marinemc.util.Location;
 import org.marinemc.util.annotations.Cautious;
 import org.marinemc.util.annotations.Hacky;
 import org.marinemc.util.mojang.UUIDHandler;
-import org.marinemc.util.operations.PlayerOperation;
 import org.marinemc.world.entity.EntityType;
 
 /**
@@ -65,7 +64,7 @@ import org.marinemc.world.entity.EntityType;
 public class PlayerManager {
 	private final Pattern validName;
 	private final TimeoutManager timeout;
-	private final PlayerEntityHandler localEntityHandler;
+	private final MovmentValidator movmentValidator;
 	
 	/**
 	 * Player list:
@@ -82,12 +81,14 @@ public class PlayerManager {
 	
 	public PlayerManager() {
 		players = new HashMap<Short, Player>();
-		localEntityHandler = new PlayerEntityHandler();
 		namePointers = new HashMap<String, Short>();
 		timeout = new TimeoutManager();
 		validName = Pattern.compile("^[a-zA-Z0-9_]{2,16}$");
 		worldStreamer = new WorldStreamingThread(this);
 		worldStreamer.start();
+		
+		movmentValidator = new MovmentValidator();
+		movmentValidator.start();
 	}
 
 	public String login(final Client client, final LoginPacket packet) {
@@ -166,7 +167,7 @@ public class PlayerManager {
 		p.sendPositionAndLook();
 		
 		//p.updateExp();
-		p.sendChunks(p.getWorld().getSpawnChunks());
+		p.sendChunks(p.getWorld().getSpawnChunks(p));
 		
 		p.sendPositionAndLook();
 		
@@ -202,6 +203,12 @@ public class PlayerManager {
 		return null; // To indicate that the player was successfully created and joined
 	}
 	
+	
+	public void movePlayerFromPacket(PlayerMovePacket packet) {
+		
+		
+		
+	}
 	
 	/**
 	 * Adds a player to the main player storage
@@ -301,7 +308,7 @@ public class PlayerManager {
 	 * Not perhaps people logingin/pinging
 	 * @param packet
 	 */
-	public void broadcastPacket(ChatPacket packet) {
+	public void broadcastPacket(Packet packet) {
 		for(Player p : this.players.values())
 			p.getClient().sendPacket(packet);
 	}
@@ -339,12 +346,7 @@ public class PlayerManager {
 		Marine.getServer().getNetworkManager().cleanUp(p.getClient());
 	}
 
-	public PlayerEntityHandler getEntitySpawner() {
-		return localEntityHandler;
-	}
-
 	public boolean isEmpty() {
-    	System.out.println("Players online: " + players.size());
 		return players.isEmpty();
 	}
 

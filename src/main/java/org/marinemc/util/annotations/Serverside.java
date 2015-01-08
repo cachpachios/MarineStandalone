@@ -26,7 +26,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Used to tell developers that this method dont tell all clients about the change/update.
+ * Used to tell developers that this change dont tell the client(s) about the change/update.
  *
  * @author Fozie
  */

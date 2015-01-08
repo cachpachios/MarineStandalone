@@ -22,13 +22,13 @@ package org.marinemc.net;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
+import java.net.SocketException;
 
 import org.marinemc.io.ByteCompressor;
 import org.marinemc.io.ByteCompressor.EncodingUseless;
 import org.marinemc.io.binary.ByteUtils;
 import org.marinemc.io.binary.CompressableStoredByteOutput;
 import org.marinemc.util.ObjectMeta;
-import org.marinemc.util.vectors.Vector2i;
 /**
  * @author Fozie
  */
@@ -43,8 +43,14 @@ public class PacketOutputStream { // Here we enable encryption and compression i
     	return c.get() == null;
     }
    
-    private void finalWrite(final byte[] uncompressed) throws IOException {
+    private void finalWrite(final byte[] uncompressed) throws IOException, SocketException {
     	if(referenceCheck())
+    		return;
+    	
+    	if(c.get().getConnection().isClosed())
+    		return;
+    	
+    	if(!c.get().isActive())
     		return;
     	
     	if(c.get().getCompressionThreshold() == -1) {
@@ -67,8 +73,14 @@ public class PacketOutputStream { // Here we enable encryption and compression i
     		}
     }
     
-    private void finalWrite(final CompressableStoredByteOutput uncompressed) throws IOException {
+    private void finalWrite(final CompressableStoredByteOutput uncompressed) throws IOException, SocketException {
     	if(referenceCheck())
+    		return;
+    	
+    	if(c.get().getConnection().isClosed())
+    		return;
+    	
+    	if(!c.get().isActive())
     		return;
     	
     	if(c.get().getCompressionThreshold() == -1) {
@@ -162,6 +174,6 @@ public class PacketOutputStream { // Here we enable encryption and compression i
                 break;
             }
         }
-        return new ObjectMeta(out,bytes);
+        return new ObjectMeta<>(out,bytes);
     }
 }

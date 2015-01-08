@@ -28,6 +28,7 @@ import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.marinemc.game.WorldManager;
+import org.marinemc.game.player.Player;
 import org.marinemc.server.Marine;
 import org.marinemc.util.MathUtils;
 import org.marinemc.util.Position;
@@ -74,8 +75,8 @@ public class World { // TODO Save and unload chunks...
     	this.randomizer = new Random();
         this.generator = generator; // StandardGenerator
         this.generator.setGenerationWorld(this);
-        this.spawnPoint = generator.getSafeSpawnPoint().getRelativePosition(); //TODO make this get loaded from world or generate random based on worldgenerator
-        this.uid = WorldManager.getNextUID();
+        this.spawnPoint = generator.getSafeSpawnPoint(); //TODO make this get loaded from world or generate random based on worldgenerator
+        this.uid = Marine.getServer().getWorldManager().getNextUID();
         this.name = name;
         this.dimension = Dimension.OVERWORLD;
         this.time = 0;
@@ -164,7 +165,7 @@ public class World { // TODO Save and unload chunks...
     	if(spawnPoint!=null)
     		return spawnPoint;
     	else
-    		return generator.getSafeSpawnPoint().getRelativePosition();
+    		return generator.getSafeSpawnPoint();
     }
 
     public String getName() {
@@ -245,17 +246,23 @@ public class World { // TODO Save and unload chunks...
 	 * @return
 	 */
 	@Threaded
-	public List<Chunk> getSpawnChunks() {
-		List<Chunk> spawnChunks = new ArrayList<>(8*8);
-		if(!this.isEntireRegionInMemory(spawnPoint.x, spawnPoint.z, 8, 8)) {
-			this.generateAsyncRegion(spawnPoint.x, spawnPoint.y, 8, 8);
+	public List<Chunk> getSpawnChunks(Player p) {
+		
+		final int s = Marine.getServer().getViewDistance()/2;
+		
+		final int x = (int)(p.getX() / 16), y = (int)(p.getZ() / 16);
+		
+		final List<Chunk> spawnChunks = new ArrayList<>(s*s);
+		
+		if(!this.isEntireRegionInMemory(x, y, s, s)) {
+			this.generateAsyncRegion(x, y, s, s);
 			// Wait for the chunks to be generated:
 			while(hasChunksToGenerate()) try { Thread.sleep(WorldThread.skipTime*2);} catch (InterruptedException e) {}
 		}
 		
-        for (int xx = 8 / 2 * -1; xx < 8; xx++)
-            for (int yy = 8 / 2 * -1; yy < 8; yy++)
-            	spawnChunks.add(getChunkForce(spawnPoint.x + xx, spawnPoint.z + yy));
+        for (int xx = s / 2 * -1; xx < s; xx++)
+            for (int yy = s / 2 * -1; yy < s; yy++)
+            	spawnChunks.add(getChunkForce(x + xx, y + yy));
 		
 		return spawnChunks;
 	}

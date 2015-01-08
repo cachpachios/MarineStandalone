@@ -478,6 +478,6 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
 
 	@Override
 	public int getViewDistance() {
-		return 10;
+		return 9;
 	}
 }

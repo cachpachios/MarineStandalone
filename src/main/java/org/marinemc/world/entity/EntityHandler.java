@@ -33,7 +33,5 @@ public class EntityHandler {
     }
     
     public void removeEntity(int id) {
-    	
-    	Marine.getServer().getPlayerManager().getEntitySpawner().unloadLocaly(id);
     }
 }

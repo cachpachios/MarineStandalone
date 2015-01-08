@@ -47,8 +47,10 @@ public class WorldManager {
 
     // TODO World loading..
 
-    public static byte getNextUID() {
-        return ++nextUID;
+    public byte getNextUID() {
+        while(loadedWorlds.containsKey(++nextUID))
+        	if(nextUID == Byte.MIN_VALUE) return nextUID;
+        return nextUID;
     }
 
     public List<World> getWorlds() {

@@ -17,10 +17,7 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/**
- * 
- */
-package org.marinemc.net.play.clientbound.world;
+package org.marinemc.net.packets.world;
 
 import java.io.IOException;
 
@@ -28,35 +25,25 @@ import org.marinemc.io.binary.ByteList;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
-import org.marinemc.world.chunk.ChunkPos;
-
+import org.marinemc.util.Position;
 /**
- * 
- * Sent to tell client to unload a chunk.
- * Same as ChunkPacket but without information
- * 
  * @author Fozie
- *
  */
-public class UnloadChunkPacket extends Packet{
+public class SpawnPointPacket extends Packet { // Only used to make the client know where the compass should point
 
-	final ChunkPos pos;
-	
-	public UnloadChunkPacket(final ChunkPos c) {
-		super(0x21, States.INGAME);
-		pos = c;
-	}
+    final Position spawnPoint;
 
-	@Override
-	public void writeToStream(PacketOutputStream stream) throws IOException {
-		ByteList data = new ByteList();
-		
-		data.writeInt(pos.getX());
-		data.writeInt(pos.getY());
-		data.writeBoolean(true);
-		data.writeShort((short) 0);
-		
-		stream.write(getID(), data);
-	}
+    public SpawnPointPacket(Position spawnPoint) {
+        super(0x05, States.INGAME);
+        this.spawnPoint = spawnPoint;
+    }
 
+    @Override
+    public void writeToStream(PacketOutputStream stream) throws IOException {
+    	ByteList d = new ByteList();
+    	
+        d.writePosition(spawnPoint);
+
+        stream.write(getID(), d);
+    }
 }

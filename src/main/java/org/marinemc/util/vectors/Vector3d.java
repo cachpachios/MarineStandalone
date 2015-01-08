@@ -93,6 +93,10 @@ public class Vector3d extends Vector3<Double> {
 		this.y /= number;
 		this.z /= number;
 	}
+	
+	public Vector3b getDifferientialFixed32(final Vector3d target) {
+		return new Vector3b((byte)(x - target.x * 32), (byte)(y - target.y * 32), (byte)(y - target.y * 32));
+	}
 
 	@Override
 	public void multiply(Double number) {

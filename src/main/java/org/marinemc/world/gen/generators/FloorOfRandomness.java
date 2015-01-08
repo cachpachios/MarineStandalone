@@ -1,6 +1,7 @@
 package org.marinemc.world.gen.generators;
 
 import org.marinemc.util.Location;
+import org.marinemc.util.Position;
 import org.marinemc.world.BlockID;
 import org.marinemc.world.Dimension;
 import org.marinemc.world.Identifiers;
@@ -46,8 +47,8 @@ public class FloorOfRandomness extends WorldGenerator {
 
 
 	@Override
-	public Location getSafeSpawnPoint() {
-		return new Location(world, 0, 5, 0);
+	public Position getSafeSpawnPoint() {
+		return new Position(0, 5, 0);
 	}
 
 }

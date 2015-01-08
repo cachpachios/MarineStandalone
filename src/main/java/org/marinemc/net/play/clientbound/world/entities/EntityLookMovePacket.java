@@ -20,42 +20,63 @@
 package org.marinemc.net.play.clientbound.world.entities;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 
 import org.marinemc.io.binary.ByteList;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
 import org.marinemc.util.vectors.Vector3;
+import org.marinemc.util.vectors.Vector3d;
 import org.marinemc.world.entity.Entity;
+import org.marinemc.world.entity.EntityTracker;
 
 /**
  * @author Fozie
  */
 public class EntityLookMovePacket extends Packet {
 	
-	final Entity e;
+	final int id;
+	final WeakReference<Entity> e;
+	final Vector3d last;
+	final Vector3d target;
+	final WeakReference<EntityTracker> tracker;
 	
-	public EntityLookMovePacket(Entity ent) {
+	
+	public EntityLookMovePacket(EntityTracker reciver, Entity ent, Vector3d tracker, Vector3d target) {
 		super(0x17, States.INGAME);
-		this.e = ent;
+		this.id = ent.getEntityID();
+		this.e = new WeakReference<>(ent);
+		this.last = tracker;
+		this.target = target;
+		this.tracker = new WeakReference<>(reciver);
 	}
 
+	private void error()  {
+		if(tracker.get() == null)
+			return;
+		else
+			tracker.get().killLocalEntity(id);
+	}
+	
 	@Override
 	public void writeToStream(PacketOutputStream stream) throws IOException {
+		if(e.get() == null) 		error();
+			
 		ByteList data = new ByteList();
 		
-		data.writeVarInt(e.getEntityID());
+		data.writeVarInt(e.get().getEntityID());
 		
-		final Vector3<Byte> sub = e.getTrackedLocation().getDifferentialFixed32();
+		final Vector3<Byte> sub = last.getDifferientialFixed32(target);
 		
 		data.writeByte(sub.x);
 		data.writeByte(sub.y);
 		data.writeByte(sub.z);
 
-		data.writeByte((byte) (((e.getLocation().getYaw() % 360) / 360) * 256));
-		data.writeByte((byte) (((e.getLocation().getPitch() % 360) / 360) * 256));
+		data.writeByte((byte) (((e.get().getLocation().getYaw() % 360) / 360) * 256));
+		data.writeByte((byte) (((e.get().getLocation().getPitch() % 360) / 360) * 256));
 		
-		data.writeBoolean(e.getLocation().isOnGround());
+		data.writeBoolean(e.get().getLocation().isOnGround());
 		
 		stream.write(getID(), data);
 	}

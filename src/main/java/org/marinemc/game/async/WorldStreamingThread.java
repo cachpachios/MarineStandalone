@@ -33,7 +33,6 @@ public class WorldStreamingThread extends Thread {
 		while(true) {
 			if(Marine.getServer().getPlayerManager().isEmpty())
 				try {
-					System.out.println("No players online :(");
 					WorldStreamingThread.sleep(500);
 					continue;
 				} catch (InterruptedException e1) {
@@ -48,7 +47,6 @@ public class WorldStreamingThread extends Thread {
 			}
 			
 			try {
-				System.out.println("Sleep in " + nonNeg(sleepTime - ((System.nanoTime() - time)/1000/1000)));
 				WorldStreamingThread.sleep(nonNeg(sleepTime - ((System.nanoTime() - time)/1000/1000)));
 				} catch (InterruptedException e) {
 					Logging.getLogger().error("The WorldStreamer got interupted :S, Recommending restart!");

@@ -72,7 +72,6 @@ public class MojangUtils {
             status = (String) jsonObject.get(service.getURL());
             input.close();
         } catch (Exception e) {
-            e.printStackTrace();
             return Status.UNKNOWN;
         }
         return status(status);

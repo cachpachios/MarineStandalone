@@ -25,7 +25,6 @@ import java.util.Random;
 
 import org.marinemc.game.player.Player;
 import org.marinemc.io.binary.ByteArray;
-import org.marinemc.io.binary.ByteList;
 import org.marinemc.io.binary.ByteUtils;
 import org.marinemc.server.Marine;
 import org.marinemc.util.Position;
@@ -101,7 +100,7 @@ public class Chunk {
     }
     
     public void unload(final Player p) {
-    	subscribingPlayers.remove(p.getUID());
+    	subscribingPlayers.remove(new Short(p.getUID()));
 		p.unloadChunk(pos);
     }
     

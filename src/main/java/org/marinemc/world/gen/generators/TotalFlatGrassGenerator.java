@@ -19,7 +19,7 @@
 
 package org.marinemc.world.gen.generators;
 
-import org.marinemc.util.Location;
+import org.marinemc.util.Position;
 import org.marinemc.world.BlockID;
 import org.marinemc.world.Dimension;
 import org.marinemc.world.chunk.Chunk;
@@ -39,8 +39,8 @@ public final class TotalFlatGrassGenerator extends WorldGenerator {
     }
 
     @Override
-    public Location getSafeSpawnPoint() {
-        return new Location(world, 8, 5, 8);
+    public Position getSafeSpawnPoint() {
+        return new Position(0, 5, 0);
     }
 
     @Override

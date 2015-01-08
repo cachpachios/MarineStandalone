@@ -86,6 +86,8 @@ public class Client {
     }
 
     public synchronized void sendPackets(final Collection<Packet> packets) { //TODO: PacketBuffer
+    	if(getConnection().isClosed())
+    		return;
         for (final Packet packet : packets) {
             try {
                 packet.writeToStream(output);

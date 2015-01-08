@@ -225,12 +225,12 @@ public class ConsoleWindow extends OutputStream {
         synchronized (console) {
             while (console.size() > maxLines)
                 console.remove(0);
-            String sB = "";
+            StringBuilder sB = new StringBuilder();
             for (String s : console) {
-                sB += s;
-                sB += "<br>";
+                sB.append(s);
+                sB.append("<br>");
             }
-            text.setText(sB);
+            text.setText(sB.toString());
         }
     }
 
