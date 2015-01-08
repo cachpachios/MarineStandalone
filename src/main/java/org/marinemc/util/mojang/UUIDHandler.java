@@ -38,6 +38,10 @@ import org.marinemc.settings.JSONConfig;
 import org.marinemc.settings.ServerSettings;
 import org.marinemc.util.StringUtils;
 
+import com.google.common.base.Charsets;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
+
 /**
  * UUID Handler - Undocumented!
  *

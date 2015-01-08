@@ -21,6 +21,8 @@ package org.marinemc.plugins;
 
 import java.io.InputStream;
 
+import org.json.JSONTokener;
+
 /**
  * The plugin description file
  *

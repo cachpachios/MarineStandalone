@@ -114,3 +114,6 @@ nb-configuration.xml
 settings.properties
 *.log
 log/old.zip
+/target/
+
+bin1/org/marinemc/game/commands/COMMANDS

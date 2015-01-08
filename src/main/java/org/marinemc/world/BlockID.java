@@ -19,6 +19,7 @@
 
 package org.marinemc.world;
 
+import org.json.JSONException;
 import org.marinemc.util.IDObject;
 
 /**

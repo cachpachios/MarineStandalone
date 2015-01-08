@@ -21,6 +21,9 @@ package org.marinemc.net;
 
 import java.lang.ref.WeakReference;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
+
 /**
  * Created 2014-12-24 for MarineStandalone
  *

@@ -21,6 +21,7 @@ package org.marinemc.settings;
 
 import java.io.File;
 
+import org.json.JSONException;
 import org.marinemc.settings.files.BanFile;
 import org.marinemc.settings.files.PermissionFile;
 import org.marinemc.settings.files.WhitelistFile;

@@ -19,6 +19,8 @@
 
 package org.marinemc.util;
 
+import org.json.JSONException;
+
 
 /**
  * ID Object interface (blocks, materials)

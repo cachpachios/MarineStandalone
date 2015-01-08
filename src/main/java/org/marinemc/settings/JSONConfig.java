@@ -28,6 +28,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.json.JSONException;
+import org.json.JSONTokener;
+
 /**
  * JSON Config Class
  * <p/>

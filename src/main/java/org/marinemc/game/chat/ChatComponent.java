@@ -19,6 +19,8 @@
 
 package org.marinemc.game.chat;
 
+import org.json.JSONObject;
+
 
 public class ChatComponent {
 

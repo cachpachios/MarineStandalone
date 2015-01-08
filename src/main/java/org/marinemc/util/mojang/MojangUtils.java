@@ -27,6 +27,8 @@ import java.net.URLConnection;
 
 import jdk.nashorn.internal.parser.JSONParser;
 
+import org.json.JSONTokener;
+
 /**
  * Mojang Utilities - Unsupported!
  *
