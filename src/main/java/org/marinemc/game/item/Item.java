@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.json.JSONException;
+import org.json.simple.JSONObject;
 import org.marinemc.game.chat.ChatColor;
 import org.marinemc.util.IDObject;
 import org.marinemc.world.BlockID;

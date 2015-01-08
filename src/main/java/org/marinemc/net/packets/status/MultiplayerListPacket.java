@@ -22,6 +22,8 @@ package org.marinemc.net.packets.status;
 import java.io.IOException;
 import java.util.UUID;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.marinemc.events.standardevents.ListEvent;
 import org.marinemc.game.chat.ChatColor;
 import org.marinemc.game.player.Player;

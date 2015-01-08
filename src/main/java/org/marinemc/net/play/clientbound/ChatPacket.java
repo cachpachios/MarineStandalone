@@ -21,6 +21,7 @@ package org.marinemc.net.play.clientbound;
 
 import java.io.IOException;
 
+import org.json.simple.JSONObject;
 import org.marinemc.game.chat.ChatMessage;
 import org.marinemc.io.binary.ByteList;
 import org.marinemc.net.Packet;

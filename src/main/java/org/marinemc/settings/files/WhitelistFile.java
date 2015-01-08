@@ -22,6 +22,7 @@ package org.marinemc.settings.files;
 import java.io.File;
 import java.util.UUID;
 
+import org.json.JSONArray;
 import org.marinemc.settings.StorageConfig;
 
 /**

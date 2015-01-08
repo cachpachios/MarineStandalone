@@ -20,6 +20,7 @@
 package org.marinemc.util;
 
 import org.json.simple.JSONAware;
+import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.marinemc.server.Marine;
 import org.marinemc.util.vectors.Vector3;

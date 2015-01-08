@@ -19,8 +19,7 @@
 
 package org.marinemc.game.chat;
 
-import org.json.JSONObject;
-
+import org.json.simple.JSONObject;
 
 public class ChatComponent {
 
@@ -45,7 +44,7 @@ public class ChatComponent {
 
 	@Override
 	public String toString() {
-		return JSON.toJSONString();
+		return JSON.toString();
 	}
 
 	public JSONObject getJsonObject() {

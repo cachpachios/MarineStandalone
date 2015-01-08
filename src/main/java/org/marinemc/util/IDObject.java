@@ -20,6 +20,7 @@
 package org.marinemc.util;
 
 import org.json.JSONException;
+import org.json.simple.JSONObject;
 
 
 /**

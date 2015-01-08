@@ -23,6 +23,7 @@ import java.io.File;
 import java.net.InetAddress;
 import java.util.UUID;
 
+import org.json.JSONArray;
 import org.marinemc.settings.StorageConfig;
 import org.marinemc.util.Assert;
 

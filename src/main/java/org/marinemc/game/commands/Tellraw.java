@@ -22,6 +22,7 @@ package org.marinemc.game.commands;
 import java.util.Arrays;
 import java.util.Collection;
 
+import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.marinemc.game.chat.ChatColor;
 import org.marinemc.game.command.Command;

@@ -25,9 +25,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
-import jdk.nashorn.internal.parser.JSONParser;
-
+import org.json.JSONObject;
 import org.json.JSONTokener;
+import org.json.simple.parser.JSONParser;
+
 
 /**
  * Mojang Utilities - Unsupported!

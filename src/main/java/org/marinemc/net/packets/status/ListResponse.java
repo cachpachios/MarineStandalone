@@ -21,6 +21,8 @@ package org.marinemc.net.packets.status;
 
 import java.util.UUID;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.marinemc.game.chat.ChatColor;
 import org.marinemc.io.Base64Image;
 

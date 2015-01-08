@@ -28,8 +28,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import jdk.nashorn.internal.parser.JSONParser;
-
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.marinemc.Bootstrap;
 import org.marinemc.game.player.Player;
 import org.marinemc.logging.Logging;
