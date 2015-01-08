@@ -22,59 +22,51 @@ package org.marinemc.net;
 import java.io.IOException;
 
 import org.marinemc.io.binary.ByteInput;
+
 /**
  * @author Fozie
  */
 public abstract class Packet {
 
-    private final States state;
-    private final int id;
+	private final States state;
+	private final int id;
 
-    public Packet(final int id, final States state) {
-        this.id = id;
-        this.state = state;
-    }
+	public Packet(final int id, final States state) {
+		this.id = id;
+		this.state = state;
+	}
 
-    /*
-    public static Packet createSimplePacket(final byte ID, final byte[] inputdata, final States state) {
-        Packet p = new Packet() {
+	/*
+	 * public static Packet createSimplePacket(final byte ID, final byte[]
+	 * inputdata, final States state) { Packet p = new Packet() {
+	 * 
+	 * States s = state;
+	 * 
+	 * @Override public void writeToStream(PacketOutputStream stream) throws
+	 * IOException { stream.write(ID, inputdata); }
+	 * 
+	 * @Override public void readFromBytes(ByteData input) { }
+	 * 
+	 * @Override public int getID() { return ID; }
+	 * 
+	 * @Override public States getPacketState() { return s; }
+	 * 
+	 * }; return p; }
+	 */
 
-            States s = state;
+	final public int getID() {
+		return id;
+	}
 
-            @Override
-            public void writeToStream(PacketOutputStream stream) throws IOException {
-                stream.write(ID, inputdata);
-            }
+	final public States getPacketState() {
+		return state;
+	}
 
-            @Override
-            public void readFromBytes(ByteData input) {
-            }
+	public void writeToStream(final PacketOutputStream stream)
+			throws IOException {
+	}
 
-            @Override
-            public int getID() {
-                return ID;
-            }
-
-            @Override
-            public States getPacketState() {
-                return s;
-            }
-
-        };
-        return p;
-    }
-    */
-
-    final public int getID() {
-        return this.id;
-    }
-
-    final public States getPacketState() {
-        return this.state;
-    }
-
-    public void writeToStream(PacketOutputStream stream) throws IOException {}
-
-    public void readFromBytes(ByteInput input) {}
+	public void readFromBytes(final ByteInput input) {
+	}
 
 }

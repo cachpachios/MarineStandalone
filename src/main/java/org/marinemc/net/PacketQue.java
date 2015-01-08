@@ -21,9 +21,6 @@ package org.marinemc.net;
 
 import java.lang.ref.WeakReference;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimap;
-
 /**
  * Created 2014-12-24 for MarineStandalone
  *
@@ -31,28 +28,27 @@ import com.google.common.collect.Multimap;
  */
 public class PacketQue {
 
-    private final Multimap<Integer, Packet> que;
-    private final WeakReference<Client> c;
+	private final Multimap<Integer, Packet> que;
+	private final WeakReference<Client> c;
 
-    public PacketQue(final Client c) {
-        this.que = ArrayListMultimap.create();
-        this.c = new WeakReference<>(c);
-    }
+	public PacketQue(final Client c) {
+		que = ArrayListMultimap.create();
+		this.c = new WeakReference<>(c);
+	}
 
-    public synchronized void add(final Packet packet) {
-        add(packet, 3);
-    }
+	public synchronized void add(final Packet packet) {
+		add(packet, 3);
+	}
 
-    public synchronized void add(final Packet packet, final int priority) {
-        que.put(priority, packet);
-    }
+	public synchronized void add(final Packet packet, final int priority) {
+		que.put(priority, packet);
+	}
 
-    public synchronized void executePackets() {
-        if(c.get() == null)
-        	return;
-    	
-    	for (int key : que.keys()) {
-            c.get().sendPackets(que.get(key));
-        }
-    }
+	public synchronized void executePackets() {
+		if (c.get() == null)
+			return;
+
+		for (final int key : que.keys())
+			c.get().sendPackets(que.get(key));
+	}
 }

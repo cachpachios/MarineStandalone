@@ -28,77 +28,83 @@ import org.marinemc.logging.Logging;
  */
 public class PluginLogger {
 
-    private final Plugin plugin;
+	private final Plugin plugin;
 
-    /**
-     * The plugin to init with
-     *
-     * @param plugin Plugin
-     */
-    public PluginLogger(Plugin plugin) {
-        this.plugin = plugin;
-    }
+	/**
+	 * The plugin to init with
+	 *
+	 * @param plugin
+	 *            Plugin
+	 */
+	public PluginLogger(final Plugin plugin) {
+		this.plugin = plugin;
+	}
 
-    /**
-     * Log a string to the global logger
-     *
-     * @param message Message to log
-     */
-    final public void log(String message) {
-        Logging.getLogger().log(constructMessage(message));
-    }
+	/**
+	 * Log a string to the global logger
+	 *
+	 * @param message
+	 *            Message to log
+	 */
+	final public void log(final String message) {
+		Logging.getLogger().log(constructMessage(message));
+	}
 
-    /**
-     * Construct a plugin message
-     *
-     * @param message Message
-     * @return Constructed message
-     */
-    private PluginMessage constructMessage(String message) {
-        return new PluginMessage(String.format("[%s] %s", plugin.getName(), message), this);
-    }
+	/**
+	 * Construct a plugin message
+	 *
+	 * @param message
+	 *            Message
+	 * @return Constructed message
+	 */
+	private PluginMessage constructMessage(final String message) {
+		return new PluginMessage(String.format("[%s] %s", plugin.getName(),
+				message), this);
+	}
 
-    /**
-     * Get the plugin for this logger
-     *
-     * @return plugin
-     */
-    final public Plugin getPlugin() {
-        return this.plugin;
-    }
+	/**
+	 * Get the plugin for this logger
+	 *
+	 * @return plugin
+	 */
+	final public Plugin getPlugin() {
+		return plugin;
+	}
 
-    public static class PluginMessage {
+	public static class PluginMessage {
 
-        private final String message;
-        private final PluginLogger logger;
+		private final String message;
+		private final PluginLogger logger;
 
-        /**
-         * Construct a new message
-         *
-         * @param message Message
-         * @param logger  Logger
-         */
-        public PluginMessage(String message, final PluginLogger logger) {
-            this.message = message;
-            this.logger = logger;
-        }
+		/**
+		 * Construct a new message
+		 *
+		 * @param message
+		 *            Message
+		 * @param logger
+		 *            Logger
+		 */
+		public PluginMessage(final String message, final PluginLogger logger) {
+			this.message = message;
+			this.logger = logger;
+		}
 
-        /**
-         * Get the message
-         *
-         * @return
-         */
-        public String getMessage() {
-            return this.message;
-        }
+		/**
+		 * Get the message
+		 *
+		 * @return
+		 */
+		public String getMessage() {
+			return message;
+		}
 
-        /**
-         * Get the logger
-         *
-         * @return logger
-         */
-        public PluginLogger getLogger() {
-            return this.logger;
-        }
-    }
+		/**
+		 * Get the logger
+		 *
+		 * @return logger
+		 */
+		public PluginLogger getLogger() {
+			return logger;
+		}
+	}
 }

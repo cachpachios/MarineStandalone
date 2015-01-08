@@ -35,85 +35,112 @@ import java.util.zip.GZIPOutputStream;
 import org.marinemc.io.binary.ByteArray;
 import org.marinemc.io.binary.ByteInput;
 import org.marinemc.io.binary.Byteable;
+
 /**
  * @author Fozie
  */
 public class BinaryFile {
 
-    File file;
-    ByteArray data;
+	File file;
+	ByteArray data;
 
-    public BinaryFile(final File f) {
-        this.file = f;
-        this.data = null;
-    }
+	public BinaryFile(final File f) {
+		file = f;
+		data = null;
+	}
 
-    public BinaryFile(final File f, final Byteable v) {
-    	if(v instanceof ByteArray)
-    		this.data = (ByteArray) v;
-    	else
-    		this.data = new ByteArray(v.toBytes());
-    	this.file = f;
-    }
+	public BinaryFile(final File f, final Byteable v) {
+		if (v instanceof ByteArray)
+			data = (ByteArray) v;
+		else
+			data = new ByteArray(v.toBytes());
+		file = f;
+	}
 
-    public static InputStream decompressStream(final InputStream input) throws IOException {
-        final PushbackInputStream pb = new PushbackInputStream(input, 2); // We need a pushbackstream to look ahead for the signature
-        byte[] signature = new byte[2];
-        pb.read(signature); // Read the signature
-        pb.unread(signature); // Push back the signature to the stream
-        if (signature[0] == (byte) 0x1f && signature[1] == (byte) 0x8b) // Check if the signature matches standard gzip magic number
-            return new GZIPInputStream(pb);
-        else
-            return pb;
-    }
+	public static InputStream decompressStream(final InputStream input)
+			throws IOException {
+		final PushbackInputStream pb = new PushbackInputStream(input, 2); // We
+																			// need
+																			// a
+																			// pushbackstream
+																			// to
+																			// look
+																			// ahead
+																			// for
+																			// the
+																			// signature
+		final byte[] signature = new byte[2];
+		pb.read(signature); // Read the signature
+		pb.unread(signature); // Push back the signature to the stream
+		if (signature[0] == (byte) 0x1f && signature[1] == (byte) 0x8b) // Check
+																		// if
+																		// the
+																		// signature
+																		// matches
+																		// standard
+																		// gzip
+																		// magic
+																		// number
+			return new GZIPInputStream(pb);
+		else
+			return pb;
+	}
 
-    public BinaryFile readBinary() throws IOException {
-        if (!file.canRead()) throw new IOException("Can't read file: " + file.getName());
-        if (!file.exists()) throw new FileNotFoundException("File not found: " + file.getName());
-        final byte[] r = new byte[(int) file.length()];
-        InputStream input = new BufferedInputStream(new FileInputStream(file));
-        input.read(r);
-        data = new ByteArray(r);
-        input.close();
-        return this;
-    }
+	public BinaryFile readBinary() throws IOException {
+		if (!file.canRead())
+			throw new IOException("Can't read file: " + file.getName());
+		if (!file.exists())
+			throw new FileNotFoundException("File not found: " + file.getName());
+		final byte[] r = new byte[(int) file.length()];
+		final InputStream input = new BufferedInputStream(new FileInputStream(
+				file));
+		input.read(r);
+		data = new ByteArray(r);
+		input.close();
+		return this;
+	}
 
-    public BinaryFile readGZIPBinary() throws IOException {
-        if (!file.canRead()) throw new IOException("Can't read file: " + file.getName());
-        if (!file.exists()) throw new FileNotFoundException("File not found: " + file.getName());
-        final byte[] r = new byte[(int) file.length()];
-        InputStream input = decompressStream(new BufferedInputStream(new FileInputStream(file)));
-        input.read(r);
-        data = new ByteArray(r);
-        input.close();
-        return this;
-    }
+	public BinaryFile readGZIPBinary() throws IOException {
+		if (!file.canRead())
+			throw new IOException("Can't read file: " + file.getName());
+		if (!file.exists())
+			throw new FileNotFoundException("File not found: " + file.getName());
+		final byte[] r = new byte[(int) file.length()];
+		final InputStream input = decompressStream(new BufferedInputStream(
+				new FileInputStream(file)));
+		input.read(r);
+		data = new ByteArray(r);
+		input.close();
+		return this;
+	}
 
-    public void writeBinary() throws IOException {
-    	if(data == null)
-    		return;
-        if (!file.exists())
-            file.createNewFile();
-        OutputStream output = new BufferedOutputStream(new FileOutputStream(file));
-        output.write(data.toBytes());
-        output.close();
-    }
+	public void writeBinary() throws IOException {
+		if (data == null)
+			return;
+		if (!file.exists())
+			file.createNewFile();
+		final OutputStream output = new BufferedOutputStream(
+				new FileOutputStream(file));
+		output.write(data.toBytes());
+		output.close();
+	}
 
-    public void writeGZIPBinary() throws IOException {
-    	if(data == null)
-    		return;
-        if (!file.exists())
-            file.createNewFile();
-        GZIPOutputStream output = new GZIPOutputStream(new BufferedOutputStream(new FileOutputStream(file)));
-        output.write(data.toBytes());
-        output.close();
-    }
+	public void writeGZIPBinary() throws IOException {
+		if (data == null)
+			return;
+		if (!file.exists())
+			file.createNewFile();
+		final GZIPOutputStream output = new GZIPOutputStream(
+				new BufferedOutputStream(new FileOutputStream(file)));
+		output.write(data.toBytes());
+		output.close();
+	}
 
-    public ByteInput getData() {
-        return data;
-    }
-    
-    public byte[] getBytes() {
-    	return data.toBytes();
-    }
+	public ByteInput getData() {
+		return data;
+	}
+
+	public byte[] getBytes() {
+		return data.toBytes();
+	}
 }

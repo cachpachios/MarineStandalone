@@ -19,8 +19,6 @@
 
 package org.marinemc.util;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 
 /**
  * ID Object interface (blocks, materials)
@@ -29,26 +27,26 @@ import org.json.JSONObject;
  */
 public interface IDObject {
 
-    /**
-     * Get the string ID
-     *
-     * @return String ID
-     */
-    public String getStringID();
+	/**
+	 * Get the string ID
+	 *
+	 * @return String ID
+	 */
+	public String getStringID();
 
-    /**
-     * Get the numeric ID
-     *
-     * @return Numeric ID
-     */
-    public short getNumericID();
+	/**
+	 * Get the numeric ID
+	 *
+	 * @return Numeric ID
+	 */
+	public short getNumericID();
 
-    /**
-     * Turn the item into a json object
-     *
-     * @return JSON Object
-     * @throws JSONException
-     */
-    public JSONObject toJSON() throws JSONException;
+	/**
+	 * Turn the item into a json object
+	 *
+	 * @return JSON Object
+	 * @throws JSONException
+	 */
+	public JSONObject toJSON() throws JSONException;
 
 }

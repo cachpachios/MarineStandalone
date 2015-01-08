@@ -27,60 +27,64 @@ import org.marinemc.io.binary.ByteUtils;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
+
 /**
- * Sent by the client to introduce the client to the server,
- * All new connections should begin with this packet
+ * Sent by the client to introduce the client to the server, All new connections
+ * should begin with this packet
  * 
  * @author Fozie
  */
 public class HandshakePacket extends Packet {
 
-    public int protocolVersion;
-    public String serverAddress;
-    public int port;
-    public int nextState;
+	public int protocolVersion;
+	public String serverAddress;
+	public int port;
+	public int nextState;
 
-    public HandshakePacket() {
-        super(0x00, States.HANDSHAKE);
-    }
+	public HandshakePacket() {
+		super(0x00, States.HANDSHAKE);
+	}
 
-    @Override
-    public void writeToStream(PacketOutputStream stream) throws IOException {
-    	ByteList d = new ByteList();
-        d.writeVarInt(protocolVersion);
-        d.writeUTF8(serverAddress);
-        d.writeShort((short) port);
-        d.writeVarInt(nextState);
-        stream.write(getID(), d);
-    }
+	@Override
+	public void writeToStream(final PacketOutputStream stream)
+			throws IOException {
+		final ByteList d = new ByteList();
+		d.writeVarInt(protocolVersion);
+		d.writeUTF8(serverAddress);
+		d.writeShort((short) port);
+		d.writeVarInt(nextState);
+		stream.write(getID(), d);
+	}
 
-    @Override
-    public void readFromBytes(ByteInput input) {
-        protocolVersion = input.readVarInt();
-        serverAddress = ByteUtils.readUTF8VarInt(input);
-        port = input.readUnsignedShort();
-        nextState = input.readVarInt();
-        System.out.println(toString());
-    }
+	@Override
+	public void readFromBytes(final ByteInput input) {
+		protocolVersion = input.readVarInt();
+		serverAddress = ByteUtils.readUTF8VarInt(input);
+		port = input.readUnsignedShort();
+		nextState = input.readVarInt();
+		System.out.println(toString());
+	}
 
-    public String toString() {
-        return "Protocol: " + protocolVersion + " connected to " + serverAddress + " : " + port + " target state " + nextState;
-    }
+	@Override
+	public String toString() {
+		return "Protocol: " + protocolVersion + " connected to "
+				+ serverAddress + " : " + port + " target state " + nextState;
+	}
 
-    public int getProtocolVersion() {
-        return protocolVersion;
-    }
+	public int getProtocolVersion() {
+		return protocolVersion;
+	}
 
-    public String getServerAddress() {
-        return serverAddress;
-    }
+	public String getServerAddress() {
+		return serverAddress;
+	}
 
-    public int getPort() {
-        return port;
-    }
+	public int getPort() {
+		return port;
+	}
 
-    public int getState() {
-        return nextState;
-    }
+	public int getState() {
+		return nextState;
+	}
 
 }

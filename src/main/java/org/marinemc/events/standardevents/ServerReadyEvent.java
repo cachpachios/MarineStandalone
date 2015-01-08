@@ -28,8 +28,8 @@ import org.marinemc.events.Event;
  */
 public class ServerReadyEvent extends Event {
 
-    public ServerReadyEvent() {
-        super("server_ready");
-    }
+	public ServerReadyEvent() {
+		super("server_ready");
+	}
 
 }

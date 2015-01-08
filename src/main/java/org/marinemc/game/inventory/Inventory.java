@@ -27,42 +27,42 @@ import org.marinemc.util.wrapper.PacketWrapper;
 
 public abstract class Inventory {
 
-    private final byte uid;
+	private final byte uid;
 
-    public PacketWrapper<Item>[] slots;
+	public PacketWrapper<Item>[] slots;
 
-    public Inventory(int size, byte uid) {
-        this.uid = uid;
-        this.slots = new ItemSlot[size];
-    }
+	public Inventory(final int size, final byte uid) {
+		this.uid = uid;
+		slots = new ItemSlot[size];
+	}
 
-    public byte getUID() {
-        return this.uid;
-    }
+	public byte getUID() {
+		return uid;
+	}
 
-    public abstract byte getID();
+	public abstract byte getID();
 
-    public abstract String getType();
+	public abstract String getType();
 
-    public PacketWrapper<Item>[] getSlots() {
-        return slots;
-    }
+	public PacketWrapper<Item>[] getSlots() {
+		return slots;
+	}
 
-    public ItemSlot getSlot(int id) {
-        return (ItemSlot) slots[id];
-    }
+	public ItemSlot getSlot(final int id) {
+		return (ItemSlot) slots[id];
+	}
 
-    public void setSlot(int id, Item data) {
-        slots[id] = new ItemSlot(data);
-    }
+	public void setSlot(final int id, final Item data) {
+		slots[id] = new ItemSlot(data);
+	}
 
-    public void clear() {
-        for (int i = 0; i < slots.length; i++)
-            slots[i] = new ItemSlot(new Item(ItemID.EMPTY));
-    }
+	public void clear() {
+		for (int i = 0; i < slots.length; i++)
+			slots[i] = new ItemSlot(new Item(ItemID.EMPTY));
+	}
 
-    public abstract ChatMessage getTitle();
+	public abstract ChatMessage getTitle();
 
-    public abstract byte getNumberOfSlots();
+	public abstract byte getNumberOfSlots();
 
 }

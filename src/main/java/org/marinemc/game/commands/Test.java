@@ -39,83 +39,88 @@ import org.marinemc.util.StringUtils;
  */
 public class Test extends Command {
 
-    final String[] acceptableArguments = new String[]{
-            "inventory", "kick", "tab", "anvil", "crafting", "credits", "display_name", "exp"
-    };
+	final String[] acceptableArguments = new String[] { "inventory", "kick",
+			"tab", "anvil", "crafting", "credits", "display_name", "exp" };
 
-    public Test() {
-        super("test", "marine.test", "Debug", "debug");
-    }
+	public Test() {
+		super("test", "marine.test", "Debug", "debug");
+	}
 
+	@Override
+	public void execute(final CommandSender sender, final String[] arguments) {
+		String test;
+		if (!(sender instanceof Player)) {
+			sender.sendMessage("§cThis command can only be used by players");
+			return;
+		}
+		if (arguments == null || arguments.length < 1
+				|| !Arrays.asList(acceptableArguments).contains(arguments[0])) {
+			sender.sendMessage("§c[§6*§c] §6Unknown test type, acceptable types§c: §6"
+					+ StringUtils.join(Arrays.asList(acceptableArguments),
+							"§c, §6"));
+			return;
+		}
+		final Player player = (Player) sender;
+		test = arguments[0];
+		switch (test) {
+		case "inventory":
+			player.openInventory(new PlayerInventory(player.nextWindowID()));
+			break;
+		case "kick":
+			// player.getClient().sendPacket(new
+			// KickPacket(ChatColor.randomColor() + "Kick Worked! xD"));
+			if (arguments.length > 1) {
+				final String[] newArray = new String[arguments.length - 1];
+				System.arraycopy(arguments, 1, newArray, 0, newArray.length);
+				player.kick(ChatColor.transform('&',
+						StringUtils.join(newArray, " ")));
+			} else
+				player.kick(ChatColor.randomColor() + "Kicked");
+			break;
+		case "credits":
+			player.getClient().sendPacket(
+					new GameStateChangePacket(
+							GameStateChangePacket.Reason.DEMO_MESSAGES, 0f));
+			break;
+		case "crafting":
+			player.openInventory(new CraftingInventory(player.nextWindowID()));
+			break;
+		case "display_name":
+			if (arguments.length > 1) {
+				player.setDisplayName(arguments[1]);
+				TablistManager.getInstance().setDisplayName(player);
+			} else {
+				player.setDisplayName(player.getUserName());
+				TablistManager.getInstance().setDisplayName(player);
+			}
+			break;
+		case "exp":
+			player.setXP((float) Math.random());
+			player.setLevels((int) Math.ceil(Math.random() * 255));
+			break;
+		case "tab":
+			if (arguments.length < 3)
+				player.sendMessage("You need to specify two strings (_ instead of spaces)");
+			else {
+				final String header = arguments[1].replace('_', ' ');
+				final String footer = arguments[2].replace('_', ' ');
+				TablistManager.getInstance().setHeaderAndFooter(header, footer,
+						player);
+			}
+			break;
+		default:
+			break;
+		}
+	}
 
-    @Override
-    public void execute(CommandSender sender, String[] arguments) {
-        String test;
-        if (!(sender instanceof Player)) {
-            sender.sendMessage("§cThis command can only be used by players");
-            return;
-        }
-        if (arguments == null || arguments.length < 1 || !Arrays.asList(acceptableArguments).contains(arguments[0])) {
-            sender.sendMessage("§c[§6*§c] §6Unknown test type, acceptable types§c: §6"
-                    + StringUtils.join(Arrays.asList(acceptableArguments), "§c, §6"));
-            return;
-        }
-        Player player = (Player) sender;
-        test = arguments[0];
-        switch (test) {
-            case "inventory":
-                player.openInventory(new PlayerInventory(player.nextWindowID()));
-                break;
-            case "kick":
-                // player.getClient().sendPacket(new KickPacket(ChatColor.randomColor() + "Kick Worked! xD"));
-                if (arguments.length > 1) {
-                    String[] newArray = new String[arguments.length - 1];
-                    System.arraycopy(arguments, 1, newArray, 0, newArray.length);
-                    player.kick(ChatColor.transform('&', StringUtils.join(newArray, " ")));
-                } else {
-                    player.kick(ChatColor.randomColor() + "Kicked");
-                }
-                break;
-            case "credits":
-                player.getClient().sendPacket(new GameStateChangePacket(GameStateChangePacket.Reason.DEMO_MESSAGES, 0f));
-                break;	
-            case "crafting":
-                player.openInventory(new CraftingInventory(player.nextWindowID()));
-                break;
-            case "display_name":
-                if (arguments.length > 1) {
-                    player.setDisplayName(arguments[1]);
-                    TablistManager.getInstance().setDisplayName(player);
-                } else {
-                    player.setDisplayName(player.getUserName());
-                    TablistManager.getInstance().setDisplayName(player);
-                }
-                break;
-  	        case "exp":
-                player.setXP((float) Math.random());
-                player.setLevels((int) (Math.ceil(Math.random() * 255)));
-                break;
-            case "tab":
-                if (arguments.length < 3) {
-                    player.sendMessage("You need to specify two strings (_ instead of spaces)");
-                } else {
-                    String header = arguments[1].replace('_', ' ');
-                    String footer = arguments[2].replace('_', ' ');
-                    TablistManager.getInstance().setHeaderAndFooter(header, footer, player);
-                }
-                break;
-            default:
-                break;
-        }
-    }
-
-    @Override
-    public Collection<String> getCompletion(CommandSender sender, String command) {
-        String[] s = command.split(" ");
-        // Only return the suggestions if the sender has not inputted
-        // a test yet (/test [suggestion request])
-        if (s.length == 1)
-            return Arrays.asList(acceptableArguments);
-        return Arrays.asList();
-    }
+	@Override
+	public Collection<String> getCompletion(final CommandSender sender,
+			final String command) {
+		final String[] s = command.split(" ");
+		// Only return the suggestions if the sender has not inputted
+		// a test yet (/test [suggestion request])
+		if (s.length == 1)
+			return Arrays.asList(acceptableArguments);
+		return Arrays.asList();
+	}
 }

@@ -26,59 +26,57 @@ import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
 import org.marinemc.util.Position;
+
 /**
  * @author Fozie
  */
 public class DiggingPacket extends Packet {
 
-    private Status status;
-    private Position blockPos;
-    private byte blockFace;
+	private Status status;
+	private Position blockPos;
+	private byte blockFace;
 
-    public DiggingPacket() {
-        super(0, States.INGAME);
-    }
+	public DiggingPacket() {
+		super(0, States.INGAME);
+	}
 
-    @Override
-    public void writeToStream(PacketOutputStream stream) throws IOException {
-    }
+	@Override
+	public void writeToStream(final PacketOutputStream stream)
+			throws IOException {
+	}
 
-    @Override
-    public void readFromBytes(ByteInput input) {
-        switch (input.readByte()) {
-            case 0:
-                status = Status.StartedDigging;
-            case 1:
-                status = Status.CanceledDigging;
-            case 2:
-                status = Status.FinishDigging;
-            default:
-                status = Status.FinishDigging;
-        }
+	@Override
+	public void readFromBytes(final ByteInput input) {
+		switch (input.readByte()) {
+		case 0:
+			status = Status.StartedDigging;
+		case 1:
+			status = Status.CanceledDigging;
+		case 2:
+			status = Status.FinishDigging;
+		default:
+			status = Status.FinishDigging;
+		}
 
-        blockPos = Position.Decode(input.readLong());
+		blockPos = Position.Decode(input.readLong());
 
-        blockFace = input.readByte(); // Block Face
-    }
+		blockFace = input.readByte(); // Block Face
+	}
 
-    public Status getStatus() {
-        return status;
-    }
+	public Status getStatus() {
+		return status;
+	}
 
-    public Position getBlockPos() {
-        return blockPos;
-    }
+	public Position getBlockPos() {
+		return blockPos;
+	}
 
-    public byte getBlockFace() {
-        return blockFace;
-    }
+	public byte getBlockFace() {
+		return blockFace;
+	}
 
-    public enum Status {
-        StartedDigging,
-        CanceledDigging,
-        FinishDigging,
-        DropItemStack,
-        DropItem
-    }
+	public enum Status {
+		StartedDigging, CanceledDigging, FinishDigging, DropItemStack, DropItem
+	}
 
 }

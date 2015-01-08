@@ -22,37 +22,38 @@ package org.marinemc.io.nbt;
 import org.marinemc.io.binary.ByteArray;
 import org.marinemc.io.binary.ByteInput;
 import org.marinemc.io.binary.ByteList;
+
 /**
  * @author Fozie
  */
 public class NBTByteArray extends NBTTag<Byte[]> {
 
-    private ByteArray array;
+	private final ByteArray array;
 
-    public NBTByteArray(String name, ByteInput data) {
-        super(name, 7);
-        array = new ByteArray(data.readBytes(data.readInt()));
-    }
+	public NBTByteArray(final String name, final ByteInput data) {
+		super(name, 7);
+		array = new ByteArray(data.readBytes(data.readInt()));
+	}
 
-    public NBTByteArray(String name, byte[] v) {
-        this(name, new ByteArray(v));
-    }
+	public NBTByteArray(final String name, final byte[] v) {
+		this(name, new ByteArray(v));
+	}
 
-    @Override
-    public byte[] toByteArray() {
-        ByteList d = new ByteList();
-        d.writeByte(getTagID());
-        d.writeUTF8Short(getName());
-        d.writeInt(array.length());
-        d.write(array.toBytes());
-        return d.toBytes();
-    }
+	@Override
+	public byte[] toByteArray() {
+		final ByteList d = new ByteList();
+		d.writeByte(getTagID());
+		d.writeUTF8Short(getName());
+		d.writeInt(array.length());
+		d.write(array.toBytes());
+		return d.toBytes();
+	}
 
-    @Override
-    public byte[] toNonPrefixedByteArray() {
-    	ByteList data = new ByteList();
-        data.writeInt(array.length());
-        data.write(array.toBytes());
-        return data.toBytes();
-    }
+	@Override
+	public byte[] toNonPrefixedByteArray() {
+		final ByteList data = new ByteList();
+		data.writeInt(array.length());
+		data.write(array.toBytes());
+		return data.toBytes();
+	}
 }

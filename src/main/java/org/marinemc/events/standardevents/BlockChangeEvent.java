@@ -29,46 +29,47 @@ import org.marinemc.world.BlockID;
  */
 public class BlockChangeEvent extends Event implements Cancellable {
 
-    private final Position blockPos;
-    private final BlockID current;
-    boolean isCancelled;
-    private BlockID target;
+	private final Position blockPos;
+	private final BlockID current;
+	boolean isCancelled;
+	private BlockID target;
 
-    public BlockChangeEvent(Position blockPos, BlockID current, BlockID target) {
-        super("BlockChangeEvent");
-        this.blockPos = blockPos;
-        this.current = current;
-        this.target = target;
-        this.isCancelled = false;
-    }
+	public BlockChangeEvent(final Position blockPos, final BlockID current,
+			final BlockID target) {
+		super("BlockChangeEvent");
+		this.blockPos = blockPos;
+		this.current = current;
+		this.target = target;
+		isCancelled = false;
+	}
 
-    public BlockID getPrevious() {
-        return this.current;
-    }
+	public BlockID getPrevious() {
+		return current;
+	}
 
-    public BlockID getNew() {
-        return this.target;
-    }
+	public BlockID getNew() {
+		return target;
+	}
 
-    public void setNew(BlockID target) {
-        if (target == this.getPrevious())
-            this.setCancelled(true);
-        else
-            this.target = target;
-    }
+	public void setNew(final BlockID target) {
+		if (target == getPrevious())
+			setCancelled(true);
+		else
+			this.target = target;
+	}
 
-    public Position getPosition() {
-        return this.blockPos;
-    }
+	public Position getPosition() {
+		return blockPos;
+	}
 
-    @Override
-    public boolean isCancelled() {
-        return isCancelled;
-    }
+	@Override
+	public boolean isCancelled() {
+		return isCancelled;
+	}
 
-    @Override
-    public void setCancelled(boolean b) {
-        isCancelled = true;
-    }
+	@Override
+	public void setCancelled(final boolean b) {
+		isCancelled = true;
+	}
 
 }

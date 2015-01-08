@@ -26,29 +26,30 @@ package org.marinemc.util;
  */
 public class SystemUtils {
 
-    /**
-     * Get the java version as a number
-     *
-     * @return Java Specification Version Times 10 Minus 10
-     */
-    public static int getJavaVersion() {
-        try {
-            return (int) (Double.parseDouble(System.getProperty("java.specification.version")) * 10) - 10;
-        } catch (Throwable e) {
-            return -1;
-        }
-    }
+	/**
+	 * Get the java version as a number
+	 *
+	 * @return Java Specification Version Times 10 Minus 10
+	 */
+	public static int getJavaVersion() {
+		try {
+			return (int) (Double.parseDouble(System
+					.getProperty("java.specification.version")) * 10) - 10;
+		} catch (final Throwable e) {
+			return -1;
+		}
+	}
 
-    /**
-     * Get the system arch
-     *
-     * @return System Arch
-     */
-    public static int getArch() {
-        try {
-            return Integer.parseInt(System.getProperty("sun.arch.data.model"));
-        } catch (Exception e) {
-            return -1;
-        }
-    }
+	/**
+	 * Get the system arch
+	 *
+	 * @return System Arch
+	 */
+	public static int getArch() {
+		try {
+			return Integer.parseInt(System.getProperty("sun.arch.data.model"));
+		} catch (final Exception e) {
+			return -1;
+		}
+	}
 }

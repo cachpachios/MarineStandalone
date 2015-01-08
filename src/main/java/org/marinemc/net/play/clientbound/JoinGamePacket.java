@@ -27,34 +27,36 @@ import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
 import org.marinemc.server.Marine;
+
 /**
  * @author Fozie
  */
 public class JoinGamePacket extends Packet {
 
-    final Player p;
+	final Player p;
 
-    public JoinGamePacket(final Player p) {
-        super(0x01, States.INGAME);
-        this.p = p;
-    }
+	public JoinGamePacket(final Player p) {
+		super(0x01, States.INGAME);
+		this.p = p;
+	}
 
-    @Override
-    public void writeToStream(PacketOutputStream stream) throws IOException {
-    	ByteList d = new ByteList();
+	@Override
+	public void writeToStream(final PacketOutputStream stream)
+			throws IOException {
+		final ByteList d = new ByteList();
 
-        d.writeInt(p.getEntityID());
+		d.writeInt(p.getEntityID());
 
-        d.writeByte(p.getGamemode().getID()); // Gamemode
+		d.writeByte(p.getGamemode().getID()); // Gamemode
 
-        d.writeByte(p.getWorld().getDimension().getID()); // Dimension
-        d.writeByte(Marine.getServer().getDefaultDifficulty().getID()); // Difficulty
+		d.writeByte(p.getWorld().getDimension().getID()); // Dimension
+		d.writeByte(Marine.getServer().getDefaultDifficulty().getID()); // Difficulty
 
-        d.writeByte((byte) Marine.getMaxPlayers()); // MaxPlayers
-        d.writeUTF8("flat");
-        d.writeBoolean(false);
+		d.writeByte((byte) Marine.getMaxPlayers()); // MaxPlayers
+		d.writeUTF8("flat");
+		d.writeBoolean(false);
 
-        stream.write(getID(), d);
-    }
+		stream.write(getID(), d);
+	}
 
 }

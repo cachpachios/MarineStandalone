@@ -26,29 +26,32 @@ import org.marinemc.io.binary.ByteList;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
+
 /**
  * @author Fozie
  */
 public class PlayerAbilitesPacket extends Packet {
 
-    final Player p;
+	final Player p;
 
-    public PlayerAbilitesPacket(Player p) {
-        super(0x39, States.INGAME);
-        this.p = p;
-    }
+	public PlayerAbilitesPacket(final Player p) {
+		super(0x39, States.INGAME);
+		this.p = p;
+	}
 
-    @Override
-    public void writeToStream(PacketOutputStream stream) throws IOException {
-    	ByteList d = new ByteList();
+	@Override
+	public void writeToStream(final PacketOutputStream stream)
+			throws IOException {
+		final ByteList d = new ByteList();
 
-        byte flags = (byte) ((p.isInCreativeMode() ? 8 : 0) | (p.canFly() ? 4 : 0) | (p.isFlying() ? 2 : 0) | (p.isInCreativeMode() ? 1 : 0));
-        d.writeByte(flags);
-        d.writeFloat(p.getFlySpeed());
-        d.writeFloat(p.getWalkSpeed());
+		final byte flags = (byte) ((p.isInCreativeMode() ? 8 : 0)
+				| (p.canFly() ? 4 : 0) | (p.isFlying() ? 2 : 0) | (p
+				.isInCreativeMode() ? 1 : 0));
+		d.writeByte(flags);
+		d.writeFloat(p.getFlySpeed());
+		d.writeFloat(p.getWalkSpeed());
 
-        stream.write(getID(), d);
+		stream.write(getID(), d);
 
-
-    }
+	}
 }

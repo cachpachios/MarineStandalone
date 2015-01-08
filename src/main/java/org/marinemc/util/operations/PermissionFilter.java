@@ -29,27 +29,27 @@ import org.marinemc.game.player.Player;
  */
 public class PermissionFilter extends FilteredOperation<Player> {
 
-    private Permission permission;
-    private ArgumentedOperation<Player> operation;
+	private final Permission permission;
+	private final ArgumentedOperation<Player> operation;
 
-    public PermissionFilter(final Permission permission, final ArgumentedOperation<Player> operation) {
-        this.permission = permission;
-        this.operation = operation;
-    }
+	public PermissionFilter(final Permission permission,
+			final ArgumentedOperation<Player> operation) {
+		this.permission = permission;
+		this.operation = operation;
+	}
 
-    public PermissionFilter(final Permission permission) {
-        this(permission, null);
-    }
+	public PermissionFilter(final Permission permission) {
+		this(permission, null);
+	}
 
-    @Override
-    public void perform(Player player) {
-        if (operation != null) {
-            operation.action(player);
-        }
-    }
+	@Override
+	public void perform(final Player player) {
+		if (operation != null)
+			operation.action(player);
+	}
 
-    @Override
-    public boolean filter(Player player) {
-        return player.hasPermission(permission);
-    }
+	@Override
+	public boolean filter(final Player player) {
+		return player.hasPermission(permission);
+	}
 }

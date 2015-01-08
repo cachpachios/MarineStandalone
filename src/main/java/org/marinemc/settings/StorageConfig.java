@@ -21,8 +21,6 @@ package org.marinemc.settings;
 
 import java.io.File;
 
-import org.json.JSONException;
-
 /**
  * Created 2014-12-27 for MarineStandalone
  *
@@ -30,23 +28,20 @@ import org.json.JSONException;
  */
 public class StorageConfig extends JSONConfig {
 
-    protected StorageConfig(File file) {
-        super(file);
-    }
+	protected StorageConfig(final File file) {
+		super(file);
+	}
 
-    protected StorageConfig(File parent, String file) throws JSONException {
-        super(parent, file);
-    }
+	protected StorageConfig(final File parent, final String file)
+			throws JSONException {
+		super(parent, file);
+	}
 
-       /*@Override
-        public Map<String, Object> defaultValues() {
-            Map<String, Object> defaultUUIDS = new HashMap<>();
-            try {
-                defaultUUIDS.put("uuid", new JSONArray(new String[]{UUIDHandler.getUUID("notch").toString()}));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return defaultUUIDS;
-        }*/
+	/*
+	 * @Override public Map<String, Object> defaultValues() { Map<String,
+	 * Object> defaultUUIDS = new HashMap<>(); try { defaultUUIDS.put("uuid",
+	 * new JSONArray(new String[]{UUIDHandler.getUUID("notch").toString()})); }
+	 * catch (JSONException e) { e.printStackTrace(); } return defaultUUIDS; }
+	 */
 
 }

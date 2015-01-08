@@ -26,22 +26,24 @@ import org.marinemc.io.binary.ByteList;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
+
 /**
  * @author Fozie
  */
 public class KickPacket extends Packet {
 
-    private final String msg;
+	private final String msg;
 
-    public KickPacket(final String msg) {
-        super(0x40, States.INGAME);
-        this.msg = msg;
-    }
+	public KickPacket(final String msg) {
+		super(0x40, States.INGAME);
+		this.msg = msg;
+	}
 
-    @Override
-    public void writeToStream(PacketOutputStream stream) throws IOException {
-    	ByteList d = new ByteList();
-        d.writeUTF8(new ChatMessage(msg).toString());
-        stream.write(getID(), d);
-    }
+	@Override
+	public void writeToStream(final PacketOutputStream stream)
+			throws IOException {
+		final ByteList d = new ByteList();
+		d.writeUTF8(new ChatMessage(msg).toString());
+		stream.write(getID(), d);
+	}
 }

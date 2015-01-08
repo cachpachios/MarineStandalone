@@ -33,16 +33,15 @@ import org.marinemc.util.StringUtils;
  */
 public class Me extends Command {
 
-    public Me() {
-        super("me", "marine.me", "Do something...", "emote");
-    }
+	public Me() {
+		super("me", "marine.me", "Do something...", "emote");
+	}
 
-    public void execute(CommandSender sender, String[] args) {
-        Marine.broadcastMessage(
-                String.format(
-                        ChatColor.GRAY + "* %s %s",
-                        ((sender instanceof Player) ? ((Player) sender).getUserName() : "Console"),
-                        StringUtils.join(replaceAll(args, sender), " "))
-        );
-    }
+	@Override
+	public void execute(final CommandSender sender, final String[] args) {
+		Marine.broadcastMessage(String.format(ChatColor.GRAY + "* %s %s",
+				sender instanceof Player ? ((Player) sender).getUserName()
+						: "Console", StringUtils.join(replaceAll(args, sender),
+						" ")));
+	}
 }

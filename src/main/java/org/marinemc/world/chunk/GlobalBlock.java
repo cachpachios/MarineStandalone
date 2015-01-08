@@ -21,6 +21,7 @@ package org.marinemc.world.chunk;
 
 import org.marinemc.util.Position;
 import org.marinemc.world.BlockID;
+
 /**
  * 
  * Used as a resepentation or pointer.
@@ -28,20 +29,20 @@ import org.marinemc.world.BlockID;
  * @author Fozie
  */
 public class GlobalBlock {
-    private final Position pos;
-    private final BlockID type;
+	private final Position pos;
+	private final BlockID type;
 
-    public GlobalBlock(final Position pos, final BlockID type) {
-        this.pos = pos;
-        this.type = type;
-    }
+	public GlobalBlock(final Position pos, final BlockID type) {
+		this.pos = pos;
+		this.type = type;
+	}
 
-    public BlockID getBlockID() {
-        return type;
-    }
+	public BlockID getBlockID() {
+		return type;
+	}
 
-    public Position getPos() {
-        return pos;
-    }
+	public Position getPos() {
+		return pos;
+	}
 
 }

@@ -29,52 +29,52 @@ import java.io.IOException;
  */
 public class Base64Image {
 
-    private final File file;
-    private String string;
+	private final File file;
+	private String string;
 
-    public Base64Image(final File file) {
-        if (file == null) {
-            this.file = null;
-            this.string = "";
-            return;
-        }
-        if (!file.exists()) {
-            throw new IllegalArgumentException("File cannot be null, and has to exist");
-        }
-        BinaryFile f = new BinaryFile(file);
-        try {
-            f.readBinary();
-        } catch (final IOException e) {
-            throw new RuntimeException("Unable to read in the binary data", e);
-        }
-        this.string = new String(Base64Encoding.encode(f.getBytes()));
-        this.file = file;
-    }
+	public Base64Image(final File file) {
+		if (file == null) {
+			this.file = null;
+			string = "";
+			return;
+		}
+		if (!file.exists())
+			throw new IllegalArgumentException(
+					"File cannot be null, and has to exist");
+		final BinaryFile f = new BinaryFile(file);
+		try {
+			f.readBinary();
+		} catch (final IOException e) {
+			throw new RuntimeException("Unable to read in the binary data", e);
+		}
+		string = new String(Base64Encoding.encode(f.getBytes()));
+		this.file = file;
+	}
 
-    public File getFile() {
-        return this.file;
-    }
+	public File getFile() {
+		return file;
+	}
 
-    @Override
-    public String toString() {
-        return this.string;
-    }
-    
-    public void refreshImage() {
-        if (file == null) {
-            this.string = "";
-            return;
-        }
-        if (!file.exists()) {
-            throw new IllegalArgumentException("File cannot be null, and has to exist");
-        }
-        BinaryFile f = new BinaryFile(file);
-        try {
-            f.readBinary();
-        } catch (final IOException e) {
-            throw new RuntimeException("Unable to read in the binary data", e);
-        }
-        this.string = new String(Base64Encoding.encode(f.getBytes()));
-    }
-    
+	@Override
+	public String toString() {
+		return string;
+	}
+
+	public void refreshImage() {
+		if (file == null) {
+			string = "";
+			return;
+		}
+		if (!file.exists())
+			throw new IllegalArgumentException(
+					"File cannot be null, and has to exist");
+		final BinaryFile f = new BinaryFile(file);
+		try {
+			f.readBinary();
+		} catch (final IOException e) {
+			throw new RuntimeException("Unable to read in the binary data", e);
+		}
+		string = new String(Base64Encoding.encode(f.getBytes()));
+	}
+
 }

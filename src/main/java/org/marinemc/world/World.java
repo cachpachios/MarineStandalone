@@ -27,7 +27,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.marinemc.game.WorldManager;
 import org.marinemc.game.player.Player;
 import org.marinemc.server.Marine;
 import org.marinemc.util.MathUtils;
@@ -42,202 +41,221 @@ import org.marinemc.world.gen.WorldGenerator;
 /**
  * @author Fozie
  */
-public class World { // TODO Save and unload chunks...	
-	
-    //Async stuff:
-    private WorldThread thread;
-    private List<Long> chunksToGenerate;
-    
-    //Identifiers:
-    private final String name;
-    private final byte uid;
-    private final Dimension dimension;
+public class World { // TODO Save and unload chunks...
 
-    //Data:
-    private volatile Map<Long, Chunk> loadedChunks;
-    private Position spawnPoint;
-    
-    private EntityHandler entities;
+	// Async stuff:
+	private final WorldThread thread;
+	private final List<Long> chunksToGenerate;
 
-    private long age;
-    private long time;
+	// Identifiers:
+	private final String name;
+	private final byte uid;
+	private final Dimension dimension;
 
-    private WorldGenerator generator;
-	private Random randomizer;
+	// Data:
+	private volatile Map<Long, Chunk> loadedChunks;
+	private final Position spawnPoint;
+
+	private final EntityHandler entities;
+
+	private long age;
+	private long time;
+
+	private final WorldGenerator generator;
+	private final Random randomizer;
+
 	/**
 	 * Constructor with a random world seed
 	 */
-    public World(final String name, WorldGenerator generator) {
-    	this(name,(long) (Math.random() * Long.MAX_VALUE),generator);
-    }
-    public World(final String name,long seed, WorldGenerator generator) {
-    	this.loadedChunks = Collections.synchronizedMap(new HashMap<Long, Chunk>());
-    	this.randomizer = new Random();
-        this.generator = generator; // StandardGenerator
-        this.generator.setGenerationWorld(this);
-        this.spawnPoint = generator.getSafeSpawnPoint(); //TODO make this get loaded from world or generate random based on worldgenerator
-        this.uid = Marine.getServer().getWorldManager().getNextUID();
-        this.name = name;
-        this.dimension = Dimension.OVERWORLD;
-        this.time = 0;
-        this.age = 0;
-        this.entities = new EntityHandler(this);
-        
-        chunksToGenerate = new CopyOnWriteArrayList<>();
-        
-        thread = new WorldThread(this);
-        thread.start();
-    }
+	public World(final String name, final WorldGenerator generator) {
+		this(name, (long) (Math.random() * Long.MAX_VALUE), generator);
+	}
 
-    public boolean isChunkLoaded(int x, int y) {
-        return loadedChunks.containsKey(ChunkPos.Encode(x, y));
-    }
+	public World(final String name, final long seed,
+			final WorldGenerator generator) {
+		loadedChunks = Collections.synchronizedMap(new HashMap<Long, Chunk>());
+		randomizer = new Random();
+		this.generator = generator; // StandardGenerator
+		this.generator.setGenerationWorld(this);
+		spawnPoint = generator.getSafeSpawnPoint(); // TODO make this get loaded
+													// from world or generate
+													// random based on
+													// worldgenerator
+		uid = Marine.getServer().getWorldManager().getNextUID();
+		this.name = name;
+		dimension = Dimension.OVERWORLD;
+		time = 0;
+		age = 0;
+		entities = new EntityHandler(this);
 
-    public boolean isChunkLoaded(ChunkPos p) {
-        return loadedChunks.containsKey(p.encode());
-    }
+		chunksToGenerate = new CopyOnWriteArrayList<>();
 
-    public void generateAsyncChunk(int x, int y) {
-    	ChunkPos pos = new ChunkPos(x,y);
+		thread = new WorldThread(this);
+		thread.start();
+	}
 
-    	if(!loadedChunks.containsKey(pos.encode()))
-    		chunksToGenerate.add(pos.encode());
-    }
-    
-    public void generateAsyncChunk(ChunkPos pos) {
-    	if(!loadedChunks.containsKey(pos.encode()))
-    		chunksToGenerate.add(pos.encode());
-    }
-    
-    public void generateAsyncRegion(int x, int y, int amtX, int amtY)  {
-        for (int xx = amtX / 2 * -1; xx < amtX; xx++)
-            for (int yy = amtY / 2 * -1; yy < amtY; yy++)
-            	generateAsyncChunk(x + xx, y + yy);
-    }
-    
-    public boolean isEntireRegionInMemory(int x, int y, int amtX, int amtY) {
-    	boolean r = true;
-        for (int xx = amtX / 2 * -1; xx < amtX; xx++)
-            for (int yy = amtY / 2 * -1; yy < amtY; yy++)
-            	if(!loadedChunks.containsKey(ChunkPos.Encode(x + xx, y + yy)))
-            		r = false;
-        return r;
-    }
-    
-    private void forceGenerateChunk(int x, int z) {
-        loadedChunks.put(ChunkPos.Encode(x, z), generator.generateChunk(new ChunkPos(x,z)));
-    }
+	public boolean isChunkLoaded(final int x, final int y) {
+		return loadedChunks.containsKey(ChunkPos.Encode(x, y));
+	}
 
-    private void forceGenerateChunk(ChunkPos p) {
-        loadedChunks.put(p.encode(), generator.generateChunk(p));
-    }
-    
-    public Chunk getChunkForce(int x, int z) { // Will generate/loadchunk if not loaded
-        if (!isChunkLoaded(x, z))
-        	forceGenerateChunk(x,z); // TODO Load world
+	public boolean isChunkLoaded(final ChunkPos p) {
+		return loadedChunks.containsKey(p.encode());
+	}
 
-            return loadedChunks.get(ChunkPos.Encode(x, z));
-    }
+	public void generateAsyncChunk(final int x, final int y) {
+		final ChunkPos pos = new ChunkPos(x, y);
 
-    public Chunk getChunkForce(ChunkPos p) { // Will generate/loadchunk if not loaded
-        if (!isChunkLoaded(p))
-        	forceGenerateChunk(p); // TODO Load world
+		if (!loadedChunks.containsKey(pos.encode()))
+			chunksToGenerate.add(pos.encode());
+	}
 
-            return loadedChunks.get(p.encode());
-    }
+	public void generateAsyncChunk(final ChunkPos pos) {
+		if (!loadedChunks.containsKey(pos.encode()))
+			chunksToGenerate.add(pos.encode());
+	}
 
-    public List<Chunk> getChunksForce(int x, int z, int amtX, int amtY) {
+	public void generateAsyncRegion(final int x, final int y, final int amtX,
+			final int amtY) {
+		for (int xx = amtX / 2 * -1; xx < amtX; xx++)
+			for (int yy = amtY / 2 * -1; yy < amtY; yy++)
+				generateAsyncChunk(x + xx, y + yy);
+	}
 
-        List<Chunk> chunks = new ArrayList<Chunk>();
+	public boolean isEntireRegionInMemory(final int x, final int y,
+			final int amtX, final int amtY) {
+		boolean r = true;
+		for (int xx = amtX / 2 * -1; xx < amtX; xx++)
+			for (int yy = amtY / 2 * -1; yy < amtY; yy++)
+				if (!loadedChunks.containsKey(ChunkPos.Encode(x + xx, y + yy)))
+					r = false;
+		return r;
+	}
 
-        for (int xx = amtX / 2 * -1; xx < amtX; xx++)
-            for (int yy = amtY / 2 * -1; yy < amtY; yy++)
-                chunks.add(getChunkForce(x + xx, z + yy));
+	private void forceGenerateChunk(final int x, final int z) {
+		loadedChunks.put(ChunkPos.Encode(x, z),
+				generator.generateChunk(new ChunkPos(x, z)));
+	}
 
-        return chunks;
-    }
+	private void forceGenerateChunk(final ChunkPos p) {
+		loadedChunks.put(p.encode(), generator.generateChunk(p));
+	}
 
-    public Dimension getDimension() {
-        return dimension;
-    }
+	public Chunk getChunkForce(final int x, final int z) { // Will
+															// generate/loadchunk
+															// if not loaded
+		if (!isChunkLoaded(x, z))
+			forceGenerateChunk(x, z); // TODO Load world
 
-    public Position getSpawnPoint() {
-    	if(spawnPoint!=null)
-    		return spawnPoint;
-    	else
-    		return generator.getSafeSpawnPoint();
-    }
+		return loadedChunks.get(ChunkPos.Encode(x, z));
+	}
 
-    public String getName() {
-        return name;
-    }
-    
-    void generateRequested() {
-    	for(Long pos : chunksToGenerate) {
-    		if(loadedChunks.containsKey(pos)) {
-    			chunksToGenerate.remove(pos);
-    			continue;
-    		}
-    		
-    		forceGenerateChunk(new ChunkPos(pos));
-    		
-    	}
-    }
+	public Chunk getChunkForce(final ChunkPos p) { // Will generate/loadchunk if
+													// not loaded
+		if (!isChunkLoaded(p))
+			forceGenerateChunk(p); // TODO Load world
 
-    void tick() {
-        if (time < 24000)
-            ++time;
-        else
-            time = 0;
-        age++;
-    }
+		return loadedChunks.get(p.encode());
+	}
 
-    public long getTime() {
-        return time;
-    }
+	public List<Chunk> getChunksForce(final int x, final int z, final int amtX,
+			final int amtY) {
 
+		final List<Chunk> chunks = new ArrayList<Chunk>();
 
-    public LevelType getLevelType() {
-        return generator.getLevelType();
-    }
+		for (int xx = amtX / 2 * -1; xx < amtX; xx++)
+			for (int yy = amtY / 2 * -1; yy < amtY; yy++)
+				chunks.add(getChunkForce(x + xx, z + yy));
 
-    public long getWorldAge() {
-        return age;
-    }
+		return chunks;
+	}
 
-    public void setTypeAt(Position blockPos, BlockID target, boolean loadIfEmpty) {
-        ChunkPos p = blockPos.getChunkPos();
-        if (isChunkLoaded(p)) {
-            Position pos = blockPos.getChunkBlockPos();
-            loadedChunks.get(p.encode()).setBlock(pos.getX(), pos.getY(), pos.getZ(), target);
-        } else if (loadIfEmpty) {
-            Position pos = blockPos.getChunkBlockPos();
-            getChunkForce(p).setBlock(pos.getX(), pos.getY(), pos.getZ(), target);
-        }
-    }
+	public Dimension getDimension() {
+		return dimension;
+	}
 
-    public byte getUID() {
-        return uid;
-    }
+	public Position getSpawnPoint() {
+		if (spawnPoint != null)
+			return spawnPoint;
+		else
+			return generator.getSafeSpawnPoint();
+	}
 
-    public WorldGenerator getGenerator() {
-        return this.generator;
-    }
+	public String getName() {
+		return name;
+	}
+
+	void generateRequested() {
+		for (final Long pos : chunksToGenerate) {
+			if (loadedChunks.containsKey(pos)) {
+				chunksToGenerate.remove(pos);
+				continue;
+			}
+
+			forceGenerateChunk(new ChunkPos(pos));
+
+		}
+	}
+
+	void tick() {
+		if (time < 24000)
+			++time;
+		else
+			time = 0;
+		age++;
+	}
+
+	public long getTime() {
+		return time;
+	}
+
+	public LevelType getLevelType() {
+		return generator.getLevelType();
+	}
+
+	public long getWorldAge() {
+		return age;
+	}
+
+	public void setTypeAt(final Position blockPos, final BlockID target,
+			final boolean loadIfEmpty) {
+		final ChunkPos p = blockPos.getChunkPos();
+		if (isChunkLoaded(p)) {
+			final Position pos = blockPos.getChunkBlockPos();
+			loadedChunks.get(p.encode()).setBlock(pos.getX(), pos.getY(),
+					pos.getZ(), target);
+		} else if (loadIfEmpty) {
+			final Position pos = blockPos.getChunkBlockPos();
+			getChunkForce(p).setBlock(pos.getX(), pos.getY(), pos.getZ(),
+					target);
+		}
+	}
+
+	public byte getUID() {
+		return uid;
+	}
+
+	public WorldGenerator getGenerator() {
+		return generator;
+	}
 
 	public EntityHandler getEntityHandler() {
-        return entities;
-    }
+		return entities;
+	}
 
 	public boolean hasChunksToGenerate() {
 		return !chunksToGenerate.isEmpty();
 	}
 
 	void finalizeChunks() {
-		for(Chunk c : loadedChunks.values())
-			if(!c.isActive() && !MathUtils.isInsideRect(0, 0, Marine.getServer().getViewDistance(), Marine.getServer().getViewDistance(), c.getPos().getX(), c.getPos().getY())) {
+		for (final Chunk c : loadedChunks.values())
+			if (!c.isActive()
+					&& !MathUtils.isInsideRect(0, 0, Marine.getServer()
+							.getViewDistance(), Marine.getServer()
+							.getViewDistance(), c.getPos().getX(), c.getPos()
+							.getY())) {
 				c.unload();
 				loadedChunks.remove(c);
-				
+
 			}
 	}
 
@@ -246,24 +264,28 @@ public class World { // TODO Save and unload chunks...
 	 * @return
 	 */
 	@Threaded
-	public List<Chunk> getSpawnChunks(Player p) {
-		
-		final int s = Marine.getServer().getViewDistance()/2;
-		
-		final int x = (int)(p.getX() / 16), y = (int)(p.getZ() / 16);
-		
-		final List<Chunk> spawnChunks = new ArrayList<>(s*s);
-		
-		if(!this.isEntireRegionInMemory(x, y, s, s)) {
-			this.generateAsyncRegion(x, y, s, s);
+	public List<Chunk> getSpawnChunks(final Player p) {
+
+		final int s = Marine.getServer().getViewDistance() / 2;
+
+		final int x = (int) (p.getX() / 16), y = (int) (p.getZ() / 16);
+
+		final List<Chunk> spawnChunks = new ArrayList<>(s * s);
+
+		if (!isEntireRegionInMemory(x, y, s, s)) {
+			generateAsyncRegion(x, y, s, s);
 			// Wait for the chunks to be generated:
-			while(hasChunksToGenerate()) try { Thread.sleep(WorldThread.skipTime*2);} catch (InterruptedException e) {}
+			while (hasChunksToGenerate())
+				try {
+					Thread.sleep(WorldThread.skipTime * 2);
+				} catch (final InterruptedException e) {
+				}
 		}
-		
-        for (int xx = s / 2 * -1; xx < s; xx++)
-            for (int yy = s / 2 * -1; yy < s; yy++)
-            	spawnChunks.add(getChunkForce(x + xx, y + yy));
-		
+
+		for (int xx = s / 2 * -1; xx < s; xx++)
+			for (int yy = s / 2 * -1; yy < s; yy++)
+				spawnChunks.add(getChunkForce(x + xx, y + yy));
+
 		return spawnChunks;
 	}
 

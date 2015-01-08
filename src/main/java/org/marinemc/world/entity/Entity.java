@@ -29,6 +29,7 @@ import org.marinemc.util.annotations.Cautious;
 import org.marinemc.util.vectors.Vector3d;
 import org.marinemc.util.vectors.Vector3i;
 import org.marinemc.world.World;
+
 /**
  * Standard entity object
  * 
@@ -40,128 +41,132 @@ public abstract class Entity {
 	 * Tracking:
 	 */
 	private final List<EntityTracker> trackers;
-	
-	
-    private final int entityID;
-    private final EntityType type;
-    private final World world;
-    
-    private EntityLocation position;
-    
-    private int ticksLived;
 
-    public Entity(final EntityType type, final int ID, Location pos) {
-        this(type, ID, pos.getWorld(), pos);
-    }
-    
-    public Entity(final EntityType type, final int ID, final World world, Location pos) {
-        this.entityID = ID;
-        this.world = pos.getWorld();
-        this.position = new EntityLocation(this, pos);
-        this.ticksLived = 0;
-        this.type = type;
-        this.trackers = new ArrayList<>();
-    }
+	private final int entityID;
+	private final EntityType type;
+	private final World world;
 
-    public EntityType getType() {
-        return this.type;
-    }
+	private final EntityLocation position;
 
-    public abstract int getSendDistance();
+	private int ticksLived;
 
-    public abstract void update(); // Called each tick for ai/other updating
-
-    public final void tick() {
-        if (ticksLived >= Integer.MAX_VALUE - 2) {
-            Logging.getLogger().error("Entity lived more than 3.6 years impressive! but now we have to remove some age because of memory:/");
-            ticksLived = -1;
-        }
-        ++ticksLived;
-    }
-
-    @Override
-    public String toString() {
-        return "MarineEntity{\"id\":" + getEntityID() + "}";
-    }
-
-    public int getEntityID() {
-        return entityID;
-    }
-
-    public World getWorld() {
-        return world;
-    }
-
-    public double getX() {
-        return position.getX();
-    }
-
-    public double getY() {
-        return position.getY();
-    }
-
-    public double getZ() {
-        return position.getZ();
-    }
-
-    public Vector3i getRelativeLocation() {
-        return position.getRelativePosition();
-    }
-
-    public Position getRelativePosition() {
-        return position.getRelativePosition();
-    }
-
-    public Vector3d getAbsoluteLocation() {
-        return position;
-    }
-
-    public Vector3d getPosition() {
-        return position;
-    }
-    
-    public Location getLocation() {
-    	return position;
-    }
-
-    public int getSecondsLived() {
-        return ticksLived / 20;
-    }
-
-    public int getTicksLived() {
-        return ticksLived;
-    }
-    
-    public void move(double x, double y, double z) {
-    	if(x > 4) teleport(x,y,z);
-    	if(y > 4) teleport(x,y,z);
-    	if(z > 4) teleport(x,y,z);
-    	
-    	this.position.localSetX(x);
-    	this.position.localSetY(x);
-    	this.position.localSetZ(x);
-    	
-    }
-    
-    public void teleport(double x, double y, double z) {
-    	
-    }
-    
-    @Cautious
-    public void addEntityTracker(EntityTracker tracker) {
-    	if(!trackers.contains(tracker))
-    			trackers.add(tracker);
-    }
-
-	public void look(float pitch, float yaw) {
-		this.position.localSetPitch(pitch);
-		this.position.localSetYaw(pitch);
-		
+	public Entity(final EntityType type, final int ID, final Location pos) {
+		this(type, ID, pos.getWorld(), pos);
 	}
-	
+
+	public Entity(final EntityType type, final int ID, final World world,
+			final Location pos) {
+		entityID = ID;
+		this.world = pos.getWorld();
+		position = new EntityLocation(this, pos);
+		ticksLived = 0;
+		this.type = type;
+		trackers = new ArrayList<>();
+	}
+
+	public EntityType getType() {
+		return type;
+	}
+
+	public abstract int getSendDistance();
+
+	public abstract void update(); // Called each tick for ai/other updating
+
+	public final void tick() {
+		if (ticksLived >= Integer.MAX_VALUE - 2) {
+			Logging.getLogger()
+					.error("Entity lived more than 3.6 years impressive! but now we have to remove some age because of memory:/");
+			ticksLived = -1;
+		}
+		++ticksLived;
+	}
+
+	@Override
+	public String toString() {
+		return "MarineEntity{\"id\":" + getEntityID() + "}";
+	}
+
+	public int getEntityID() {
+		return entityID;
+	}
+
+	public World getWorld() {
+		return world;
+	}
+
+	public double getX() {
+		return position.getX();
+	}
+
+	public double getY() {
+		return position.getY();
+	}
+
+	public double getZ() {
+		return position.getZ();
+	}
+
+	public Vector3i getRelativeLocation() {
+		return position.getRelativePosition();
+	}
+
+	public Position getRelativePosition() {
+		return position.getRelativePosition();
+	}
+
+	public Vector3d getAbsoluteLocation() {
+		return position;
+	}
+
+	public Vector3d getPosition() {
+		return position;
+	}
+
+	public Location getLocation() {
+		return position;
+	}
+
+	public int getSecondsLived() {
+		return ticksLived / 20;
+	}
+
+	public int getTicksLived() {
+		return ticksLived;
+	}
+
+	public void move(final double x, final double y, final double z) {
+		if (x > 4)
+			teleport(x, y, z);
+		if (y > 4)
+			teleport(x, y, z);
+		if (z > 4)
+			teleport(x, y, z);
+
+		position.localSetX(x);
+		position.localSetY(x);
+		position.localSetZ(x);
+
+	}
+
+	public void teleport(final double x, final double y, final double z) {
+
+	}
+
+	@Cautious
+	public void addEntityTracker(final EntityTracker tracker) {
+		if (!trackers.contains(tracker))
+			trackers.add(tracker);
+	}
+
+	public void look(final float pitch, final float yaw) {
+		position.localSetPitch(pitch);
+		position.localSetYaw(pitch);
+
+	}
+
 	@Override
 	public int hashCode() {
 		return entityID;
 	}
-    
+
 }

@@ -32,149 +32,149 @@ import java.util.ListIterator;
  */
 public class MemoryEfficientNibbleArray implements NibbleArray { // TODO WIP
 
-    private List<Byte> values;
+	private final List<Byte> values;
 
-    public MemoryEfficientNibbleArray() {
-        this.values = new ArrayList<Byte>();
-    }
+	public MemoryEfficientNibbleArray() {
+		values = new ArrayList<Byte>();
+	}
 
-    @Override
-    public boolean add(Byte e) {
-        return false;
-    }
+	@Override
+	public boolean add(final Byte e) {
+		return false;
+	}
 
-    @Override
-    public void add(int index, Byte element) {
-    }
+	@Override
+	public void add(final int index, final Byte element) {
+	}
 
-    @Override
-    public boolean addAll(Collection<? extends Byte> c) {
-        return false;
-    }
+	@Override
+	public boolean addAll(final Collection<? extends Byte> c) {
+		return false;
+	}
 
-    @Override
-    public boolean addAll(int index, Collection<? extends Byte> c) {
-        // TODO Auto-generated method stub
-        return false;
-    }
+	@Override
+	public boolean addAll(final int index, final Collection<? extends Byte> c) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
-    @Override
-    public void clear() {
-        values.clear();
-    }
+	@Override
+	public void clear() {
+		values.clear();
+	}
 
-    @Override
-    public boolean contains(Object o) {
-        // TODO Auto-generated method stub
-        return false;
-    }
+	@Override
+	public boolean contains(final Object o) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
-    @Override
-    public boolean containsAll(Collection<?> c) {
-        // TODO Auto-generated method stub
-        return false;
-    }
+	@Override
+	public boolean containsAll(final Collection<?> c) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
-    @Override
-    public Byte get(int index) {
-        // TODO Auto-generated method stub
-        return null;
-    }
+	@Override
+	public Byte get(final int index) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-    @Override
-    public int indexOf(Object o) {
-        // TODO Auto-generated method stub
-        return 0;
-    }
+	@Override
+	public int indexOf(final Object o) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 
-    @Override
-    public boolean isEmpty() {
-        // TODO Auto-generated method stub
-        return false;
-    }
+	@Override
+	public boolean isEmpty() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
-    @Override
-    public Iterator<Byte> iterator() {
-        // TODO Auto-generated method stub
-        return null;
-    }
+	@Override
+	public Iterator<Byte> iterator() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-    @Override
-    public int lastIndexOf(Object o) {
-        // TODO Auto-generated method stub
-        return 0;
-    }
+	@Override
+	public int lastIndexOf(final Object o) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 
-    @Override
-    public ListIterator<Byte> listIterator() {
-        // TODO Auto-generated method stub
-        return null;
-    }
+	@Override
+	public ListIterator<Byte> listIterator() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-    @Override
-    public ListIterator<Byte> listIterator(int index) {
-        // TODO Auto-generated method stub
-        return null;
-    }
+	@Override
+	public ListIterator<Byte> listIterator(final int index) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-    @Override
-    public boolean remove(Object o) {
-        // TODO Auto-generated method stub
-        return false;
-    }
+	@Override
+	public boolean remove(final Object o) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
-    @Override
-    public Byte remove(int index) {
-        // TODO Auto-generated method stub
-        return null;
-    }
+	@Override
+	public Byte remove(final int index) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-    @Override
-    public boolean removeAll(Collection<?> c) {
-        // TODO Auto-generated method stub
-        return false;
-    }
+	@Override
+	public boolean removeAll(final Collection<?> c) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
-    @Override
-    public boolean retainAll(Collection<?> c) {
-        // TODO Auto-generated method stub
-        return false;
-    }
+	@Override
+	public boolean retainAll(final Collection<?> c) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
-    @Override
-    public Byte set(int index, Byte element) {
-        return null;
-    }
+	@Override
+	public Byte set(final int index, final Byte element) {
+		return null;
+	}
 
-    @Override
-    public int size() {
-        return values.size() * 2;
-    }
+	@Override
+	public int size() {
+		return values.size() * 2;
+	}
 
-    @Override
-    public List<Byte> subList(int fromIndex, int toIndex) {
-        return null;
-    }
+	@Override
+	public List<Byte> subList(final int fromIndex, final int toIndex) {
+		return null;
+	}
 
-    @Override
-    public Object[] toArray() {
-        return values.toArray();
-    }
+	@Override
+	public Object[] toArray() {
+		return values.toArray();
+	}
 
-    @Override
-    public <T> T[] toArray(T[] a) {
-        return values.toArray(a);
-    }
+	@Override
+	public <T> T[] toArray(final T[] a) {
+		return values.toArray(a);
+	}
 
-    @Override
-    public byte[] toBytes() {
-        // TODO Auto-generated method stub
-        return null;
-    }
+	@Override
+	public byte[] toBytes() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-    @Override
-    public boolean contains(byte nibble) {
-        // TODO Auto-generated method stub
-        return false;
-    }
+	@Override
+	public boolean contains(final byte nibble) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

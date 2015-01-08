@@ -27,110 +27,112 @@ package org.marinemc.util.vectors;
  */
 public class Vector3d extends Vector3<Double> {
 
-    public Vector3d() {
-        super(0d, 0d, 0d);
-    }
+	public Vector3d() {
+		super(0d, 0d, 0d);
+	}
 
-    public Vector3d(int x, int y, int z) {
-        super((double) x, (double) y, (double) z);
-    }
+	public Vector3d(final int x, final int y, final int z) {
+		super((double) x, (double) y, (double) z);
+	}
 
-    public Vector3d(double x, double y, double z) {
-        super(x, y, z);
-    }
+	public Vector3d(final double x, final double y, final double z) {
+		super(x, y, z);
+	}
 
-    public Vector3d(double t) {
-        super(t, t, t);
-    }
+	public Vector3d(final double t) {
+		super(t, t, t);
+	}
 
-    public double getLengthSquared() {
-        return (x * x + y * y + z * z);
-    }
+	public double getLengthSquared() {
+		return x * x + y * y + z * z;
+	}
 
-    public double getLength() {
-        return Math.sqrt(getX() * getX() + getY() * getY() + getZ() * getZ());
-    }
+	public double getLength() {
+		return Math.sqrt(getX() * getX() + getY() * getY() + getZ() * getZ());
+	}
 
-    public Vector3i toIntVector() {
-        return new Vector3i(getX().intValue(), getY().intValue(), getZ().intValue());
-    }
-
-    @Override
-    public void add(Vector3<Double> v2) {
-        x += v2.x;
-        y += v2.y;
-        z += v2.z;
-    }
-
-    @Override
-    public void subtract(Vector3<Double> v2) {
-        x -= v2.x;
-        y -= v2.y;
-        z -= v2.y;
-    }
-
-    @Override
-    public void multiply(int n) {
-        x *= n;
-        y *= n;
-        z *= n;
-    }
-
-    @Override
-    public void divide(int n) {
-        x /= n;
-        y /= n;
-        z /= n;
-    }
-    
-    public Vector3<Double> getGen() {
-    	return this;
-    }
+	public Vector3i toIntVector() {
+		return new Vector3i(getX().intValue(), getY().intValue(), getZ()
+				.intValue());
+	}
 
 	@Override
-	public void divide(Double number) {
-		this.x /= number;
-		this.y /= number;
-		this.z /= number;
+	public void add(final Vector3<Double> v2) {
+		x += v2.x;
+		y += v2.y;
+		z += v2.z;
 	}
-	
+
+	@Override
+	public void subtract(final Vector3<Double> v2) {
+		x -= v2.x;
+		y -= v2.y;
+		z -= v2.y;
+	}
+
+	@Override
+	public void multiply(final int n) {
+		x *= n;
+		y *= n;
+		z *= n;
+	}
+
+	@Override
+	public void divide(final int n) {
+		x /= n;
+		y /= n;
+		z /= n;
+	}
+
+	public Vector3<Double> getGen() {
+		return this;
+	}
+
+	@Override
+	public void divide(final Double number) {
+		x /= number;
+		y /= number;
+		z /= number;
+	}
+
 	public Vector3b getDifferientialFixed32(final Vector3d target) {
-		return new Vector3b((byte)(x - target.x * 32), (byte)(y - target.y * 32), (byte)(y - target.y * 32));
+		return new Vector3b((byte) (x - target.x * 32),
+				(byte) (y - target.y * 32), (byte) (y - target.y * 32));
 	}
 
 	@Override
-	public void multiply(Double number) {
-		this.x *= number;
-		this.y *= number;
-		this.z *= number;
+	public void multiply(final Double number) {
+		x *= number;
+		y *= number;
+		z *= number;
 	}
 
 	@Override
-	public void add(int factor) {
-		this.x += factor;
-		this.y += factor;
-		this.z += factor;
+	public void add(final int factor) {
+		x += factor;
+		y += factor;
+		z += factor;
 	}
 
 	@Override
-	public void add(Double number) {
-		this.x += number;
-		this.y += number;
-		this.z += number;
+	public void add(final Double number) {
+		x += number;
+		y += number;
+		z += number;
 	}
 
 	@Override
-	public void sub(int factor) {
-		this.x -= factor;
-		this.y -= factor;
-		this.z -= factor;
+	public void sub(final int factor) {
+		x -= factor;
+		y -= factor;
+		z -= factor;
 	}
 
 	@Override
-	public void sub(Double number) {
-		this.x -= number;
-		this.y -= number;
-		this.z -= number;
+	public void sub(final Double number) {
+		x -= number;
+		y -= number;
+		z -= number;
 	}
-    
+
 }

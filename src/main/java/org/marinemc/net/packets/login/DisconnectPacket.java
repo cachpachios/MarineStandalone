@@ -28,6 +28,7 @@ import org.marinemc.io.binary.ByteList;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
+
 /**
  * @author Fozie
  */
@@ -35,24 +36,25 @@ public class DisconnectPacket extends Packet {
 
 	ChatMessage msg;
 
-    public DisconnectPacket(String msg) {
-        this(new ChatMessage(msg).format(ChatColor.BOLD).color(ChatColor.WHITE));
-    }
-    
-    public DisconnectPacket(ChatMessage msg) {
-        super(0x00, States.LOGIN);
-        this.msg = msg;
-    }
+	public DisconnectPacket(final String msg) {
+		this(new ChatMessage(msg).format(ChatColor.BOLD).color(ChatColor.WHITE));
+	}
 
-    @Override
-    public void writeToStream(PacketOutputStream stream) throws IOException {
-        ByteList data = new ByteList();
-        data.writeUTF8(msg.toString());
+	public DisconnectPacket(final ChatMessage msg) {
+		super(0x00, States.LOGIN);
+		this.msg = msg;
+	}
 
-        stream.write(getID(), data);
-    }
+	@Override
+	public void writeToStream(final PacketOutputStream stream)
+			throws IOException {
+		final ByteList data = new ByteList();
+		data.writeUTF8(msg.toString());
 
-    @Override
-    public void readFromBytes(ByteInput input) {
-    }
+		stream.write(getID(), data);
+	}
+
+	@Override
+	public void readFromBytes(final ByteInput input) {
+	}
 }

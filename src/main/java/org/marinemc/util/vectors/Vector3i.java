@@ -26,93 +26,94 @@ package org.marinemc.util.vectors;
  */
 public class Vector3i extends Vector3<Integer> {
 
-    public Vector3i() {
-        super(0, 0, 0);
-    }
+	public Vector3i() {
+		super(0, 0, 0);
+	}
 
-    public Vector3i(int t) {
-        super(t, t, t);
-    }
+	public Vector3i(final int t) {
+		super(t, t, t);
+	}
 
-    public Vector3i(int x, int y, int z) {
-        super(x, y, z);
-    }
+	public Vector3i(final int x, final int y, final int z) {
+		super(x, y, z);
+	}
 
-    public double getLength() {
-        return Math.sqrt(getX() * getX() + getY() * getY() + getZ() * getZ());
-    }
+	public double getLength() {
+		return Math.sqrt(getX() * getX() + getY() * getY() + getZ() * getZ());
+	}
 
-    public Vector3d toDoubleVector() {
-        return new Vector3d(getX(), getY(), getZ());
-    }
-
-    @Override
-    public void add(Vector3<Integer> v2) {
-        setX(getX() + v2.getX());
-        setY(getY() + v2.getY());
-        setZ(getZ() + v2.getZ());
-    }
-
-    @Override
-    public void subtract(Vector3<Integer> v2) {
-        setX(getX() - v2.getX());
-        setY(getY() - v2.getY());
-        setZ(getZ() - v2.getZ());
-    }
-
-    @Override
-    public void multiply(int n) {
-        setX(getX() * n);
-        setY(getY() * n);
-        setZ(getZ() * n);
-    }
-
-    @Override
-    public void divide(int n) {
-        setX(getX() / n);
-        setY(getY() / n);
-        setZ(getZ() / n);
-    }
-	@Override
-	public void divide(Integer number) {
-		this.x /= number;
-		this.y /= number;
-		this.z /= number;
+	public Vector3d toDoubleVector() {
+		return new Vector3d(getX(), getY(), getZ());
 	}
 
 	@Override
-	public void multiply(Integer number) {
-		this.x *= number;
-		this.y *= number;
-		this.z *= number;
+	public void add(final Vector3<Integer> v2) {
+		setX(getX() + v2.getX());
+		setY(getY() + v2.getY());
+		setZ(getZ() + v2.getZ());
 	}
 
 	@Override
-	public void add(int factor) {
-		this.x += factor;
-		this.y += factor;
-		this.z += factor;
+	public void subtract(final Vector3<Integer> v2) {
+		setX(getX() - v2.getX());
+		setY(getY() - v2.getY());
+		setZ(getZ() - v2.getZ());
 	}
 
 	@Override
-	public void add(Integer number) {
-		this.x += number;
-		this.y += number;
-		this.z += number;
+	public void multiply(final int n) {
+		setX(getX() * n);
+		setY(getY() * n);
+		setZ(getZ() * n);
 	}
 
 	@Override
-	public void sub(int factor) {
-		this.x -= factor;
-		this.y -= factor;
-		this.z -= factor;
+	public void divide(final int n) {
+		setX(getX() / n);
+		setY(getY() / n);
+		setZ(getZ() / n);
 	}
 
 	@Override
-	public void sub(Integer number) {
-		this.x -= number;
-		this.y -= number;
-		this.z -= number;
+	public void divide(final Integer number) {
+		x /= number;
+		y /= number;
+		z /= number;
+	}
+
+	@Override
+	public void multiply(final Integer number) {
+		x *= number;
+		y *= number;
+		z *= number;
+	}
+
+	@Override
+	public void add(final int factor) {
+		x += factor;
+		y += factor;
+		z += factor;
+	}
+
+	@Override
+	public void add(final Integer number) {
+		x += number;
+		y += number;
+		z += number;
+	}
+
+	@Override
+	public void sub(final int factor) {
+		x -= factor;
+		y -= factor;
+		z -= factor;
+	}
+
+	@Override
+	public void sub(final Integer number) {
+		x -= number;
+		y -= number;
+		z -= number;
 	}
 
 }

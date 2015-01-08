@@ -6,26 +6,27 @@ import java.util.RandomAccess;
 import org.marinemc.io.ByteCompressor;
 import org.marinemc.io.ByteCompressor.EncodingUseless;
 
-public class ByteArray extends AbstractInput implements StoredReader, ByteDataInput, RandomAccess, Compressable {
+public class ByteArray extends AbstractInput implements StoredReader,
+		ByteDataInput, RandomAccess, Compressable {
 
 	private byte[] data;
 
 	private int position;
-	
+
 	public ByteArray(final byte[] data) {
 		position = 0;
 		this.data = data;
 	}
-	
+
 	@Override
 	public byte readByte() {
 		return data[position++];
 	}
-	
+
 	@Override
-    public byte[] readBytes(int size) {
-    	return Arrays.copyOfRange(data, position, position + size);
-    }
+	public byte[] readBytes(final int size) {
+		return Arrays.copyOfRange(data, position, position + size);
+	}
 
 	@Override
 	public int getReaderPosition() {
@@ -43,12 +44,12 @@ public class ByteArray extends AbstractInput implements StoredReader, ByteDataIn
 	}
 
 	@Override
-	public void skipBytes(int amount) {
+	public void skipBytes(final int amount) {
 		position += amount;
 	}
 
 	@Override
-	public void backReader(int amount) {
+	public void backReader(final int amount) {
 		position -= amount;
 	}
 
@@ -67,8 +68,8 @@ public class ByteArray extends AbstractInput implements StoredReader, ByteDataIn
 	}
 
 	@Override
-	public void compress() throws EncodingUseless{
+	public void compress() throws EncodingUseless {
 		data = ByteCompressor.instance().encode(data);
 	}
-	
+
 }

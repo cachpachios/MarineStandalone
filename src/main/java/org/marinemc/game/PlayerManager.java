@@ -65,20 +65,19 @@ public class PlayerManager {
 	private final Pattern validName;
 	private final TimeoutManager timeout;
 	private final MovmentValidator movmentValidator;
-	
+
 	/**
 	 * Player list:
 	 */
 	private volatile Map<Short, Player> players;
-	
+
 	/**
-	 * Name pointers:
-	 * (Returns the UID from the username of an online player)
+	 * Name pointers: (Returns the UID from the username of an online player)
 	 */
 	private volatile Map<String, Short> namePointers;
 
 	private final WorldStreamingThread worldStreamer;
-	
+
 	public PlayerManager() {
 		players = new HashMap<Short, Player>();
 		namePointers = new HashMap<String, Short>();
@@ -86,7 +85,7 @@ public class PlayerManager {
 		validName = Pattern.compile("^[a-zA-Z0-9_]{2,16}$");
 		worldStreamer = new WorldStreamingThread(this);
 		worldStreamer.start();
-		
+
 		movmentValidator = new MovmentValidator();
 		movmentValidator.start();
 	}
@@ -94,188 +93,179 @@ public class PlayerManager {
 	public String login(final Client client, final LoginPacket packet) {
 		// TODO: Encryption and Compression
 		// TODO Proper authentication
-		
-		String name = packet.name;
-		UUID uuid = UUIDHandler.instance().getUUID(name);
 
-		if (uuid == null) {
+		final String name = packet.name;
+		final UUID uuid = UUIDHandler.instance().getUUID(name);
+
+		if (uuid == null)
 			return "Invalid UUID";
-		}
-		if (!validName.matcher(name).matches()) {
+		if (!validName.matcher(name).matches())
 			return "Invalid Username";
-		}
 
-		// TODO This add the encryption stuff etc.. And then separate the following code in to another method that is called when encryption response is intercepted.
+		// TODO This add the encryption stuff etc.. And then separate the
+		// following code in to another method that is called when encryption
+		// response is intercepted.
 
-		Player p = new Player(
-				EntityType.PLAYER,
-				1,
-				new Location(Marine.getMainWorld(),0,5,0), //TODO: Get an location from file or generate spawnpoint
-				UIDGenerator.instance().getUID(name),
-				uuid,
-				name, 
-				0f,
-				0,
-				Marine.getServer().getDefaultGamemode(),
-				0.2f,
-				0.2f,
-				true,
-				false,
-				true,
-				new PlayerInventory((byte) 0),
-				client
-		);
-		
+		final Player p = new Player(EntityType.PLAYER, 1, new Location(
+				Marine.getMainWorld(), 0, 5, 0), // TODO: Get an location from
+													// file or generate
+													// spawnpoint
+				UIDGenerator.instance().getUID(name), uuid, name, 0f, 0, Marine
+						.getServer().getDefaultGamemode(), 0.2f, 0.2f, true,
+				false, true, new PlayerInventory((byte) 0), client);
+
 		client.setUID(p.getUID());
 
-
-		PreLoginEvent preEvent = new PreLoginEvent(p);
+		final PreLoginEvent preEvent = new PreLoginEvent(p);
 		Marine.getServer().callEvent(preEvent);
-		
-		if (!preEvent.isCancelled()) {
-			return preEvent.getMessage(); // Does this if the prelogin event is cancelled
-		}
-		
-		if (Marine.getServer().usingWhitelist() && !Marine.getServer().isWhitelisted(p)) {
+
+		if (!preEvent.isCancelled())
+			return preEvent.getMessage(); // Does this if the prelogin event is
+											// cancelled
+
+		if (Marine.getServer().usingWhitelist()
+				&& !Marine.getServer().isWhitelisted(p))
 			return "You are not whitelisted";
-		}
-		if (Marine.isBanned(client.getAdress())) {
+		if (Marine.isBanned(client.getAdress()))
 			return "Your IP is banned from the server";
-		}
-		if (Marine.isBanned(uuid)) {
+		if (Marine.isBanned(uuid))
 			return "You are banned from the server";
-		}
-		
+
 		client.setCompressionThreshold(ServerSettings.getInstance().network_threshould);
-		
-		client.sendPacket(new LoginSucessPacket(p)); // Send the LoginSuccessPacket
-		
+
+		client.sendPacket(new LoginSucessPacket(p)); // Send the
+														// LoginSuccessPacket
+
 		// Begin the join game process
-		
+
 		client.setState(States.INGAME);
-		
+
 		p.getClient().sendPacket(new JoinGamePacket(p));
-		
-		JoinEvent event = new JoinEvent(p, JOIN_MESSAGE);
+
+		final JoinEvent event = new JoinEvent(p, JOIN_MESSAGE);
 		Marine.getServer().callEvent(event);
-		if(event.isCancelled()) {
+		if (event.isCancelled())
 			return "Unable to join server";
-		}
-		
+
 		p.updateAbilites();
-		
+
 		p.sendPositionAndLook();
-		
-		//p.updateExp();
+
+		// p.updateExp();
 		p.sendChunks(p.getWorld().getSpawnChunks(p));
-		
+
 		p.sendPositionAndLook();
-		
+
 		p.sendTime();
-		
+
 		getInstance().sendJoinMessage(p, event.getJoinMessage());
-		
+
 		TablistManager.getInstance().addItem(p);
 		TablistManager.getInstance().joinList(p);
-		TablistManager.getInstance().setHeaderAndFooter("Testing", "MarineStandalone", p);
-		
+		TablistManager.getInstance().setHeaderAndFooter("Testing",
+				"MarineStandalone", p);
+
 		putPlayer(p);
-		//Send them the herobrine :>
-//		p.getClient().sendPacket(new SpawnPlayerPacket(new Player(
-//				EntityType.PLAYER,
-//				5,
-//				new Location(Marine.getMainWorld(),3,5,3), //TODO: Get an location from file or generate spawnpoint
-//				UIDGenerator.instance().getUID("Herobrine"),
-//				UUID.fromString("f84c6a79-0a4e-45e0-879b-cd49ebd4c4e2"),
-//				"Herobrine", 
-//				0f,
-//				0,
-//				Marine.getServer().getDefaultGamemode(),
-//				2,
-//				2,
-//				true,
-//				false,
-//				true,
-//				new PlayerInventory((byte) 0),
-//				null
-//		)));
-		
-		return null; // To indicate that the player was successfully created and joined
+		// Send them the herobrine :>
+		// p.getClient().sendPacket(new SpawnPlayerPacket(new Player(
+		// EntityType.PLAYER,
+		// 5,
+		// new Location(Marine.getMainWorld(),3,5,3), //TODO: Get an location
+		// from file or generate spawnpoint
+		// UIDGenerator.instance().getUID("Herobrine"),
+		// UUID.fromString("f84c6a79-0a4e-45e0-879b-cd49ebd4c4e2"),
+		// "Herobrine",
+		// 0f,
+		// 0,
+		// Marine.getServer().getDefaultGamemode(),
+		// 2,
+		// 2,
+		// true,
+		// false,
+		// true,
+		// new PlayerInventory((byte) 0),
+		// null
+		// )));
+
+		return null; // To indicate that the player was successfully created and
+						// joined
 	}
-	
-	
-	public void movePlayerFromPacket(PlayerMovePacket packet) {
-		
-		
-		
+
+	public void movePlayerFromPacket(final PlayerMovePacket packet) {
+
 	}
-	
+
 	/**
 	 * Adds a player to the main player storage
-	 * @param p The player that should be added
+	 * 
+	 * @param p
+	 *            The player that should be added
 	 */
-	public  void putPlayer(Player p) {
-				players.put(p.getUID(), p);
-				namePointers.put(p.getUserName(), p.getUID());
+	public void putPlayer(final Player p) {
+		players.put(p.getUID(), p);
+		namePointers.put(p.getUserName(), p.getUID());
 	}
-	
+
 	/**
 	 * Get all UID's of player online
 	 * 
 	 * @return A set over all UID's online
 	 */
-	public  Set<Short> getOnlineUIDs() {
+	public Set<Short> getOnlineUIDs() {
 		return players.keySet();
 	}
+
 	/**
 	 * Get all players on the server
+	 * 
 	 * @return A collection of all players online
 	 */
-	public  Collection<Player> getPlayers() {
+	public Collection<Player> getPlayers() {
 		return players.values();
 	}
 
 	/**
-	 * Ticks/Updates all existing players
-	 * Called in Server.java's main loop (Each tick(20hz) )
+	 * Ticks/Updates all existing players Called in Server.java's main loop
+	 * (Each tick(20hz) )
 	 */
-	public  void tickAllPlayers() {
-		for(final Player p : players.values())
+	public void tickAllPlayers() {
+		for (final Player p : players.values())
 			p.sendTime();
 	}
 
 	/**
 	 * To get a player by specified UID(short)
 	 * 
-	 * @param uid The uid of the object
+	 * @param uid
+	 *            The uid of the object
 	 * @return The pointed player or null if non existance
 	 */
-	public  Player getPlayer(short uid) {
+	public Player getPlayer(final short uid) {
 		return players.get(uid);
 	}
 
 	/**
-	 * Get the amount of players on the server,
-	 * This value however does not include clients. That info is avalible in NetworkManager
+	 * Get the amount of players on the server, This value however does not
+	 * include clients. That info is avalible in NetworkManager
 	 * 
 	 * @return Amount of players stored here
 	 */
-	public  int getPlayersConnected() {
-		return this.players.size();
+	public int getPlayersConnected() {
+		return players.size();
 	}
 
 	/**
-	 * Used to get a player by its UUID
-	 * Highly not recommended!!!
+	 * Used to get a player by its UUID Highly not recommended!!!
 	 * 
-	 * @param uuid The given UUID
+	 * @param uuid
+	 *            The given UUID
 	 * @return The given UUID or null if no such player is online
 	 */
 	@Hacky
 	@Cautious
-	public  Player getPlayer(UUID uuid) {
-		for(Player p : this.getPlayers())
-			if(p.getUUID().toString().equals(uuid.toString()))
+	public Player getPlayer(final UUID uuid) {
+		for (final Player p : getPlayers())
+			if (p.getUUID().toString().equals(uuid.toString()))
 				return p;
 		return null;
 	}
@@ -283,11 +273,12 @@ public class PlayerManager {
 	/**
 	 * To get a online player by its username.
 	 * 
-	 * @param username The username of the player to get
+	 * @param username
+	 *            The username of the player to get
 	 * @return Either the player or null if not online.
 	 */
-	public  Player getPlayer(String username) {
-		if(namePointers.containsKey(username))
+	public Player getPlayer(final String username) {
+		if (namePointers.containsKey(username))
 			return players.get(namePointers.get(username));
 		return null;
 	}
@@ -295,53 +286,53 @@ public class PlayerManager {
 	/**
 	 * Checks if player is online
 	 * 
-	 * @param uid The UID of the player
+	 * @param uid
+	 *            The UID of the player
 	 * @return An boolean if the player is online
 	 */
-	public  boolean isPlayerOnline(short uid) {
+	public boolean isPlayerOnline(final short uid) {
 		return players.containsKey(uid);
 	}
-	
+
 	/**
-	 * Send packet to each online player,
-	 * Differs from networkmanager in that way that only ingame players gets this packet,
-	 * Not perhaps people logingin/pinging
+	 * Send packet to each online player, Differs from networkmanager in that
+	 * way that only ingame players gets this packet, Not perhaps people
+	 * logingin/pinging
+	 * 
 	 * @param packet
 	 */
-	public void broadcastPacket(Packet packet) {
-		for(Player p : this.players.values())
+	public void broadcastPacket(final Packet packet) {
+		for (final Player p : players.values())
 			p.getClient().sendPacket(packet);
 	}
-	
+
 	public Player getPlayerByClient(final Client c) {
 		return c.getUID() != -1 ? getPlayer(c.getUID()) : null;
 	}
-	
-	public void removePlayer(short uid) {
-		if(players.containsKey(uid))  {
-			if(namePointers.containsKey(players.get(uid).getUserName()))
+
+	public void removePlayer(final short uid) {
+		if (players.containsKey(uid)) {
+			if (namePointers.containsKey(players.get(uid).getUserName()))
 				namePointers.remove(players.get(uid).getUserName());
 			players.remove(uid);
 		}
 	}
 
 	public void disconnect_nonnewtork(Player p) {
-		if(p == null)
+		if (p == null)
 			return;
-		Assert.contains(this.players, p.getUID());
-		getInstance()
-				.broadcastMessage(format(LEAVE_MESSAGE, p));
+		Assert.contains(players, p.getUID());
+		getInstance().broadcastMessage(format(LEAVE_MESSAGE, p));
 		removePlayer(p.getUID());
 		p = null;
 	}
-	
-	public void disconnect(Player p) {
+
+	public void disconnect(final Player p) {
 		// if(!this.players.containsKey(p.getUID())) {
-		// 	return;
+		// return;
 		// }
-		Assert.contains(this.players, p.getUID());
-		getInstance()
-				.broadcastMessage(format(LEAVE_MESSAGE, p));
+		Assert.contains(players, p.getUID());
+		getInstance().broadcastMessage(format(LEAVE_MESSAGE, p));
 		removePlayer(p.getUID());
 		Marine.getServer().getNetworkManager().cleanUp(p.getClient());
 	}

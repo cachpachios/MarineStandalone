@@ -25,17 +25,17 @@ import org.marinemc.util.wrapper.PacketWrapper;
 
 public class ItemSlot extends PacketWrapper<Item> {
 
-    public ItemSlot(Item itemID) {
-        super(itemID);
-    }
+	public ItemSlot(final Item itemID) {
+		super(itemID);
+	}
 
-    @Override
-    public ByteDataOutput toByteData() {
-        return null;
-    }
+	@Override
+	public ByteDataOutput toByteData() {
+		return null;
+	}
 
-    @Override
-    public Item readFromData(ByteInput d) {
-        return null;
-    }
+	@Override
+	public Item readFromData(final ByteInput d) {
+		return null;
+	}
 }

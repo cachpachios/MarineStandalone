@@ -26,65 +26,67 @@ package org.marinemc.util.vectors;
  */
 public abstract class Vector2<T extends Number> implements Vector<T> {
 
-    /**
-     * X & Y Values
-     */
-    public T x, y;
+	/**
+	 * X & Y Values
+	 */
+	public T x, y;
 
-    /**
-     * Constructor
-     *
-     * @param x X Value
-     * @param y Y Value
-     */
-    public Vector2(final T x, final T y) {
-        this.x = x;
-        this.y = y;
-    }
+	/**
+	 * Constructor
+	 *
+	 * @param x
+	 *            X Value
+	 * @param y
+	 *            Y Value
+	 */
+	public Vector2(final T x, final T y) {
+		this.x = x;
+		this.y = y;
+	}
 
-    /**
-     * Add all values of the specified vector to the
-     * current instance
-     *
-     * @param v2 Other instance
-     */
-    public abstract void add(Vector2<T> v2);
+	/**
+	 * Add all values of the specified vector to the current instance
+	 *
+	 * @param v2
+	 *            Other instance
+	 */
+	public abstract void add(Vector2<T> v2);
 
-    /**
-     * Subtract all values of the specified vector
-     * from the current instance
-     *
-     * @param v2 Other instance
-     */
-    public abstract void subtract(Vector2<T> v2);
+	/**
+	 * Subtract all values of the specified vector from the current instance
+	 *
+	 * @param v2
+	 *            Other instance
+	 */
+	public abstract void subtract(Vector2<T> v2);
 
-    @Override
-    public abstract void multiply(int n);
+	@Override
+	public abstract void multiply(int n);
 
-    @Override
-    public abstract void divide(int n);
+	@Override
+	public abstract void divide(int n);
 
-    public T getX() {
-        return this.x;
-    }
+	public T getX() {
+		return this.x;
+	}
 
-    public void setX(T x) {
-        this.x = x;
-    }
+	public void setX(final T x) {
+		this.x = x;
+	}
 
-    final public T getY() {
-        return this.y;
-    }
+	final public T getY() {
+		return this.y;
+	}
 
-    final public void setY(T y) {
-        this.y = y;
-    }
+	final public void setY(final T y) {
+		this.y = y;
+	}
 
-    @Override
-    final public int hashCode() {
-        int hash = 37;
-        hash = hash * 3 + getX().intValue();
-        hash = hash * 3 + getY().intValue();
-        return hash;
-    }
+	@Override
+	final public int hashCode() {
+		int hash = 37;
+		hash = hash * 3 + getX().intValue();
+		hash = hash * 3 + getY().intValue();
+		return hash;
+	}
 }

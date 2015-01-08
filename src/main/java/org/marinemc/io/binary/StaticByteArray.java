@@ -1,16 +1,17 @@
 package org.marinemc.io.binary;
 
-public class StaticByteArray extends AbstractInput implements StoredReader, ByteDataInput {
+public class StaticByteArray extends AbstractInput implements StoredReader,
+		ByteDataInput {
 
 	final byte[] data;
 
 	int position;
-	
+
 	public StaticByteArray(final byte[] data) {
 		position = -1;
 		this.data = data;
 	}
-	
+
 	@Override
 	public byte readByte() {
 		return data[++position];
@@ -18,7 +19,7 @@ public class StaticByteArray extends AbstractInput implements StoredReader, Byte
 
 	@Override
 	public int getReaderPosition() {
-		if(position == -1)
+		if (position == -1)
 			return 0;
 		else
 			return position;
@@ -35,12 +36,12 @@ public class StaticByteArray extends AbstractInput implements StoredReader, Byte
 	}
 
 	@Override
-	public void skipBytes(int amount) {
+	public void skipBytes(final int amount) {
 		position += amount;
 	}
 
 	@Override
-	public void backReader(int amount) {
+	public void backReader(final int amount) {
 		position -= amount;
 	}
 

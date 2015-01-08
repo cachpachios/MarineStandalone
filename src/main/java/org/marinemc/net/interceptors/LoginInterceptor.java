@@ -30,24 +30,26 @@ import org.marinemc.server.Marine;
  */
 public class LoginInterceptor implements PacketInterceptor {
 
-    @Override
-    public boolean intercept(int id, ByteInput data, final Client c) {
-    	if(id == 0) {
-    	   LoginPacket packet = new LoginPacket();
-    	   packet.readFromBytes(data);
-		   
-    	   final String s = Marine.getServer().getPlayerManager().login(c, packet);
-    	   if(s == null)
-    		   return true; // End the interception with a positive interception
-    	   else {
-    		   DisconnectPacket disc = new DisconnectPacket(s);
-    		   c.sendPacket(disc);
-    		   
-    		   Marine.getServer().getNetworkManager().cleanUp(c);
-    		   
-    		   return true;
-    	   }
-    	}
-       return false;
-    }
+	@Override
+	public boolean intercept(final int id, final ByteInput data, final Client c) {
+		if (id == 0) {
+			final LoginPacket packet = new LoginPacket();
+			packet.readFromBytes(data);
+
+			final String s = Marine.getServer().getPlayerManager()
+					.login(c, packet);
+			if (s == null)
+				return true; // End the interception with a positive
+								// interception
+			else {
+				final DisconnectPacket disc = new DisconnectPacket(s);
+				c.sendPacket(disc);
+
+				Marine.getServer().getNetworkManager().cleanUp(c);
+
+				return true;
+			}
+		}
+		return false;
+	}
 }

@@ -26,26 +26,28 @@ import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
 import org.marinemc.util.Location;
+
 /**
  * @author Fozie
  */
 public class PlayerLookPacket extends Packet {
 
-    private final Location loc;
+	private final Location loc;
 
-    public PlayerLookPacket(Location l) {
-        super(0x05, States.INGAME);
-        loc = l;
-    }
+	public PlayerLookPacket(final Location l) {
+		super(0x05, States.INGAME);
+		loc = l;
+	}
 
-    @Override
-    public void writeToStream(PacketOutputStream stream) throws IOException {
-    	ByteList data = new ByteList();
+	@Override
+	public void writeToStream(final PacketOutputStream stream)
+			throws IOException {
+		final ByteList data = new ByteList();
 
-        data.writeFloat(loc.getYaw());
-        data.writeFloat(loc.getPitch());
-        data.writeBoolean(loc.isOnGround());
+		data.writeFloat(loc.getYaw());
+		data.writeFloat(loc.getPitch());
+		data.writeBoolean(loc.isOnGround());
 
-        stream.write(getID(), data);
-    }
+		stream.write(getID(), data);
+	}
 }

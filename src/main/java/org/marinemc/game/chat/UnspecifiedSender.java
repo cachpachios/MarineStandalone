@@ -1,20 +1,22 @@
 package org.marinemc.game.chat;
+
 /**
  * An static class that implements ChatSender
+ * 
  * @author Fozie
  */
-public final class UnspecifiedSender implements ChatSender{
+public final class UnspecifiedSender implements ChatSender {
 
 	private static UnspecifiedSender instance;
-	
+
 	public static UnspecifiedSender getInstance() {
-		if(instance == null)
+		if (instance == null)
 			instance = new UnspecifiedSender();
 		return instance;
 	}
-	
+
 	@Override
-	public boolean hasPermission(String permission) {
+	public boolean hasPermission(final String permission) {
 		return true;
 	}
 

@@ -23,32 +23,32 @@ import java.io.IOException;
 import java.net.Socket;
 
 import org.marinemc.logging.Logging;
+
 /**
  * @author Fozie
  */
 public class ConnectionThread extends Thread {
-    private NetworkManager network;
+	private final NetworkManager network;
 
-    //TODO: SOME KIND OF DDOS PROTECTION!
+	// TODO: SOME KIND OF DDOS PROTECTION!
 
-    public ConnectionThread(NetworkManager manager) {
-        super("ServerConnector");
-        network = manager;
-    }
+	public ConnectionThread(final NetworkManager manager) {
+		super("ServerConnector");
+		network = manager;
+	}
 
-    public void run() {
-        Logging.getLogger().log("Waiting for connection...");
-        // for(;;) is faster than while(true)
-        for (; ; ) { //TODO: Stopping and starting!
-            try {
-                Socket connection = network.server.accept();
-                network.connect(connection);
-                ConnectionThread.sleep(10);
-            } catch (InterruptedException ignored) {
-            } catch (IOException e) {
-                Logging.getLogger().error("Connection problems with client.");
-            }
-
-        }
-    }
+	@Override
+	public void run() {
+		Logging.getLogger().log("Waiting for connection...");
+		// for(;;) is faster than while(true)
+		for (;;)
+			try {
+				final Socket connection = network.server.accept();
+				network.connect(connection);
+				ConnectionThread.sleep(10);
+			} catch (final InterruptedException ignored) {
+			} catch (final IOException e) {
+				Logging.getLogger().error("Connection problems with client.");
+			}
+	}
 }

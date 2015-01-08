@@ -26,72 +26,72 @@ package org.marinemc.util.vectors;
  */
 public class Vector2i extends Vector2<Integer> {
 
-    public Vector2i(Integer x, Integer y) {
-        super(x, y);
-    }
-
-    @Override
-    public void add(Vector2<Integer> v2) {
-        setX(getX() + v2.getX());
-        setY(getY() + v2.getY());
-    }
-
-    @Override
-    public void subtract(Vector2<Integer> v2) {
-        setX(getX() - v2.getX());
-        setY(getY() - v2.getY());
-    }
-
-    @Override
-    public void multiply(int n) {
-        setX(getX() * n);
-        setY(getY() * n);
-    }
-
-    @Override
-    public void divide(int n) {
-        setX(getX() / n);
-        setY(getY() / n);
-    }
-
-	@Override
-	public void divide(Integer number) {
-		this.x /= number;
-		this.y /= number;
+	public Vector2i(final Integer x, final Integer y) {
+		super(x, y);
 	}
 
 	@Override
-	public void multiply(Integer number) {
-		this.x *= number;
-		this.y *= number;
+	public void add(final Vector2<Integer> v2) {
+		setX(getX() + v2.getX());
+		setY(getY() + v2.getY());
 	}
 
 	@Override
-	public void add(int factor) {
-		this.x += factor;
-		this.y += factor;
+	public void subtract(final Vector2<Integer> v2) {
+		setX(getX() - v2.getX());
+		setY(getY() - v2.getY());
 	}
 
 	@Override
-	public void add(Integer number) {
-		this.x += number;
-		this.y += number;
+	public void multiply(final int n) {
+		setX(getX() * n);
+		setY(getY() * n);
 	}
 
 	@Override
-	public void sub(int factor) {
-		this.x -= factor;
-		this.y -= factor;
+	public void divide(final int n) {
+		setX(getX() / n);
+		setY(getY() / n);
 	}
 
 	@Override
-	public void sub(Integer number) {
-		this.x -= number;
-		this.y -= number;
+	public void divide(final Integer number) {
+		x /= number;
+		y /= number;
+	}
+
+	@Override
+	public void multiply(final Integer number) {
+		x *= number;
+		y *= number;
+	}
+
+	@Override
+	public void add(final int factor) {
+		x += factor;
+		y += factor;
+	}
+
+	@Override
+	public void add(final Integer number) {
+		x += number;
+		y += number;
+	}
+
+	@Override
+	public void sub(final int factor) {
+		x -= factor;
+		y -= factor;
+	}
+
+	@Override
+	public void sub(final Integer number) {
+		x -= number;
+		y -= number;
 	}
 
 	@Override
 	public Integer[] asArray() {
-		return new Integer[] {x,y};
+		return new Integer[] { x, y };
 	}
 }

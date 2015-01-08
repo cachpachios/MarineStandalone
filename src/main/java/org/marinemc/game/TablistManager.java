@@ -24,7 +24,6 @@ import org.marinemc.net.play.clientbound.player.PlayerListHeaderPacket;
 import org.marinemc.net.play.clientbound.player.PlayerListItemPacket;
 import org.marinemc.server.Marine;
 
-
 /**
  * Created 2014-12-05 for MarineStandalone
  *
@@ -33,42 +32,54 @@ import org.marinemc.server.Marine;
  */
 public class TablistManager {
 
-    private static TablistManager instance;
+	private static TablistManager instance;
 
-    public TablistManager() {
-    }
+	public TablistManager() {
+	}
 
-    public static TablistManager getInstance() {
-        if (instance == null) instance = new TablistManager();
-        return instance;
-    }
+	public static TablistManager getInstance() {
+		if (instance == null)
+			instance = new TablistManager();
+		return instance;
+	}
 
-    public void setHeaderAndFooter(final String header, final String footer, final Player player) {
-        player.getClient().sendPacket(new PlayerListHeaderPacket(header, footer));
-    }
+	public void setHeaderAndFooter(final String header, final String footer,
+			final Player player) {
+		player.getClient().sendPacket(
+				new PlayerListHeaderPacket(header, footer));
+	}
 
-    public void addItem(final Player toAdd) {
-        for (Player affected : Marine.getPlayers()) {
-            affected.getClient().sendPacket(new PlayerListItemPacket(PlayerListItemPacket.Action.ADD_PLAYER, toAdd));
-        }
-    }
+	public void addItem(final Player toAdd) {
+		for (final Player affected : Marine.getPlayers())
+			affected.getClient().sendPacket(
+					new PlayerListItemPacket(
+							PlayerListItemPacket.Action.ADD_PLAYER, toAdd));
+	}
 
-    public void removeItem(final Player toRemove) {
-        for (Player affected : Marine.getPlayers()) {
-            affected.getClient().sendPacket(new PlayerListItemPacket(PlayerListItemPacket.Action.REMOVE_PLAYER, toRemove));
-        }
-    }
+	public void removeItem(final Player toRemove) {
+		for (final Player affected : Marine.getPlayers())
+			affected.getClient()
+					.sendPacket(
+							new PlayerListItemPacket(
+									PlayerListItemPacket.Action.REMOVE_PLAYER,
+									toRemove));
+	}
 
-    public void joinList(final Player joined) {
-        for (Player player : Marine.getServer().getPlayers()) {
-            if (player.getUUID().equals(joined.getUUID())) continue;
-            joined.getClient().sendPacket(new PlayerListItemPacket(PlayerListItemPacket.Action.ADD_PLAYER, player));
-        }
-    }
+	public void joinList(final Player joined) {
+		for (final Player player : Marine.getServer().getPlayers()) {
+			if (player.getUUID().equals(joined.getUUID()))
+				continue;
+			joined.getClient().sendPacket(
+					new PlayerListItemPacket(
+							PlayerListItemPacket.Action.ADD_PLAYER, player));
+		}
+	}
 
-    public void setDisplayName(final Player toChange) {
-        for (Player affected : Marine.getPlayers()) {
-            affected.getClient().sendPacket(new PlayerListItemPacket(PlayerListItemPacket.Action.UPDATE_DISPLAY_NAME, toChange));
-        }
-    }
+	public void setDisplayName(final Player toChange) {
+		for (final Player affected : Marine.getPlayers())
+			affected.getClient().sendPacket(
+					new PlayerListItemPacket(
+							PlayerListItemPacket.Action.UPDATE_DISPLAY_NAME,
+							toChange));
+	}
 }

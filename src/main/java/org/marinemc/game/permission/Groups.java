@@ -26,6 +26,7 @@ package org.marinemc.game.permission;
  */
 public class Groups {
 
-    public static final Group ADMIN = new Group("admin", "[A]", Permissions.ALL_PERMISSIONS);
+	public static final Group ADMIN = new Group("admin", "[A]",
+			Permissions.ALL_PERMISSIONS);
 
 }

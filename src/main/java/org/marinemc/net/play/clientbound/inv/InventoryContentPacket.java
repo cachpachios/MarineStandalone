@@ -29,33 +29,35 @@ import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
 import org.marinemc.util.wrapper.PacketWrapper;
+
 /**
  * @author Fozie
  */
 public class InventoryContentPacket extends Packet {
 
-    final Inventory inv;
+	final Inventory inv;
 
-    public InventoryContentPacket(Inventory inventory) {
-        super(0x30, States.INGAME);
-        this.inv = inventory;
-    }
+	public InventoryContentPacket(final Inventory inventory) {
+		super(0x30, States.INGAME);
+		inv = inventory;
+	}
 
-    @Override
-    public void writeToStream(PacketOutputStream stream) throws IOException {
-    	ByteList d = new ByteList();
+	@Override
+	public void writeToStream(final PacketOutputStream stream)
+			throws IOException {
+		final ByteList d = new ByteList();
 
-        d.writeByte(inv.getID());
+		d.writeByte(inv.getID());
 
-        d.writeShort((short) inv.getSlots().length);
+		d.writeShort((short) inv.getSlots().length);
 
-        for (PacketWrapper<Item> slot : inv.getSlots())
-            if (slot == null)
-                d.writeShort(ItemID.EMPTY.getFirst());
-            else
-                d.write(slot.getBytes());
+		for (final PacketWrapper<Item> slot : inv.getSlots())
+			if (slot == null)
+				d.writeShort(ItemID.EMPTY.getFirst());
+			else
+				d.write(slot.getBytes());
 
-        stream.write(getID(), d);
-    }
+		stream.write(getID(), d);
+	}
 
 }

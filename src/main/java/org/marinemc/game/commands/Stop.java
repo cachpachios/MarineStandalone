@@ -30,13 +30,13 @@ import org.marinemc.server.Marine;
  */
 public class Stop extends Command {
 
-    public Stop() {
-        super("stop", "marine.stop", "Stop the server");
-    }
+	public Stop() {
+		super("stop", "marine.stop", "Stop the server");
+	}
 
-    @Override
-    public void execute(CommandSender sender, String[] arguments) {
-        Marine.broadcastMessage("Stopping the server");
-        Marine.stop();
-    }
+	@Override
+	public void execute(final CommandSender sender, final String[] arguments) {
+		Marine.broadcastMessage("Stopping the server");
+		Marine.stop();
+	}
 }

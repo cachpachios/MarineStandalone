@@ -26,19 +26,17 @@ package org.marinemc.game.chat.builder;
  */
 public class HoverEvent extends Event {
 
-    public HoverEvent(Action action, String value) {
-        super("hoverEvent", action.toString(), value);
-    }
+	public HoverEvent(final Action action, final String value) {
+		super("hoverEvent", action.toString(), value);
+	}
 
-    public static enum Action {
-        SHOW_TEXT,
-        SHOW_ACHIEVEMENT,
-        SHOW_ITEM;
+	public static enum Action {
+		SHOW_TEXT, SHOW_ACHIEVEMENT, SHOW_ITEM;
 
-        @Override
-        public String toString() {
-            return super.name().toLowerCase();
-        }
-    }
+		@Override
+		public String toString() {
+			return super.name().toLowerCase();
+		}
+	}
 
 }

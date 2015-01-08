@@ -26,16 +26,18 @@ package org.marinemc.game.chat.builder;
  */
 public class Event {
 
-    private String key, value, action;
+	private final String key, value, action;
 
-    public Event(final String key, final String action, final String value) {
-        this.key = key;
-        this.action = action;
-        this.value = value;
-    }
+	public Event(final String key, final String action, final String value) {
+		this.key = key;
+		this.action = action;
+		this.value = value;
+	}
 
-    @Override
-    public String toString() {
-        return "\"%s\":{\"action\":\"%s\",\"value\":\"%s\"}".replaceFirst("%s", key).replaceFirst("%s", action).replaceFirst("%s", value);
-    }
+	@Override
+	public String toString() {
+		return "\"%s\":{\"action\":\"%s\",\"value\":\"%s\"}"
+				.replaceFirst("%s", key).replaceFirst("%s", action)
+				.replaceFirst("%s", value);
+	}
 }

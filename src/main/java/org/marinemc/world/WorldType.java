@@ -25,18 +25,17 @@ package org.marinemc.world;
  * @author Fozie
  */
 public enum WorldType {
-    DEFAULT("default"),
-    FLAT("flat"),
-    LARGE_BIOMES("largeBiomes"),
-    AMPLIFIED("amplified");
+	DEFAULT("default"), FLAT("flat"), LARGE_BIOMES("largeBiomes"), AMPLIFIED(
+			"amplified");
 
-    private final String dataName;
+	private final String dataName;
 
-    private WorldType(String name) {
-        this.dataName = name;
-    }
+	private WorldType(final String name) {
+		dataName = name;
+	}
 
-    public String toString() {
-        return dataName;
-    }
+	@Override
+	public String toString() {
+		return dataName;
+	}
 }

@@ -30,26 +30,26 @@ import org.marinemc.game.player.Player;
  */
 public class PreLoginEvent extends Event implements Cancellable {
 
-    private Player player;
-    private boolean allowed = true;
-    private String message = "Disconnected";
+	private final Player player;
+	private boolean allowed = true;
+	private String message = "Disconnected";
 
-    public PreLoginEvent(Player player) {
-        super("pre_join", true);
-        this.player = player;
-    }
+	public PreLoginEvent(final Player player) {
+		super("pre_join", true);
+		this.player = player;
+	}
 
-    public String getMessage() {
-        return this.message;
-    }
+	public String getMessage() {
+		return message;
+	}
 
-    public void setMessage(String s) {
-        this.message = s;
-    }
+	public void setMessage(final String s) {
+		message = s;
+	}
 
-    public Player getPlayer() {
-        return this.player;
-    }
+	public Player getPlayer() {
+		return player;
+	}
 
 	@Override
 	public boolean isCancelled() {
@@ -57,7 +57,7 @@ public class PreLoginEvent extends Event implements Cancellable {
 	}
 
 	@Override
-	public void setCancelled(boolean n) {
+	public void setCancelled(final boolean n) {
 		allowed = n;
 	}
 }

@@ -30,53 +30,47 @@ import java.util.Map;
  */
 public class Assert {
 
-    public static <T> void notNull(T t) {
-        if (t == null || (t instanceof String && t.equals(""))) {
-            throw new NullPointerException("Unsupported null");
-        }
-    }
+	public static <T> void notNull(final T t) {
+		if (t == null || t instanceof String && t.equals(""))
+			throw new NullPointerException("Unsupported null");
+	}
 
-    public static <T> void compare(T t, T w) {
-        if (!t.equals(w)) {
-            throw new AssertionError("t != w");
-        }
-    }
+	public static <T> void compare(final T t, final T w) {
+		if (!t.equals(w))
+			throw new AssertionError("t != w");
+	}
 
-    public static void notNull(Object... objects) {
-        for (Object o : objects) {
-            notNull(o);
-        }
-    }
+	public static void notNull(final Object... objects) {
+		for (final Object o : objects)
+			notNull(o);
+	}
 
-    public static <T> boolean notEmpty(T t) {
-        notNull(t);
+	public static <T> boolean notEmpty(final T t) {
+		notNull(t);
 
-        boolean b;
-        if (t instanceof Collection) {
-            b = ((Collection) t).isEmpty();
-        } else if (t instanceof Map) {
-            b = ((Map) t).isEmpty();
-        } else {
-            throw new IllegalArgumentException("T is not a collection or a map");
-        }
-        return true;
-    }
+		boolean b;
+		if (t instanceof Collection)
+			b = ((Collection) t).isEmpty();
+		else if (t instanceof Map)
+			b = ((Map) t).isEmpty();
+		else
+			throw new IllegalArgumentException("T is not a collection or a map");
+		return true;
+	}
 
-    public static void contains(Object[] t, Object o) {
-        contains(Arrays.asList(t), o);
-    }
+	public static void contains(final Object[] t, final Object o) {
+		contains(Arrays.asList(t), o);
+	}
 
-    public static <T> void contains(T t, Object o) {
-        boolean c = false;
-        if (t instanceof Map) {
-            c = ((Map) t).containsKey(o);
-        } else if (t instanceof Collection) {
-            c = ((Collection) t).contains(o);
-        } else {
-            throw new IllegalArgumentException("T is not a collection or a map");
-        }
-        if (!c) {
-            throw new AssertionError("t doesn't contain o");
-        }
-    }
+	public static <T> void contains(final T t, final Object o) {
+		boolean c = false;
+		if (t instanceof Map)
+			c = ((Map) t).containsKey(o);
+		else if (t instanceof Collection)
+			c = ((Collection) t).contains(o);
+		else
+			throw new IllegalArgumentException("T is not a collection or a map");
+		if (!c)
+			throw new AssertionError("t doesn't contain o");
+	}
 }

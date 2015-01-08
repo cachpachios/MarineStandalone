@@ -33,48 +33,48 @@ import org.marinemc.util.Location;
  */
 public class ConsoleSender implements CommandSender {
 
-    @Override
-    public void executeCommand(String command) {
-        executeCommand(command, new String[]{});
-    }
+	@Override
+	public void executeCommand(final String command) {
+		executeCommand(command, new String[] {});
+	}
 
-    @Override
-    public void executeCommand(String command, String[] arguments) {
-        Command cmd;
-        if ((cmd = CommandManager.getInstance().getCommand(command.toLowerCase().substring(1))) == null) {
-            sendMessage("That command doesn't exist");
-        } else {
-            executeCommand(cmd, arguments);
-        }
-    }
+	@Override
+	public void executeCommand(final String command, final String[] arguments) {
+		Command cmd;
+		if ((cmd = CommandManager.getInstance().getCommand(
+				command.toLowerCase().substring(1))) == null)
+			sendMessage("That command doesn't exist");
+		else
+			executeCommand(cmd, arguments);
+	}
 
-    @Override
-    public void executeCommand(Command command, String[] arguments) {
-        command.execute(this, arguments);
-    }
+	@Override
+	public void executeCommand(final Command command, final String[] arguments) {
+		command.execute(this, arguments);
+	}
 
-    @Override
-    public Location getLocation() {
-        return Marine.getServer().getSpawnLocation();
-    }
+	@Override
+	public Location getLocation() {
+		return Marine.getServer().getSpawnLocation();
+	}
 
-    @Override
-    public boolean hasPermission(String permission) {
-        return true;
-    }
+	@Override
+	public boolean hasPermission(final String permission) {
+		return true;
+	}
 
-    @Override
-    public boolean hasPermission(Permission permission) {
-        return true;
-    }
+	@Override
+	public boolean hasPermission(final Permission permission) {
+		return true;
+	}
 
-    @Override
-    public void sendMessage(String message) {
-        Logging.getLogger().log(message);
-    }
+	@Override
+	public void sendMessage(final String message) {
+		Logging.getLogger().log(message);
+	}
 
-    @Override
-    public void sendMessage(ChatMessage message) {
-        sendMessage(this.toString());
-    }
+	@Override
+	public void sendMessage(final ChatMessage message) {
+		sendMessage(toString());
+	}
 }

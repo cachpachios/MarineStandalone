@@ -26,11 +26,14 @@ package org.marinemc.settings;
  */
 public class JSONConfigException extends RuntimeException {
 
-    public JSONConfigException(String config, String error) {
-        super("JSON Config: " + config + " caused an exception (\"" + error + "\")");
-    }
+	public JSONConfigException(final String config, final String error) {
+		super("JSON Config: " + config + " caused an exception (\"" + error
+				+ "\")");
+	}
 
-    public JSONConfigException(String config, String error, Throwable exception) {
-        super("JSON Config: " + config + " caused an exceiption (\"" + error + "\")", exception);
-    }
+	public JSONConfigException(final String config, final String error,
+			final Throwable exception) {
+		super("JSON Config: " + config + " caused an exceiption (\"" + error
+				+ "\")", exception);
+	}
 }

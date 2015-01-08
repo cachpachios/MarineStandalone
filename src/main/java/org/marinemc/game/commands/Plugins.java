@@ -31,13 +31,16 @@ import org.marinemc.util.StringUtils;
  */
 public class Plugins extends Command {
 
+	public Plugins() {
+		super("plugins", "marine.plugins",
+				"Show a list of the plugins running on this server", "pl",
+				"addons", "scripts");
+	}
 
-    public Plugins() {
-        super("plugins", "marine.plugins", "Show a list of the plugins running on this server", "pl", "addons", "scripts");
-    }
-
-    @Override
-    public void execute(CommandSender sender, String[] arguments) {
-        sender.sendMessage("Plugins: " + StringUtils.join(Marine.getServer().getPluginLoader().getManager().getPlugins(), ", "));
-    }
+	@Override
+	public void execute(final CommandSender sender, final String[] arguments) {
+		sender.sendMessage("Plugins: "
+				+ StringUtils.join(Marine.getServer().getPluginLoader()
+						.getManager().getPlugins(), ", "));
+	}
 }

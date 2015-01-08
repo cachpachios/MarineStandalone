@@ -23,7 +23,6 @@ import org.marinemc.events.Cancellable;
 import org.marinemc.events.Event;
 import org.marinemc.game.chat.ChatSender;
 import org.marinemc.game.chat.UnspecifiedSender;
-import org.marinemc.game.player.Player;
 
 /**
  * Created 2014-12-07 for MarineStandalone
@@ -33,44 +32,44 @@ import org.marinemc.game.player.Player;
  */
 public class ChatEvent extends Event implements Cancellable {
 
-    private String message;
-    private boolean cancelled;
+	private String message;
+	private boolean cancelled;
 
-    private ChatSender sender;
-    
-    public ChatEvent(ChatSender sender, String message) {
-        super("chat", true);
-        this.sender = sender;
-        this.message = message;
-        this.cancelled = false;
-    }
-    
-    public ChatEvent(String message) {
-        super("chat", true);
-        this.sender = UnspecifiedSender.getInstance();
-        this.message = message;
-        this.cancelled = false;
-    }
+	private final ChatSender sender;
 
-    public String getMessage() {
-        return this.message;
-    }
+	public ChatEvent(final ChatSender sender, final String message) {
+		super("chat", true);
+		this.sender = sender;
+		this.message = message;
+		cancelled = false;
+	}
 
-    public void setMessage(String newMessage) {
-        this.message = newMessage;
-    }
+	public ChatEvent(final String message) {
+		super("chat", true);
+		sender = UnspecifiedSender.getInstance();
+		this.message = message;
+		cancelled = false;
+	}
 
-    public ChatSender getSender() {
-        return this.sender;
-    }
+	public String getMessage() {
+		return message;
+	}
 
-    @Override
-    public boolean isCancelled() {
-        return cancelled;
-    }
+	public void setMessage(final String newMessage) {
+		message = newMessage;
+	}
 
-    @Override
-    public void setCancelled(boolean b) {
-        this.cancelled = b;
-    }
+	public ChatSender getSender() {
+		return sender;
+	}
+
+	@Override
+	public boolean isCancelled() {
+		return cancelled;
+	}
+
+	@Override
+	public void setCancelled(final boolean b) {
+		cancelled = b;
+	}
 }

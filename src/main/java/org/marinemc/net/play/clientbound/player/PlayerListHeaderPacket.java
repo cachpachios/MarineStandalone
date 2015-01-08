@@ -21,7 +21,6 @@ package org.marinemc.net.play.clientbound.player;
 
 import java.io.IOException;
 
-import org.json.simple.JSONObject;
 import org.marinemc.game.chat.ChatColor;
 import org.marinemc.io.binary.ByteList;
 import org.marinemc.net.Packet;
@@ -35,25 +34,26 @@ import org.marinemc.net.States;
  */
 public class PlayerListHeaderPacket extends Packet {
 
-    private final String header, footer;
+	private final String header, footer;
 
-    public PlayerListHeaderPacket(final String header, final String footer) {
-        super(0x047, States.INGAME);
+	public PlayerListHeaderPacket(final String header, final String footer) {
+		super(0x047, States.INGAME);
 
-        JSONObject headerObject = new JSONObject();
-        headerObject.put("text", ChatColor.transform('&', header));
-        this.header = headerObject.toJSONString();
+		final JSONObject headerObject = new JSONObject();
+		headerObject.put("text", ChatColor.transform('&', header));
+		this.header = headerObject.toJSONString();
 
-        JSONObject footerObject = new JSONObject();
-        footerObject.put("text", ChatColor.transform('&', footer));
-        this.footer = footerObject.toJSONString();
-    }
+		final JSONObject footerObject = new JSONObject();
+		footerObject.put("text", ChatColor.transform('&', footer));
+		this.footer = footerObject.toJSONString();
+	}
 
-    @Override
-    public void writeToStream(PacketOutputStream stream) throws IOException {
-    	ByteList data = new ByteList();
-        data.writeUTF8(header);
-        data.writeUTF8(footer);
-        stream.write(getID(), data);
-    }
+	@Override
+	public void writeToStream(final PacketOutputStream stream)
+			throws IOException {
+		final ByteList data = new ByteList();
+		data.writeUTF8(header);
+		data.writeUTF8(footer);
+		stream.write(getID(), data);
+	}
 }

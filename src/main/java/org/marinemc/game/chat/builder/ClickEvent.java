@@ -26,19 +26,16 @@ package org.marinemc.game.chat.builder;
  */
 public class ClickEvent extends Event {
 
-    public ClickEvent(Action action, String value) {
-        super("clickEvent", action.toString(), value);
-    }
+	public ClickEvent(final Action action, final String value) {
+		super("clickEvent", action.toString(), value);
+	}
 
-    public static enum Action {
-        OPEN_URL,
-        OPEN_FILE,
-        RUN_COMMAND,
-        SUGGEST_COMMAND;
+	public static enum Action {
+		OPEN_URL, OPEN_FILE, RUN_COMMAND, SUGGEST_COMMAND;
 
-        @Override
-        public String toString() {
-            return super.name().toLowerCase();
-        }
-    }
+		@Override
+		public String toString() {
+			return super.name().toLowerCase();
+		}
+	}
 }

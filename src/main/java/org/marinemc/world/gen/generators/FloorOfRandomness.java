@@ -1,6 +1,5 @@
 package org.marinemc.world.gen.generators;
 
-import org.marinemc.util.Location;
 import org.marinemc.util.Position;
 import org.marinemc.world.BlockID;
 import org.marinemc.world.Dimension;
@@ -26,25 +25,24 @@ public class FloorOfRandomness extends WorldGenerator {
 		return Dimension.OVERWORLD;
 	}
 
-    @Override
-    public Chunk generateChunkTerrain(final ChunkPos pos) {
-        Chunk r = new Chunk(world, pos);
-        for (int xx = 0; xx < 16; xx++)
-            for (int zz = 0; zz < 16; zz++) {
-            	
-            	BlockID t = Identifiers.randomBlock();
-            	
-            	while(t == BlockID.AIR)
-            		t = Identifiers.randomBlock();
-            	
-            	r.setPrivateType(xx, 0, zz, t);
-                
-                r.setPrivateLight(xx, 0, zz, (byte) -1);
+	@Override
+	public Chunk generateChunkTerrain(final ChunkPos pos) {
+		final Chunk r = new Chunk(world, pos);
+		for (int xx = 0; xx < 16; xx++)
+			for (int zz = 0; zz < 16; zz++) {
 
-            }
-        return r;
-    }
+				BlockID t = Identifiers.randomBlock();
 
+				while (t == BlockID.AIR)
+					t = Identifiers.randomBlock();
+
+				r.setPrivateType(xx, 0, zz, t);
+
+				r.setPrivateLight(xx, 0, zz, (byte) -1);
+
+			}
+		return r;
+	}
 
 	@Override
 	public Position getSafeSpawnPoint() {

@@ -29,23 +29,24 @@ import org.marinemc.server.Marine;
  */
 public class MojangTask extends MarineRunnable {
 
-    private static MojangTask instance;
-    private MojangUtils.Status AUTH;
+	private static MojangTask instance;
+	private MojangUtils.Status AUTH;
 
-    public MojangTask() {
-        super(Marine.getServer(), 400l, -1l);
-        instance = this;
-    }
+	public MojangTask() {
+		super(Marine.getServer(), 400l, -1l);
+		instance = this;
+	}
 
-    public static synchronized MojangUtils.Status getStatus() {
-    	if(instance != null)
-    		return instance.AUTH;
-    	else
-    		return MojangUtils.Status.UNKNOWN;
-    }
+	public static synchronized MojangUtils.Status getStatus() {
+		if (instance != null)
+			return instance.AUTH;
+		else
+			return MojangUtils.Status.UNKNOWN;
+	}
 
-    @Override
-    public void run() {
-        AUTH = MojangUtils.getInstance().getStatus(MojangUtils.MinecraftService.AUTH);
-    }
+	@Override
+	public void run() {
+		AUTH = MojangUtils.getInstance().getStatus(
+				MojangUtils.MinecraftService.AUTH);
+	}
 }

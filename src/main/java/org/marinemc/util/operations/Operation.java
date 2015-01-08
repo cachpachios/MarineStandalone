@@ -26,8 +26,8 @@ package org.marinemc.util.operations;
  * @see ArgumenetOperation
  */
 public interface Operation {
-    /**
-     * Perform this action
-     */
-    public void action();
+	/**
+	 * Perform this action
+	 */
+	public void action();
 }

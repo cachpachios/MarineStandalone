@@ -30,31 +30,30 @@ import org.marinemc.net.packets.status.ListResponse;
  */
 public class ListEvent extends Event implements Cancellable {
 
-    private ListResponse response;
-    private boolean cancelled;
+	private ListResponse response;
+	private boolean cancelled;
 
-    public ListEvent(ListResponse response) {
-        super("list");
-        this.response = response;
-        this.cancelled = false;
-    }
+	public ListEvent(final ListResponse response) {
+		super("list");
+		this.response = response;
+		cancelled = false;
+	}
 
+	public ListResponse getResponse() {
+		return response;
+	}
 
-    public ListResponse getResponse() {
-        return this.response;
-    }
+	public void setResponse(final ListResponse response) {
+		this.response = response;
+	}
 
-    public void setResponse(ListResponse response) {
-        this.response = response;
-    }
+	@Override
+	public boolean isCancelled() {
+		return cancelled;
+	}
 
-    @Override
-    public boolean isCancelled() {
-        return this.cancelled;
-    }
-
-    @Override
-    public void setCancelled(boolean cancelled) {
-        this.cancelled = cancelled;
-    }
+	@Override
+	public void setCancelled(final boolean cancelled) {
+		this.cancelled = cancelled;
+	}
 }

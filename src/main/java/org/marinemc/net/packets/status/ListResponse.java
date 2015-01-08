@@ -21,8 +21,6 @@ package org.marinemc.net.packets.status;
 
 import java.util.UUID;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.marinemc.game.chat.ChatColor;
 import org.marinemc.io.Base64Image;
 
@@ -33,77 +31,86 @@ import org.marinemc.io.Base64Image;
  */
 public class ListResponse {
 
-    private String motd;
-    private Base64Image favicon;
-    private int maxPlayers, currentPlayers;
-    private JSONArray samplePlayers;
-    /**
-     * Create a new list response
-     *
-     * @param motd           Message of the day
-     * @param currentPlayers Current player count
-     * @param maxPlayers     Max player count
-     * @param samplePlayers  Sample player list
-     * @param favicon        Server icon
-     */
-    public ListResponse(String motd, int currentPlayers, int maxPlayers, JSONArray samplePlayers, Base64Image favicon) {
-        this.motd = motd;
-        this.favicon = favicon;
-        this.maxPlayers = maxPlayers;
-        this.currentPlayers = currentPlayers;
-        this.samplePlayers = samplePlayers;
-    }
+	private String motd;
+	private Base64Image favicon;
+	private int maxPlayers, currentPlayers;
+	private JSONArray samplePlayers;
 
-    /**
-     * Get a json object that can be used in player samples as pure text
-     *
-     * @param text Text
-     * @return JSONObject
-     */
-    public static JSONObject getText(final String text) {
-        final JSONObject o = new JSONObject();
-        o.put("id", UUID.randomUUID().toString());
-        o.put("name", ChatColor.transform('&', text));
-        return o;
-    }
+	/**
+	 * Create a new list response
+	 *
+	 * @param motd
+	 *            Message of the day
+	 * @param currentPlayers
+	 *            Current player count
+	 * @param maxPlayers
+	 *            Max player count
+	 * @param samplePlayers
+	 *            Sample player list
+	 * @param favicon
+	 *            Server icon
+	 */
+	public ListResponse(final String motd, final int currentPlayers,
+			final int maxPlayers, final JSONArray samplePlayers,
+			final Base64Image favicon) {
+		this.motd = motd;
+		this.favicon = favicon;
+		this.maxPlayers = maxPlayers;
+		this.currentPlayers = currentPlayers;
+		this.samplePlayers = samplePlayers;
+	}
 
-    public String getMOTD() {
-        return this.motd;
-    }
+	/**
+	 * Get a json object that can be used in player samples as pure text
+	 *
+	 * @param text
+	 *            Text
+	 * @return JSONObject
+	 */
+	public static JSONObject getText(final String text) {
+		final JSONObject o = new JSONObject();
+		o.put("id", UUID.randomUUID().toString());
+		o.put("name", ChatColor.transform('&', text));
+		return o;
+	}
 
-    public Base64Image getFavicon() {
-        return this.favicon;
-    }
+	public String getMOTD() {
+		return motd;
+	}
 
-    public void setFavicon(Base64Image favicon) {
-        this.favicon = favicon;
-    }
+	public Base64Image getFavicon() {
+		return favicon;
+	}
 
-    public int getMaxPlayers() {
-        return this.maxPlayers;
-    }
+	public void setFavicon(final Base64Image favicon) {
+		this.favicon = favicon;
+	}
 
-    public void setMaxPlayers(int maxPlayers) {
-        this.maxPlayers = maxPlayers;
-    }
+	public int getMaxPlayers() {
+		return maxPlayers;
+	}
 
-    public int getCurrentPlayers() {
-        return this.currentPlayers;
-    }
+	public void setMaxPlayers(final int maxPlayers) {
+		this.maxPlayers = maxPlayers;
+	}
 
-    public void setCurrentPlayers(int currentPlayers) {
-        this.currentPlayers = currentPlayers;
-    }
+	public int getCurrentPlayers() {
+		return currentPlayers;
+	}
 
-    public JSONArray getSamplePlayers() {
-        return this.samplePlayers;
-    }
+	public void setCurrentPlayers(final int currentPlayers) {
+		this.currentPlayers = currentPlayers;
+	}
 
-    public void setSamplePlayers(JSONArray samplePlayers) {
-        this.samplePlayers = samplePlayers;
-    }
+	public JSONArray getSamplePlayers() {
+		return samplePlayers;
+	}
 
-    public void setMotd(String motd) {
-        this.motd = motd;
-    }
+	public void setSamplePlayers(final JSONArray samplePlayers) {
+		this.samplePlayers = samplePlayers;
+	}
+
+	public void setMotd(final String motd) {
+		this.motd = motd;
+	}
 }

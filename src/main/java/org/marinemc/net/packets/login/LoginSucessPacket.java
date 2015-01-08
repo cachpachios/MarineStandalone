@@ -27,33 +27,34 @@ import org.marinemc.io.binary.ByteList;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
+
 /**
  * @author Fozie
  */
 public class LoginSucessPacket extends Packet {
 
-    public final Player p;
+	public final Player p;
 
-    public LoginSucessPacket(final Player p) {
-        super(0x02, States.LOGIN);
-        this.p = p;
-    }
+	public LoginSucessPacket(final Player p) {
+		super(0x02, States.LOGIN);
+		this.p = p;
+	}
 
-    @Override
-    public void writeToStream(PacketOutputStream stream) throws IOException {
-        ByteList d = new ByteList();
+	@Override
+	public void writeToStream(final PacketOutputStream stream)
+			throws IOException {
+		final ByteList d = new ByteList();
 
-        d.writeUTF8(p.getUUID().toString());
-        d.writeUTF8(p.getUserName());
+		d.writeUTF8(p.getUUID().toString());
+		d.writeUTF8(p.getUserName());
 
+		stream.write(getID(), d);
+	}
 
-        stream.write(getID(), d);
-    }
+	@Override
+	public void readFromBytes(final ByteInput input) {
+		// TODO Auto-generated method stub
 
-    @Override
-    public void readFromBytes(ByteInput input) {
-        // TODO Auto-generated method stub
-
-    }
+	}
 
 }

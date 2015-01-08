@@ -75,15 +75,14 @@ import org.marinemc.world.entity.LivingEntity;
  * @author Fozie
  */
 
-
-
-public class Player extends LivingEntity implements IPlayer, CommandSender, EntityTracker {
+public class Player extends LivingEntity implements IPlayer, CommandSender,
+		EntityTracker {
 	/*
 	 * Identifier variables:
 	 */
-	private final short 	uid;
-	private final UUID 		uuid;
-	private final String	name;
+	private final short uid;
+	private final UUID uuid;
+	private final String name;
 	/*
 	 * Network variables
 	 */
@@ -100,7 +99,7 @@ public class Player extends LivingEntity implements IPlayer, CommandSender, Enti
 	private float walkSpeed;
 	private float flySpeed;
 	private Group group;
-	private Collection<Permission> permissions;
+	private final Collection<Permission> permissions;
 	/*
 	 * Chat Stuff
 	 */
@@ -111,31 +110,31 @@ public class Player extends LivingEntity implements IPlayer, CommandSender, Enti
 	 */
 	private boolean isFlying;
 	private boolean canFly;
-	
-	//TODO Use this:
-	private boolean isSneaking;
 
-	private PlayerInventory inventory;
-	private byte nextWindowID; // Generates a new byte for a new ID, cant be 0 when that is the standard inventory
-	
-	/**
-	 * An list of entities spawned localy
-	 * Its represented by the Entity UID
-	 */
-	private List<Integer> spawnedEntities;
+	// TODO Use this:
+	private final boolean isSneaking;
+
+	private final PlayerInventory inventory;
+	private byte nextWindowID; // Generates a new byte for a new ID, cant be 0
+								// when that is the standard inventory
 
 	/**
-	 * An list of chunks sent to the client
-	 * Its represented by the ChunksPos encoded form
-	 * (Half long is X integer, secound half is the Y Integer)
+	 * An list of entities spawned localy Its represented by the Entity UID
 	 */
-	private List<Long> loadedChunks;
-	
-	public Player(EntityType type, int ID, Location pos, short uid, UUID uuid,
-			String name, float exp, int levels, Gamemode currentGameMode,
-			float walkSpeed, float flySpeed, boolean isOp,
-			boolean isFlying, boolean canFly,
-			PlayerInventory inventory, final Client client) {
+	private final List<Integer> spawnedEntities;
+
+	/**
+	 * An list of chunks sent to the client Its represented by the ChunksPos
+	 * encoded form (Half long is X integer, secound half is the Y Integer)
+	 */
+	private final List<Long> loadedChunks;
+
+	public Player(final EntityType type, final int ID, final Location pos,
+			final short uid, final UUID uuid, final String name,
+			final float exp, final int levels, final Gamemode currentGameMode,
+			final float walkSpeed, final float flySpeed, final boolean isOp,
+			final boolean isFlying, final boolean canFly,
+			final PlayerInventory inventory, final Client client) {
 		super(type, ID, pos);
 		this.uid = uid;
 		this.uuid = uuid;
@@ -145,28 +144,30 @@ public class Player extends LivingEntity implements IPlayer, CommandSender, Enti
 		this.currentGameMode = currentGameMode;
 		this.walkSpeed = walkSpeed;
 		this.flySpeed = flySpeed;
-		this.permissions = new ArrayList<>(); // TODO Load this from somewhere
-		this.group = PermissionManager.instance().getGroup(uuid);
-		this.spawnedEntities = new ArrayList<Integer>(); // Could be an set but for integers linear search quicker than Hashing
-		this.loadedChunks = new ArrayList<Long>();
+		permissions = new ArrayList<>(); // TODO Load this from somewhere
+		group = PermissionManager.instance().getGroup(uuid);
+		spawnedEntities = new ArrayList<Integer>(); // Could be an set but for
+													// integers linear search
+													// quicker than Hashing
+		loadedChunks = new ArrayList<Long>();
 		this.isFlying = isFlying;
 		this.canFly = canFly;
 		this.inventory = inventory;
 		this.client = client;
-		this.nextWindowID = Byte.MIN_VALUE;
-		this.lastChatReset = System.currentTimeMillis();
-		this.messagesSent = 0;
-		this.isSneaking = false;
-		this.trackingEntities = new HashMap<Integer, Vector3d>();
+		nextWindowID = Byte.MIN_VALUE;
+		lastChatReset = System.currentTimeMillis();
+		messagesSent = 0;
+		isSneaking = false;
+		trackingEntities = new HashMap<Integer, Vector3d>();
 	}
-	
+
 	/**
 	 * Generates a new window id to use
 	 *
 	 * @return A new window id (Never equal to 0)
 	 */
 	public byte nextWindowID() {
-		return (++nextWindowID != 0) ? nextWindowID : ++nextWindowID;
+		return ++nextWindowID != 0 ? nextWindowID : ++nextWindowID;
 	}
 
 	@Override
@@ -187,10 +188,11 @@ public class Player extends LivingEntity implements IPlayer, CommandSender, Enti
 	/**
 	 * Kick a player with a specified reason
 	 *
-	 * @param reason Reason (shown to player)
+	 * @param reason
+	 *            Reason (shown to player)
 	 */
-	public void kick(String reason) {
-		this.client.sendPacket(new KickPacket(reason));
+	public void kick(final String reason) {
+		client.sendPacket(new KickPacket(reason));
 		Marine.getServer().getPlayerManager().disconnect(this);
 	}
 
@@ -201,20 +203,20 @@ public class Player extends LivingEntity implements IPlayer, CommandSender, Enti
 
 	@Override
 	public void update() {
-		//TODO
+		// TODO
 	}
 
 	/**
 	 * Set the gamemode and update it with the client
-
-	 * @param gm The target gamemode
+	 * 
+	 * @param gm
+	 *            The target gamemode
 	 */
-	public void updateGamemode(Gamemode gm) {
+	public void updateGamemode(final Gamemode gm) {
 		Assert.notNull(gm);
-		if(this.currentGameMode != gm) {
-			//TODO: Send packet to client
+		if (currentGameMode != gm)
+			// TODO: Send packet to client
 			currentGameMode = gm;
-		}
 	}
 
 	/**
@@ -247,15 +249,15 @@ public class Player extends LivingEntity implements IPlayer, CommandSender, Enti
 		levels = Math.min(levels, 255);
 		levels = Math.max(levels, 0);
 		this.levels = levels;
-		this.updateExp();
+		updateExp();
 	}
 
 	public float getWalkSpeed() {
 		return walkSpeed;
 	}
 
-	public void updateWalkSpeed(float walkSpeed) {
-		this.updateAbilites();
+	public void updateWalkSpeed(final float walkSpeed) {
+		updateAbilites();
 		this.walkSpeed = walkSpeed;
 	}
 
@@ -263,8 +265,8 @@ public class Player extends LivingEntity implements IPlayer, CommandSender, Enti
 		return flySpeed;
 	}
 
-	public void updateFlySpeed(float flySpeed) {
-		this.updateAbilites();
+	public void updateFlySpeed(final float flySpeed) {
+		updateAbilites();
 		this.flySpeed = flySpeed;
 	}
 
@@ -272,8 +274,8 @@ public class Player extends LivingEntity implements IPlayer, CommandSender, Enti
 		return isFlying;
 	}
 
-	public void updateIsFlying(boolean isFlying) {
-		this.updateAbilites();
+	public void updateIsFlying(final boolean isFlying) {
+		updateAbilites();
 		this.isFlying = isFlying;
 	}
 
@@ -281,8 +283,8 @@ public class Player extends LivingEntity implements IPlayer, CommandSender, Enti
 		return canFly;
 	}
 
-	public void updateCanFly(boolean canFly) {
-		this.updateAbilites();
+	public void updateCanFly(final boolean canFly) {
+		updateAbilites();
 		this.canFly = canFly;
 	}
 
@@ -297,105 +299,106 @@ public class Player extends LivingEntity implements IPlayer, CommandSender, Enti
 	}
 
 	@Override
-	public void sendMessage(String message) {
+	public void sendMessage(final String message) {
 		client.sendPacket(new ChatPacket(message));
 	}
 
 	@Override
-	public void sendMessage(ChatMessage message) {
+	public void sendMessage(final ChatMessage message) {
 		client.sendPacket(new ChatPacket(message));
 	}
 
 	@Override
-	public void executeCommand(String command) {
+	public void executeCommand(final String command) {
 		executeCommand(command, new String[] {});
 	}
 
 	@Override
-	public void executeCommand(String command, String[] arguments) {
+	public void executeCommand(final String command, final String[] arguments) {
 		final Command cmd = CommandManager.getInstance().getCommand(command);
 		if (cmd == null) {
-			final Collection<Command> commands = CommandManager.getInstance().getCommands();
+			final Collection<Command> commands = CommandManager.getInstance()
+					.getCommands();
 			String extra;
 			try {
-				StringComparison cm = new StringComparison(command, commands.toArray());
-				if (((double) cm.getBestMatchAdvanced()[0]) < .25) {
+				final StringComparison cm = new StringComparison(command,
+						commands.toArray());
+				if ((double) cm.getBestMatchAdvanced()[0] < .25)
 					extra = "";
-				} else {
+				else
 					extra = " Did you mean " + cm.getBestMatch();
-				}
 			} catch (final Throwable e) {
 				extra = "";
 			}
 			sendMessage("There is no such command." + extra);
-		} else {
+		} else
 			executeCommand(cmd, arguments);
-		}
 	}
 
 	@Override
-	public void executeCommand(Command command, String[] arguments) {
+	public void executeCommand(final Command command, final String[] arguments) {
 		Assert.notNull(command, arguments);
-		if (hasPermission(command.getPermission())) {
+		if (hasPermission(command.getPermission()))
 			try {
 				command.execute(this, arguments);
 			} catch (final Throwable e) {
-				sendMessage(ChatColor.RED + "Something went wrong when executing the command...");
-				Logging.getLogger().error("Something went wrong when executing command /" + command.toString(), e);
+				sendMessage(ChatColor.RED
+						+ "Something went wrong when executing the command...");
+				Logging.getLogger().error(
+						"Something went wrong when executing command /"
+								+ command.toString(), e);
 			}
-		} else {
+		else
 			sendMessage("You are not permitted to use that command");
-		}
 	}
 
 	@Override
-	public boolean hasPermission(String permission) {
+	public boolean hasPermission(final String permission) {
 		return PermissionManager.instance().hasPermission(this, permission);
 	}
 
 	@Override
-	public boolean hasPermission(Permission permission) {
+	public boolean hasPermission(final Permission permission) {
 		return PermissionManager.instance().hasPermission(this, permission);
 	}
 
-	public void sendAboveActionbarMessage(String message) {
-        getClient().sendPacket(new ChatPacket(message, 2)); // TODO Event
+	public void sendAboveActionbarMessage(final String message) {
+		getClient().sendPacket(new ChatPacket(message, 2)); // TODO Event
 	}
 
 	public Collection<Permission> getPermissions() {
-		return this.permissions;
+		return permissions;
 	}
 
 	public Group getGroup() {
-		return this.group;
+		return group;
 	}
 
 	public void setGroup(final Group group) {
 		Assert.notNull(group);
 		this.group = group;
 	}
-	
-	public void teleport(Location relative) {
+
+	public void teleport(final Location relative) {
 		// TODO THIS
 	}
 
-	public void sendMessageRaw(String msg) {
-        getClient().sendPacket(new ChatPacket(msg, false));
+	public void sendMessageRaw(final String msg) {
+		getClient().sendPacket(new ChatPacket(msg, false));
 	}
 
 	public void openInventory(final Inventory inventory) {
 		Assert.notNull(inventory);
 		client.sendPacket(new InventoryOpenPacket(inventory));
-    }
+	}
 
 	public void setXP(float xp) {
-        xp = Math.min(xp, 1.0f);
-        xp = Math.max(xp, 0.0f);
-        this.exp = xp;
-        this.updateExp();
+		xp = Math.min(xp, 1.0f);
+		xp = Math.max(xp, 0.0f);
+		exp = xp;
+		updateExp();
 	}
-	
-	
+
 	/**
 	 * Clientside update methods:
 	 */
@@ -405,7 +408,8 @@ public class Player extends LivingEntity implements IPlayer, CommandSender, Enti
 	}
 
 	/**
-	 * Sends a Experience update packet to the client with the current experience
+	 * Sends a Experience update packet to the client with the current
+	 * experience
 	 */
 	public void updateExp() {
 		getClient().sendPacket(new ExperiencePacket(this));
@@ -414,25 +418,26 @@ public class Player extends LivingEntity implements IPlayer, CommandSender, Enti
 	/**
 	 * Sends a PlayerAbilites Packet
 	 */
-    public void updateAbilites() {
-        this.getClient().sendPacket(new PlayerAbilitesPacket(this));
+	public void updateAbilites() {
+		getClient().sendPacket(new PlayerAbilitesPacket(this));
 	}
 
 	public void sendCompassTarget(final Position pos) {
 		Assert.notNull(pos);
-		this.getClient().sendPacket(new SpawnPointPacket(pos));
-    }
+		getClient().sendPacket(new SpawnPointPacket(pos));
+	}
 
-    public void sendInventory() {
-        this.getClient().sendPacket(new InventoryContentPacket(getInventory()));
-    }
+	public void sendInventory() {
+		getClient().sendPacket(new InventoryContentPacket(getInventory()));
+	}
 
-    public void sendPositionAndLook() {
-        this.getClient().sendPacket(new ClientboundPlayerLookPositionPacket(getLocation()));
-    }
+	public void sendPositionAndLook() {
+		getClient().sendPacket(
+				new ClientboundPlayerLookPositionPacket(getLocation()));
+	}
 
-    public void sendLook() {
-        this.getClient().sendPacket(new PlayerLookPacket(getLocation()));
+	public void sendLook() {
+		getClient().sendPacket(new PlayerLookPacket(getLocation()));
 	}
 
 	public void sendBlockUpdate(final Position pos, final BlockID type) {
@@ -441,7 +446,7 @@ public class Player extends LivingEntity implements IPlayer, CommandSender, Enti
 	}
 
 	public boolean checkForSpam() {
-		if ((System.currentTimeMillis() - lastChatReset) >= 5000) {
+		if (System.currentTimeMillis() - lastChatReset >= 5000) {
 			lastChatReset = System.currentTimeMillis();
 			messagesSent = 0;
 		}
@@ -449,39 +454,34 @@ public class Player extends LivingEntity implements IPlayer, CommandSender, Enti
 	}
 
 	public void sendTime() {
-		getClient().sendPacket(new TimeUpdatePacket(this.getWorld()));
+		getClient().sendPacket(new TimeUpdatePacket(getWorld()));
 	}
 
 	public void unloadChunk(final ChunkPos c) {
-		if(loadedChunks.contains(c.encode())) {
+		if (loadedChunks.contains(c.encode())) {
 			getClient().sendPacket(new UnloadChunkPacket(c));
 			loadedChunks.remove(c.encode());
 		}
 	}
-	
+
 	public boolean sendChunk(final Chunk c) {
-		if (loadedChunks.contains(c.getPos().encode())) {
+		if (loadedChunks.contains(c.getPos().encode()))
 			return false;
-		}
 		loadedChunks.add(c.getPos().encode());
 		getClient().sendPacket(new ChunkPacket(c));
 		return true;
 	}
 
 	public boolean sendChunks(final List<Chunk> chunks) {
-		if (!Assert.notEmpty(chunks)) {
+		if (!Assert.notEmpty(chunks))
 			return false;
-		}
-		for (final Chunk c : chunks) {
+		for (final Chunk c : chunks)
 			if (loadedChunks.contains(c.getPos().encode()))
 				chunks.remove(c);
-			else {
+			else
 				loadedChunks.add(c.getPos().encode());
-			}
-		}
-		if (chunks.isEmpty()) {
+		if (chunks.isEmpty())
 			return false;
-		}
 		getClient().sendPacket(new MapChunkPacket(getWorld(), chunks));
 		return true;
 	}
@@ -492,96 +492,109 @@ public class Player extends LivingEntity implements IPlayer, CommandSender, Enti
 
 	@Override
 	final public String toString() {
-		return this.name;
+		return name;
 	}
 
-	
-	//TODO Fix unloading :p
-	public void localChunkRegion(int w, int h) {
+	// TODO Fix unloading :p
+	public void localChunkRegion(final int w, final int h) {
 		final List<Long> chunksToSend = new ArrayList<Long>();
-//		final List<Long> chunksToUnload = new ArrayList<Long>();
-		
+		// final List<Long> chunksToUnload = new ArrayList<Long>();
+
 		System.out.println("Invoke");
-		
+
 		// Put missing chunks for sending
-        for (int x = -(w); x < w / 2; x++)
-            for (int y = -(h / 2); y < h / 2; y++) {
-				if(!loadedChunks.contains(ChunkPos.Encode(x, y)))
+		for (int x = -w; x < w / 2; x++)
+			for (int y = -(h / 2); y < h / 2; y++)
+				if (!loadedChunks.contains(ChunkPos.Encode(x, y)))
 					chunksToSend.add(ChunkPos.Encode(x, y));
-			}
-		
-//		// Remove extra chunks
-//		for(Long l : loadedChunks) {
-//			ChunkPos c = new ChunkPos(l);
-//			if(!MathUtils.isInsideRect((int)getX(), (int)getY(), w,h, c.x, c.y))
-//				chunksToUnload.add(l);
-//		}
-		
-//		for(Long l : chunksToUnload)
-//			getWorld().getChunkForce(new ChunkPos(l)).unload(this);
-        
-		if(chunksToSend.size() > 1) {
+
+		// // Remove extra chunks
+		// for(Long l : loadedChunks) {
+		// ChunkPos c = new ChunkPos(l);
+		// if(!MathUtils.isInsideRect((int)getX(), (int)getY(), w,h, c.x, c.y))
+		// chunksToUnload.add(l);
+		// }
+
+		// for(Long l : chunksToUnload)
+		// getWorld().getChunkForce(new ChunkPos(l)).unload(this);
+
+		if (chunksToSend.size() > 1) {
 			final List<Chunk> chunks = new ArrayList<>(chunksToSend.size());
-			for(Long l : chunksToSend)
+			for (final Long l : chunksToSend)
 				chunks.add(getWorld().getChunkForce(new ChunkPos(l)));
-		}
-		else
-			for(Long l : chunksToSend)
+		} else
+			for (final Long l : chunksToSend)
 				sendChunk(getWorld().getChunkForce(new ChunkPos(l)));
 	}
 
 	/**
 	 * ENTITY TRACKING STARTS HERE:
 	 */
-	
+
 	private final Map<Integer, Vector3d> trackingEntities;
-	
+
 	@Override
-	public void killLocalEntity(Entity e) {
-		killLocalEntities(new Entity[] {e});
+	public void killLocalEntity(final Entity e) {
+		killLocalEntities(new Entity[] { e });
 	}
 
 	@Override
-	public void killLocalEntity(Integer e) {
-		killLocalEntities(new Integer[] {e});
+	public void killLocalEntity(final Integer e) {
+		killLocalEntities(new Integer[] { e });
 	}
 
 	@Override
-	public void killLocalEntities(Entity[] e) {
-		// TODO Send delete entities request or player leave if instanceof player	
+	public void killLocalEntities(final Entity[] e) {
+		// TODO Send delete entities request or player leave if instanceof
+		// player
 	}
 
 	@Override
-	public void killLocalEntities(Integer[] e) {
-		
+	public void killLocalEntities(final Integer[] e) {
+
 	}
 
 	@Override
-	public boolean doesTrackEntity(Entity e) {
+	public boolean doesTrackEntity(final Entity e) {
 		return trackingEntities.containsKey(e.getEntityID());
 	}
 
 	@Override
-	public void updateLocalEntityMove(Entity e, double x, double y, double z) {
-		if(trackingEntities.containsKey(e.getEntityID()))
-			getClient().sendPacket(new EntityLookMovePacket(this, e, trackingEntities.get(e.getEntityID()), new Vector3d(x,y,z))); //TODO Replace this with only move packet
-	}
-	
-	@Override
-	public void updateLocalEntityLook(Entity e) {
-		if(trackingEntities.containsKey(e.getEntityID()))
-			getClient().sendPacket(new EntityLookMovePacket(this, e, trackingEntities.get(e.getEntityID()), e.getLocation())); //TODO Replace this with only look packet
+	public void updateLocalEntityMove(final Entity e, final double x,
+			final double y, final double z) {
+		if (trackingEntities.containsKey(e.getEntityID()))
+			getClient().sendPacket(
+					new EntityLookMovePacket(this, e, trackingEntities.get(e
+							.getEntityID()), new Vector3d(x, y, z))); // TODO
+																		// Replace
+																		// this
+																		// with
+																		// only
+																		// move
+																		// packet
 	}
 
 	@Override
-	public void teleportLocalEntity(Entity e, double x, double y, double z) {
+	public void updateLocalEntityLook(final Entity e) {
+		if (trackingEntities.containsKey(e.getEntityID()))
+			getClient().sendPacket(
+					new EntityLookMovePacket(this, e, trackingEntities.get(e
+							.getEntityID()), e.getLocation())); // TODO Replace
+																// this with
+																// only look
+																// packet
+	}
+
+	@Override
+	public void teleportLocalEntity(final Entity e, final double x,
+			final double y, final double z) {
 		// TODO
 	}
 
 	@Override
-	public Vector3d getLastLocalySeenPosition(Entity e) {
-		if(trackingEntities.containsKey(e.getEntityID()))
+	public Vector3d getLastLocalySeenPosition(final Entity e) {
+		if (trackingEntities.containsKey(e.getEntityID()))
 			return trackingEntities.get(e.getEntityID());
 		return null;
-	} 
+	}
 }

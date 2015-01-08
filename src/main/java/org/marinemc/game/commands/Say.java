@@ -34,17 +34,17 @@ import org.marinemc.util.StringUtils;
  */
 public class Say extends Command {
 
-    public Say() {
-        super("say", "marine.say", "Say something");
-    }
+	public Say() {
+		super("say", "marine.say", "Say something");
+	}
 
-    @Override
-    public void execute(CommandSender sender, String[] arguments) {
-        String message = ChatColor.transform('&', (StringUtils.join(Arrays.asList(replaceAll(arguments, sender)), " ")));
-        if (message.equals("")) {
-            sender.sendMessage("You cannot send an empty message");
-        } else {
-            Marine.broadcastMessage(message);
-        }
-    }
+	@Override
+	public void execute(final CommandSender sender, final String[] arguments) {
+		final String message = ChatColor.transform('&', StringUtils.join(
+				Arrays.asList(replaceAll(arguments, sender)), " "));
+		if (message.equals(""))
+			sender.sendMessage("You cannot send an empty message");
+		else
+			Marine.broadcastMessage(message);
+	}
 }

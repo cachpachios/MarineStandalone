@@ -22,7 +22,6 @@ package org.marinemc.settings.files;
 import java.io.File;
 import java.util.UUID;
 
-import org.json.JSONArray;
 import org.marinemc.settings.StorageConfig;
 
 /**
@@ -32,42 +31,38 @@ import org.marinemc.settings.StorageConfig;
  */
 public class WhitelistFile extends StorageConfig {
 
-    private JSONArray array;
+	private final JSONArray array;
 
-    public WhitelistFile(File file) {
-        super(file, "whitelist");
-        setIfNull("players", new JSONArray());
-        array = get("players");
-    }
+	public WhitelistFile(final File file) {
+		super(file, "whitelist");
+		setIfNull("players", new JSONArray());
+		array = get("players");
+	}
 
-    @Override
-    public void saveFile() {
-        set("players", array);
-        super.saveFile();
-    }
+	@Override
+	public void saveFile() {
+		set("players", array);
+		super.saveFile();
+	}
 
-    public void setWhitelisted(UUID uuid, boolean b) {
-        for (int x = 0; x < array.length(); x++) {
-            if (array.getString(x).equals(uuid.toString())) {
-                if (!b) {
-                    array.remove(x);
-                }
-                return;
-            }
-        }
-        if (b) {
-            array.put(uuid.toString());
-        } else {
-            throw new UnsupportedOperationException("You cannot remove someone from the whitelist, unless they're added");
-        }
-    }
+	public void setWhitelisted(final UUID uuid, final boolean b) {
+		for (int x = 0; x < array.length(); x++)
+			if (array.getString(x).equals(uuid.toString())) {
+				if (!b)
+					array.remove(x);
+				return;
+			}
+		if (b)
+			array.put(uuid.toString());
+		else
+			throw new UnsupportedOperationException(
+					"You cannot remove someone from the whitelist, unless they're added");
+	}
 
-    public boolean isWhitelisted(UUID uuid) {
-        for (int x = 0; x < array.length(); x++) {
-            if (array.getString(x).equals(uuid.toString())) {
-                return true;
-            }
-        }
-        return false;
-    }
+	public boolean isWhitelisted(final UUID uuid) {
+		for (int x = 0; x < array.length(); x++)
+			if (array.getString(x).equals(uuid.toString()))
+				return true;
+		return false;
+	}
 }

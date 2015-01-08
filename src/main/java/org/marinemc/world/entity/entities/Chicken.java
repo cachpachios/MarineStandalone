@@ -30,17 +30,17 @@ import org.marinemc.world.entity.EntityType;
  */
 public class Chicken extends Entity {
 
-    public Chicken(int ID, Location pos) {
-        super(EntityType.CHICKEN, ID, pos);
-    }
+	public Chicken(final int ID, final Location pos) {
+		super(EntityType.CHICKEN, ID, pos);
+	}
 
-    @Override
-    public int getSendDistance() {
-        return 0;
-    }
+	@Override
+	public int getSendDistance() {
+		return 0;
+	}
 
-    @Override
-    public void update() {
+	@Override
+	public void update() {
 
-    }
+	}
 }

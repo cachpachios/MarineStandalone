@@ -29,12 +29,13 @@ import org.marinemc.game.command.CommandSender;
  */
 public class List extends Command {
 
-    public List() {
-        super("list", "marine.list", "List all players", "l");
-    }
+	public List() {
+		super("list", "marine.list", "List all players", "l");
+	}
 
-    public void execute(CommandSender sender, String[] args) {
-        sender.sendMessage("Currently Online: " + getAllPlayers());
-    }
+	@Override
+	public void execute(final CommandSender sender, final String[] args) {
+		sender.sendMessage("Currently Online: " + getAllPlayers());
+	}
 
 }

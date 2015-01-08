@@ -33,32 +33,26 @@ import org.marinemc.net.States;
  */
 public class GameStateChangePacket extends Packet {
 
-    private final Reason reason;
-    private final float value;
+	private final Reason reason;
+	private final float value;
 
-    public GameStateChangePacket(Reason reason, float value) {
-        super(0x2B, States.INGAME);
-        this.reason = reason;
-        this.value = value;
-    }
+	public GameStateChangePacket(final Reason reason, final float value) {
+		super(0x2B, States.INGAME);
+		this.reason = reason;
+		this.value = value;
+	}
 
-    @Override
-    public void writeToStream(PacketOutputStream stream) throws IOException {
-    	ByteList data = new ByteList();
-        data.writeByte((byte) reason.ordinal());
-        if (value > -1f)
-            data.writeFloat(value);
-        stream.write(getID(), data);
-    }
-    public static enum Reason {
-        INVALID_BED,
-        END_RAINING,
-        BEGIN_RAINING,
-        CHANGE_GAMEMODE,
-        ENTER_CREDITS,
-        DEMO_MESSAGES,
-        ARROW_HITTING_PLAYER,
-        FADE_VALUE,
-        FADE_TIME
-    }
+	@Override
+	public void writeToStream(final PacketOutputStream stream)
+			throws IOException {
+		final ByteList data = new ByteList();
+		data.writeByte((byte) reason.ordinal());
+		if (value > -1f)
+			data.writeFloat(value);
+		stream.write(getID(), data);
+	}
+
+	public static enum Reason {
+		INVALID_BED, END_RAINING, BEGIN_RAINING, CHANGE_GAMEMODE, ENTER_CREDITS, DEMO_MESSAGES, ARROW_HITTING_PLAYER, FADE_VALUE, FADE_TIME
+	}
 }

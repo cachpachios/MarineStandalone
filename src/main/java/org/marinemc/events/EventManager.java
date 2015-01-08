@@ -37,148 +37,151 @@ import org.marinemc.plugins.Plugin;
  */
 public class EventManager {
 
-    private static EventManager instance;
-    private final Map<Integer, ArrayDeque<EventListener>> listeners;
-    private Map<Integer, EventListener[]> bakedListeners;
+	private static EventManager instance;
+	private final Map<Integer, ArrayDeque<EventListener>> listeners;
+	private Map<Integer, EventListener[]> bakedListeners;
 
-    /**
-     * Constructor
-     */
-    public EventManager() {
-        this.listeners = new HashMap<>();
-    }
+	/**
+	 * Constructor
+	 */
+	public EventManager() {
+		listeners = new HashMap<>();
+	}
 
-    /**
-     * Get the static instance
-     *
-     * @return THIS, literally THIS
-     */
-    public static EventManager getInstance() {
-        if (instance == null)
-            instance = new EventManager();
-        return instance;
-    }
+	/**
+	 * Get the static instance
+	 *
+	 * @return THIS, literally THIS
+	 */
+	public static EventManager getInstance() {
+		if (instance == null)
+			instance = new EventManager();
+		return instance;
+	}
 
-    /**
-     * Remove all listeners registered by a plugin
-     *
-     * @param plugin Plugin for which the listeners should be removed
-     */
-    public void removeAll(final Plugin plugin) {
-        synchronized (listeners) {
-            for (final Deque<EventListener> listeners : this.listeners.values()) {
-                for (final EventListener listener : listeners) {
-                    if (listener.getIDENTIFIERObject() instanceof Plugin && listener.getIDENTIFIERObject().equals(plugin))
-                        listeners.remove(listener);
-                }
-            }
-            bake();
-        }
-    }
+	/**
+	 * Remove all listeners registered by a plugin
+	 *
+	 * @param plugin
+	 *            Plugin for which the listeners should be removed
+	 */
+	public void removeAll(final Plugin plugin) {
+		synchronized (listeners) {
+			for (final Deque<EventListener> listeners : this.listeners.values())
+				for (final EventListener listener : listeners)
+					if (listener.getIDENTIFIERObject() instanceof Plugin
+							&& listener.getIDENTIFIERObject().equals(plugin))
+						listeners.remove(listener);
+			bake();
+		}
+	}
 
-    /**
-     * Add a listener
-     *
-     * @param listener listener to add
-     */
-    public void addListener(final EventListener listener) {
-        synchronized (listeners) {
-            if (!listeners.containsKey(listener.hashCode())) {
-                listeners.put(listener.hashCode(), new ArrayDeque<EventListener>());
-            }
-            listeners.get(listener.hashCode()).add(listener);
-        }
-    }
+	/**
+	 * Add a listener
+	 *
+	 * @param listener
+	 *            listener to add
+	 */
+	public void addListener(final EventListener listener) {
+		synchronized (listeners) {
+			if (!listeners.containsKey(listener.hashCode()))
+				listeners.put(listener.hashCode(),
+						new ArrayDeque<EventListener>());
+			listeners.get(listener.hashCode()).add(listener);
+		}
+	}
 
-    /**
-     * Remove a listener
-     *
-     * @param listener listener to remove
-     */
-    public void removeListener(final EventListener listener) {
-        synchronized (listeners) {
-            for (final Deque<EventListener> ll : listeners.values()) {
-                ll.remove(listener);
-            }
-        }
-    }
+	/**
+	 * Remove a listener
+	 *
+	 * @param listener
+	 *            listener to remove
+	 */
+	public void removeListener(final EventListener listener) {
+		synchronized (listeners) {
+			for (final Deque<EventListener> ll : listeners.values())
+				ll.remove(listener);
+		}
+	}
 
-    /**
-     * Handle an event
-     *
-     * @param event event to be handled
-     */
-    public void handle(final Event event) {
-        if (event.async()) {
-            call(event);
-        } else {
-            synchronized (this) {
-                call(event);
-            }
-        }
-    }
+	/**
+	 * Handle an event
+	 *
+	 * @param event
+	 *            event to be handled
+	 */
+	public void handle(final Event event) {
+		if (event.async())
+			call(event);
+		else
+			synchronized (this) {
+				call(event);
+			}
+	}
 
-    /**
-     * Bake the listeners...
-     */
-    public void bake() {
-        Logging.getLogger().log("Baking Event Listeners...");
-        synchronized (this) {
-            bakedListeners = new HashMap<>();
-            List<EventListener> low, med, hig;
-            int index;
-            EventListener[] array;
-            for (Map.Entry<Integer, ArrayDeque<EventListener>> entry : listeners.entrySet()) {
-                low = new ArrayList<>();
-                med = new ArrayList<>();
-                hig = new ArrayList<>();
-                for (final EventListener listener : entry.getValue()) {
-                    switch (listener.getPriority()) {
-                        case LOW:
-                            low.add(listener);
-                            break;
-                        case MEDIUM:
-                            low.add(listener);
-                            break;
-                        case HIGH:
-                            hig.add(listener);
-                            break;
-                        default:
-                            break;
-                    }
-                }
-                array = new EventListener[low.size() + med.size() + hig.size()];
-                index = 0;
-                for (EventListener listener : low) {
-                    array[index++] = listener;
-                }
-                for (EventListener listener : med) {
-                    array[index++] = listener;
-                }
-                for (EventListener listener : hig) {
-                    array[index++] = listener;
-                }
-                bakedListeners.put(entry.getKey(), array);
-            }
-        }
-        if (Bootstrap.debug()) {
-            for (Map.Entry<Integer, EventListener[]> entry : bakedListeners.entrySet()) {
-                Logging.getLogger().debug("Listeners for " + entry.getKey());
-                int index = 0;
-                for (EventListener listener : entry.getValue()) {
-                    Logging.getLogger().debug("[" + ++index + "] Listing to: " + listener.listeningTo() + ", Class: " + listener.getClass());
-                }
-            }
-            Logging.getLogger().debug("Baked!");
-        }
-    }
+	/**
+	 * Bake the listeners...
+	 */
+	public void bake() {
+		Logging.getLogger().log("Baking Event Listeners...");
+		synchronized (this) {
+			bakedListeners = new HashMap<>();
+			List<EventListener> low, med, hig;
+			int index;
+			EventListener[] array;
+			for (final Map.Entry<Integer, ArrayDeque<EventListener>> entry : listeners
+					.entrySet()) {
+				low = new ArrayList<>();
+				med = new ArrayList<>();
+				hig = new ArrayList<>();
+				for (final EventListener listener : entry.getValue())
+					switch (listener.getPriority()) {
+					case LOW:
+						low.add(listener);
+						break;
+					case MEDIUM:
+						low.add(listener);
+						break;
+					case HIGH:
+						hig.add(listener);
+						break;
+					default:
+						break;
+					}
+				array = new EventListener[low.size() + med.size() + hig.size()];
+				index = 0;
+				for (final EventListener listener : low)
+					array[index++] = listener;
+				for (final EventListener listener : med)
+					array[index++] = listener;
+				for (final EventListener listener : hig)
+					array[index++] = listener;
+				bakedListeners.put(entry.getKey(), array);
+			}
+		}
+		if (Bootstrap.debug()) {
+			for (final Map.Entry<Integer, EventListener[]> entry : bakedListeners
+					.entrySet()) {
+				Logging.getLogger().debug("Listeners for " + entry.getKey());
+				int index = 0;
+				for (final EventListener listener : entry.getValue())
+					Logging.getLogger().debug(
+							"[" + ++index + "] Listing to: "
+									+ listener.listeningTo() + ", Class: "
+									+ listener.getClass());
+			}
+			Logging.getLogger().debug("Baked!");
+		}
+	}
 
-    @SuppressWarnings("ALL")
-    private void call(final Event event) throws NullPointerException {
-        if (bakedListeners == null || !bakedListeners.containsKey(event.hashCode())) return;
-        for (final EventListener listener : bakedListeners.get(event.hashCode())) {
-            listener.listen(event);
-        }
-    }
+	@SuppressWarnings("ALL")
+	private void call(final Event event) throws NullPointerException {
+		if (bakedListeners == null
+				|| !bakedListeners.containsKey(event.hashCode()))
+			return;
+		for (final EventListener listener : bakedListeners
+				.get(event.hashCode()))
+			listener.listen(event);
+	}
 
 }

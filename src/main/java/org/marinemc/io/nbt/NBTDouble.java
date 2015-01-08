@@ -27,34 +27,34 @@ import org.marinemc.io.binary.ByteList;
  */
 public class NBTDouble extends NBTTag<Double> {
 
-    private double data;
+	private final double data;
 
-    public NBTDouble(String name, double v) {
-        super(name, 6);
-        data = v;
-    }
+	public NBTDouble(final String name, final double v) {
+		super(name, 6);
+		data = v;
+	}
 
-    public NBTDouble(String name, ByteInput data) {
-        this(name, data.readDouble());
-    }
+	public NBTDouble(final String name, final ByteInput data) {
+		this(name, data.readDouble());
+	}
 
-    @Override
-    public byte[] toByteArray() {
-        ByteList d = new ByteList();
-        d.writeByte(getTagID());
-        d.writeUTF8Short(name);
-        d.writeDouble(data);
-        return d.toBytes();
-    }
+	@Override
+	public byte[] toByteArray() {
+		final ByteList d = new ByteList();
+		d.writeByte(getTagID());
+		d.writeUTF8Short(name);
+		d.writeDouble(data);
+		return d.toBytes();
+	}
 
-    public double toDouble() {
-        return data;
-    }
+	public double toDouble() {
+		return data;
+	}
 
-    @Override
-    public byte[] toNonPrefixedByteArray() {
-    	ByteList data = new ByteList();
-        data.writeDouble(this.data);
-        return data.toBytes();
-    }
+	@Override
+	public byte[] toNonPrefixedByteArray() {
+		final ByteList data = new ByteList();
+		data.writeDouble(this.data);
+		return data.toBytes();
+	}
 }

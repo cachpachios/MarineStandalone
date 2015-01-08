@@ -34,16 +34,18 @@ import org.marinemc.util.StringUtils;
  */
 public class SendAboveActionBarMessage extends Command {
 
-    public SendAboveActionBarMessage() {
-        super("sendaboveactionbarmessage", "marine.saabm", "Send above action bar message", "saabm");
-    }
+	public SendAboveActionBarMessage() {
+		super("sendaboveactionbarmessage", "marine.saabm",
+				"Send above action bar message", "saabm");
+	}
 
-    @Override
-    public void execute(CommandSender sender, String[] args) {
-        if (!(sender instanceof Player))
-            return;
-        Player player = (Player) sender;
-        args = replaceAll(args, sender);
-        player.sendAboveActionbarMessage(ChatColor.transform('&', StringUtils.join(Arrays.asList(args), " ")));
-    }
+	@Override
+	public void execute(final CommandSender sender, String[] args) {
+		if (!(sender instanceof Player))
+			return;
+		final Player player = (Player) sender;
+		args = replaceAll(args, sender);
+		player.sendAboveActionbarMessage(ChatColor.transform('&',
+				StringUtils.join(Arrays.asList(args), " ")));
+	}
 }

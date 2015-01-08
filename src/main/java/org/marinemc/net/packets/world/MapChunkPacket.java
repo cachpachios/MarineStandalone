@@ -30,43 +30,44 @@ import org.marinemc.net.States;
 import org.marinemc.world.Dimension;
 import org.marinemc.world.World;
 import org.marinemc.world.chunk.Chunk;
+
 /**
  * @author Fozie
  */
 public class MapChunkPacket extends Packet {
 
-    final List<Chunk> chunks;
+	final List<Chunk> chunks;
 
-    final World world;
+	final World world;
 
-    public MapChunkPacket(final World w, final List<Chunk> chunks) {
-        super(0x26, States.INGAME);
-        this.chunks = chunks;
-        world = w;
-    }
+	public MapChunkPacket(final World w, final List<Chunk> chunks) {
+		super(0x26, States.INGAME);
+		this.chunks = chunks;
+		world = w;
+	}
 
-    @Override
-    public void writeToStream(PacketOutputStream stream) throws IOException {
-    	ByteList data = new ByteList();
+	@Override
+	public void writeToStream(final PacketOutputStream stream)
+			throws IOException {
+		final ByteList data = new ByteList();
 
-        data.writeBoolean(world.getDimension() == Dimension.OVERWORLD);
+		data.writeBoolean(world.getDimension() == Dimension.OVERWORLD);
 
-        data.writeVarInt(chunks.size());
+		data.writeVarInt(chunks.size());
 
-        for (Chunk c : chunks) {
-            //Write Chunk metadata
-            data.writeInt(c.getPos().getX());
-            data.writeInt(c.getPos().getY());
-            data.writeShort(c.getSectionBitMap());
-        }
-        
-        byte[] bytes = new byte[0];
-        
-        for (Chunk c : chunks) {
-        	bytes = ByteUtils.combine(bytes, c.getBytes(true, true));
-        }
+		for (final Chunk c : chunks) {
+			// Write Chunk metadata
+			data.writeInt(c.getPos().getX());
+			data.writeInt(c.getPos().getY());
+			data.writeShort(c.getSectionBitMap());
+		}
 
-        stream.write(getID(), ByteUtils.putFirst(data.toBytes(),bytes));
-    }
+		byte[] bytes = new byte[0];
+
+		for (final Chunk c : chunks)
+			bytes = ByteUtils.combine(bytes, c.getBytes(true, true));
+
+		stream.write(getID(), ByteUtils.putFirst(data.toBytes(), bytes));
+	}
 
 }

@@ -32,72 +32,72 @@ public class Vector3b extends Vector3<Byte> {
 	}
 
 	@Override
-	public void add(Vector3<Byte> v2) {
-		this.x = (byte) (x + v2.x);
-		this.y = (byte) (y + v2.y);
-		this.z = (byte) (z + v2.z);
+	public void add(final Vector3<Byte> v2) {
+		x = (byte) (x + v2.x);
+		y = (byte) (y + v2.y);
+		z = (byte) (z + v2.z);
 	}
 
 	@Override
-	public void subtract(Vector3<Byte> v2) {
-		this.x = (byte) (x - v2.x);
-		this.y = (byte) (y - v2.y);
-		this.z = (byte) (z - v2.z);
+	public void subtract(final Vector3<Byte> v2) {
+		x = (byte) (x - v2.x);
+		y = (byte) (y - v2.y);
+		z = (byte) (z - v2.z);
 	}
 
 	@Override
-	public void multiply(int n) {
-		this.x = (byte) (x * n);
-		this.y = (byte) (y * n);
-		this.z = (byte) (z * n);
+	public void multiply(final int n) {
+		x = (byte) (x * n);
+		y = (byte) (y * n);
+		z = (byte) (z * n);
 	}
 
 	@Override
-	public void divide(int n) {
-		this.x = (byte) (x / n);
-		this.y = (byte) (y / n);
-		this.z = (byte) (z / n);
+	public void divide(final int n) {
+		x = (byte) (x / n);
+		y = (byte) (y / n);
+		z = (byte) (z / n);
 	}
 
 	@Override
-	public void divide(Byte number) {
-		this.x = (byte) (this.x / number);
-		this.y = (byte) (this.y / number);
-		this.z = (byte) (this.z / number);
+	public void divide(final Byte number) {
+		x = (byte) (x / number);
+		y = (byte) (y / number);
+		z = (byte) (z / number);
 	}
 
 	@Override
-	public void multiply(Byte number) {
-		this.x = (byte) (this.x * number);
-		this.y = (byte) (this.y * number);
-		this.z = (byte) (this.z * number);
+	public void multiply(final Byte number) {
+		x = (byte) (x * number);
+		y = (byte) (y * number);
+		z = (byte) (z * number);
 	}
 
 	@Override
-	public void add(int factor) {
-		this.x = (byte) (this.x + factor);
-		this.y = (byte) (this.y + factor);
-		this.z = (byte) (this.z + factor);
+	public void add(final int factor) {
+		x = (byte) (x + factor);
+		y = (byte) (y + factor);
+		z = (byte) (z + factor);
 	}
 
 	@Override
-	public void add(Byte number) {
-		this.x = (byte) (this.x + number);
-		this.y = (byte) (this.y + number);
-		this.z = (byte) (this.z + number);
+	public void add(final Byte number) {
+		x = (byte) (x + number);
+		y = (byte) (y + number);
+		z = (byte) (z + number);
 	}
 
 	@Override
-	public void sub(int factor) {
-		this.x = (byte) (this.x - factor);
-		this.y = (byte) (this.y - factor);
-		this.z = (byte) (this.z - factor);
+	public void sub(final int factor) {
+		x = (byte) (x - factor);
+		y = (byte) (y - factor);
+		z = (byte) (z - factor);
 	}
 
 	@Override
-	public void sub(Byte number) {
-		this.x = (byte) (this.x - number);
-		this.y = (byte) (this.y - number);
-		this.z = (byte) (this.z - number);
+	public void sub(final Byte number) {
+		x = (byte) (x - number);
+		y = (byte) (y - number);
+		z = (byte) (z - number);
 	}
 }

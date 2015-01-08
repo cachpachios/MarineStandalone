@@ -23,29 +23,29 @@ import org.marinemc.game.chat.ChatMessage;
 
 public final class PlayerInventory extends Inventory {
 
-    public PlayerInventory(byte uid) {
-        super(44, uid);
-    }
+	public PlayerInventory(final byte uid) {
+		super(44, uid);
+	}
 
-    @Override
-    public String getType() {
-        return InventoryID.INVENTORY.getStringID();
-    }
+	@Override
+	public String getType() {
+		return InventoryID.INVENTORY.getStringID();
+	}
 
+	@Override
+	public byte getNumberOfSlots() {
+		return 44;
+	}
 
-    @Override
-    public byte getNumberOfSlots() {
-        return 44;
-    }
+	@Override
+	public byte getID() {
+		return (byte) InventoryID.INVENTORY.getIntegerID(); // Player inventory
+															// is always 0
+	}
 
-    @Override
-    public byte getID() {
-        return (byte) InventoryID.INVENTORY.getIntegerID(); // Player inventory is always 0
-    }
-
-    @Override
-    public ChatMessage getTitle() {
-        return new ChatMessage("Inventory");
-    }
+	@Override
+	public ChatMessage getTitle() {
+		return new ChatMessage("Inventory");
+	}
 
 }

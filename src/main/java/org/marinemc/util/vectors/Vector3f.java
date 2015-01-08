@@ -26,77 +26,77 @@ package org.marinemc.util.vectors;
  */
 public class Vector3f extends Vector3<Float> {
 
-    public Vector3f(Float x, Float y, Float z) {
-        super(x, y, z);
-    }
-
-    @Override
-    public void add(Vector3<Float> v2) {
-        setX(getX() + v2.getX());
-        setY(getY() + v2.getY());
-        setZ(getZ() + v2.getZ());
-    }
-
-    @Override
-    public void subtract(Vector3<Float> v2) {
-        setX(getX() - v2.getX());
-        setY(getY() - v2.getY());
-        setZ(getZ() - v2.getZ());
-    }
-
-    @Override
-    public void multiply(int n) {
-        setX(getX() * n);
-        setY(getY() * n);
-        setZ(getZ() * n);
-    }
-
-    @Override
-    public void divide(int n) {
-        setX(getX() / n);
-        setY(getY() / n);
-        setZ(getZ() / n);
-    }
-    
-	@Override
-	public void divide(Float number) {
-		this.x /= number;
-		this.y /= number;
-		this.z /= number;
+	public Vector3f(final Float x, final Float y, final Float z) {
+		super(x, y, z);
 	}
 
 	@Override
-	public void multiply(Float number) {
-		this.x *= number;
-		this.y *= number;
-		this.z *= number;
+	public void add(final Vector3<Float> v2) {
+		setX(getX() + v2.getX());
+		setY(getY() + v2.getY());
+		setZ(getZ() + v2.getZ());
 	}
 
 	@Override
-	public void add(int factor) {
-		this.x += factor;
-		this.y += factor;
-		this.z += factor;
+	public void subtract(final Vector3<Float> v2) {
+		setX(getX() - v2.getX());
+		setY(getY() - v2.getY());
+		setZ(getZ() - v2.getZ());
 	}
 
 	@Override
-	public void add(Float number) {
-		this.x += number;
-		this.y += number;
-		this.z += number;
+	public void multiply(final int n) {
+		setX(getX() * n);
+		setY(getY() * n);
+		setZ(getZ() * n);
 	}
 
 	@Override
-	public void sub(int factor) {
-		this.x -= factor;
-		this.y -= factor;
-		this.z -= factor;
+	public void divide(final int n) {
+		setX(getX() / n);
+		setY(getY() / n);
+		setZ(getZ() / n);
 	}
 
 	@Override
-	public void sub(Float number) {
-		this.x -= number;
-		this.y -= number;
-		this.z -= number;
+	public void divide(final Float number) {
+		x /= number;
+		y /= number;
+		z /= number;
+	}
+
+	@Override
+	public void multiply(final Float number) {
+		x *= number;
+		y *= number;
+		z *= number;
+	}
+
+	@Override
+	public void add(final int factor) {
+		x += factor;
+		y += factor;
+		z += factor;
+	}
+
+	@Override
+	public void add(final Float number) {
+		x += number;
+		y += number;
+		z += number;
+	}
+
+	@Override
+	public void sub(final int factor) {
+		x -= factor;
+		y -= factor;
+		z -= factor;
+	}
+
+	@Override
+	public void sub(final Float number) {
+		x -= number;
+		y -= number;
+		z -= number;
 	}
 }

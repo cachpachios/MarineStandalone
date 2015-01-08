@@ -30,38 +30,39 @@ import java.util.Collection;
  */
 public class Group {
 
-    private String name;
-    private Collection<Permission> permissions;
-    private String prefix;
+	private final String name;
+	private final Collection<Permission> permissions;
+	private final String prefix;
 
-    public Group(final String name, final String prefix, final Permission... permissions) {
-        this.name = name;
-        this.prefix = prefix;
-        this.permissions = new ArrayList<>(Arrays.asList(permissions));
-    }
+	public Group(final String name, final String prefix,
+			final Permission... permissions) {
+		this.name = name;
+		this.prefix = prefix;
+		this.permissions = new ArrayList<>(Arrays.asList(permissions));
+	}
 
-    @Override
-    public String toString() {
-        return this.name;
-    }
+	@Override
+	public String toString() {
+		return name;
+	}
 
-    public Collection<Permission> getPermissions() {
-        return this.permissions;
-    }
+	public Collection<Permission> getPermissions() {
+		return permissions;
+	}
 
-    public String getPrefix() {
-        return this.prefix;
-    }
+	public String getPrefix() {
+		return prefix;
+	}
 
-    public boolean has(final Permission permission) {
-        return permissions.contains(permission);
-    }
+	public boolean has(final Permission permission) {
+		return permissions.contains(permission);
+	}
 
-    public void add(final Permission permission) {
-        this.permissions.add(permission);
-    }
+	public void add(final Permission permission) {
+		permissions.add(permission);
+	}
 
-    public void remove(final Permission permission) {
-        this.permissions.remove(permission);
-    }
+	public void remove(final Permission permission) {
+		permissions.remove(permission);
+	}
 }

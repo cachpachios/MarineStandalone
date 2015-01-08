@@ -36,76 +36,82 @@ import org.marinemc.world.gen.WorldGenerator;
  */
 public class SpikeGenerator extends WorldGenerator {
 
-    private static final int H = 32;
+	private static final int H = 32;
 
-    public SpikeGenerator(final World w) {
-    	super(WorldGenerator.NO_POPULATION);
-    }
-    
-    @Override
-    public LevelType getLevelType() {
-        return LevelType.FLAT;
-    }
+	public SpikeGenerator(final World w) {
+		super(WorldGenerator.NO_POPULATION);
+	}
 
-    @Override
-    public Dimension getDimension() {
-        return Dimension.OVERWORLD;
-    }
+	@Override
+	public LevelType getLevelType() {
+		return LevelType.FLAT;
+	}
 
-    private int getRandom100() {
-        return 1 + (int) (Math.random() * 100);
-    }
+	@Override
+	public Dimension getDimension() {
+		return Dimension.OVERWORLD;
+	}
 
-    @Override
-    public Position getSafeSpawnPoint() {
-        return new Position(0, H + 2, 0);
-    }
+	private int getRandom100() {
+		return 1 + (int) (Math.random() * 100);
+	}
 
-    @Override
-    public Chunk generateChunkTerrain(ChunkPos pos) {
-        Chunk chunk = new Chunk(world, pos);
-        BlockID id;
-        for (int y = 1; y < H; y++) {
-            for (int x = 0; x < 16; x++) {
-                for (int z = 0; z < 16; z++) {
-                    if (y == 1) {
-                        id = BlockID.BEDROCK;
-                    } else if (y == 2) {
-                        id = BlockID.STONE;
-                    } else if (y <= 10) {
-                        if (chunk.getBlock(x, y - 1, z) == BlockID.AIR.getNumericID() || getRandom100() < 25)
-                            id = BlockID.AIR;
-                        else
-                            id = BlockID.STONE;
-                    } else if (x <= 16) {
-                        if (chunk.getBlock(x, y - 1, z) == BlockID.AIR.getNumericID() || getRandom100() < 50)
-                            id = BlockID.AIR;
-                        else
-                            id = BlockID.STONE;
-                    } else {
-                        if (chunk.getBlock(x, y - 1, z) == BlockID.AIR.getNumericID() || isAirDrr(chunk, x, y, z) > .75 || getRandom100() < 75)
-                            id = BlockID.AIR;
-                        else
-                            id = BlockID.GLASS;
-                    }
-                    chunk.setPrivateType(x, y, z, id);
-                    chunk.setPrivateLight(x, y, z, (byte) -1);
-                }
-            }
-        }
-        return chunk;
-    }
+	@Override
+	public Position getSafeSpawnPoint() {
+		return new Position(0, H + 2, 0);
+	}
 
-    private boolean isAir(Chunk c, int x, int y, int z) {
-        return (x >= 1 && y >= 1 && z >= 1) && c.getBlock(x, y, z) == BlockID.AIR.getNumericID();
-    }
+	@Override
+	public Chunk generateChunkTerrain(final ChunkPos pos) {
+		final Chunk chunk = new Chunk(world, pos);
+		BlockID id;
+		for (int y = 1; y < H; y++)
+			for (int x = 0; x < 16; x++)
+				for (int z = 0; z < 16; z++) {
+					if (y == 1)
+						id = BlockID.BEDROCK;
+					else if (y == 2)
+						id = BlockID.STONE;
+					else if (y <= 10) {
+						if (chunk.getBlock(x, y - 1, z) == BlockID.AIR
+								.getNumericID() || getRandom100() < 25)
+							id = BlockID.AIR;
+						else
+							id = BlockID.STONE;
+					} else if (x <= 16) {
+						if (chunk.getBlock(x, y - 1, z) == BlockID.AIR
+								.getNumericID() || getRandom100() < 50)
+							id = BlockID.AIR;
+						else
+							id = BlockID.STONE;
+					} else if (chunk.getBlock(x, y - 1, z) == BlockID.AIR
+							.getNumericID()
+							|| isAirDrr(chunk, x, y, z) > .75
+							|| getRandom100() < 75)
+						id = BlockID.AIR;
+					else
+						id = BlockID.GLASS;
+					chunk.setPrivateType(x, y, z, id);
+					chunk.setPrivateLight(x, y, z, (byte) -1);
+				}
+		return chunk;
+	}
 
-    private double isAirDrr(Chunk c, int x, int y, int z) {
-        double d = 0;
-        if (isAir(c, x - 1, y, z)) d += 0.25;
-        if (isAir(c, x, y, z - 1)) d += 0.25;
-        if (isAir(c, x + 1, y, z)) d += 0.25;
-        if (isAir(c, x, y, z + 1)) d += 0.25;
-        return d;
-    }
+	private boolean isAir(final Chunk c, final int x, final int y, final int z) {
+		return x >= 1 && y >= 1 && z >= 1
+				&& c.getBlock(x, y, z) == BlockID.AIR.getNumericID();
+	}
+
+	private double isAirDrr(final Chunk c, final int x, final int y, final int z) {
+		double d = 0;
+		if (isAir(c, x - 1, y, z))
+			d += 0.25;
+		if (isAir(c, x, y, z - 1))
+			d += 0.25;
+		if (isAir(c, x + 1, y, z))
+			d += 0.25;
+		if (isAir(c, x, y, z + 1))
+			d += 0.25;
+		return d;
+	}
 }

@@ -18,36 +18,31 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 package org.marinemc.net;
+
 /**
  * Diffrent states the client are in.
  * 
  * @author Fozie
  */
 public enum States {
-    HANDSHAKE,
-    INTRODUCE,
-    LOGIN,
-    INGAME,
-    GLOBAL;
+	HANDSHAKE, INTRODUCE, LOGIN, INGAME, GLOBAL;
 
-    public static final States getFromID(int id) {
-        switch (id) {
-            case 0:
-                return HANDSHAKE;
-            case 1:
-                return INTRODUCE;
-            case 2:
-                return LOGIN;
-            case 3:
-                return INGAME;
-        }
-        return HANDSHAKE;
+	public static final States getFromID(final int id) {
+		switch (id) {
+		case 0:
+			return HANDSHAKE;
+		case 1:
+			return INTRODUCE;
+		case 2:
+			return LOGIN;
+		case 3:
+			return INGAME;
+		}
+		return HANDSHAKE;
 
-    }
+	}
 
-    public int getID() {
-        return this.ordinal();
-    }
+	public int getID() {
+		return ordinal();
+	}
 }
-
-	

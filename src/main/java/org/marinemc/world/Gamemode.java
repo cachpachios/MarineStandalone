@@ -18,31 +18,30 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 package org.marinemc.world;
+
 /**
- * A enum of all Gamemodes in minecraft
- * Contains its ID used in packets, and a friendly String name
+ * A enum of all Gamemodes in minecraft Contains its ID used in packets, and a
+ * friendly String name
  * 
  * @author Fozie
  */
 public enum Gamemode {
-    SURVIVAL(0, "Survival"),
-    CREATIVE(1, "Creative"),
-    ADVENTURE(2, "Adventure"),
-    SPECTATOR(3, "Spectator");
+	SURVIVAL(0, "Survival"), CREATIVE(1, "Creative"), ADVENTURE(2, "Adventure"), SPECTATOR(
+			3, "Spectator");
 
-    private final int id;
-    private final String name;
+	private final int id;
+	private final String name;
 
-    private Gamemode(int id, String name) {
-        this.id = id;
-        this.name = name;
-    }
+	private Gamemode(final int id, final String name) {
+		this.id = id;
+		this.name = name;
+	}
 
-    public byte getID() {
-        return (byte) id;
-    }
+	public byte getID() {
+		return (byte) id;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 }

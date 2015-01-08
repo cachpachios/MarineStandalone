@@ -26,32 +26,34 @@ import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
 import org.marinemc.world.World;
+
 /**
  * @author Fozie
  */
 public class TimeUpdatePacket extends Packet {
 
-    final long worldTime;
-    final long worldAge;
+	final long worldTime;
+	final long worldAge;
 
-    public TimeUpdatePacket(long worldTime, long worldAge) {
-        super(0x03, States.INGAME);
-        this.worldTime = worldTime;
-        this.worldAge = worldAge;
-    }
+	public TimeUpdatePacket(final long worldTime, final long worldAge) {
+		super(0x03, States.INGAME);
+		this.worldTime = worldTime;
+		this.worldAge = worldAge;
+	}
 
-    public TimeUpdatePacket(World w) {
-        this(w.getTime(), w.getWorldAge());
-    }
+	public TimeUpdatePacket(final World w) {
+		this(w.getTime(), w.getWorldAge());
+	}
 
-    @Override
-    public void writeToStream(PacketOutputStream stream) throws IOException {
-    	ByteList d = new ByteList();
+	@Override
+	public void writeToStream(final PacketOutputStream stream)
+			throws IOException {
+		final ByteList d = new ByteList();
 
-        d.writeLong(worldAge);
-        d.writeLong(worldTime);
+		d.writeLong(worldAge);
+		d.writeLong(worldTime);
 
-        stream.write(getID(), d);
-    }
+		stream.write(getID(), d);
+	}
 
 }

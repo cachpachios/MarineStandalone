@@ -27,11 +27,12 @@ package org.marinemc.util.operations;
  */
 public interface ArgumentedOperation<T> {
 
-    /**
-     * Perform this action on the specified object object
-     *
-     * @param t object to perform the action on
-     */
-    public void action(T obj);
+	/**
+	 * Perform this action on the specified object object
+	 *
+	 * @param t
+	 *            object to perform the action on
+	 */
+	public void action(T obj);
 
 }

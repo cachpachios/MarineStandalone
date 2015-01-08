@@ -28,21 +28,21 @@ import org.marinemc.world.BlockID;
 
 public class BlockManager {
 
-    private final PlayerManager players;
-    private final WorldManager worlds;
+	private final PlayerManager players;
+	private final WorldManager worlds;
 
-    public BlockManager(PlayerManager p, WorldManager w) {
-        this.players = p;
-        this.worlds = w;
-    }
+	public BlockManager(final PlayerManager p, final WorldManager w) {
+		players = p;
+		worlds = w;
+	}
 
-    public void changeBlock(Block b, BlockID target) {
-        BlockChangeEvent event = new BlockChangeEvent(b.getGlobalPos(), b.getType(), target);
-        Marine.getServer().callEvent(event);
-        if (event.isCancelled())
-            return;
-        b.getChunk().getWorld().setTypeAt(b.getGlobalPos(), target, true);
-    }
-
+	public void changeBlock(final Block b, final BlockID target) {
+		final BlockChangeEvent event = new BlockChangeEvent(b.getGlobalPos(),
+				b.getType(), target);
+		Marine.getServer().callEvent(event);
+		if (event.isCancelled())
+			return;
+		b.getChunk().getWorld().setTypeAt(b.getGlobalPos(), target, true);
+	}
 
 }

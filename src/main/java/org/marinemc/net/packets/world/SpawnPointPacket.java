@@ -26,24 +26,28 @@ import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
 import org.marinemc.util.Position;
+
 /**
  * @author Fozie
  */
-public class SpawnPointPacket extends Packet { // Only used to make the client know where the compass should point
+public class SpawnPointPacket extends Packet { // Only used to make the client
+												// know where the compass should
+												// point
 
-    final Position spawnPoint;
+	final Position spawnPoint;
 
-    public SpawnPointPacket(Position spawnPoint) {
-        super(0x05, States.INGAME);
-        this.spawnPoint = spawnPoint;
-    }
+	public SpawnPointPacket(final Position spawnPoint) {
+		super(0x05, States.INGAME);
+		this.spawnPoint = spawnPoint;
+	}
 
-    @Override
-    public void writeToStream(PacketOutputStream stream) throws IOException {
-    	ByteList d = new ByteList();
-    	
-        d.writePosition(spawnPoint);
+	@Override
+	public void writeToStream(final PacketOutputStream stream)
+			throws IOException {
+		final ByteList d = new ByteList();
 
-        stream.write(getID(), d);
-    }
+		d.writePosition(spawnPoint);
+
+		stream.write(getID(), d);
+	}
 }

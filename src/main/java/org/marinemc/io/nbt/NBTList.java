@@ -24,52 +24,51 @@ import java.util.List;
 
 import org.marinemc.io.binary.ByteInput;
 import org.marinemc.io.binary.ByteList;
+
 /**
  * @author Fozie
  */
 public class NBTList extends NBTTag {
 
-    byte type;
-    int size;
-    List<NBTTag> data;
+	byte type;
+	int size;
+	List<NBTTag> data;
 
-    public NBTList(String name, ByteInput data) {
-        super(name, 9);
-        this.data = new ArrayList<NBTTag>();
-        this.type = data.readByte();
-        this.size = data.readInt();
+	public NBTList(final String name, final ByteInput data) {
+		super(name, 9);
+		this.data = new ArrayList<NBTTag>();
+		type = data.readByte();
+		size = data.readInt();
 
-        int i = 0;
-        while (i < size) {
-            this.data.add(NBT.parse(data, type));
-        }
+		final int i = 0;
+		while (i < size)
+			this.data.add(NBT.parse(data, type));
 
-    }
+	}
 
-    @Override
-    public byte[] toByteArray() {
-        ByteList data = new ByteList();
+	@Override
+	public byte[] toByteArray() {
+		final ByteList data = new ByteList();
 
-        data.writeByte(getTagID());
-        data.writeUTF8Short(name);
-        data.writeByte(type);
-        data.writeInt(size);
+		data.writeByte(getTagID());
+		data.writeUTF8Short(name);
+		data.writeByte(type);
+		data.writeInt(size);
 
-        for (NBTTag tag : this.data)
-            data.write(tag.toByteArray());
+		for (final NBTTag tag : this.data)
+			data.write(tag.toByteArray());
 
+		return data.toBytes();
+	}
 
-        return data.toBytes();
-    }
+	@Override
+	public byte[] toNonPrefixedByteArray() {
+		final ByteList data = new ByteList();
+		data.writeByte(type);
+		data.writeInt(size);
 
-    @Override
-    public byte[] toNonPrefixedByteArray() {
-    	ByteList data = new ByteList();
-        data.writeByte(type);
-        data.writeInt(size);
-
-        for (NBTTag tag : this.data)
-            data.write(tag.toByteArray());
-        return data.toBytes();
-    }
+		for (final NBTTag tag : this.data)
+			data.write(tag.toByteArray());
+		return data.toBytes();
+	}
 }

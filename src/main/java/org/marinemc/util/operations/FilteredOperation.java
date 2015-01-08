@@ -24,17 +24,17 @@ package org.marinemc.util.operations;
  *
  * @author Citymonstret
  */
-public abstract class FilteredOperation<T> implements Filter<T>, ArgumentedOperation<T> {
+public abstract class FilteredOperation<T> implements Filter<T>,
+		ArgumentedOperation<T> {
 
-    @Override
-    public void action(T t) {
-        if (filter(t)) {
-            perform(t);
-        }
-    }
+	@Override
+	public void action(final T t) {
+		if (filter(t))
+			perform(t);
+	}
 
-    @Override
-    public abstract boolean filter(T t);
+	@Override
+	public abstract boolean filter(T t);
 
-    public abstract void perform(T t);
+	public abstract void perform(T t);
 }
