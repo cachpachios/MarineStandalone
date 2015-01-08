@@ -24,6 +24,7 @@ Features (so far):
 - Chat!
 - Basic inventories
 - Login Process (needs: compression, auth)
+- Multhreaded worlds
 - + **A LOT OF BACKEND**
 
 (*) = Needs improvement, rewriting or additions.
