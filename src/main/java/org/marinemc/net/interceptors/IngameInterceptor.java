@@ -22,6 +22,7 @@ package org.marinemc.net.interceptors;
 import org.marinemc.game.async.ChatManager;
 import org.marinemc.io.binary.ByteInput;
 import org.marinemc.net.Client;
+import org.marinemc.server.Marine;
 
 /**
  * Intercepts ingamepackets
@@ -36,10 +37,14 @@ public class IngameInterceptor implements PacketInterceptor {
 	@Override
 	public boolean intercept(final int id, final ByteInput data, final Client c) {
 		switch (id) {
-		case 0:
+		case 0x00:
 			System.out.println("Keepem alive ;O");
-		case 1:
+		case 0x01:
 			ChatManager.getInstance().interceptChatPacket(data, c);
+		case 0x04:
+			Marine.getServer().getPlayerManager().movePlayerFromPacket(c, data);
+		case 0x06:
+			Marine.getServer().getPlayerManager().moveLookPlayerFromPacket(c, data);
 
 		default:
 			return false;

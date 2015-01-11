@@ -52,4 +52,9 @@ public class ChunkPos extends Vector2i implements Comparable<ChunkPos> {
 		else
 			return 1;
 	}
+	
+	@Override
+	public String toString() {
+		return "X: " + x + " Y: " + y;
+	}
 }

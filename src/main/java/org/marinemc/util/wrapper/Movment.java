@@ -5,9 +5,8 @@ import org.marinemc.util.ObjectMeta;
 
 public class Movment extends ObjectMeta<Location, Location> {
 
-	public Movment(final Location obj, final Location meta) {
-		super(obj, meta);
-		// TODO Auto-generated constructor stub
+	public Movment(final Location pos, final Location target) {
+		super(pos, target);
 	}
 
 	public double getDistance() {

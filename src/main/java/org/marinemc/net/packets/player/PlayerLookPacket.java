@@ -17,57 +17,65 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package org.marinemc.net.play.clientbound.player;
+package org.marinemc.net.packets.player;
 
 import java.io.IOException;
 
-import org.marinemc.game.player.Player;
+import org.marinemc.io.binary.ByteInput;
 import org.marinemc.io.binary.ByteList;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
-import org.marinemc.world.entity.meta.HumanMeta;
+import org.marinemc.util.Location;
 
-/*
- * 
- * Used to spawn a player locally when they are in sight.
- * Warning this is not used to tell a client to spawn themself!
- * 
+/**
  * @author Fozie
- * 
  */
-public class SpawnPlayerPacket extends Packet {
-	final Player p;
+public class PlayerLookPacket extends Packet {
 
-	public SpawnPlayerPacket(final Player p) {
-		super(0x0C, States.INGAME);
-		this.p = p;
+	private float yaw, pitch;
+	private boolean onGround;
+
+	public PlayerLookPacket() {
+		super(0x05, States.INGAME);
+	}
+	
+	public PlayerLookPacket(Location l) {
+		this();
+		this.yaw = l.getYaw();
+		this.pitch = l.getPitch();
+		this.onGround = l.isOnGround();
+	}
+
+	public float getYaw() {
+		return yaw;
+	}
+
+	public float getPitch() {
+		return pitch;
+	}
+
+	public boolean getOnGround() {
+		return onGround;
 	}
 
 	@Override
 	public void writeToStream(final PacketOutputStream stream)
 			throws IOException {
-		final ByteList d = new ByteList();
+		final ByteList data = new ByteList();
 
-		d.writeVarInt(p.getEntityID());
+		data.writeFloat(yaw);
+		data.writeFloat(pitch);
+		data.writeBoolean(onGround);
 
-		d.writeUUID(p.getUUID());
+		stream.write(getID(), data);
+	}
 
-		d.writeInt((int) p.getX() * 32);
-		d.writeInt((int) p.getY() * 32);
-		d.writeInt((int) p.getZ() * 32);
-
-		d.writeByte((byte) (p.getLocation().getYaw() % 360 / 360 * 256));
-
-		d.writeByte((byte) (p.getLocation().getPitch() % 360 / 360 * 256));
-
-		// WARNING FOLLOWING CANT BE -1 IT WILL CRASH THE CLIENT
-		d.writeShort((short) 0); // TODO : In hand item like p.getInHand();
-
-		d.write(new HumanMeta((short) 20, "Herobrine", true, 20f, (byte) 0)
-				.getBytes());
-
-		stream.write(getID(), d);
+	@Override
+	public void readFromBytes(final ByteInput input) {
+		yaw = input.readFloat();
+		pitch = input.readFloat();
+		onGround = input.readBoolean();
 	}
 
 }

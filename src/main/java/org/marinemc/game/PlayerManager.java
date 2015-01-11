@@ -39,12 +39,14 @@ import org.marinemc.game.async.WorldStreamingThread;
 import org.marinemc.game.inventory.PlayerInventory;
 import org.marinemc.game.player.Player;
 import org.marinemc.game.player.UIDGenerator;
+import org.marinemc.io.binary.ByteInput;
 import org.marinemc.net.Client;
 import org.marinemc.net.Packet;
 import org.marinemc.net.States;
 import org.marinemc.net.packets.login.LoginPacket;
 import org.marinemc.net.packets.login.LoginSucessPacket;
-import org.marinemc.net.packets.player.PlayerMovePacket;
+import org.marinemc.net.packets.player.PlayerLookPositionPacket;
+import org.marinemc.net.packets.player.PlayerPositionPacket;
 import org.marinemc.net.play.clientbound.JoinGamePacket;
 import org.marinemc.server.Marine;
 import org.marinemc.settings.ServerSettings;
@@ -53,6 +55,7 @@ import org.marinemc.util.Location;
 import org.marinemc.util.annotations.Cautious;
 import org.marinemc.util.annotations.Hacky;
 import org.marinemc.util.mojang.UUIDHandler;
+import org.marinemc.util.wrapper.Movment;
 import org.marinemc.world.entity.EntityType;
 
 /**
@@ -190,11 +193,62 @@ public class PlayerManager {
 		return null; // To indicate that the player was successfully created and
 						// joined
 	}
-
-	public void movePlayerFromPacket(final PlayerMovePacket packet) {
-
+	
+	public void moveLookPlayerFromPacket(final Client c, final ByteInput data) {
+		final Player p;
+		if(c.getUID() == -1)
+			return;
+		else
+			p = this.getPlayerByClient(c);
+		
+		if(p == null) return;
+		
+			PlayerLookPositionPacket packet = new PlayerLookPositionPacket();
+			
+			packet.readFromBytes(data);
+			
+			if(packet.getLocation() == null)
+				return;
+			
+			if(p.getLocation().x == packet.getLocation().getX() && p.getLocation().y == packet.getLocation().getY() && p.getLocation().z == packet.getLocation().getZ())
+				return;
+			
+			movmentValidator.putForValidation(p, new Movment(p.getLocation(), packet.getLocation()));
+			
+			if(packet.getLocation().getEuclideanDistanceSquared(p.getLocation()) > 16)
+				p.teleport(packet.getLocation());
+			else
+				p.move(p.getX() - packet.getLocation().x, p.getY() - packet.getLocation().y, p.getZ() - packet.getLocation().z);
+			p.updateStreaming();
+			
+			packet = null;
 	}
 
+	public void movePlayerFromPacket(final Client c, final ByteInput data) {
+		final Player p;
+		if(c.getUID() == -1)
+			return;
+		else
+			p = this.getPlayerByClient(c);
+		
+		if(p == null) return;
+		
+		PlayerPositionPacket packet = new PlayerPositionPacket();
+		packet.readFromBytes(data);
+
+		if(p.getLocation().x == packet.getX() && p.getLocation().y == packet.getY() && p.getLocation().z == packet.getZ())
+			return;
+		
+		
+		if(packet.getLocation().getEuclideanDistanceSquared(p.getLocation()) > 16)
+			p.teleport(packet.getLocation());
+		else
+			p.move(p.getX() - packet.getX(), p.getY() - packet.getY(), p.getZ() - packet.getY());
+		p.updateStreaming();
+		
+		packet = null;
+	}
+	
 	/**
 	 * Adds a player to the main player storage
 	 * 

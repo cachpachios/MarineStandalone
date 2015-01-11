@@ -17,7 +17,7 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package org.marinemc.net.play.clientbound.player;
+package org.marinemc.net.packets.player;
 
 import java.io.IOException;
 
@@ -26,16 +26,21 @@ import org.marinemc.io.binary.ByteList;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
+import org.marinemc.world.entity.meta.HumanMeta;
 
-/**
+/*
+ * 
+ * Used to spawn a player locally when they are in sight.
+ * Warning this is not used to tell a client to spawn themself!
+ * 
  * @author Fozie
+ * 
  */
-public class PlayerAbilitesPacket extends Packet {
-
+public class SpawnPlayerPacket extends Packet {
 	final Player p;
 
-	public PlayerAbilitesPacket(final Player p) {
-		super(0x39, States.INGAME);
+	public SpawnPlayerPacket(final Player p) {
+		super(0x0C, States.INGAME);
 		this.p = p;
 	}
 
@@ -44,14 +49,25 @@ public class PlayerAbilitesPacket extends Packet {
 			throws IOException {
 		final ByteList d = new ByteList();
 
-		final byte flags = (byte) ((p.isInCreativeMode() ? 8 : 0)
-				| (p.canFly() ? 4 : 0) | (p.isFlying() ? 2 : 0) | (p
-				.isInCreativeMode() ? 1 : 0));
-		d.writeByte(flags);
-		d.writeFloat(p.getFlySpeed());
-		d.writeFloat(p.getWalkSpeed());
+		d.writeVarInt(p.getEntityID());
+
+		d.writeUUID(p.getUUID());
+
+		d.writeInt((int) p.getX() * 32);
+		d.writeInt((int) p.getY() * 32);
+		d.writeInt((int) p.getZ() * 32);
+
+		d.writeByte((byte) (p.getLocation().getYaw() % 360 / 360 * 256));
+
+		d.writeByte((byte) (p.getLocation().getPitch() % 360 / 360 * 256));
+
+		// WARNING FOLLOWING CANT BE -1 IT WILL CRASH THE CLIENT
+		d.writeShort((short) 0); // TODO : In hand item like p.getInHand();
+
+		d.write(new HumanMeta((short) 20, "Herobrine", true, 20f, (byte) 0)
+				.getBytes());
 
 		stream.write(getID(), d);
-
 	}
+
 }

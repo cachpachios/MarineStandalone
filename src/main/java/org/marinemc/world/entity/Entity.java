@@ -142,6 +142,8 @@ public abstract class Entity {
 		if (z > 4)
 			teleport(x, y, z);
 
+		//TODO: Update our little subscribers/trackers
+		
 		position.localSetX(x);
 		position.localSetY(x);
 		position.localSetZ(x);
@@ -150,6 +152,10 @@ public abstract class Entity {
 
 	public void teleport(final double x, final double y, final double z) {
 
+		//TODO: Update our little subscribers/trackers
+		position.localSetX(x);
+		position.localSetY(x);
+		position.localSetZ(x);
 	}
 
 	@Cautious

@@ -30,7 +30,7 @@ import java.util.Map;
 public class UIDGenerator {
 
 	private static UIDGenerator instance;
-	private final Map<Integer, Short> UIDMap;
+	private final Map<String, Short> UIDMap;
 	private short nextUnassigned;
 
 	private UIDGenerator() {
@@ -58,8 +58,8 @@ public class UIDGenerator {
 	 * @return UID
 	 */
 	public short getUID(final String username) {
-		if (UIDMap.containsKey(username.hashCode()))
-			return UIDMap.get(username.hashCode());
+		if (UIDMap.containsKey(username))
+			return UIDMap.get(username);
 		short uid = ++nextUnassigned;
 
 		if (uid == -1)

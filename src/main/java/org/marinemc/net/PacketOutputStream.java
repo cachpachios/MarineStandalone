@@ -78,11 +78,13 @@ public class PacketOutputStream { // Here we enable encryption and compression
 												// will send uncompressed data
 				output = ByteUtils.putFirst(Client.NULL_BYTE, uncompressed);
 			}
+			try {
 			c.get()
 					.getConnection()
 					.getOutputStream()
 					.write(ByteUtils.putFirst(ByteUtils.VarInt(output.length),
 							output));
+			} catch(SocketException e) {}
 		}
 	}
 
@@ -115,8 +117,10 @@ public class PacketOutputStream { // Here we enable encryption and compression
 
 			uncompressed.writeVarInt(0, uncompressed.size());
 
+			try {
 			c.get().getConnection().getOutputStream()
 					.write(uncompressed.toBytes());
+			} catch(SocketException e) {}
 		}
 	}
 

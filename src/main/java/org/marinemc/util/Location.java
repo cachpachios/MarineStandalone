@@ -303,16 +303,6 @@ public class Location extends Vector3d implements JSONAware, Cloneable,
 		return x * x + y * y + z * z;
 	}
 
-	@Override
-	public boolean equals(final Object o) {
-		if (!(o instanceof Location))
-			return false;
-		final Location loc = (Location) o;
-		return loc.getX().equals(getX()) && loc.getY().equals(getY())
-				&& loc.getZ().equals(getZ()) && loc.getYaw() == getYaw()
-				&& loc.getPitch() == getPitch()
-				&& loc.getWorld().getName().equals(getWorld().getName());
-	}
 
 	@Override
 	public int hashCode() {
@@ -400,6 +390,50 @@ public class Location extends Vector3d implements JSONAware, Cloneable,
 		return world.getChunkForce(x.intValue() >> 4, z.intValue() >> 4);
 	}
 
+	/**
+	 * Get an directional vector from this location
+	 * @return An directional Vector3d calculated out of the pitch and yaw
+	 */
+	public Vector3d getDirectionVector() {
+		return new Vector3d(-Math.cos(pitch) * Math.sin(yaw),
+							-Math.sin(pitch),
+							Math.cos(pitch) * Math.cos(yaw));
+	}
+	
+	/**
+	 * Rotate the yaw to look at an X and Z cordinate
+	 * @param x The X to look at
+	 * @param z The Z to look at 
+	 */
+	public void lookAt(double x, double z) {
+		double l = this.x - x;
+		double w = this.z - z;
+		double c = Math.sqrt(l*l + w*w);
+		
+		if((Math.asin(w/c)/Math.PI*180) > 90)
+			setYaw((float) (180 - (-Math.asin(l/c)/Math.PI*180)));
+		else
+			setYaw((float) (-Math.asin(l/c)/Math.PI*180));
+	}
+	@Override
+	public boolean equals(Object l) {
+		if(l instanceof Location) {
+			final Location loc = (Location) l;
+			return loc.getX().equals(getX()) && loc.getY().equals(getY())
+					&& loc.getZ().equals(getZ()) && loc.getYaw() == getYaw()
+					&& loc.getPitch() == getPitch()
+					&& loc.getWorld().getName().equals(getWorld().getName());
+			
+		}
+		else
+		if(l instanceof Vector3d) {
+			final Vector3d v = (Vector3d) l;
+			return v.x == this.x && v.y == this.y && v.z == this.z;
+		}
+		else
+		return false;
+	}
+	
 	@Override
 	public int compareTo(final Location o) {
 		if (o == null)

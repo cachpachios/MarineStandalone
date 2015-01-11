@@ -20,8 +20,8 @@
 package org.marinemc.game;
 
 import org.marinemc.game.player.Player;
-import org.marinemc.net.play.clientbound.player.PlayerListHeaderPacket;
-import org.marinemc.net.play.clientbound.player.PlayerListItemPacket;
+import org.marinemc.net.packets.player.PlayerListHeaderPacket;
+import org.marinemc.net.packets.player.PlayerListItemPacket;
 import org.marinemc.server.Marine;
 
 /**

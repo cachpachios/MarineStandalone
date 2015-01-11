@@ -35,15 +35,15 @@ public class EntityLocation extends Location {
 	}
 
 	public void localSetX(final double x) {
-		self().setX(x);
+		this.x = x;
 	}
 
 	public void localSetY(final double y) {
-		self().setX(y);
+		this.y = y;
 	}
 
 	public void localSetZ(final double z) {
-		self().setX(z);
+		this.z = z;
 	}
 
 	@Override

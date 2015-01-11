@@ -93,9 +93,7 @@ public class Client {
 			try {
 				packet.writeToStream(output);
 				connection.getOutputStream().flush();
-			} catch (final IOException e) {
-				e.printStackTrace();
-			}
+			} catch (final IOException e) {this.isActive = false;}
 	}
 
 	public NetworkManager getNetwork() {
@@ -146,19 +144,20 @@ public class Client {
 	}
 
 	/**
-	 * Checks the connection and returns true if its closed
+	 * Checks the connection and returns false if it did succeeded
 	 * 
 	 * @return
 	 */
 	boolean tryConnection() {
-		if (isActive)
+		if (isActive) {
 			try { // Write a 0 bit to check if available
 				getConnection().getOutputStream().write(NULL_BYTE);
 			} catch (final IOException e1) {
 				isActive = false;
 				return false;
 			}
-
+		}
+		
 		return true;
 	}
 

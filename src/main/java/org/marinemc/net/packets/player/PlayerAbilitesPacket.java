@@ -17,11 +17,12 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package org.marinemc.net.play.serverbound.player;
+package org.marinemc.net.packets.player;
 
 import java.io.IOException;
 
-import org.marinemc.io.binary.ByteInput;
+import org.marinemc.game.player.Player;
+import org.marinemc.io.binary.ByteList;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
@@ -29,37 +30,28 @@ import org.marinemc.net.States;
 /**
  * @author Fozie
  */
-public class PlayerLookPacket extends Packet {
+public class PlayerAbilitesPacket extends Packet {
 
-	private float yaw, pitch;
-	private boolean onGround;
+	final Player p;
 
-	public PlayerLookPacket() {
-		super(0x05, States.INGAME);
-	}
-
-	public float getYaw() {
-		return yaw;
-	}
-
-	public float getPitch() {
-		return pitch;
-	}
-
-	public boolean getOnGround() {
-		return onGround;
+	public PlayerAbilitesPacket(final Player player) {
+		super(0x39, States.INGAME);
+		this.p = player;
 	}
 
 	@Override
 	public void writeToStream(final PacketOutputStream stream)
 			throws IOException {
-	}
+		final ByteList d = new ByteList();
 
-	@Override
-	public void readFromBytes(final ByteInput input) {
-		yaw = input.readFloat();
-		pitch = input.readFloat();
-		onGround = input.readBoolean();
-	}
+		final byte flags = (byte) ((p.isInCreativeMode() ? 8 : 0)
+				| (p.canFly() ? 4 : 0) | (p.isFlying() ? 2 : 0) | (p
+				.isInCreativeMode() ? 1 : 0));
+		d.writeByte(flags);
+		d.writeFloat(p.getFlySpeed());
+		d.writeFloat(p.getWalkSpeed());
 
+		stream.write(getID(), d);
+
+	}
 }

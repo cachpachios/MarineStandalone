@@ -1,6 +1,7 @@
 package org.marinemc.io.binary;
 
 import java.nio.charset.Charset;
+import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.LinkedList;
 
@@ -9,7 +10,7 @@ public class ByteQueue extends AbstractInput implements ByteDataOutput,
 	final Deque<Byte> queue;
 
 	public ByteQueue(final byte[] data) {
-		queue = new LinkedList<Byte>();
+		queue = new ArrayDeque<Byte>();
 		for (final byte b : data)
 			queue.add(b);
 	}
@@ -126,6 +127,11 @@ public class ByteQueue extends AbstractInput implements ByteDataOutput,
 
 	@Override
 	public int size() {
+		return queue.size();
+	}
+
+	@Override
+	public int getRemainingBytes() {
 		return queue.size();
 	}
 }

@@ -47,12 +47,12 @@ public class WorldStreamingThread extends Thread {
 			time = System.nanoTime();
 
 			for (final Player p : manager.getPlayers()) {
+				if(!p.isStreamingNeeded()) continue;
 				p.getWorld().generateAsyncRegion((int) p.getX(),
 						(int) p.getY(),
 						Marine.getServer().getViewDistance() * 2,
 						Marine.getServer().getViewDistance() * 2);
-				p.localChunkRegion(Marine.getServer().getViewDistance(), Marine
-						.getServer().getViewDistance());
+				p.localChunkRegion(Marine.getServer().getViewDistance()); // Send the chunks
 			}
 
 			try {

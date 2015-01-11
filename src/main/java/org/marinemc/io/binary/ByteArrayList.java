@@ -199,4 +199,9 @@ public class ByteArrayList extends ArrayList<Byte> implements ByteInput,
 	public void write(final byte... input) {
 		addAll(ByteUtils.asWrappedList(input));
 	}
+
+	@Override
+	public int getRemainingBytes() {
+		return size() - position;
+	}
 }

@@ -28,4 +28,6 @@ public interface ByteInput {
 	public byte[] read(byte... input);
 
 	public byte[] readBytes(int size);
+
+	public int getRemainingBytes();
 }

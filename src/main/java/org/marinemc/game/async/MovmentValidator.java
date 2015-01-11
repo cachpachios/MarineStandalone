@@ -1,6 +1,7 @@
 package org.marinemc.game.async;
 
-import java.util.ArrayList;
+import java.util.ArrayDeque;
+import java.util.Queue;
 
 import org.marinemc.game.player.Player;
 import org.marinemc.game.player.WeakPlayer;
@@ -9,7 +10,7 @@ import org.marinemc.util.ObjectMeta;
 import org.marinemc.util.wrapper.Movment;
 
 /**
- * Updates with refreshrate of 10hz in normal cases
+ * Updates with refresh rate of 10hz in normal cases
  * 
  * @author Fozie
  */
@@ -25,7 +26,7 @@ public class MovmentValidator extends Thread {
 		movmentsToCheck.add(new ObjectMeta<>(new WeakPlayer(p), m));
 	}
 
-	public volatile ArrayList<ObjectMeta<WeakPlayer, Movment>> movmentsToCheck;
+	public volatile Queue<ObjectMeta<WeakPlayer, Movment>> movmentsToCheck;
 
 	private void validate(final Player p, final Movment move) {
 
@@ -38,7 +39,7 @@ public class MovmentValidator extends Thread {
 
 	@Override
 	public void run() {
-		movmentsToCheck = new ArrayList<>();
+		movmentsToCheck = new ArrayDeque<>();
 
 		// Synchronize this thread with the main thread
 		while (Marine.getServer() == null)
