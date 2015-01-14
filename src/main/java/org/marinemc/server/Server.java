@@ -19,14 +19,6 @@
 
 package org.marinemc.server;
 
-import java.io.File;
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.util.Collection;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.UUID;
-
 import org.marinemc.events.Event;
 import org.marinemc.events.EventManager;
 import org.marinemc.events.standardevents.ServerReadyEvent;
@@ -38,17 +30,7 @@ import org.marinemc.game.command.Command;
 import org.marinemc.game.command.CommandSender;
 import org.marinemc.game.command.ConsoleSender;
 import org.marinemc.game.command.ServiceProvider;
-import org.marinemc.game.commands.Help;
-import org.marinemc.game.commands.Info;
-import org.marinemc.game.commands.List;
-import org.marinemc.game.commands.Me;
-import org.marinemc.game.commands.Plugins;
-import org.marinemc.game.commands.Say;
-import org.marinemc.game.commands.SendAboveActionBarMessage;
-import org.marinemc.game.commands.Stop;
-import org.marinemc.game.commands.Teleport;
-import org.marinemc.game.commands.Tellraw;
-import org.marinemc.game.commands.Test;
+import org.marinemc.game.commands.*;
 import org.marinemc.game.permission.PermissionManager;
 import org.marinemc.game.player.Player;
 import org.marinemc.game.scheduler.MarineRunnable;
@@ -71,6 +53,14 @@ import org.marinemc.world.Difficulty;
 import org.marinemc.world.Gamemode;
 import org.marinemc.world.Identifiers;
 import org.marinemc.world.World;
+
+import java.io.File;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.util.Collection;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.UUID;
 
 /**
  * Server implementation
@@ -176,7 +166,6 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
 		Logging.getLogger().log(
 				"World Generation took: " + (System.nanoTime() - generateTime)
 						/ 1000 / 1000 + "ms.");
-
 		EventManager.getInstance().bake();
 		callEvent(new ServerReadyEvent());
 		timer.scheduleAtFixedRate(this, 0l, 1000 / tickRate);
@@ -267,16 +256,20 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
 
 	@Override
 	final public void loadPlugins() {
-		Logging.getLogger().log("Plugin Folder: " + pluginFolder.getPath());
-		if (!pluginFolder.exists())
-			if (!pluginFolder.mkdir()) {
-				Logging.getLogger().error("Could not create the plugin folder");
-				return;
-			}
-		Logging.getLogger().log("Loading Plugins...");
-		pluginLoader.loadAllPlugins(pluginFolder);
-		Logging.getLogger().log("Enabling Plugins...");
-		pluginLoader.enableAllPlugins();
+		try {
+			Logging.getLogger().log("Plugin Folder: " + pluginFolder.getPath());
+			if (!pluginFolder.exists())
+				if (!pluginFolder.mkdir()) {
+					Logging.getLogger().error("Could not create the plugin folder");
+					return;
+				}
+			Logging.getLogger().log("Loading Plugins...");
+			pluginLoader.loadAllPlugins(pluginFolder);
+			Logging.getLogger().log("Enabling Plugins...");
+			pluginLoader.enableAllPlugins();
+		} catch(final Exception e) {
+			Logging.getLogger().error("Failed to load in plugins", e);
+		}
 	}
 
 	@Override
@@ -485,6 +478,6 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
 
 	@Override
 	public int getViewDistance() {
-		return 9;
+		return 9; // TODO Make configurable
 	}
 }

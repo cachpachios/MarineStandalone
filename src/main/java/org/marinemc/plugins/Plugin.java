@@ -19,9 +19,6 @@
 
 package org.marinemc.plugins;
 
-import java.io.File;
-import java.util.UUID;
-
 import org.marinemc.events.EventListener;
 import org.marinemc.events.EventManager;
 import org.marinemc.game.CommandManager;
@@ -29,7 +26,11 @@ import org.marinemc.game.chat.ChatColor;
 import org.marinemc.game.command.Command;
 import org.marinemc.game.command.ServiceProvider;
 import org.marinemc.logging.Logging;
+import org.marinemc.server.Marine;
 import org.marinemc.util.Assert;
+
+import java.io.File;
+import java.util.UUID;
 
 /**
  * Plugins will need to implement this class in order to be loaded.
@@ -45,7 +46,7 @@ public class Plugin implements ServiceProvider {
 	private final UUID uuid;
 	private boolean enabled;
 
-	private String name, version, author;
+	private String name, version, author, provider;
 
 	private File data;
 
@@ -75,6 +76,9 @@ public class Plugin implements ServiceProvider {
 		author = desc.author;
 		version = desc.version;
 		logger = new PluginLogger(this);
+		if (Marine.getServer().getPluginLoader().isTaken((provider = name.toLowerCase().replace(" ", "")))) {
+			throw new PluginException(this, "The provider name is already taken!");
+		}
 	}
 
 	/**
@@ -125,12 +129,14 @@ public class Plugin implements ServiceProvider {
 	 * Listen to enable
 	 */
 	public void onEnable() {
+		// Override!
 	}
 
 	/**
 	 * Listen to disable
 	 */
 	public void onDisable() {
+		// Override!
 	}
 
 	/**
@@ -223,7 +229,7 @@ public class Plugin implements ServiceProvider {
 
 	@Override
 	final public String getProviderName() {
-		return getName().toLowerCase().replace(" ", "");
+		return provider;
 	}
 
 	@Override

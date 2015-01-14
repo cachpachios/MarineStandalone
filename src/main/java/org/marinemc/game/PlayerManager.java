@@ -19,18 +19,6 @@
 
 package org.marinemc.game;
 
-import static org.marinemc.game.async.ChatManager.JOIN_MESSAGE;
-import static org.marinemc.game.async.ChatManager.LEAVE_MESSAGE;
-import static org.marinemc.game.async.ChatManager.format;
-import static org.marinemc.game.async.ChatManager.getInstance;
-
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-import java.util.regex.Pattern;
-
 import org.marinemc.events.standardevents.JoinEvent;
 import org.marinemc.events.standardevents.PreLoginEvent;
 import org.marinemc.game.async.MovmentValidator;
@@ -57,6 +45,11 @@ import org.marinemc.util.annotations.Hacky;
 import org.marinemc.util.mojang.UUIDHandler;
 import org.marinemc.util.wrapper.Movment;
 import org.marinemc.world.entity.EntityType;
+
+import java.util.*;
+import java.util.regex.Pattern;
+
+import static org.marinemc.game.async.ChatManager.*;
 
 /**
  * The place where players are saved and accessed.
@@ -123,8 +116,7 @@ public class PlayerManager {
 		Marine.getServer().callEvent(preEvent);
 
 		if (!preEvent.isCancelled())
-			return preEvent.getMessage(); // Does this if the prelogin event is
-											// cancelled
+			return preEvent.getMessage();
 
 		if (Marine.getServer().usingWhitelist()
 				&& !Marine.getServer().isWhitelisted(p))
@@ -189,9 +181,7 @@ public class PlayerManager {
 		// new PlayerInventory((byte) 0),
 		// null
 		// )));
-
-		return null; // To indicate that the player was successfully created and
-						// joined
+		return null;
 	}
 	
 	public void moveLookPlayerFromPacket(final Client c, final ByteInput data) {

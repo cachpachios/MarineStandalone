@@ -1,9 +1,9 @@
 package org.marinemc.game.player;
 
+import org.marinemc.net.Client;
+
 import java.lang.ref.WeakReference;
 import java.util.UUID;
-
-import org.marinemc.net.Client;
 
 /**
  * WeakReference of player, includes necessary player functions
@@ -54,14 +54,11 @@ public class WeakPlayer implements IPlayer {
 	 */
 	@Override
 	public UUID getUUID() {
-		if (isReferenceAlive())
-			return ref.get().getUUID();
-		else
-			return UUID.fromString("ec561538-f3fd-461d-aff5-086b22154bce"); // Retrives
-																			// the
-																			// uuid
-																			// of
-																			// 'Alex'
+		UUID uuid = null;
+		if (isReferenceAlive()) {
+			uuid = ref.get().getUUID();
+		}
+		return uuid == null ? UUID.fromString("ec561538-f3fd-461d-aff5-086b22154bce") : uuid;
 	}
 
 	/**

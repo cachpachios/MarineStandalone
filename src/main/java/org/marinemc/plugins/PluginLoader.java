@@ -19,12 +19,15 @@
 
 package org.marinemc.plugins;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import org.marinemc.events.EventManager;
+import org.marinemc.events.standardevents.PluginEnableEvent;
+import org.marinemc.game.system.MarineSecurityManager;
+import org.marinemc.logging.Logging;
+import org.marinemc.server.Marine;
+import org.marinemc.util.FileUtils;
+import sun.misc.JarFilter;
+
+import java.io.*;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -33,15 +36,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-
-import org.marinemc.events.EventManager;
-import org.marinemc.events.standardevents.PluginEnableEvent;
-import org.marinemc.game.system.MarineSecurityManager;
-import org.marinemc.logging.Logging;
-import org.marinemc.server.Marine;
-import org.marinemc.util.FileUtils;
-
-import sun.misc.JarFilter;
 
 /**
  * The plugin loader - CANNOT BE ACCESS BY PLUGINS ITSELF
@@ -421,5 +415,14 @@ public class PluginLoader {
 			e.printStackTrace();
 		}
 		return f;
+	}
+
+	public boolean isTaken(String provider) {
+		for (Plugin plugin : getManager().getPlugins()) {
+			if (plugin.getProviderName().equals(provider)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

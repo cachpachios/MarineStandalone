@@ -1,0 +1,6 @@
+{
+  "name": "TestPlugin",
+  "version": "0.0.1",
+  "author": "Citymonstret",
+  "main": "test.plugin.PluginMain"
+}

@@ -19,16 +19,6 @@
 
 package org.marinemc.game.player;
 
-import java.awt.Rectangle;
-import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.CopyOnWriteArrayList;
-
 import org.marinemc.game.CommandManager;
 import org.marinemc.game.chat.ChatColor;
 import org.marinemc.game.chat.ChatMessage;
@@ -41,25 +31,19 @@ import org.marinemc.game.permission.Permission;
 import org.marinemc.game.permission.PermissionManager;
 import org.marinemc.logging.Logging;
 import org.marinemc.net.Client;
-import org.marinemc.net.packets.player.PlayerAbilitesPacket;
-import org.marinemc.net.packets.player.PlayerExperiencePacket;
-import org.marinemc.net.packets.player.PlayerLookPacket;
-import org.marinemc.net.packets.player.PlayerLookPositionPacket;
-import org.marinemc.net.packets.world.BlockChangePacket;
-import org.marinemc.net.packets.world.ChunkPacket;
-import org.marinemc.net.packets.world.MapChunkPacket;
-import org.marinemc.net.packets.world.SpawnPointPacket;
-import org.marinemc.net.packets.world.TimeUpdatePacket;
-import org.marinemc.net.packets.world.UnloadChunkPacket;
+import org.marinemc.net.packets.world.*;
 import org.marinemc.net.play.clientbound.ChatPacket;
 import org.marinemc.net.play.clientbound.KickPacket;
 import org.marinemc.net.play.clientbound.inv.InventoryContentPacket;
 import org.marinemc.net.play.clientbound.inv.InventoryOpenPacket;
+import org.marinemc.net.play.clientbound.player.ClientboundPlayerLookPositionPacket;
+import org.marinemc.net.play.clientbound.player.ExperiencePacket;
+import org.marinemc.net.play.clientbound.player.PlayerAbilitesPacket;
+import org.marinemc.net.play.clientbound.player.PlayerLookPacket;
 import org.marinemc.net.play.clientbound.world.entities.EntityLookMovePacket;
 import org.marinemc.server.Marine;
 import org.marinemc.util.Assert;
 import org.marinemc.util.Location;
-import org.marinemc.util.MathUtils;
 import org.marinemc.util.Position;
 import org.marinemc.util.StringComparison;
 import org.marinemc.util.annotations.Cautious;
@@ -73,6 +57,8 @@ import org.marinemc.world.entity.EntityTracker;
 import org.marinemc.world.entity.EntityType;
 import org.marinemc.world.entity.LivingEntity;
 
+import java.util.*;
+
 /**
  * The online ingame Player instance object
  * 
@@ -81,7 +67,6 @@ import org.marinemc.world.entity.LivingEntity;
 
 public class Player extends LivingEntity implements IPlayer, CommandSender,
 		EntityTracker {
-	
 	/*
 	 * Identifier variables:
 	 */
@@ -122,10 +107,11 @@ public class Player extends LivingEntity implements IPlayer, CommandSender,
 	private final PlayerInventory inventory;
 	private byte nextWindowID; // Generates a new byte for a new ID, cant be 0
 								// when that is the standard inventory
-	/*
-	 * World streaming stuff: 
+
+	/**
+	 * An list of entities spawned localy Its represented by the Entity UID
 	 */
-	private volatile boolean needStreaming;
+	private final List<Integer> spawnedEntities;
 
 	/**
 	 * An list of chunks sent to the client Its represented by the ChunksPos
@@ -150,7 +136,10 @@ public class Player extends LivingEntity implements IPlayer, CommandSender,
 		this.flySpeed = flySpeed;
 		permissions = new ArrayList<>(); // TODO Load this from somewhere
 		group = PermissionManager.instance().getGroup(uuid);
-		loadedChunks = new CopyOnWriteArrayList<Long>();
+		spawnedEntities = new ArrayList<Integer>(); // Could be an set but for
+													// integers linear search
+													// quicker than Hashing
+		loadedChunks = new ArrayList<Long>();
 		this.isFlying = isFlying;
 		this.canFly = canFly;
 		this.inventory = inventory;
@@ -316,7 +305,7 @@ public class Player extends LivingEntity implements IPlayer, CommandSender,
 
 	@Override
 	public void executeCommand(final String command, final String[] arguments) {
-		final Command cmd = CommandManager.getInstance().getCommand(command);
+		final Command cmd = CommandManager.getInstance().getCommand(command.substring(1));
 		if (cmd == null) {
 			final Collection<Command> commands = CommandManager.getInstance()
 					.getCommands();
@@ -349,8 +338,9 @@ public class Player extends LivingEntity implements IPlayer, CommandSender,
 						"Something went wrong when executing command /"
 								+ command.toString(), e);
 			}
-		else
+		else {
 			sendMessage("You are not permitted to use that command");
+		}
 	}
 
 	@Override
@@ -380,8 +370,8 @@ public class Player extends LivingEntity implements IPlayer, CommandSender,
 		this.group = group;
 	}
 
-	public void teleport(final Location pos) {
-		this.teleport(pos.x, pos.y, pos.z);
+	public void teleport(final Location relative) {
+		// TODO THIS
 	}
 
 	public void sendMessageRaw(final String msg) {
@@ -413,7 +403,7 @@ public class Player extends LivingEntity implements IPlayer, CommandSender,
 	 * experience
 	 */
 	public void updateExp() {
-		getClient().sendPacket(new PlayerExperiencePacket(this));
+		getClient().sendPacket(new ExperiencePacket(this));
 	}
 
 	/**
@@ -434,7 +424,7 @@ public class Player extends LivingEntity implements IPlayer, CommandSender,
 
 	public void sendPositionAndLook() {
 		getClient().sendPacket(
-				new PlayerLookPositionPacket(getLocation()));
+				new ClientboundPlayerLookPositionPacket(getLocation()));
 	}
 
 	public void sendLook() {
@@ -466,7 +456,6 @@ public class Player extends LivingEntity implements IPlayer, CommandSender,
 	}
 
 	public boolean sendChunk(final Chunk c) {
-		System.out.println("Sending chunks: " + c.getPos().toString());
 		if (loadedChunks.contains(c.getPos().encode()))
 			return false;
 		loadedChunks.add(c.getPos().encode());
@@ -498,46 +487,37 @@ public class Player extends LivingEntity implements IPlayer, CommandSender,
 	}
 
 	// TODO Fix unloading :p
-	public void localChunkRegion(final int size) {
-		final List<ChunkPos> chunksToSend = new ArrayList<ChunkPos>();
-//		final List<ChunkPos> chunksToUnload = new ArrayList<ChunkPos>();
+	public void localChunkRegion(final int w, final int h) {
+		final List<Long> chunksToSend = new ArrayList<Long>();
+		// final List<Long> chunksToUnload = new ArrayList<Long>();
 
-		// Put missing chunks for sending:
-		for 	(int x = (int) (Math.round(getX()/16) - (size / 2)); x < Math.round(getX()/16) + (size / 2); x++)
-			for (int y = (int) (Math.round(getZ()/16) - (size / 2)); y < Math.round(getZ()/16) + (size / 2); y++)
-				if(!loadedChunks.contains(ChunkPos.Encode(x,y)))
-					chunksToSend.add(new ChunkPos(x,y));
-		
-		 for (final ChunkPos l : chunksToSend)
-			 sendChunk(getWorld().getChunkForce(l));
-		
-		chunksToSend.clear();
-		
-//		Rectangle rect = new Rectangle((int) (Math.round(getX()/16)) - (size / 2),
-//									   (int) (Math.round(getZ()/16)) - (size / 2),
-//									   size / 2,
-//									   size / 2);
-//		// Remove extra chunks
-//		for(Long l : loadedChunks) {
-//			ChunkPos c = new ChunkPos(l);
-//		 	if(!rect.contains(c.getX(), c.getY()))
-//		 		chunksToUnload.add(c);
-//		 	else
-//		 		c = null;
-//		 }
-//
-//		 for(ChunkPos l : chunksToUnload)
-//			 getWorld().getChunkForce(l).unload(this);
-//		
-//		chunksToUnload.clear();
-		
-		needStreaming = false;
+		System.out.println("Invoke");
+
+		// Put missing chunks for sending
+		for (int x = -w; x < w / 2; x++)
+			for (int y = -(h / 2); y < h / 2; y++)
+				if (!loadedChunks.contains(ChunkPos.Encode(x, y)))
+					chunksToSend.add(ChunkPos.Encode(x, y));
+
+		// // Remove extra chunks
+		// for(Long l : loadedChunks) {
+		// ChunkPos c = new ChunkPos(l);
+		// if(!MathUtils.isInsideRect((int)getX(), (int)getY(), w,h, c.x, c.y))
+		// chunksToUnload.add(l);
+		// }
+
+		// for(Long l : chunksToUnload)
+		// getWorld().getChunkForce(new ChunkPos(l)).unload(this);
+
+		if (chunksToSend.size() > 1) {
+			final List<Chunk> chunks = new ArrayList<>(chunksToSend.size());
+			for (final Long l : chunksToSend)
+				chunks.add(getWorld().getChunkForce(new ChunkPos(l)));
+		} else
+			for (final Long l : chunksToSend)
+				sendChunk(getWorld().getChunkForce(new ChunkPos(l)));
 	}
 
-	public void updateStreaming() {
-		needStreaming = true;
-	}
-	
 	/**
 	 * ENTITY TRACKING STARTS HERE:
 	 */
@@ -607,9 +587,5 @@ public class Player extends LivingEntity implements IPlayer, CommandSender,
 		if (trackingEntities.containsKey(e.getEntityID()))
 			return trackingEntities.get(e.getEntityID());
 		return null;
-	}
-
-	public boolean isStreamingNeeded() {
-		return needStreaming;
 	}
 }
