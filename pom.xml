@@ -62,7 +62,7 @@
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
-            <version>20120521</version>
+            <version>20140107</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
