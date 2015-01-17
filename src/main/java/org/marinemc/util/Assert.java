@@ -62,6 +62,20 @@ public class Assert {
 		contains(Arrays.asList(t), o);
 	}
 
+	public static <T> void equals(final T t, final Object o) {
+		if (o == null || !o.getClass().equals(t.getClass()) || !t.equals(o)) {
+			throw new AssertionError("o doesn't equal t");
+		}
+	}
+
+	public static void requireTrue(boolean b) {
+		equals(b, true);
+	}
+
+	public static void requireFalse(boolean b) {
+		equals(b, false);
+	}
+
 	public static <T> void contains(final T t, final Object o) {
 		boolean c = false;
 		if (t instanceof Map)

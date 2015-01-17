@@ -61,18 +61,15 @@ public class PlayerManager {
 	private final Pattern validName;
 	private final TimeoutManager timeout;
 	private final MovmentValidator movmentValidator;
-
+	private final WorldStreamingThread worldStreamer;
 	/**
 	 * Player list:
 	 */
 	private volatile Map<Short, Player> players;
-
 	/**
 	 * Name pointers: (Returns the UID from the username of an online player)
 	 */
 	private volatile Map<String, Short> namePointers;
-
-	private final WorldStreamingThread worldStreamer;
 
 	public PlayerManager() {
 		players = new HashMap<Short, Player>();
@@ -155,12 +152,13 @@ public class PlayerManager {
 
 		getInstance().sendJoinMessage(p, event.getJoinMessage());
 
-		TablistManager.getInstance().addItem(p);
-		TablistManager.getInstance().joinList(p);
+		putPlayer(p);
+
+		// TODO LET FOZIE HELP ME FIX THESE ERRORS
+		// TablistManager.getInstance().joinList(p);
+		// TablistManager.getInstance().addItem(p);
 		TablistManager.getInstance().setHeaderAndFooter("Testing",
 				"MarineStandalone", p);
-
-		putPlayer(p);
 		// Send them the herobrine :>
 		// p.getClient().sendPacket(new SpawnPlayerPacket(new Player(
 		// EntityType.PLAYER,
@@ -209,7 +207,7 @@ public class PlayerManager {
 				p.teleport(packet.getLocation());
 			else
 				p.move(p.getX() - packet.getLocation().x, p.getY() - packet.getLocation().y, p.getZ() - packet.getLocation().z);
-			p.updateStreaming();
+		// TODO FIX p.updateStreaming();
 			
 			packet = null;
 	}
@@ -234,7 +232,7 @@ public class PlayerManager {
 			p.teleport(packet.getLocation());
 		else
 			p.move(p.getX() - packet.getX(), p.getY() - packet.getY(), p.getZ() - packet.getY());
-		p.updateStreaming();
+		// TODO FIX p.updateStreaming();
 		
 		packet = null;
 	}

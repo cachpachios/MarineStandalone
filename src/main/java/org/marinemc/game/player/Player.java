@@ -31,15 +31,14 @@ import org.marinemc.game.permission.Permission;
 import org.marinemc.game.permission.PermissionManager;
 import org.marinemc.logging.Logging;
 import org.marinemc.net.Client;
+import org.marinemc.net.packets.player.PlayerAbilitesPacket;
+import org.marinemc.net.packets.player.PlayerLookPacket;
+import org.marinemc.net.packets.player.PlayerLookPositionPacket;
 import org.marinemc.net.packets.world.*;
 import org.marinemc.net.play.clientbound.ChatPacket;
 import org.marinemc.net.play.clientbound.KickPacket;
 import org.marinemc.net.play.clientbound.inv.InventoryContentPacket;
 import org.marinemc.net.play.clientbound.inv.InventoryOpenPacket;
-import org.marinemc.net.play.clientbound.player.ClientboundPlayerLookPositionPacket;
-import org.marinemc.net.play.clientbound.player.ExperiencePacket;
-import org.marinemc.net.play.clientbound.player.PlayerAbilitesPacket;
-import org.marinemc.net.play.clientbound.player.PlayerLookPacket;
 import org.marinemc.net.play.clientbound.world.entities.EntityLookMovePacket;
 import org.marinemc.server.Marine;
 import org.marinemc.util.Assert;
@@ -77,6 +76,24 @@ public class Player extends LivingEntity implements IPlayer, CommandSender,
 	 * Network variables
 	 */
 	private final Client client;
+	private final Collection<Permission> permissions;
+	// TODO Use this:
+	private final boolean isSneaking;
+	private final PlayerInventory inventory;
+	/**
+	 * An list of entities spawned localy Its represented by the Entity UID
+	 */
+	private final List<Integer> spawnedEntities;
+	/**
+	 * An list of chunks sent to the client Its represented by the ChunksPos
+	 * encoded form (Half long is X integer, secound half is the Y Integer)
+	 */
+	private final List<Long> loadedChunks;
+	/**
+	 * ENTITY TRACKING STARTS HERE:
+	 */
+
+	private final Map<Integer, Vector3d> trackingEntities;
 	/*
 	 * Experience variables:
 	 */
@@ -89,35 +106,18 @@ public class Player extends LivingEntity implements IPlayer, CommandSender,
 	private float walkSpeed;
 	private float flySpeed;
 	private Group group;
-	private final Collection<Permission> permissions;
 	/*
 	 * Chat Stuff
 	 */
 	private long lastChatReset;
 	private int messagesSent;
+								// when that is the standard inventory
 	/*
 	 * Game variables:
 	 */
-	private boolean isFlying;
+								private boolean isFlying;
 	private boolean canFly;
-
-	// TODO Use this:
-	private final boolean isSneaking;
-
-	private final PlayerInventory inventory;
 	private byte nextWindowID; // Generates a new byte for a new ID, cant be 0
-								// when that is the standard inventory
-
-	/**
-	 * An list of entities spawned localy Its represented by the Entity UID
-	 */
-	private final List<Integer> spawnedEntities;
-
-	/**
-	 * An list of chunks sent to the client Its represented by the ChunksPos
-	 * encoded form (Half long is X integer, secound half is the Y Integer)
-	 */
-	private final List<Long> loadedChunks;
 
 	public Player(final EntityType type, final int ID, final Location pos,
 			final short uid, final UUID uuid, final String name,
@@ -198,7 +198,7 @@ public class Player extends LivingEntity implements IPlayer, CommandSender,
 
 	/**
 	 * Set the gamemode and update it with the client
-	 * 
+	 *
 	 * @param gm
 	 *            The target gamemode
 	 */
@@ -403,7 +403,7 @@ public class Player extends LivingEntity implements IPlayer, CommandSender,
 	 * experience
 	 */
 	public void updateExp() {
-		getClient().sendPacket(new ExperiencePacket(this));
+
 	}
 
 	/**
@@ -423,8 +423,7 @@ public class Player extends LivingEntity implements IPlayer, CommandSender,
 	}
 
 	public void sendPositionAndLook() {
-		getClient().sendPacket(
-				new ClientboundPlayerLookPositionPacket(getLocation()));
+		getClient().sendPacket(new PlayerLookPositionPacket(getLocation()));
 	}
 
 	public void sendLook() {
@@ -517,12 +516,6 @@ public class Player extends LivingEntity implements IPlayer, CommandSender,
 			for (final Long l : chunksToSend)
 				sendChunk(getWorld().getChunkForce(new ChunkPos(l)));
 	}
-
-	/**
-	 * ENTITY TRACKING STARTS HERE:
-	 */
-
-	private final Map<Integer, Vector3d> trackingEntities;
 
 	@Override
 	public void killLocalEntity(final Entity e) {

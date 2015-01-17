@@ -19,48 +19,28 @@
 
 package org.marinemc.gui;
 
-import java.awt.Color;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
+import org.marinemc.Bootstrap;
+import org.marinemc.game.chat.ChatColor;
+import org.marinemc.logging.Logging;
+import org.marinemc.server.Marine;
+import org.marinemc.server.ServerProperties;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
-import javax.swing.AbstractAction;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextPane;
-import javax.swing.WindowConstants;
-import javax.swing.table.DefaultTableModel;
-
-import org.marinemc.Bootstrap;
-import org.marinemc.game.CommandManager;
-import org.marinemc.game.chat.ChatColor;
-import org.marinemc.game.command.Command;
-import org.marinemc.logging.Logging;
-import org.marinemc.server.Marine;
-import org.marinemc.server.ServerProperties;
-import org.marinemc.util.StringUtils;
 
 public class ConsoleWindow extends OutputStream {
 	private final int maxLines;
 	private final boolean showHTML;
 	private final List<String> console;
-	private JFrame jFrame;
 	private final JTextPane text;
+	private JFrame jFrame;
 	@SuppressWarnings("unused")
 	private JTextPane input;
 	private String s;
@@ -74,6 +54,12 @@ public class ConsoleWindow extends OutputStream {
 	}
 
 	public void initWindow() {
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (final Throwable e) {
+			System.out.print("[Error] Could not set the GUI look and feel!");
+			e.printStackTrace();
+		}
 		jFrame = new JFrame();
 		jFrame.setTitle("MarineStandalone " + ServerProperties.BUILD_VERSION
 				+ " " + ServerProperties.BUILD_TYPE + " ("
@@ -115,7 +101,7 @@ public class ConsoleWindow extends OutputStream {
 		c.insets = new Insets(1, 1, 1, 1);
 		jFrame.add(new JScrollPane(text), c);
 		// Set visible, yay
-		final JMenuBar menuBar = new JMenuBar();
+		/*final JMenuBar menuBar = new JMenuBar();
 		final JMenu actions = new JMenu("actions"), tools = new JMenu("tools"), help = new JMenu(
 				"help");
 		actions.setText("Actions");
@@ -181,7 +167,8 @@ public class ConsoleWindow extends OutputStream {
 		menuBar.add(actions);
 		menuBar.add(tools);
 		menuBar.add(help);
-		jFrame.setJMenuBar(menuBar);
+		jFrame.setJMenuBar(menuBar);*/
+
 		jFrame.setVisible(true);
 	}
 

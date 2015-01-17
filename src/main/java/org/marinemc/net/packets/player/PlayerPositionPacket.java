@@ -19,14 +19,14 @@
 
 package org.marinemc.net.packets.player;
 
-import java.io.IOException;
-
 import org.marinemc.io.binary.ByteInput;
 import org.marinemc.io.binary.ByteList;
 import org.marinemc.net.Packet;
 import org.marinemc.net.PacketOutputStream;
 import org.marinemc.net.States;
 import org.marinemc.util.Location;
+
+import java.io.IOException;
 
 /**
  * @author Fozie

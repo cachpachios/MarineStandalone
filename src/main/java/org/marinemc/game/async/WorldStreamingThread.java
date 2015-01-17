@@ -1,7 +1,25 @@
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// MarineStandalone is a minecraft server software and API.
+// Copyright (C) MarineMC (marinemc.org)
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 2 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License along
+// with this program; if not, write to the Free Software Foundation, Inc.,
+// 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 package org.marinemc.game.async;
 
 import org.marinemc.game.PlayerManager;
-import org.marinemc.game.player.Player;
 import org.marinemc.logging.Logging;
 import org.marinemc.server.Marine;
 
@@ -16,13 +34,12 @@ public class WorldStreamingThread extends Thread {
 	public static final long sleepTime = 1000 / 8;
 
 	final PlayerManager manager;
+	private long time;
 
 	public WorldStreamingThread(final PlayerManager playerManager) {
 		super("WorldStreamer");
 		manager = playerManager;
 	}
-
-	private long time;
 
 	@Override
 	public void run() {
@@ -46,14 +63,15 @@ public class WorldStreamingThread extends Thread {
 
 			time = System.nanoTime();
 
-			for (final Player p : manager.getPlayers()) {
-				if(!p.isStreamingNeeded()) continue;
-				p.getWorld().generateAsyncRegion((int) p.getX(),
-						(int) p.getY(),
-						Marine.getServer().getViewDistance() * 2,
-						Marine.getServer().getViewDistance() * 2);
-				p.localChunkRegion(Marine.getServer().getViewDistance()); // Send the chunks
-			}
+			// TODO FIX
+			// for (final Player p : manager.getPlayers()) {
+			//	if(!p.isStreamingNeeded()) continue;
+			//	p.getWorld().generateAsyncRegion((int) p.getX(),
+			//			(int) p.getY(),
+			//			Marine.getServer().getViewDistance() * 2,
+			//			Marine.getServer().getViewDistance() * 2);
+			//	p.localChunkRegion(Marine.getServer().getViewDistance()); // Send the chunks
+			// }
 
 			try {
 				WorldStreamingThread.sleep(nonNeg(sleepTime

@@ -39,15 +39,19 @@ public class IngameInterceptor implements PacketInterceptor {
 		switch (id) {
 		case 0x00:
 			System.out.println("Keepem alive ;O");
+			break;
 		case 0x01:
 			ChatManager.getInstance().interceptChatPacket(data, c);
+			break;
 		case 0x04:
 			Marine.getServer().getPlayerManager().movePlayerFromPacket(c, data);
+			break;
 		case 0x06:
 			Marine.getServer().getPlayerManager().moveLookPlayerFromPacket(c, data);
-
+			break;
 		default:
 			return false;
 		}
+		return true;
 	}
 }
