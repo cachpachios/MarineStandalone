@@ -26,10 +26,9 @@ import org.marinemc.server.Marine;
 import org.marinemc.server.ServerProperties;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
+import java.awt.event.*;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -40,6 +39,7 @@ public class ConsoleWindow extends OutputStream {
 	private final boolean showHTML;
 	private final List<String> console;
 	private final JTextPane text;
+	private final JTextField input;
 	private JFrame jFrame;
 	private String s;
 	private java.util.List<Character> validChars;
@@ -49,6 +49,7 @@ public class ConsoleWindow extends OutputStream {
 		console = new ArrayList<String>();
 		showHTML = false;
 		text = new JTextPane();
+		input = new JTextField();
 	}
 
 	public void initWindow() {
@@ -82,23 +83,77 @@ public class ConsoleWindow extends OutputStream {
 		jFrame.addWindowListener(exitListener);
 		// The layout stuffz
 		final GridBagConstraints c = new GridBagConstraints();
-		final GridBagConstraints c1 = new GridBagConstraints();
 		jFrame.setLayout(new GridBagLayout());
 		// Should we display the html outputted?
 		if (!showHTML)
 			text.setContentType("text/html");
 		// This ain't editable
+		input.setEditable(true);
+		input.setBackground(Color.BLACK);
+		input.setForeground(Color.WHITE);
+		input.setCaretColor(Color.WHITE);
+		input.setBorder(new EmptyBorder(0, 0, 0, 0));
 		text.setEditable(false);
+		text.setBorder(new EmptyBorder(0, 0, 0, 0));
 		// Set background
 		text.setBackground(Color.BLACK);
 		// Grid layout
 		c.fill = GridBagConstraints.BOTH;
 		c.gridx = 1;
-		c.gridy = 1;
+		c.gridy = 0;
 		c.weightx = 1.5D;
 		c.weighty = 1;
 		c.insets = new Insets(0, 0, 0, 0);
-		jFrame.add(new JScrollPane(text), c);
+		jFrame.add(new JScrollPane(text) {
+			{
+				setBorder(new EmptyBorder(0, 0, 0, 0));
+			}
+		}, c);
+		c.gridy = 1;
+		c.weighty = .035;
+		jFrame.add(input, c);
+		input.addKeyListener(new KeyListener() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					String text = input.getText();
+					if (!text.startsWith("/")) {
+						text = "/" + text;
+					}
+					if (text.length() < 1) {
+						return;
+					}
+					String[] args, pure;
+					String command;
+					pure = text.split(" ");
+					command = pure[0];
+					if (pure.length < 2) {
+						args = new String[0];
+					} else {
+						List<String> sar = new ArrayList<String>();
+						for (int x = 1; x < pure.length; x++) {
+							if (pure[x] != null)
+								sar.add(pure[x]);
+						}
+						args = sar.toArray(new String[sar.size()]);
+					}
+					input.setText("");
+					Marine.getServer().getConsoleSender().executeCommand(command, args);
+				} else if (e.getKeyCode() == KeyEvent.VK_TAB) {
+					Logging.getLogger().log("Tab Completion Isn't Implemented Yet :(");
+				}
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+
+			}
+		});
 		// Set visible, yay
 		/*final JMenuBar menuBar = new JMenuBar();
 		final JMenu actions = new JMenu("actions"), tools = new JMenu("tools"), help = new JMenu(
@@ -188,6 +243,7 @@ public class ConsoleWindow extends OutputStream {
 	}
 
 	private String format(String string) {
+		string = string.replace("\n", "<br>").replace("\t", "   ");
 		if (!Bootstrap.instance().arguments.contains("nocolors")) {
 			string = string.replace("§0", "§f");
 			string = "<font face='MarineStandalone'>" + string;
@@ -200,6 +256,7 @@ public class ConsoleWindow extends OutputStream {
 			string = string.replace("§o", "</b></u><i></s>");
 			string = string.replace("§n", "</b><u></i></s>");
 			string = string.replace("§s", "</b></u></i><s>");
+			string = string.replace("§r", "</b></u></i></s><font face='MarineStandalone' color='#FFFFFF'>");
 			return string + "</font>";
 		}
 		return "<font face='MarineStandalone' color='#FFFFFF'>"
@@ -216,6 +273,7 @@ public class ConsoleWindow extends OutputStream {
 				sB.append("<br>");
 			}
 			text.setText(sB.toString());
+			text.setCaretPosition(text.getDocument().getLength());
 		}
 	}
 

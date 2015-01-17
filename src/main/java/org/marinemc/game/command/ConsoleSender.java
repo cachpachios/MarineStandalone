@@ -25,6 +25,7 @@ import org.marinemc.game.permission.Permission;
 import org.marinemc.logging.Logging;
 import org.marinemc.server.Marine;
 import org.marinemc.util.Location;
+import org.marinemc.util.StringUtils;
 
 /**
  * Created 2014-12-21 for MarineStandalone
@@ -44,12 +45,14 @@ public class ConsoleSender implements CommandSender {
 		if ((cmd = CommandManager.getInstance().getCommand(
 				command.toLowerCase().substring(1))) == null)
 			sendMessage("That command doesn't exist");
-		else
+		else {
 			executeCommand(cmd, arguments);
+		}
 	}
 
 	@Override
 	public void executeCommand(final Command command, final String[] arguments) {
+		Logging.getLogger().info("Console executed command: " + command + " " + StringUtils.join(arguments, " "));
 		command.execute(this, arguments);
 	}
 

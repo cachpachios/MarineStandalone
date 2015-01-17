@@ -373,10 +373,10 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
 	@Override
 	final public void stop() {
 		stopping = true;
+		Logging.getLogger().info("Shutting down...");
 		scheduler.createSyncTask(new MarineRunnable(this, 5, 1) {
 			@Override
 			public void run() {
-				Logging.getLogger().info("Shutting down...");
 				for (final Player player : getPlayers())
 					player.getClient().sendPacket(
 							new KickPacket(ChatColor.red + ChatColor.bold

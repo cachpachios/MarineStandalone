@@ -19,11 +19,6 @@
 
 package org.marinemc.game.command;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-
 import org.marinemc.game.CommandManager;
 import org.marinemc.game.player.Player;
 import org.marinemc.server.Marine;
@@ -31,6 +26,11 @@ import org.marinemc.util.Location;
 import org.marinemc.util.StringUtils;
 import org.marinemc.util.annotations.Protected;
 import org.marinemc.world.entity.Entity;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Created 2014-12-01 for MarineStandalone
@@ -48,26 +48,22 @@ public abstract class Command {
 	 * Command description
 	 */
 	private final String description;
-
-	/**
-	 * The actual command
-	 */
-	private String command;
-
-	/**
-	 * The manager in which the command was "created"
-	 */
-	private CommandManager provider;
-
-	/**
-	 * The provider of the command, containing the priority level and such
-	 */
-	private ServiceProvider serviceProvider;
-
 	/**
 	 * Required permission
 	 */
 	private final String permission;
+	/**
+	 * The actual command
+	 */
+	private String command;
+	/**
+	 * The manager in which the command was "created"
+	 */
+	private CommandManager provider;
+	/**
+	 * The provider of the command, containing the priority level and such
+	 */
+	private ServiceProvider serviceProvider;
 
 	/**
 	 * Constructor
@@ -221,7 +217,11 @@ public abstract class Command {
 	 */
 	public Player getRandomPlayer() {
 		final List<Player> players = new ArrayList<>(Marine.getPlayers());
-		return players.get((int) (Math.random() * players.size()));
+		if (players.isEmpty()) {
+			return null;
+		} else {
+			return players.get((int) (Math.random() * players.size()));
+		}
 	}
 
 	/**
