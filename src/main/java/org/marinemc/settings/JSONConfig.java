@@ -62,6 +62,11 @@ public class JSONConfig {
 				throw new JSONConfigException(name,
 						"Could not create parent folders");
 		file = new File(path + File.separator + name + ".json");
+		
+		if(file.length() == 0) {
+			map = new JSONObject();
+			return;
+		}
 		if (!file.exists())
 			try {
 				if (!file.createNewFile())
