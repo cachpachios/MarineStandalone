@@ -41,8 +41,6 @@ public class ConsoleWindow extends OutputStream {
 	private final List<String> console;
 	private final JTextPane text;
 	private JFrame jFrame;
-	@SuppressWarnings("unused")
-	private JTextPane input;
 	private String s;
 	private java.util.List<Character> validChars;
 
@@ -84,6 +82,7 @@ public class ConsoleWindow extends OutputStream {
 		jFrame.addWindowListener(exitListener);
 		// The layout stuffz
 		final GridBagConstraints c = new GridBagConstraints();
+		final GridBagConstraints c1 = new GridBagConstraints();
 		jFrame.setLayout(new GridBagLayout());
 		// Should we display the html outputted?
 		if (!showHTML)
@@ -98,7 +97,7 @@ public class ConsoleWindow extends OutputStream {
 		c.gridy = 1;
 		c.weightx = 1.5D;
 		c.weighty = 1;
-		c.insets = new Insets(1, 1, 1, 1);
+		c.insets = new Insets(0, 0, 0, 0);
 		jFrame.add(new JScrollPane(text), c);
 		// Set visible, yay
 		/*final JMenuBar menuBar = new JMenuBar();
