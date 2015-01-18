@@ -52,6 +52,15 @@ public class ConsoleWindow extends OutputStream {
 		input = new JTextField();
 	}
 
+	private void requestClose() {
+		final int confirm = JOptionPane.showOptionDialog(jFrame,
+				"Are you sure you want to close the server?",
+				"Exit Confirmation", JOptionPane.YES_NO_OPTION,
+				JOptionPane.QUESTION_MESSAGE, null, null, null);
+		if (confirm == 0)
+			Marine.stop();
+	}
+
 	public void initWindow() {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -71,12 +80,7 @@ public class ConsoleWindow extends OutputStream {
 		final WindowListener exitListener = new WindowAdapter() {
 			@Override
 			public void windowClosing(final WindowEvent e) {
-				final int confirm = JOptionPane.showOptionDialog(jFrame,
-						"Are you sure you want to close the server?",
-						"Exit Confirmation", JOptionPane.YES_NO_OPTION,
-						JOptionPane.QUESTION_MESSAGE, null, null, null);
-				if (confirm == 0)
-					Marine.stop();
+				requestClose();
 			}
 		};
 		// The listener
@@ -112,15 +116,20 @@ public class ConsoleWindow extends OutputStream {
 		c.gridy = 1;
 		c.weighty = .035;
 		jFrame.add(input, c);
+
+		final CommandHistory history = new CommandHistory();
 		input.addKeyListener(new KeyListener() {
 			@Override
 			public void keyTyped(KeyEvent e) {
-
 			}
 
 			@Override
 			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+				if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+					input.setText(history.getNext());
+				} else if (e.getKeyCode() == KeyEvent.VK_UP) {
+					input.setText(history.getPrevious(input.getText()));
+				} else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 					String text = input.getText();
 					if (!text.startsWith("/")) {
 						text = "/" + text;
@@ -142,6 +151,8 @@ public class ConsoleWindow extends OutputStream {
 						}
 						args = sar.toArray(new String[sar.size()]);
 					}
+					history.add(input.getText());
+					history.reset();
 					input.setText("");
 					Marine.getServer().getConsoleSender().executeCommand(command, args);
 				} else if (e.getKeyCode() == KeyEvent.VK_TAB) {
@@ -302,5 +313,43 @@ public class ConsoleWindow extends OutputStream {
 		s = s.replaceAll(">", "&gt;");
 		s = s.replaceAll("€", "&euro;");
 		s = s.replaceAll("£", "&pound;");
+	}
+
+	private class CommandHistory {
+		private int current = -1;
+		private List<String> history = new ArrayList<>();
+
+		public String getPrevious(String s) {
+			if (s.length() > 0 && !history.get(history.size() - 1).equals(s)) {
+				history.add(s);
+			}
+			if (current == -1) {
+				current = history.size();
+			}
+			if (current < 1) {
+				current = 1;
+			}
+			return history.get(--current);
+		}
+
+		public String getNext() {
+			if (history.isEmpty()) {
+				return "";
+			}
+			if (++current >= history.size()) {
+				current = history.size() - 1;
+			}
+			return history.get(current);
+		}
+
+		public void reset() {
+			current = -1;
+		}
+
+		public void add(String s) {
+			if (!history.contains(s)) {
+				history.add(s);
+			}
+		}
 	}
 }
