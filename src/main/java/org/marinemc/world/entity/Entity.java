@@ -19,13 +19,14 @@
 
 package org.marinemc.world.entity;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.marinemc.logging.Logging;
 import org.marinemc.util.Location;
 import org.marinemc.util.Position;
 import org.marinemc.util.annotations.Cautious;
+import org.marinemc.util.annotations.Serverside;
 import org.marinemc.util.vectors.Vector3d;
 import org.marinemc.util.vectors.Vector3i;
 import org.marinemc.world.World;
@@ -40,7 +41,7 @@ public abstract class Entity {
 	/**
 	 * Tracking:
 	 */
-	private final List<EntityTracker> trackers;
+	private final Set<EntityTracker> trackers;
 
 	private final int entityID;
 	private final EntityType type;
@@ -61,7 +62,7 @@ public abstract class Entity {
 		position = new EntityLocation(this, pos);
 		ticksLived = 0;
 		this.type = type;
-		trackers = new ArrayList<>();
+		trackers = new HashSet<>();
 	}
 
 	public EntityType getType() {
@@ -135,13 +136,6 @@ public abstract class Entity {
 	}
 
 	public void move(final double x, final double y, final double z) {
-		if (x > 4)
-			teleport(x, y, z);
-		if (y > 4)
-			teleport(x, y, z);
-		if (z > 4)
-			teleport(x, y, z);
-
 		//TODO: Update our little subscribers/trackers
 		
 		position.localSetX(x);
@@ -151,13 +145,19 @@ public abstract class Entity {
 	}
 
 	public void teleport(final double x, final double y, final double z) {
-
 		//TODO: Update our little subscribers/trackers
+		
 		position.localSetX(x);
 		position.localSetY(x);
 		position.localSetZ(x);
 	}
 
+	@Cautious
+	@Serverside	
+	public EntityLocation getEntityLocation() {
+		return position;
+	}
+	
 	@Cautious
 	public void addEntityTracker(final EntityTracker tracker) {
 		if (!trackers.contains(tracker))

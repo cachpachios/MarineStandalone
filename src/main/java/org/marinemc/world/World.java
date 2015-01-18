@@ -20,11 +20,10 @@
 package org.marinemc.world;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.marinemc.game.player.Player;
@@ -41,6 +40,9 @@ import org.marinemc.world.gen.WorldGenerator;
 /**
  * @author Fozie
  */
+
+
+//TODO Synchronizing loadedChunks
 public class World { // TODO Save and unload chunks...
 
 	// Async stuff:
@@ -73,7 +75,7 @@ public class World { // TODO Save and unload chunks...
 
 	public World(final String name, final long seed,
 			final WorldGenerator generator) {
-		loadedChunks = Collections.synchronizedMap(new HashMap<Long, Chunk>());
+		loadedChunks = new ConcurrentHashMap<Long, Chunk>();
 		randomizer = new Random();
 		this.generator = generator; // StandardGenerator
 		this.generator.setGenerationWorld(this);
@@ -132,12 +134,16 @@ public class World { // TODO Save and unload chunks...
 	}
 
 	private void forceGenerateChunk(final int x, final int z) {
+		synchronized(loadedChunks) {
 		loadedChunks.put(ChunkPos.Encode(x, z),
 				generator.generateChunk(new ChunkPos(x, z)));
+		}
 	}
 
 	private void forceGenerateChunk(final ChunkPos p) {
-		loadedChunks.put(p.encode(), generator.generateChunk(p));
+		synchronized(loadedChunks) {
+			loadedChunks.put(p.encode(), generator.generateChunk(p));
+		}
 	}
 
 	public Chunk getChunkForce(final int x, final int z) { // Will
@@ -247,16 +253,15 @@ public class World { // TODO Save and unload chunks...
 	}
 
 	void finalizeChunks() {
+		synchronized(loadedChunks) {
 		for (final Chunk c : loadedChunks.values())
 			if (!c.isActive()
-					&& !MathUtils.isInsideRect(0, 0, Marine.getServer()
-							.getViewDistance(), Marine.getServer()
-							.getViewDistance(), c.getPos().getX(), c.getPos()
-							.getY())) {
+					&& c.getPos().getDistanceFromXY(spawnPoint.x/16, spawnPoint.y/16) > Marine.getServer().getViewDistance()*2) {
 				c.unload();
 				loadedChunks.remove(c);
 
 			}
+		}
 	}
 
 	/**
@@ -291,5 +296,14 @@ public class World { // TODO Save and unload chunks...
 
 	public Random getRandom() {
 		return randomizer;
+	}
+
+	public List<Chunk> getChunksForce(final List<ChunkPos> positions) {
+		final List<Chunk> chunks = new ArrayList<Chunk>(positions.size()+1);
+		
+		for(final ChunkPos p : positions)
+			chunks.add(getChunkForce(p));
+		
+		return chunks;
 	}
 }

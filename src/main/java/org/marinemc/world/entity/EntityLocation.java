@@ -31,7 +31,7 @@ public class EntityLocation extends Location {
 		if (!referenceCheck())
 			ent.get().teleport(x, y, z);
 		else
-			self().setX(x);
+			super.setX(x);
 	}
 
 	public void localSetX(final double x) {
@@ -49,7 +49,7 @@ public class EntityLocation extends Location {
 	@Override
 	public void setY(final Double y) {
 		if (referenceCheck())
-			self().setY(y);
+			super.setY(y);
 		else
 			ent.get().teleport(x, y, z);
 	}
@@ -57,7 +57,7 @@ public class EntityLocation extends Location {
 	@Override
 	public void setZ(final Double z) {
 		if (referenceCheck())
-			self().setZ(z);
+			super.setZ(z);
 		else
 			ent.get().teleport(x, y, z);
 	}
@@ -65,7 +65,7 @@ public class EntityLocation extends Location {
 	@Override
 	public void setPitch(final float pitch) {
 		if (referenceCheck())
-			self().setPitch(pitch);
+			super.setPitch(pitch);
 		else
 			ent.get().look(pitch, yaw);
 	}
@@ -73,21 +73,21 @@ public class EntityLocation extends Location {
 	@Override
 	public void setYaw(final float yaw) {
 		if (referenceCheck())
-			self().setYaw(yaw);
+			super.setYaw(yaw);
 		else
 			ent.get().look(pitch, yaw);
 	}
 
 	private boolean referenceCheck() {
-		return ent == null;
+		return ent.get() == null;
 	}
 
 	protected void localSetPitch(final float pitch) {
-		self().setPitch(pitch);
+		super.setPitch(pitch);
 	}
 
 	protected void localSetYaw(final float yaw) {
-		self().setYaw(yaw);
+		super.setYaw(yaw);
 	}
 
 }

@@ -19,6 +19,13 @@
 
 package org.marinemc.game.player;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
 import org.marinemc.game.CommandManager;
 import org.marinemc.game.chat.ChatColor;
 import org.marinemc.game.chat.ChatMessage;
@@ -34,7 +41,12 @@ import org.marinemc.net.Client;
 import org.marinemc.net.packets.player.PlayerAbilitesPacket;
 import org.marinemc.net.packets.player.PlayerLookPacket;
 import org.marinemc.net.packets.player.PlayerLookPositionPacket;
-import org.marinemc.net.packets.world.*;
+import org.marinemc.net.packets.world.BlockChangePacket;
+import org.marinemc.net.packets.world.ChunkPacket;
+import org.marinemc.net.packets.world.MapChunkPacket;
+import org.marinemc.net.packets.world.SpawnPointPacket;
+import org.marinemc.net.packets.world.TimeUpdatePacket;
+import org.marinemc.net.packets.world.UnloadChunkPacket;
 import org.marinemc.net.play.clientbound.ChatPacket;
 import org.marinemc.net.play.clientbound.KickPacket;
 import org.marinemc.net.play.clientbound.inv.InventoryContentPacket;
@@ -46,6 +58,7 @@ import org.marinemc.util.Location;
 import org.marinemc.util.Position;
 import org.marinemc.util.StringComparison;
 import org.marinemc.util.annotations.Cautious;
+import org.marinemc.util.annotations.Clientside;
 import org.marinemc.util.vectors.Vector3d;
 import org.marinemc.world.BlockID;
 import org.marinemc.world.Gamemode;
@@ -55,8 +68,6 @@ import org.marinemc.world.entity.Entity;
 import org.marinemc.world.entity.EntityTracker;
 import org.marinemc.world.entity.EntityType;
 import org.marinemc.world.entity.LivingEntity;
-
-import java.util.*;
 
 /**
  * The online ingame Player instance object
@@ -139,7 +150,7 @@ public class Player extends LivingEntity implements IPlayer, CommandSender,
 		spawnedEntities = new ArrayList<Integer>(); // Could be an set but for
 													// integers linear search
 													// quicker than Hashing
-		loadedChunks = new ArrayList<Long>();
+		loadedChunks = new ArrayList<>();
 		this.isFlying = isFlying;
 		this.canFly = canFly;
 		this.inventory = inventory;
@@ -347,7 +358,7 @@ public class Player extends LivingEntity implements IPlayer, CommandSender,
 	public boolean hasPermission(final String permission) {
 		return PermissionManager.instance().hasPermission(this, permission);
 	}
-
+ 
 	@Override
 	public boolean hasPermission(final Permission permission) {
 		return PermissionManager.instance().hasPermission(this, permission);
@@ -447,6 +458,7 @@ public class Player extends LivingEntity implements IPlayer, CommandSender,
 		getClient().sendPacket(new TimeUpdatePacket(getWorld()));
 	}
 
+	@Clientside
 	public void unloadChunk(final ChunkPos c) {
 		if (loadedChunks.contains(c.encode())) {
 			getClient().sendPacket(new UnloadChunkPacket(c));
@@ -458,21 +470,27 @@ public class Player extends LivingEntity implements IPlayer, CommandSender,
 		if (loadedChunks.contains(c.getPos().encode()))
 			return false;
 		loadedChunks.add(c.getPos().encode());
+		c.subscribePlayer(this);
 		getClient().sendPacket(new ChunkPacket(c));
 		return true;
 	}
 
 	public boolean sendChunks(final List<Chunk> chunks) {
-		if (!Assert.notEmpty(chunks))
-			return false;
-		for (final Chunk c : chunks)
-			if (loadedChunks.contains(c.getPos().encode()))
-				chunks.remove(c);
-			else
+		
+		List<Chunk> toSend = new ArrayList<>(chunks);
+		
+		for (Chunk c : chunks)
+			if (loadedChunks.contains(c.getPos()))
+				toSend.remove(c);
+			else {
+				c.subscribePlayer(this);
 				loadedChunks.add(c.getPos().encode());
-		if (chunks.isEmpty())
+			}
+		if (toSend.isEmpty())
 			return false;
-		getClient().sendPacket(new MapChunkPacket(getWorld(), chunks));
+		
+		getClient().sendPacket(new MapChunkPacket(getWorld(), toSend));
+		
 		return true;
 	}
 
@@ -485,36 +503,40 @@ public class Player extends LivingEntity implements IPlayer, CommandSender,
 		return name;
 	}
 
+	public void updateStreaming() {
+		Marine.getServer().getPlayerManager().getWorldStreamer().asyncStreaming(uid);
+	}
+	
 	// TODO Fix unloading :p
-	public void localChunkRegion(final int w, final int h) {
-		final List<Long> chunksToSend = new ArrayList<Long>();
-		// final List<Long> chunksToUnload = new ArrayList<Long>();
+	public void localChunkRegion(final int size) {
+		final List<Long> chunksToRemove = new ArrayList<>(loadedChunks);
 
-		System.out.println("Invoke");
+		int sent = 0;
+		
+		int chunkX = (int) getX() / 16;
+		int chunkY = (int) getZ() / 16;
 
-		// Put missing chunks for sending
-		for (int x = -w; x < w / 2; x++)
-			for (int y = -(h / 2); y < h / 2; y++)
-				if (!loadedChunks.contains(ChunkPos.Encode(x, y)))
-					chunksToSend.add(ChunkPos.Encode(x, y));
+		int viewDistance = Marine.getServer().getViewDistance();
 
-		// // Remove extra chunks
-		// for(Long l : loadedChunks) {
-		// ChunkPos c = new ChunkPos(l);
-		// if(!MathUtils.isInsideRect((int)getX(), (int)getY(), w,h, c.x, c.y))
-		// chunksToUnload.add(l);
-		// }
+		for (int x = (chunkX - viewDistance); x <= (chunkX + viewDistance); x++)
+			for (int y = (chunkY - viewDistance); y <= (chunkY + viewDistance); y++) {
+				final ChunkPos chunkPosition = new ChunkPos(x, y);
 
-		// for(Long l : chunksToUnload)
-		// getWorld().getChunkForce(new ChunkPos(l)).unload(this);
+				if (!loadedChunks.contains(chunkPosition.encode())) {
+					// Send the chunks that are missing.
+					sendChunk(Marine.getServer().getWorldManager().getMainWorld().getChunkForce(chunkPosition));
+					++sent;
+				}
 
-		if (chunksToSend.size() > 1) {
-			final List<Chunk> chunks = new ArrayList<>(chunksToSend.size());
-			for (final Long l : chunksToSend)
-				chunks.add(getWorld().getChunkForce(new ChunkPos(l)));
-		} else
-			for (final Long l : chunksToSend)
-				sendChunk(getWorld().getChunkForce(new ChunkPos(l)));
+				chunksToRemove.remove(chunkPosition);
+			}
+
+		// Unload any chunks outside the area
+//		for (Long p : chunksToRemove)
+//			Marine.getServer().getWorldManager().getMainWorld().getChunkForce(new ChunkPos(p)).unload(this);
+	
+		chunksToRemove.clear();
+		System.out.println("Sent: " + sent);
 	}
 
 	@Override
@@ -535,7 +557,7 @@ public class Player extends LivingEntity implements IPlayer, CommandSender,
 
 	@Override
 	public void killLocalEntities(final Integer[] e) {
-
+		// TODO Send delete entities request
 	}
 
 	@Override
@@ -580,5 +602,9 @@ public class Player extends LivingEntity implements IPlayer, CommandSender,
 		if (trackingEntities.containsKey(e.getEntityID()))
 			return trackingEntities.get(e.getEntityID());
 		return null;
+	}
+	
+	public int hashCode() {
+		return uid;
 	}
 }

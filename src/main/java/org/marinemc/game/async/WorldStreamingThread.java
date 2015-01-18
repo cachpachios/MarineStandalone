@@ -19,7 +19,10 @@
 
 package org.marinemc.game.async;
 
+import java.util.ArrayList;
+
 import org.marinemc.game.PlayerManager;
+import org.marinemc.game.player.Player;
 import org.marinemc.logging.Logging;
 import org.marinemc.server.Marine;
 
@@ -36,9 +39,12 @@ public class WorldStreamingThread extends Thread {
 	final PlayerManager manager;
 	private long time;
 
+	private ArrayList<Short> streamingRequested;
+	
 	public WorldStreamingThread(final PlayerManager playerManager) {
 		super("WorldStreamer");
 		manager = playerManager;
+		streamingRequested = new ArrayList<Short>();
 	}
 
 	@Override
@@ -61,17 +67,21 @@ public class WorldStreamingThread extends Thread {
 							.error("The WorldStreamer got interupted :S, Recommending restart!");
 				}
 
-			time = System.nanoTime();
+			//The update
 
-			// TODO FIX
-			// for (final Player p : manager.getPlayers()) {
-			//	if(!p.isStreamingNeeded()) continue;
-			//	p.getWorld().generateAsyncRegion((int) p.getX(),
-			//			(int) p.getY(),
-			//			Marine.getServer().getViewDistance() * 2,
-			//			Marine.getServer().getViewDistance() * 2);
-			//	p.localChunkRegion(Marine.getServer().getViewDistance()); // Send the chunks
-			// }
+			
+			//To minimize lock time the list is moved to a new Short array.
+			Short[] streamers = new Short[streamingRequested.size()];
+			
+			synchronized(streamingRequested) {
+				streamers = streamingRequested.toArray(streamers);
+				streamingRequested.clear();
+			}
+			
+			for(Short s : streamers)
+				Marine.getServer().getPlayer(s).localChunkRegion(Marine.getServer().getViewDistance());
+			
+			time = System.nanoTime();
 
 			try {
 				WorldStreamingThread.sleep(nonNeg(sleepTime
@@ -88,5 +98,12 @@ public class WorldStreamingThread extends Thread {
 			return i;
 		else
 			return 0;
+	}
+
+	public void asyncStreaming(short uid) {
+		synchronized(streamingRequested) {
+			if(!streamingRequested.contains(uid));
+				streamingRequested.add(uid);
+		}
 	}
 }

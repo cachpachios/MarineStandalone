@@ -143,7 +143,7 @@ public class PlayerManager {
 
 		p.sendPositionAndLook();
 
-		// p.updateExp();
+		// p.updateExp(); TODO Error
 		p.sendChunks(p.getWorld().getSpawnChunks(p));
 
 		p.sendPositionAndLook();
@@ -184,6 +184,8 @@ public class PlayerManager {
 	
 	public void moveLookPlayerFromPacket(final Client c, final ByteInput data) {
 		final Player p;
+
+		System.out.println("Move!");
 		if(c.getUID() == -1)
 			return;
 		else
@@ -198,22 +200,50 @@ public class PlayerManager {
 			if(packet.getLocation() == null)
 				return;
 			
-			if(p.getLocation().x == packet.getLocation().getX() && p.getLocation().y == packet.getLocation().getY() && p.getLocation().z == packet.getLocation().getZ())
+			boolean anyChange = false;
+			
+			Location copy = null;
+			boolean copied = true;
+			try {
+				copy = (Location) p.getLocation().clone();
+			} catch (CloneNotSupportedException e) {
+				copied = false;
+			}
+			
+			if(packet.getLocation().x != p.getX()) {
+				p.getLocation().setX(packet.getLocation().getX());
+				anyChange = true;
+			}
+			
+			if(packet.getLocation().y != p.getY()) {
+				p.getLocation().setY(packet.getLocation().getY());
+				anyChange = true;
+			}
+			
+			if(packet.getLocation().z != p.getZ()) {
+				p.getLocation().setZ(packet.getLocation().getZ());
+				anyChange = true;
+			}
+			
+			// If no change has accure why bother?
+			if(!anyChange)
 				return;
 			
+			// Add the movment to the async movmentvalidator to validate it
 			movmentValidator.putForValidation(p, new Movment(p.getLocation(), packet.getLocation()));
+			if(copied)
+				if(copy.getEuclideanDistanceSquared(packet.getLocation()) > 16*16)
+					worldStreamer.asyncStreaming(p.getUID());
+				else
+					worldStreamer.asyncStreaming(p.getUID());
 			
-			if(packet.getLocation().getEuclideanDistanceSquared(p.getLocation()) > 16)
-				p.teleport(packet.getLocation());
-			else
-				p.move(p.getX() - packet.getLocation().x, p.getY() - packet.getLocation().y, p.getZ() - packet.getLocation().z);
-		// TODO FIX p.updateStreaming();
-			
-			packet = null;
+			copy = null;
 	}
 
 	public void movePlayerFromPacket(final Client c, final ByteInput data) {
 		final Player p;
+
+		System.out.println("Move!");
 		if(c.getUID() == -1)
 			return;
 		else
@@ -221,20 +251,26 @@ public class PlayerManager {
 		
 		if(p == null) return;
 		
-		PlayerPositionPacket packet = new PlayerPositionPacket();
-		packet.readFromBytes(data);
-
-		if(p.getLocation().x == packet.getX() && p.getLocation().y == packet.getY() && p.getLocation().z == packet.getZ())
-			return;
-		
-		
-		if(packet.getLocation().getEuclideanDistanceSquared(p.getLocation()) > 16)
-			p.teleport(packet.getLocation());
-		else
-			p.move(p.getX() - packet.getX(), p.getY() - packet.getY(), p.getZ() - packet.getY());
-		// TODO FIX p.updateStreaming();
-		
-		packet = null;
+			PlayerPositionPacket packet = new PlayerPositionPacket();
+			
+			packet.readFromBytes(data);
+			
+			if(packet.getX() != p.getX()) {
+				p.getLocation().setX(packet.getX());
+			}
+			
+			if(packet.getY() != p.getY()) {
+				p.getLocation().setY(packet.getY());
+			}
+			
+			if(packet.getLocation().z != p.getZ()) {
+				p.getLocation().setZ(packet.getZ());
+			}
+			
+			// Add the movment to the async movmentvalidator to validate it
+			movmentValidator.putForValidation(p, new Movment(p.getLocation(), packet.getLocation()));
+			
+			worldStreamer.asyncStreaming(p.getUID());
 	}
 	
 	/**
@@ -381,6 +417,10 @@ public class PlayerManager {
 
 	public boolean isEmpty() {
 		return players.isEmpty();
+	}
+
+	public WorldStreamingThread getWorldStreamer() {
+		return worldStreamer;
 	}
 
 }

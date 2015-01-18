@@ -57,4 +57,11 @@ public class ChunkPos extends Vector2i implements Comparable<ChunkPos> {
 	public String toString() {
 		return "X: " + x + " Y: " + y;
 	}
+
+	public double getDistanceFromXY(Integer x, Integer y) {
+		int X = this.x - x;
+		int Y = this.y - y;
+		
+		return (float)Math.sqrt(X * X + Y * Y);
+	}
 }
