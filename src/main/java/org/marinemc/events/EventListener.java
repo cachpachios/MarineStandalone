@@ -65,6 +65,11 @@ public abstract class EventListener<T extends Event> {
 	}
 
 	@Override
+	final public String toString() {
+		return this.listeningTo();
+	}
+
+	@Override
 	final public int hashCode() {
 		return accessor;
 	}

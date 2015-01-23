@@ -19,16 +19,11 @@
 
 package org.marinemc.events;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.marinemc.Bootstrap;
 import org.marinemc.logging.Logging;
 import org.marinemc.plugins.Plugin;
+
+import java.util.*;
 
 /**
  * Event Manager
@@ -57,6 +52,20 @@ public class EventManager {
 		if (instance == null)
 			instance = new EventManager();
 		return instance;
+	}
+
+	public Collection<EventListener> getAll(final Plugin plugin) {
+		synchronized (listeners) {
+			final List<EventListener> l = new ArrayList<>();
+			for (final Deque<EventListener> listeners : this.listeners.values()) {
+				for (final EventListener listener : listeners) {
+					if (listener.getIDENTIFIERObject() instanceof Plugin
+							&& listener.getIDENTIFIERObject().equals(plugin))
+						l.add(listener);
+				}
+			}
+			return l;
+		}
 	}
 
 	/**

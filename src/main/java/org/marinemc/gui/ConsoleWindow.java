@@ -144,7 +144,7 @@ public class ConsoleWindow extends OutputStream {
 					if (pure.length < 2) {
 						args = new String[0];
 					} else {
-						List<String> sar = new ArrayList<String>();
+						List<String> sar = new ArrayList<>();
 						for (int x = 1; x < pure.length; x++) {
 							if (pure[x] != null)
 								sar.add(pure[x]);
@@ -155,8 +155,10 @@ public class ConsoleWindow extends OutputStream {
 					history.reset();
 					input.setText("");
 					Marine.getServer().getConsoleSender().executeCommand(command, args);
-				} else if (e.getKeyCode() == KeyEvent.VK_TAB) {
-					Logging.getLogger().log("Tab Completion Isn't Implemented Yet :(");
+				} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+					history.add(input.getText());
+					history.reset();
+					input.setText("");
 				}
 			}
 

@@ -195,7 +195,7 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
 		final Command[] defaults = new Command[] { new Info(), new Help(),
 				new Test(), new Say(), new Stop(), new Plugins(),
 				new SendAboveActionBarMessage(), new Teleport(), new Me(),
-				new Tellraw(), new List(), };
+				new Tellraw(), new List(), new Plugin()};
 		final CommandManager commandManager = CommandManager.getInstance();
 		for (final Command command : defaults)
 			commandManager.registerCommand(this, command);
