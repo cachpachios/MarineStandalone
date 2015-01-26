@@ -63,6 +63,7 @@ public class PluginLoader {
 	private final PluginManager manager;
 	private final String[] BLOCKED_NAMES = new String[] { "org.marinemc",
 			"com.intellectualsites.marinemc" };
+	private String[] ticking;
 
 	/**
 	 * Constructor
@@ -78,6 +79,21 @@ public class PluginLoader {
 		this.manager = manager;
 		loaders = new ConcurrentHashMap<>();
 		classes = new ConcurrentHashMap<>();
+	}
+
+	public void tickTicking() {
+		if (ticking == null) {
+			final List<String> ticking = new ArrayList<>();
+			for (final Plugin p : manager.getEnabledPlugins()) {
+				if (p.getDesc().shouldTick) {
+					ticking.add(p.getProviderName());
+				}
+			}
+			this.ticking = ticking.toArray(new String[ticking.size()]);
+		}
+		for (final String s : ticking) {
+			manager.getPlugin(s).tick();
+		}
 	}
 
 	/**

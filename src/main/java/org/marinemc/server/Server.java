@@ -164,13 +164,12 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
 				break;
 			}
 		Logging.getLogger().log(
-				"World Generation took: " + (System.nanoTime() - generateTime)
-						/ 1000 / 1000 + "ms.");
+				"World Generation took: " + ((System.nanoTime() - generateTime) / 1_000_000) + "ms.");
 		EventManager.getInstance().bake();
 		callEvent(new ServerReadyEvent());
 		timer.scheduleAtFixedRate(this, 0l, 1000 / tickRate);
 		PermissionManager.instance().load();
-		UUIDHandler.instance(); // Make sure to init.
+		UUIDHandler.instance().test(); // Make sure to init.
 		getScheduler().createAsyncTask(new MojangTask());
 	}
 
@@ -185,6 +184,7 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
 			networkManager.tryConnections();
 			playerManager.tickAllPlayers();
 			scheduler.tickSync();
+			pluginLoader.tickTicking();
 		} catch (final Throwable e) {
 			Logging.getLogger().error(
 					"Something went wrong in the main thread...", e);

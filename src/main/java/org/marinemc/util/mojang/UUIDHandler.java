@@ -19,15 +19,9 @@
 
 package org.marinemc.util.mojang;
 
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-
+import com.google.common.base.Charsets;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -37,11 +31,17 @@ import org.marinemc.logging.Logging;
 import org.marinemc.server.Marine;
 import org.marinemc.settings.JSONConfig;
 import org.marinemc.settings.ServerSettings;
+import org.marinemc.util.Assert;
 import org.marinemc.util.StringUtils;
 
-import com.google.common.base.Charsets;
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * UUID Handler - Undocumented!
@@ -120,6 +120,10 @@ public class UUIDHandler {
 		if (instance == null)
 			instance = new UUIDHandler();
 		return instance;
+	}
+
+	public void test() {
+		Assert.notNull(instance);
 	}
 
 	public double hoursSince(final long time) {

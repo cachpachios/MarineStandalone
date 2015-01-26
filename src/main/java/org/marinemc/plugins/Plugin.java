@@ -64,6 +64,12 @@ public class Plugin implements ServiceProvider {
 		enabled = false;
 	}
 
+	/**
+	 * Do you want your plugin to tick?
+	 */
+	public void tick() {
+	}
+
 	final public void create(final PluginFile desc, final File data,
 			final PluginClassLoader classLoader) {
 		Assert.notNull(desc, data, classLoader);

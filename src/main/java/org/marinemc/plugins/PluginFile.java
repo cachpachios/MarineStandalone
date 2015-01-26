@@ -19,11 +19,11 @@
 
 package org.marinemc.plugins;
 
-import java.io.InputStream;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+
+import java.io.InputStream;
 
 /**
  * The plugin description file
@@ -37,6 +37,7 @@ public class PluginFile {
 	public final String author;
 	public final String version;
 	public final JSONArray dependencies;
+	public final boolean shouldTick;
 
 	/**
 	 * Constructor
@@ -54,6 +55,8 @@ public class PluginFile {
 		mainClass = object.getString("main");
 		author = object.getString("author");
 		version = object.getString("version");
+		shouldTick = !object.isNull("tick") && object.getBoolean("tick");
+
 		if (object.isNull("depends"))
 			dependencies = new JSONArray();
 		else

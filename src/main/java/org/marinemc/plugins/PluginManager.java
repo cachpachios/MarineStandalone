@@ -19,9 +19,7 @@
 
 package org.marinemc.plugins;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  * Plugin Manager
@@ -32,13 +30,13 @@ import java.util.List;
  */
 public class PluginManager {
 
-	private final List<Plugin> plugins;
+	private final Map<String, Plugin> plugins;
 
 	/**
 	 * Constructor
 	 */
 	public PluginManager() {
-		plugins = new ArrayList<>();
+		plugins = new HashMap<>();
 	}
 
 	/**
@@ -49,7 +47,7 @@ public class PluginManager {
 	 *            Plugin to add
 	 */
 	public void addPlugin(final Plugin plugin) {
-		plugins.add(plugin);
+		plugins.put(plugin.getProviderName(), plugin);
 	}
 
 	/**
@@ -59,8 +57,12 @@ public class PluginManager {
 	 *            Plugin to remove
 	 */
 	public void removePlugin(final Plugin plugin) {
-		if (plugins.contains(plugin))
-			plugins.remove(plugin);
+		if (plugins.containsKey(plugin.getProviderName()))
+			plugins.remove(plugin.getProviderName());
+	}
+
+	public Plugin getPlugin(final String providerName) {
+		return this.plugins.get(providerName);
 	}
 
 	/**
@@ -73,7 +75,7 @@ public class PluginManager {
 	 *             #addPlugin(com.marine.Plugin)}
 	 */
 	protected void enablePlugin(final Plugin plugin) {
-		if (!plugins.contains(plugin))
+		if (!plugins.containsKey(plugin.getProviderName()))
 			throw new RuntimeException("Plugin: " + plugin.getName()
 					+ " is not added to the plugin list, can't enable");
 		plugin.enable();
@@ -89,7 +91,7 @@ public class PluginManager {
 	 *             #addPlugin(com.marine.Plugin)}
 	 */
 	protected void disablePlugin(final Plugin plugin) {
-		if (!plugins.contains(plugin))
+		if (!plugins.containsKey(plugin.getProviderName()))
 			throw new RuntimeException("Plugin: " + plugin.getName()
 					+ " is not added to the plugin list, can't disable");
 		plugin.disable();
@@ -101,7 +103,7 @@ public class PluginManager {
 	 * @return all plugins
 	 */
 	public Collection<Plugin> getPlugins() {
-		return plugins;
+		return plugins.values();
 	}
 
 	/**
@@ -111,7 +113,7 @@ public class PluginManager {
 	 */
 	public Collection<String> getPluginNames() {
 		final List<String> strings = new ArrayList<>();
-		for (final Plugin plugin : plugins)
+		for (final Plugin plugin : plugins.values())
 			strings.add(plugin.getName());
 		return strings;
 	}
@@ -123,7 +125,7 @@ public class PluginManager {
 	 */
 	public Collection<Plugin> getEnabledPlugins() {
 		final Collection<Plugin> plugins = new ArrayList<>();
-		for (final Plugin plugin : this.plugins)
+		for (final Plugin plugin : this.plugins.values())
 			if (plugin.isEnabled())
 				plugins.add(plugin);
 		return plugins;
