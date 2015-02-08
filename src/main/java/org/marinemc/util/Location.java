@@ -276,14 +276,14 @@ public class Location extends Vector3d implements JSONAware, Cloneable,
 	/**
 	 * Where the actual distance is important
 	 *
-	 * @param l2
+	 * @param vector3d
 	 *            Other location
 	 * @return distance (actual)
 	 */
-	public double getEuclideanDistance(final Location l2) {
-		double x = getX() - l2.getX();
-		double y = getY() - l2.getY();
-		double z = getZ() - l2.getZ();
+	public double getEuclideanDistance(final Vector3d vector3d) {
+		double x = getX() - vector3d.getX();
+		double y = getY() - vector3d.getY();
+		double z = getZ() - vector3d.getZ();
 		x *= x;
 		y *= y;
 		z *= z;
@@ -297,7 +297,7 @@ public class Location extends Vector3d implements JSONAware, Cloneable,
 	 *            Other location
 	 * @return distance squared
 	 */
-	public double getEuclideanDistanceSquared(final Location l2) {
+	public double getEuclideanDistanceSquared(final Vector3d l2) {
 		final double x = getX() - l2.getX(), y = getY() - l2.getY(), z = getZ()
 				- l2.getZ();
 		return x * x + y * y + z * z;

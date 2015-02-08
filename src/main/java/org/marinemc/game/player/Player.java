@@ -513,30 +513,28 @@ public class Player extends LivingEntity implements IPlayer, CommandSender,
 
 		int sent = 0;
 		
-		int chunkX = (int) getX() / 16;
-		int chunkY = (int) getZ() / 16;
+		int chunkX = getBlockX() >> 4;
+        int chunkZ = getBlockZ() >> 4;
 
-		int viewDistance = Marine.getServer().getViewDistance();
+        int radius = Marine.getServer().getViewDistance();
+        for (int x = (chunkX - radius); x <= (chunkX + radius); x++) {
+            for (int z = (chunkZ - radius); z <= (chunkZ + radius); z++) {
+                final ChunkPos pos = new ChunkPos(x, z);
+                if (loadedChunks.contains(pos.encode())) {
+                	chunksToRemove.remove(pos.encode());
+                } else {
+                	sendChunk(Marine.getServer().getWorldManager().getMainWorld().getChunkForce(pos));
+                	++sent;
+                }
+            }
+        }
 
-		for (int x = (chunkX - viewDistance); x <= (chunkX + viewDistance); x++)
-			for (int y = (chunkY - viewDistance); y <= (chunkY + viewDistance); y++) {
-				final ChunkPos chunkPosition = new ChunkPos(x, y);
-
-				if (!loadedChunks.contains(chunkPosition.encode())) {
-					// Send the chunks that are missing.
-					sendChunk(Marine.getServer().getWorldManager().getMainWorld().getChunkForce(chunkPosition));
-					++sent;
-				}
-
-				chunksToRemove.remove(chunkPosition);
-			}
-
-		// Unload any chunks outside the area
-//		for (Long p : chunksToRemove)
-//			Marine.getServer().getWorldManager().getMainWorld().getChunkForce(new ChunkPos(p)).unload(this);
+//		 Unload any chunks outside the area
+		for (Long p : chunksToRemove)
+			Marine.getServer().getWorldManager().getMainWorld().getChunkForce(new ChunkPos(p)).unload(this);
 	
 		chunksToRemove.clear();
-		System.out.println("Sent: " + sent);
+		System.out.println("Sent: ("+chunkX+"("+getX()+"), "+chunkZ+"("+getZ()+")) " + sent);
 	}
 
 	@Override

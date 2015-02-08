@@ -43,6 +43,7 @@ import org.marinemc.util.Location;
 import org.marinemc.util.annotations.Cautious;
 import org.marinemc.util.annotations.Hacky;
 import org.marinemc.util.mojang.UUIDHandler;
+import org.marinemc.util.vectors.Vector3d;
 import org.marinemc.util.wrapper.Movment;
 import org.marinemc.world.entity.EntityType;
 
@@ -197,10 +198,9 @@ public class PlayerManager {
 			
 			packet.readFromBytes(data);
 			
-			if(packet.getLocation() == null)
-				return;
-			
 			boolean anyChange = false;
+			
+			// Coping to not cause async errors :/
 			
 			Location copy = null;
 			boolean copied = true;
@@ -210,18 +210,18 @@ public class PlayerManager {
 				copied = false;
 			}
 			
-			if(packet.getLocation().x != p.getX()) {
-				p.getLocation().setX(packet.getLocation().getX());
+			if(packet.getX() != p.getX()) {
+				p.getLocation().setX(packet.getX());
 				anyChange = true;
 			}
 			
-			if(packet.getLocation().y != p.getY()) {
-				p.getLocation().setY(packet.getLocation().getY());
+			if(packet.getY() != p.getY()) {
+				p.getLocation().setY(packet.getY());
 				anyChange = true;
 			}
 			
-			if(packet.getLocation().z != p.getZ()) {
-				p.getLocation().setZ(packet.getLocation().getZ());
+			if(packet.getZ() != p.getZ()) {
+				p.getLocation().setZ(packet.getZ());
 				anyChange = true;
 			}
 			
@@ -230,9 +230,11 @@ public class PlayerManager {
 				return;
 			
 			// Add the movment to the async movmentvalidator to validate it
-			movmentValidator.putForValidation(p, new Movment(p.getLocation(), packet.getLocation()));
+			final Vector3d finalPos = new Vector3d(packet.getX(),packet.getY(), packet.getZ());
+			
+			movmentValidator.putForValidation(p, new Movment(p.getLocation(), finalPos));
 			if(copied)
-				if(copy.getEuclideanDistanceSquared(packet.getLocation()) > 16*16)
+				if(copy.getEuclideanDistanceSquared(finalPos) > 16*16)
 					worldStreamer.asyncStreaming(p.getUID());
 				else
 					worldStreamer.asyncStreaming(p.getUID());
@@ -263,7 +265,7 @@ public class PlayerManager {
 				p.getLocation().setY(packet.getY());
 			}
 			
-			if(packet.getLocation().z != p.getZ()) {
+			if(packet.getZ() != p.getZ()) {
 				p.getLocation().setZ(packet.getZ());
 			}
 			

@@ -2,10 +2,11 @@ package org.marinemc.util.wrapper;
 
 import org.marinemc.util.Location;
 import org.marinemc.util.ObjectMeta;
+import org.marinemc.util.vectors.Vector3d;
 
-public class Movment extends ObjectMeta<Location, Location> {
+public class Movment extends ObjectMeta<Location, Vector3d> {
 
-	public Movment(final Location pos, final Location target) {
+	public Movment(final Location pos, final Vector3d target) {
 		super(pos, target);
 	}
 
@@ -21,7 +22,7 @@ public class Movment extends ObjectMeta<Location, Location> {
 		return get().y - getMeta().getZ();
 	}
 
-	public Location getTargetLocation() {
+	public Vector3d getTargetLocation() {
 		return getMeta();
 	}
 

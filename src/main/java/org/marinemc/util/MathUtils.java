@@ -34,6 +34,11 @@ public class MathUtils {
 			return v;
 	}
 
+    public static int floor(double num) {
+        final int numInt = (int) num;
+        return numInt == num ? numInt : numInt - (int) (Double.doubleToRawLongBits(num) >>> 63);
+    }
+	
 	public static boolean isInsideRect(final int x, final int y, int w, int h,
 			final int X, final int Y) {
 		if ((w | h) < 0)

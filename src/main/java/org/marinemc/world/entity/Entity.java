@@ -24,6 +24,7 @@ import java.util.Set;
 
 import org.marinemc.logging.Logging;
 import org.marinemc.util.Location;
+import org.marinemc.util.MathUtils;
 import org.marinemc.util.Position;
 import org.marinemc.util.annotations.Cautious;
 import org.marinemc.util.annotations.Serverside;
@@ -107,6 +108,18 @@ public abstract class Entity {
 		return position.getZ();
 	}
 
+	public int getBlockX() {
+		return MathUtils.floor(getX());
+	}
+	
+	public int getBlockY() {
+		return MathUtils.floor(getY());
+	}
+	
+	public int getBlockZ() {
+		return MathUtils.floor(getZ());
+	}
+	
 	public Vector3i getRelativeLocation() {
 		return position.getRelativePosition();
 	}
@@ -139,8 +152,8 @@ public abstract class Entity {
 		//TODO: Update our little subscribers/trackers
 		
 		position.localSetX(x);
-		position.localSetY(x);
-		position.localSetZ(x);
+		position.localSetY(y);
+		position.localSetZ(z);
 
 	}
 
@@ -148,8 +161,8 @@ public abstract class Entity {
 		//TODO: Update our little subscribers/trackers
 		
 		position.localSetX(x);
-		position.localSetY(x);
-		position.localSetZ(x);
+		position.localSetY(y);
+		position.localSetZ(z);
 	}
 
 	@Cautious

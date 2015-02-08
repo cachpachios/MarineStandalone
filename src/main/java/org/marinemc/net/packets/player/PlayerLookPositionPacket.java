@@ -17,11 +17,18 @@ import org.marinemc.util.Location;
  */
 public class PlayerLookPositionPacket extends Packet {
 
-	Location location;
+	double x,y,z;
+	float yaw,pitch;
 	
-	public PlayerLookPositionPacket(Location l) {
+	boolean onGround;
+	
+	public PlayerLookPositionPacket(final Location l) {
 		this();
-		this.location = l;
+		this.x = l.getX();
+		this.y = l.getY();
+		this.z = l.getZ();
+		this.yaw = l.getYaw();
+		this.pitch = l.getPitch();
 	}
 	
 	public PlayerLookPositionPacket() {
@@ -32,14 +39,14 @@ public class PlayerLookPositionPacket extends Packet {
 	public void writeToStream(final PacketOutputStream stream)	throws IOException {
 		final ByteList d = new ByteList();
 		
-		d.writeDouble(location.getX());
-		d.writeDouble(location.getY());
-		d.writeDouble(location.getZ());
+		d.writeDouble(x);
+		d.writeDouble(y);
+		d.writeDouble(z);
 
-		d.writeFloat(location.getYaw());
-		d.writeFloat(location.getPitch());
+		d.writeFloat(yaw);
+		d.writeFloat(pitch);
 
-		d.writeBoolean(location.isOnGround());
+		d.writeBoolean(onGround);
 		
 		//Other id for outgoing
 		stream.write(0x08, d);
@@ -49,15 +56,60 @@ public class PlayerLookPositionPacket extends Packet {
 	public void readFromBytes(final ByteInput input) {
 		if(input.getRemainingBytes() < 30)
 			return;
-		final double x = input.readDouble();
-		final double y = input.readDouble();
-		final double z = input.readDouble();
-		final float yaw = input.readFloat();
-		final float pitch = input.readFloat();
+		x = input.readDouble();
+		y = input.readDouble();
+		z = input.readDouble();
 		
-		location = new Location(null, x, y, z, yaw, pitch);
-		location.setOnGround(input.readBoolean()); // onGround
+		yaw = input.readFloat();
+		pitch = input.readFloat();
+		onGround = input.readBoolean(); // onGround
 	}
-	
-	public Location getLocation() { return location; }
+
+	public double getX() {
+		return x;
+	}
+
+	public void setX(double x) {
+		this.x = x;
+	}
+
+	public double getY() {
+		return y;
+	}
+
+	public void setY(double y) {
+		this.y = y;
+	}
+
+	public double getZ() {
+		return z;
+	}
+
+	public void setZ(double z) {
+		this.z = z;
+	}
+
+	public float getYaw() {
+		return yaw;
+	}
+
+	public void setYaw(float yaw) {
+		this.yaw = yaw;
+	}
+
+	public float getPitch() {
+		return pitch;
+	}
+
+	public void setPitch(float pitch) {
+		this.pitch = pitch;
+	}
+
+	public boolean isOnGround() {
+		return onGround;
+	}
+
+	public void setOnGround(boolean onGround) {
+		this.onGround = onGround;
+	}
 }
