@@ -508,7 +508,10 @@ public class Player extends LivingEntity implements IPlayer, CommandSender,
 	}
 	
 	// TODO Fix unloading :p
-	public void localChunkRegion(final int size) {
+	/**
+	 * Checks if any chunks need to be sent to the client and puts a greater surronding area for generation if the players starts to move
+	 */
+	public void localChunkRegion() {
 		final List<Long> chunksToRemove = new ArrayList<>(loadedChunks);
 
 		int sent = 0;
@@ -529,6 +532,9 @@ public class Player extends LivingEntity implements IPlayer, CommandSender,
             }
         }
 
+        // Tells the server to asyncly generate chunks around to ensure that the region is avalible when requested
+        getWorld().generateAsyncRegion(chunkX, chunkZ, (int)(Marine.getServer().getViewDistance() * 1.5), (int)(Marine.getServer().getViewDistance() * 1.5));
+        
 //		 Unload any chunks outside the area
 		for (Long p : chunksToRemove)
 			Marine.getServer().getWorldManager().getMainWorld().getChunkForce(new ChunkPos(p)).unload(this);
