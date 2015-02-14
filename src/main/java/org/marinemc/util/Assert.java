@@ -19,6 +19,8 @@
 
 package org.marinemc.util;
 
+import org.json.JSONObject;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
@@ -67,6 +69,10 @@ public class Assert {
 			throw new AssertionError("o doesn't equal t");
 		}
 	}
+
+    public static void AssertJSONChild(final JSONObject object, final String key) {
+        requireFalse(object.isNull(key));
+    }
 
 	public static void requireTrue(boolean b) {
 		equals(b, true);

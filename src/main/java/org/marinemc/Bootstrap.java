@@ -52,9 +52,8 @@ public class Bootstrap {
 	}
 	// SECURITY CHECK END
 	// //////////////////////////////////////////////////////////////////////////////////////////////
-
-	private static Bootstrap instance;
-
+    public static long aLong;
+    private static Bootstrap instance;
 	public List<String> arguments;
 
 	public Bootstrap() {
@@ -153,6 +152,8 @@ public class Bootstrap {
 	}
 
 	private void start(final String[] args) {
+        aLong = System.nanoTime();
+
 		arguments = Arrays.asList(args);
 		systemChecks();
 		systemSettings();

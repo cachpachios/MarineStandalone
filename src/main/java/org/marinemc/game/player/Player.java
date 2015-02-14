@@ -19,13 +19,6 @@
 
 package org.marinemc.game.player;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
 import org.marinemc.game.CommandManager;
 import org.marinemc.game.chat.ChatColor;
 import org.marinemc.game.chat.ChatMessage;
@@ -41,12 +34,7 @@ import org.marinemc.net.Client;
 import org.marinemc.net.packets.player.PlayerAbilitesPacket;
 import org.marinemc.net.packets.player.PlayerLookPacket;
 import org.marinemc.net.packets.player.PlayerLookPositionPacket;
-import org.marinemc.net.packets.world.BlockChangePacket;
-import org.marinemc.net.packets.world.ChunkPacket;
-import org.marinemc.net.packets.world.MapChunkPacket;
-import org.marinemc.net.packets.world.SpawnPointPacket;
-import org.marinemc.net.packets.world.TimeUpdatePacket;
-import org.marinemc.net.packets.world.UnloadChunkPacket;
+import org.marinemc.net.packets.world.*;
 import org.marinemc.net.play.clientbound.ChatPacket;
 import org.marinemc.net.play.clientbound.KickPacket;
 import org.marinemc.net.play.clientbound.inv.InventoryContentPacket;
@@ -68,6 +56,8 @@ import org.marinemc.world.entity.Entity;
 import org.marinemc.world.entity.EntityTracker;
 import org.marinemc.world.entity.EntityType;
 import org.marinemc.world.entity.LivingEntity;
+
+import java.util.*;
 
 /**
  * The online ingame Player instance object
@@ -506,7 +496,11 @@ public class Player extends LivingEntity implements IPlayer, CommandSender,
 	public void updateStreaming() {
 		Marine.getServer().getPlayerManager().getWorldStreamer().asyncStreaming(uid);
 	}
-	
+
+    public void localChunkRegion(int n) {
+        localChunkRegion();
+    }
+
 	// TODO Fix unloading :p
 	/**
 	 * Checks if any chunks need to be sent to the client and puts a greater surronding area for generation if the players starts to move

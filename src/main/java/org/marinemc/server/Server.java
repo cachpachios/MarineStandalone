@@ -19,6 +19,7 @@
 
 package org.marinemc.server;
 
+import org.marinemc.Bootstrap;
 import org.marinemc.events.Event;
 import org.marinemc.events.EventManager;
 import org.marinemc.events.standardevents.ServerReadyEvent;
@@ -42,6 +43,7 @@ import org.marinemc.net.NetworkManager;
 import org.marinemc.net.play.clientbound.KickPacket;
 import org.marinemc.plugins.PluginLoader;
 import org.marinemc.plugins.PluginManager;
+import org.marinemc.plugins.scripts.ScriptEnginge;
 import org.marinemc.settings.JSONFileHandler;
 import org.marinemc.settings.ServerSettings;
 import org.marinemc.util.Assert;
@@ -70,8 +72,11 @@ import java.util.UUID;
  */
 public class Server extends TimerTask implements MarineServer, ServiceProvider {
 
+    public static int STARTUP_TIME_WARNING = 10;
+
 	private final PluginLoader pluginLoader;
-	private final File pluginFolder, settingsFolder, storageFolder;
+    private final ScriptEnginge scriptEnginge;
+    private final File pluginFolder, settingsFolder, storageFolder;
 	private final int port;
 	private final CommandSender console;
 	private final NetworkManager networkManager;
@@ -103,7 +108,8 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
 		worldManager = new WorldManager(this);
 		playerManager = new PlayerManager();
 		pluginLoader = new PluginLoader(new PluginManager());
-		networkManager = new NetworkManager(port, address);
+        scriptEnginge = new ScriptEnginge(new File("./scripts"));
+        networkManager = new NetworkManager(port, address);
 		pluginFolder = new File("./plugins");
 		storageFolder = new File("./storage");
 		settingsFolder = new File("./settings");
@@ -119,7 +125,14 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
 		offlineMode = ServerSettings.getInstance().offlineMode;
 		// INIT :D
 		init();
-	}
+
+        double a = (double) (System.nanoTime() - Bootstrap.aLong) / 1_000_000_000;
+        if (a > STARTUP_TIME_WARNING) {
+            Logging.getLogger().warn("The startup time was greater than " + STARTUP_TIME_WARNING + " seconds! Something is hogging up the startup thread.");
+        } else {
+            Logging.getLogger().logf("Starting took {0} seconds!", a);
+        }
+    }
 
 	@Override
 	final public InetAddress getAddress() {
@@ -154,7 +167,8 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
 		Identifiers.init();
 		networkManager.openConnection();
 		loadPlugins();
-		Logging.getLogger().log("Generating the World...");
+        loadScripts();
+        Logging.getLogger().log("Generating the World...");
 		final long generateTime = System.nanoTime();
 		worldManager.getMainWorld().generateAsyncRegion(0, 0, 8, 8);
 		while (worldManager.getMainWorld().hasChunksToGenerate())
@@ -253,6 +267,11 @@ public class Server extends TimerTask implements MarineServer, ServiceProvider {
 	final public File getPluginFolder() {
 		return pluginFolder;
 	}
+
+    final public void loadScripts() {
+        scriptEnginge.load();
+        scriptEnginge.loadScripts();
+    }
 
 	@Override
 	final public void loadPlugins() {
