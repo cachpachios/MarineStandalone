@@ -464,12 +464,18 @@ public class Player extends LivingEntity implements IPlayer, CommandSender,
 		getClient().sendPacket(new ChunkPacket(c));
 		return true;
 	}
-
-	public boolean sendChunks(final List<Chunk> chunks) {
+	public boolean sendChunks(final Long[] chunksToSend) {
+		List<Chunk> toSend = new ArrayList<>();
 		
-		List<Chunk> toSend = new ArrayList<>(chunks);
+		for(Long l : chunksToSend)
+			toSend.add(getWorld().getChunkForce(new ChunkPos(l)));
+		return sendChunks(toSend);
+	}
+	public boolean sendChunks(final List<Chunk> chunksToSend) {
 		
-		for (Chunk c : chunks)
+		List<Chunk> toSend = new ArrayList<>(chunksToSend);
+		
+		for (Chunk c : chunksToSend)
 			if (loadedChunks.contains(c.getPos()))
 				toSend.remove(c);
 			else {
@@ -507,21 +513,21 @@ public class Player extends LivingEntity implements IPlayer, CommandSender,
 	 */
 	public void localChunkRegion() {
 		final List<Long> chunksToRemove = new ArrayList<>(loadedChunks);
-
-		int sent = 0;
+		
+		final List<Long> chunksToSend = new ArrayList<>();
 		
 		int chunkX = getBlockX() >> 4;
         int chunkZ = getBlockZ() >> 4;
 
-        int radius = Marine.getServer().getViewDistance();
+        int radius = Marine.getServer().getViewDistance() / 2;
         for (int x = (chunkX - radius); x <= (chunkX + radius); x++) {
             for (int z = (chunkZ - radius); z <= (chunkZ + radius); z++) {
                 final ChunkPos pos = new ChunkPos(x, z);
                 if (loadedChunks.contains(pos.encode())) {
                 	chunksToRemove.remove(pos.encode());
                 } else {
-                	sendChunk(Marine.getServer().getWorldManager().getMainWorld().getChunkForce(pos));
-                	++sent;
+                	chunksToSend.add(pos.encode());
+                	//sendChunk(Marine.getServer().getWorldManager().getMainWorld().getChunkForce(pos));
                 }
             }
         }
@@ -529,12 +535,19 @@ public class Player extends LivingEntity implements IPlayer, CommandSender,
         // Tells the server to asyncly generate chunks around to ensure that the region is avalible when requested
         getWorld().generateAsyncRegion(chunkX, chunkZ, (int)(Marine.getServer().getViewDistance() * 1.5), (int)(Marine.getServer().getViewDistance() * 1.5));
         
+        
+        if(chunksToSend.size() > 2) {
+        	sendChunks(chunksToSend.toArray(new Long[chunksToSend.size()]));
+        }
+        else
+        	for(Long l : chunksToSend)
+        		sendChunk(Marine.getServer().getWorldManager().getMainWorld().getChunkForce(new ChunkPos(l)));
+        
 //		 Unload any chunks outside the area
 		for (Long p : chunksToRemove)
 			Marine.getServer().getWorldManager().getMainWorld().getChunkForce(new ChunkPos(p)).unload(this);
 	
 		chunksToRemove.clear();
-		System.out.println("Sent: ("+chunkX+"("+getX()+"), "+chunkZ+"("+getZ()+")) " + sent);
 	}
 
 	@Override

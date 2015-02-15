@@ -30,6 +30,7 @@ import org.marinemc.events.EventManager;
 import org.marinemc.events.standardevents.LeaveEvent;
 import org.marinemc.game.player.Player;
 import org.marinemc.server.Marine;
+import org.marinemc.util.annotations.Cautious;
 import org.marinemc.util.operations.ArgumentedOperation;
 import org.marinemc.util.operations.Filter;
 
@@ -119,7 +120,7 @@ public class PlayerList extends ArrayList<Short> implements Serializable {
 	 * @return Players
 	 */
 	public Collection<Player> getPlayers() {
-		final Collection<Player> players = new ArrayList<>();
+		final Collection<Player> players = new ArrayList<>(super.size());
 		synchronized (this) {
 			for (final Object s : this)
 				players.add(Marine.getPlayer((short) s));
@@ -131,6 +132,7 @@ public class PlayerList extends ArrayList<Short> implements Serializable {
 	 * @deprecated
 	 */
 	@Deprecated
+	@Cautious
 	public synchronized boolean contains(final UUID uuid) {
 		return getPlayers().contains(Marine.getPlayer(uuid));
 	}
@@ -265,7 +267,7 @@ public class PlayerList extends ArrayList<Short> implements Serializable {
 	 * @param c
 	 *            to add
 	 */
-	@SuppressWarnings("deprecation")
+	@SuppressWarnings({ "rawtypes" })
 	@Override
 	final public boolean addAll(final Collection c) {
 		boolean all = true;

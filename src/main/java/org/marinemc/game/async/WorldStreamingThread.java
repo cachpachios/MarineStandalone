@@ -79,7 +79,7 @@ public class WorldStreamingThread extends Thread {
 			}
 			
 			for(Short s : streamers)
-				Marine.getServer().getPlayer(s).localChunkRegion(Marine.getServer().getViewDistance());
+				Marine.getServer().getPlayer(s).localChunkRegion();
 			
 			time = System.nanoTime();
 

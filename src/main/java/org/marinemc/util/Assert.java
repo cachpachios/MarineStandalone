@@ -23,12 +23,14 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
  * Created 2014-12-28 for MarineStandalone
  *
  * @author Citymonstret
+ * @author Fozie
  */
 public class Assert {
 
@@ -93,4 +95,12 @@ public class Assert {
 		if (!c)
 			throw new AssertionError("t doesn't contain o");
 	}
+	
+	public static <T> Iterator<T> join(final Iterator<T>... list) {
+		if(list.length == 1)
+			return list[0];
+		else
+			return new JoinedIterator<T>(list);
+	}
+	
 }
