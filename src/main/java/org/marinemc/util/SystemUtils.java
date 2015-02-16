@@ -52,4 +52,17 @@ public class SystemUtils {
 			return -1;
 		}
 	}
+	
+	/**
+	 * Pases to System.arraycopy
+	 * To bypass SecurityManager
+	 * @param src
+	 * @param srcPos
+	 * @param dest
+	 * @param destPos
+	 * @param length
+	 */
+	public static void arraycopy(Object src, int srcPos, Object dest, int destPos, int length) {
+		System.arraycopy(src, srcPos, dest, destPos, length);
+	}
 }
